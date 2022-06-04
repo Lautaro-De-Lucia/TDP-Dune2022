@@ -5,32 +5,12 @@
 #include <vector>
 
 #include "board.h"
-
-struct SCDesc {
-    std::string name;
-    uint16_t LP;
-    uint8_t dim_x;
-    uint8_t dim_y;
-    uint16_t Ymax;
-};
-
-struct Area {
-    uint16_t Xmin;
-    uint16_t Xmax;
-    uint16_t Ymin;
-    uint16_t Ymax;
-    Area(uint16_t Xmin,uint16_t Xmax, uint16_t Ymin, uint16_t Ymax);
-};
-
-struct State{
-    uint16_t LP;
-    Position position;
-    bool selected;
-};
+#include "common_utils.h"
 
 class Selectable {
     protected:
     std::string name;
+    std::string imagepath;
     uint16_t LP;
     Position position;
     uint8_t dim_x;
@@ -47,7 +27,6 @@ class Selectable {
     bool isWithin(const Area & selection);
     void react(Cell & location);
     std::string getName();
-    SCDesc description();
     std::vector<Position> getPositions();
     std::vector<Position> getSurroundings(); 
     void setPosition(Position position);

@@ -36,12 +36,8 @@ ADD_EXECUTABLE("${PROJECT_NAME}" main.cpp
             src/textfilehandler.cpp
             src/unit.cpp
             src/unitfactory.cpp
-            src/ui/vistas.h
-            src/ui/mainwindow.cpp
-            src/ui/mainwindow.ui
-            src/ui/lobbywindow.cpp
-            src/ui/lobbywindow.ui
-            src/ui/resources.qrc)
+            src/client_player.cpp 
+            src/client_selectable.cpp)
 
 target_include_directories("${PROJECT_NAME}" PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)            
 
