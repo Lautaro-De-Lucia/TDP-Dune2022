@@ -1,11 +1,6 @@
 #pragma once
 #include "selectable.h"
-
-enum building_t {
-    AIR_TRAP = 1, 
-    BARRACK = 2,
-    REFINERY = 3
-};
+#include "common_utils.h"
 
 class Building : public Selectable {
 protected:    

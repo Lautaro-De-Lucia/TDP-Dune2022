@@ -1,9 +1,5 @@
 #include "selectable.h"
-
-enum unit_t{
-    HARVESTER = 1,
-    TRIKE = 2
-};
+#include "common_utils.h"
 
 class Unit : public Selectable {
  protected:

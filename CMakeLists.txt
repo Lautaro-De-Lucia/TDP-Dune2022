@@ -24,7 +24,9 @@ ADD_EXECUTABLE("${PROJECT_NAME}" main.cpp
             src/terrain.cpp
             src/textfilehandler.cpp
             src/unit.cpp
-            src/unitfactory.cpp)
+            src/unitfactory.cpp
+            src/client_player.cpp 
+            src/client_selectable.cpp)
 
 target_include_directories("${PROJECT_NAME}" PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)            
 
