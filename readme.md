@@ -1,5 +1,5 @@
-mkdir build
-cd build
-cmake -S ../ -B .
-make all
-./DuneII
+mkdir build <br>
+cd build <br>
+cmake -S ../ -B . <br>
+make all <br> 
+./DuneII <br>
