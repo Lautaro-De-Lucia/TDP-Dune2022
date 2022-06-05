@@ -13,12 +13,6 @@
 
 #define INSTRUCTIONS_FILE "/instr.txt"
 
-#define INIT_SPICE 5000
-#define INIT_CSPICE 5000
-#define INIT_ENERGY 3000
-#define INIT_CENERGY 5000
-
-
 enum command_t {
     CREATE_BUILDING = 1,
     CREATE_UNIT = 2, 
@@ -44,7 +38,7 @@ private:
     bool place(Refinery & refinery,Position & position);
     bool place(Unit & unit,std::vector<Position> positions);
 public:    
-    Player (Board & boardref);
+    Player (Board & boardref,uint16_t spice, uint16_t c_spice, uint16_t energy, uint16_t c_energy);
     void makeCreator();
     void print();
     void run(); // This should receive the socket in the future

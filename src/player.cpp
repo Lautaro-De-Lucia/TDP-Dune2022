@@ -4,12 +4,13 @@
 
 std::vector<std::string> file_input;
 
-Player::Player(Board & boardref) : board(boardref) {
+Player::Player(Board & boardref,uint16_t spice, uint16_t c_spice, uint16_t energy, uint16_t c_energy) 
+: board(boardref) {
     this->ID = 0;
-    this->spice = INIT_SPICE;
-    this->c_spice = INIT_CSPICE;
-    this->energy = INIT_ENERGY;
-    this->c_energy = INIT_CENERGY;
+    this->spice = spice;
+    this->c_spice = c_spice;
+    this->energy = energy;
+    this->c_energy = c_energy;
     this->efficiency = 1;
     this->creators.insert({HARVESTER,-1});
     this->creators.insert({TRIKE,-1});

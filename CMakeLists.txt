@@ -39,6 +39,8 @@ ADD_EXECUTABLE("${PROJECT_NAME}" main.cpp
             src/unitfactory.cpp
             src/client_player.cpp 
             src/client_selectable.cpp
+            src/client_gamemap.cpp
+            src/common_utils.cpp
             src/ui/vistas.h
             src/ui/mainwindow.cpp
             src/ui/mainwindow.ui
