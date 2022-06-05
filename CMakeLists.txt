@@ -8,7 +8,7 @@ SET(SDL2PP_WITH_TTF YES)
 add_subdirectory(external/SDL2pp)
 
 # add compilation flags
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -pthread")
 ADD_DEFINITIONS(-DDATA_PATH="${PROJECT_SOURCE_DIR}/data")
 INCLUDE_DIRECTORIES("${SDL2PP_INCLUDE_DIRS}")
 
