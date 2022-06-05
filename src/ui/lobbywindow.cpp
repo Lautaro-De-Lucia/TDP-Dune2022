@@ -20,7 +20,7 @@ LobbyWindow::LobbyWindow(QWidget *parent)
     mMediaPlayer->play();
     connect(mMediaPlayer,&QMediaPlayer::mediaStatusChanged,mMediaPlayer,&QMediaPlayer::play);
 
-    move(screen()->geometry().center() - frameGeometry().center()); // centrada
+    //move(screen()->geometry().center() - frameGeometry().center()); // centrada
 
     QPixmap p;
     p.load(":/resources/img/lobby.png");

@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->img->setStyleSheet("QLabel { background-image: url(:/resources/img/dune.png); }"); // fondo
     setWindowFlags(Qt::Window | Qt::CustomizeWindowHint); // no resizeable
-    move(screen()->geometry().center() - frameGeometry().center()); // centrada
+    //move(screen()->geometry().center() - frameGeometry().center()); // centrada
 
     QBrush tb(Qt::transparent); // botones transparentes
     ui->botonCreditos->setPalette(QPalette(tb, tb, tb, tb, tb, tb, tb, tb, tb));
