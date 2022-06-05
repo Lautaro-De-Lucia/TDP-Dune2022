@@ -128,8 +128,8 @@ void LobbyWindow::handleCrear()
     QString nombre = ui->nombrePartida->toPlainText();
     QString faccion = buttongroup->checkedButton()->text();
     QString n = QString::number(ui->sliderJugadores->value());
-
     ui->consola->append("Creando partida " + nombre + " con facción " + faccion + ". Jugadores requeridos: " + n + "\n");
+    emit jugar();
 }
 
 void LobbyWindow::handleConectarse()

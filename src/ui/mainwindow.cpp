@@ -1,7 +1,7 @@
 #include "vistas.h"
 #include "./ui_mainwindow.h"
-#include <QScreen>
 #include <QDebug>
+#include <QDesktopWidget>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->img->setStyleSheet("QLabel { background-image: url(:/resources/img/dune.png); }"); // fondo
     setWindowFlags(Qt::Window | Qt::CustomizeWindowHint); // no resizeable
-    //move(screen()->geometry().center() - frameGeometry().center()); // centrada
+    this->move(QApplication::desktop()->availableGeometry().center() - this->rect().center());
 
     QBrush tb(Qt::transparent); // botones transparentes
     ui->botonCreditos->setPalette(QPalette(tb, tb, tb, tb, tb, tb, tb, tb, tb));
