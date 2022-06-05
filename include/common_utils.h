@@ -1,4 +1,5 @@
 #pragma once
+
 #include <string>
 #include <iostream>
 #include "board.h"
@@ -6,6 +7,12 @@
 enum unit_t{
     HARVESTER = 1,
     TRIKE = 2
+}; 
+
+enum cell_t{
+    ROCK = 1,
+    SAND = 2,
+    DUNE = 3
 };
 
 enum building_t {
