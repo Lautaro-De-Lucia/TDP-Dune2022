@@ -12,6 +12,9 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 ADD_DEFINITIONS(-DDATA_PATH="${PROJECT_SOURCE_DIR}/data")
 INCLUDE_DIRECTORIES("${SDL2PP_INCLUDE_DIRS}")
 
+# set up yaml-cpp library
+add_subdirectory(external/yaml-cpp)
+
 # set up QT library
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOUIC ON)
@@ -21,8 +24,6 @@ set(CMAKE_AUTORCC ON)
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Multimedia REQUIRED)
-
-# ADD_EXECUTABLE("${PROJECT_NAME}" main.cpp)
 
 ADD_EXECUTABLE("${PROJECT_NAME}" main.cpp
             src/astar.cpp
@@ -47,15 +48,5 @@ ADD_EXECUTABLE("${PROJECT_NAME}" main.cpp
 
 target_include_directories("${PROJECT_NAME}" PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)            
 
-TARGET_LINK_LIBRARIES("${PROJECT_NAME}" "${SDL2PP_LIBRARIES}" Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Multimedia)
-
-#target_include_directories(${PROJECT_NAME}
-#	PUBLIC external/SDL2pp
-#)
-
-#target_link_directories(${PROJECT_NAME}
-#	PRIVATE external/SDL2pp
-#)
-
-#target_link_libraries(${PROJECT_NAME} SDL2pp)
+TARGET_LINK_LIBRARIES("${PROJECT_NAME}" "${SDL2PP_LIBRARIES}" Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Multimedia yaml-cpp)
 
