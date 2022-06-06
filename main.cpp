@@ -83,7 +83,15 @@ void run_sdl() {
     states.push_back(harvester_state);
     client_player.update(states,game_renderer);
     game_renderer.Present();
-    sleep(5);
+    for(size_t i = 0 ; i < 5 ; i++) {
+        states[3].position = Position (40,20+i);
+        states[4].position = Position (40,30-i);
+        game_renderer.Clear();
+        client_player.renderMap(game_renderer);
+        client_player.update(states,game_renderer);
+        game_renderer.Present();
+        sleep(1);
+    }
     Player server(board,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY);
     server.run();
 };
