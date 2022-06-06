@@ -13,6 +13,8 @@
 #define BARRACK_PATH "/buildingsprites/barrack/barrack.png"
 #define REFINERY_PATH "/buildingsprites/refinery/refinery.png"
 
+#define LP_PATH "/extrasprites/lp.png"
+
 enum move_direction {
     TOP = 0,
     TOP_RIGHT = 1,
@@ -24,16 +26,28 @@ enum move_direction {
     TOP_LEFT = 7
 };
 
+enum health_t {
+    VERY_HIGH = 0,
+    HIGH = 1,
+    MEDIUM_HIGH = 2,
+    MEDIUM = 3,
+    MEDIUM_LOW = 4,
+    LOW = 5,
+    VERY_LOW = 6
+};
+
 class CSelectable {
 protected:
+    SDL2pp::Texture lp_texture;  
     uint16_t ID;
     std::string name;
     uint16_t LP;
     Position position;
     bool selected;
+    health_t health;
 public:
-    CSelectable(std::string name,State & state);
-    void update(State & new_state,SDL2pp::Renderer & renderer);
+    CSelectable(std::string name,State & state,SDL2pp::Renderer & renderer, const std::string& lp_path);
+    virtual void update(State & new_state,SDL2pp::Renderer & renderer);
     virtual void render(SDL2pp::Renderer & renderer);
 };
 
@@ -48,14 +62,16 @@ class CMovable : public CSelectable {
       SDL2pp::Texture texture;  
       move_direction dir;
   public:
+      CMovable(std::string name,State & state,SDL2pp::Renderer & renderer, const std::string& lp_path , const std::string& path);
       void render(SDL2pp::Renderer & renderer);
-      CMovable(std::string name,State & state,SDL2pp::Renderer & renderer, const std::string& path);
+      void update(State & new_state,SDL2pp::Renderer & renderer);
 }; 
 
 class CStatic : public CSelectable {
   private:
       SDL2pp::Texture texture;  
   public:
-      CStatic(std::string name,State & state,SDL2pp::Renderer & renderer, const std::string& path);
+      CStatic(std::string name,State & state,SDL2pp::Renderer & renderer, const std::string& lp_path ,const std::string& path);
       void render(SDL2pp::Renderer & renderer);
+      void update(State & new_state,SDL2pp::Renderer & renderer);
 };
