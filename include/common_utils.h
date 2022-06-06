@@ -3,6 +3,17 @@
 #include <string>
 #include <iostream>
 
+#define TILE_SIZE 16
+
+#define AIR_TRAP_DIM_X 3
+#define AIR_TRAP_DIM_Y 3
+
+#define BARRACK_DIM_X 2
+#define BARRACK_DIM_Y 3
+
+#define REFINERY_DIM_X 3
+#define REFINERY_DIM_Y 3
+
 enum unit_t{
     HARVESTER = 1,
     TRIKE = 2

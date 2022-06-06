@@ -26,7 +26,6 @@ GameMap::GameMap(SDL2pp::Renderer & renderer,std::vector<std::vector<cell_t>> & 
         for (size_t i = 0 ; i < dim_x ; i++) {
             switch(cells[i][j]){
 				case ROCK:
-					std::cout << "I am here and I will print: " <<"("<< i <<","<< j <<")"<< std::endl; 
 					map_cells.push_back(MapCell(renderer,DATA_PATH ROCK_PATH,i,j));
 					break;
 				case SAND:
