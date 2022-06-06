@@ -5,7 +5,7 @@ CPlayer::CPlayer(SDL2pp::Window & window,SDL2pp::Renderer & renderer,size_t spic
 :   
 game_window(window),
 game_renderer(renderer),
-map(map_data)
+map(renderer,map_data)
 {
     this->spice = spice;
     this->c_spice = c_spice;
@@ -25,4 +25,8 @@ void CPlayer::addElement(building_t type,State & desc){
 void CPlayer::update(std::vector<State> & server_data){
     for (State data : server_data)
         this->elements.at(data.ID).update(data);
+}
+
+void CPlayer::renderMap(SDL2pp::Renderer & renderer){
+    this->map.render(renderer);
 }

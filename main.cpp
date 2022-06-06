@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdlib.h>
 #include "player.h"
 #include "client_player.h"
 #include "common_utils.h"
@@ -18,13 +19,19 @@
 #define MAP_DIM_Y 45
 
 std::vector<std::vector<cell_t>> generate_random_map () {
+    //  Create space for the map
     std::vector<std::vector<cell_t>> map_cells(MAP_DIM_X);
     for (size_t i = 0 ; i < MAP_DIM_X ; i++) {
         map_cells[i].resize(MAP_DIM_Y);
     }
+    //  
     for (size_t j = 0 ; j < MAP_DIM_Y ; j++) {
         for (size_t i = 0 ; i < MAP_DIM_X ; i++) {
-            map_cells[i][j] = ROCK;
+            if (j > 15 && j < 30 && i > 20  && i < 60){
+                map_cells[i][j] = ROCK;
+                continue;
+            }    
+            map_cells[i][j] = (cell_t) (rand() % 4);
         }
     }
     return map_cells;
@@ -34,9 +41,11 @@ void run_sdl() {
     SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,SDL_WINDOW_ALWAYS_ON_TOP);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
     Board board(45,25);
-    Player server(board,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY);
     std::vector<std::vector<cell_t>> cells = generate_random_map();
-    CPlayer(game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cells);
+    CPlayer client_player(game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cells);
+    client_player.renderMap(game_renderer);
+    game_renderer.Present();
+    Player server(board,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY);
     server.run();
 };
 

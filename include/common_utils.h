@@ -9,9 +9,10 @@ enum unit_t{
 }; 
 
 enum cell_t{
-    ROCK = 1,
-    SAND = 2,
-    DUNE = 3
+    ROCK = 0,
+    SAND = 1,
+    DUNE = 2,
+    PIT = 3
 };
 
 enum building_t {
