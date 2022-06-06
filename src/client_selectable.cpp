@@ -314,7 +314,7 @@ void CStatic::render(SDL2pp::Renderer & renderer){
         renderer.Copy(
 		    texture,						//	The sprite
 		    //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
-		    SDL2pp::Rect(0,0,65,82),		//	'cut' from the sprite (NullOpt for no cut)
+		    SDL2pp::Rect(0,0,65,80),		//	'cut' from the sprite (NullOpt for no cut)
 		    SDL2pp::Rect(this->position.x*TILE_SIZE,this->position.y*TILE_SIZE,AIR_TRAP_DIM_X*TILE_SIZE,AIR_TRAP_DIM_Y*TILE_SIZE)				//	set to this part of the window		
 	    );
     }
