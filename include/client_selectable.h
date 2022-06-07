@@ -1,3 +1,5 @@
+#pragma once
+
 #include <string>
 #include "board.h"
 #include "common_utils.h"

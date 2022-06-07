@@ -31,14 +31,14 @@ std::vector<std::vector<cell_t>> generate_random_map () {
 }
 
 void run_sdl() {
-    SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,SDL_WINDOW_ALWAYS_ON_TOP);
-    SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
-    Board board(45,25);
-    Player server(board,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY);
+    //SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,SDL_WINDOW_ALWAYS_ON_TOP);
+    //SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
+    Player server(INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY);
     std::vector<std::vector<cell_t>> cells = generate_random_map();
-    CPlayer(game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cells);
+    //CPlayer(game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cells);
     server.run();
 };
+
 
 int main(int argc, char *argv[]) {
 
@@ -60,4 +60,3 @@ int main(int argc, char *argv[]) {
     run_sdl();
 
 }
-

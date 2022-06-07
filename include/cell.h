@@ -1,4 +1,5 @@
 #pragma once
+
 #include <iostream>
 
 #include "terrain.h"
@@ -13,6 +14,7 @@ class Cell {
  private:
     Terrain terrain;
     Position position;
+    bool unit;
     //  TODO: The isue of cell visibility for different players ¿Should that logic be left to the client?
 
  public:
@@ -20,6 +22,9 @@ class Cell {
     void setPosition(uint16_t x, uint16_t y);
     Position getPosition();
     bool isOccupied();
+    bool hasUnit();
+    void placeUnit();
+    void removeUnit();
     void occupy();
     void free();
     void print();

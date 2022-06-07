@@ -1,4 +1,3 @@
-/*
 #pragma once
 
 #include <memory>
@@ -20,8 +19,7 @@
 #define TRIKE_DIM_X 1
 #define TRIKE_DIM_Y 1
 
-class UnitFactory{
+class TrikeFactory{
  public:
-    static std::unique_ptr<Unit> create(unit_t unit);
+    static std::unique_ptr<Trike> create(unit_t unit);
 };
-*/

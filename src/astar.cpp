@@ -6,9 +6,7 @@
 
 #define INF 999999
 
-aStar::aStar(Board& map) : maze(map) {
-
-    (this->maze) = map;
+aStar::aStar() {
 
     (this->adjacents).push_back(Position( 0, -1));
     (this->adjacents).push_back(Position( 0,  1));
@@ -53,26 +51,27 @@ std::vector<Position> aStar::reconstruct_path(Position current) {
             break;
         current = (this->predecessors)[(current)];
     }
+
     return path;
 }
 
 bool aStar::validate_position(Position position) {
     // position is an obstacle
-    if ((this->maze).getCell(position.x, position.y).isOccupied())
+    if (board.getCell(position.x, position.y).isOccupied())
         return false;
     // position.x out of bounds
-    else if(position.x > (this->maze).get_width() - 1 || position.x < 0) 
+    else if(position.x > board.get_width() - 1 || position.x < 0) 
         return false;
     // position.y out of bounds
-    else if(position.y > (this->maze).get_height() - 1 || position.y < 0) 
+    else if(position.y > board.get_height() - 1 || position.y < 0) 
         return false;
     return true;
 }
 
 std::vector<Position> aStar::algorithm(Position start, Position end) {
 
-    size_t board_width = (this->maze).get_width();
-    size_t board_height = (this->maze).get_height();
+    size_t board_width = board.get_width();
+    size_t board_height = board.get_height();
 
     for (size_t i = 0; i < board_width; i++) {
         for (size_t j = 0; j < board_height; j++) {
@@ -84,7 +83,7 @@ std::vector<Position> aStar::algorithm(Position start, Position end) {
 
     std::vector<Position> empty_path;
 
-    if(!validate_position(start) || !validate_position(end))
+    if(/*!validate_position(start) ||*/ !validate_position(end))
         return empty_path;
         
     Position none_position(-1, -1);
