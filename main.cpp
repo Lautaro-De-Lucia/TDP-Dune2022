@@ -56,6 +56,7 @@ void run_sdl() {
     SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH/2, SCREEN_HEIGHT/2,SDL_WINDOW_ALWAYS_ON_TOP);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
     Board board(45,25);
+    SDL_Event event;
     std::vector<std::vector<cell_t>> cells = generate_random_map();
     CPlayer client_player(game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cells);
     client_player.renderMap();
@@ -106,6 +107,7 @@ void run_sdl() {
         sleep(1);
     }
     */
+    /*
     for(size_t i = 0 ; i < 200 ; i++){
         cam.move(2,1);
         sleepcp(10);
@@ -116,6 +118,44 @@ void run_sdl() {
         sleepcp(10);
         client_player.update(states);
     }
+    */
+    //Handle events on queue
+    while( true )
+    {
+        SDL_PollEvent( &event );
+        //User requests quit
+        if( event.type == SDL_QUIT )
+        {
+            exit(1);
+        }
+        int x, y;
+		SDL_GetMouseState( &x, &y );
+
+        std::cout << x << std::endl;
+        std::cout << y << std::endl;
+
+        if(x < 80){
+            cam.move(-1,0);
+            sleepcp(x);
+            client_player.update(states);
+        }
+        if(x > 560){
+            cam.move(1,0);
+            sleepcp(640-x);
+            client_player.update(states);
+        }
+        if(y < 60){
+            cam.move(0,-1);
+            sleepcp(y);
+            client_player.update(states);
+        }
+        if(y > 300){
+            cam.move(0,1);
+            sleepcp(360-y);
+            client_player.update(states);
+        }
+
+    }    
     
     Player server(board,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY);
     server.run();
