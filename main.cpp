@@ -53,6 +53,7 @@ Camera cam(320,180,640,360,1280,720);
 
 
 void run_sdl() {
+
     SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,SDL_WINDOW_ALWAYS_ON_TOP);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
     Board board(45,25);
@@ -132,15 +133,15 @@ void run_sdl() {
             sleepcp(360-y);
             client_player.update(states);
         }
-    }    
-    
-    Player server(board,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY);
+    }
+    /*
+    Player server(INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY);
     server.run();
+    */
 };
 
 
 int main(int argc, char *argv[]) {
-
 
     /*
     QApplication a(argc, argv);
