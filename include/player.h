@@ -5,11 +5,12 @@
 #include <map>
 #include <string>
 #include <unistd.h>
+#include <memory>
 
 #include "textfilehandler.h"
 #include "selectable.h"
 #include "buildingfactory.h"
-#include "unitfactory.h"
+#include "trikefactory.h"
 
 #define INSTRUCTIONS_FILE "/instr.txt"
 
@@ -21,6 +22,7 @@ enum command_t {
     MOUSE_RIGHT_CLICK = 5,
     MOUSE_SELECTION = 6,
     TEST_ASTAR = 7,
+    IDLE = 8,
 };
 
 class Player {
@@ -31,14 +33,13 @@ private:
     int energy;
     uint16_t c_energy;
     double efficiency;
-    std::map<uint16_t,Selectable> elements;
+    std::map<uint16_t,std::unique_ptr<Selectable>> elements;
     std::map<unit_t,uint16_t> creators;
-    Board & board;
     bool place(Building & building,Position position);
     bool place(Refinery & refinery,Position & position);
-    bool place(Unit & unit,std::vector<Position> positions);
+    bool place(Trike & unit,std::vector<Position> positions);
 public:    
-    Player (Board & boardref,uint16_t spice, uint16_t c_spice, uint16_t energy, uint16_t c_energy);
+    Player (uint16_t spice, uint16_t c_spice, uint16_t energy, uint16_t c_energy);
     void makeCreator();
     void print();
     void run(); // This should receive the socket in the future
@@ -47,7 +48,9 @@ public:
     void handleLeftClick();
     void handleRightClick();
     void handleSelection();
+    void handleIdle();
     void reportState();
+    void updateState();
 };
 
 

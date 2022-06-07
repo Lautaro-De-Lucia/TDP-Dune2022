@@ -29,14 +29,16 @@ enum move_direction {
     TOP_LEFT = 7
 };
 
+#define HEALTH_SPRITES 7
+
 enum health_t {
-    VERY_HIGH = 0,
-    HIGH = 1,
-    MEDIUM_HIGH = 2,
-    MEDIUM = 3,
-    MEDIUM_LOW = 4,
-    LOW = 5,
-    VERY_LOW = 6
+    VERY_HIGH = 1,
+    HIGH = 2,
+    MEDIUM_HIGH = 3,
+    MEDIUM = 4,
+    MEDIUM_LOW = 5,
+    LOW = 6,
+    VERY_LOW = 7
 };
 
 class CSelectable {
@@ -45,11 +47,12 @@ protected:
     uint16_t ID;
     std::string name;
     uint16_t LP;
+    uint16_t max_LP;
     Position position;
     bool selected;
     health_t health;
 public:
-    CSelectable(std::string name,State & state,SDL2pp::Renderer & renderer, const std::string& lp_path);
+    CSelectable(std::string name,State & initial_state,SDL2pp::Renderer & renderer, const std::string& lp_path);
     virtual void update(State & new_state,SDL2pp::Renderer & renderer);
     virtual void render(SDL2pp::Renderer & renderer);
 };

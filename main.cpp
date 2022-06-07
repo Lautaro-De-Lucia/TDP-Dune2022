@@ -61,6 +61,7 @@ void greet(SDL2pp::Renderer &game_renderer) {
     game_renderer.Present();
 }
 void run_sdl() {
+
     SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,SDL_WINDOW_ALWAYS_ON_TOP);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
     greet(game_renderer);
@@ -81,19 +82,19 @@ void run_sdl() {
     refinery_state.ID = 1;
     refinery_state.LP = REFINERY_LP;
     refinery_state.position = Position(30,25);
-    refinery_state.selected = true;   
+    refinery_state.selected = false;   
     client_player.addElement(REFINERY,refinery_state);
     State barrack_state;
     barrack_state.ID = 2;
     barrack_state.LP = BARRACK_LP;
     barrack_state.position = Position(30,20);
-    barrack_state.selected = false;   
+    barrack_state.selected = true;   
     client_player.addElement(BARRACK,barrack_state);
     State trike_state;
     trike_state.ID = 3;
     trike_state.LP = TRIKE_LP;
     trike_state.position = Position(40,20);
-    trike_state.selected = false;   
+    trike_state.selected = true;   
     client_player.addElement(TRIKE,trike_state);
     State harvester_state;
     harvester_state.ID = 4;
@@ -108,6 +109,13 @@ void run_sdl() {
     states.push_back(trike_state);
     states.push_back(harvester_state);
     client_player.update(states);
+    //  Silly test
+    for( size_t i = 0; i < 8 ; i++){
+        states[4].LP-=60;    
+        states[4].position = Position(40-i,30-i);
+        client_player.update(states);
+        sleepcp(500);
+    }
     //Handle events on queue
     bool running = true;
     while(running)
@@ -153,15 +161,15 @@ void run_sdl() {
             sleepcp(360-y);
             client_player.update(states);
         }
-    }    
-    
-    Player server(board,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY);
+    }
+    /*
+    Player server(INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY);
     server.run();
+    */
 };
 
 
 int main(int argc, char *argv[]) {
-    
     /*
     QApplication a(argc, argv);
     a.setWindowIcon(QIcon("./src/resources/img/icon.png"));
@@ -178,4 +186,3 @@ int main(int argc, char *argv[]) {
     run_sdl();
     return 0;
 }
-
