@@ -159,4 +159,3 @@ int main(int argc, char *argv[]) {
     run_sdl();
     return 0;
 }
-

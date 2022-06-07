@@ -1,4 +1,4 @@
-#pragma once 
+#pragma once
 
 #include <string>
 #include <vector>
@@ -11,6 +11,8 @@ enum status_t {
     FAILED_TO_ADD = 1
 };
 
+
+
 class Board{
  private:
     uint16_t dim_x;
@@ -21,7 +23,11 @@ class Board{
     Cell& getCell(uint16_t x, uint16_t y);
     void print();
     void print(std::vector<Position> path);
-    status_t place(const Position & location, uint8_t dim_x, uint8_t dim_y);
+    status_t place(const Position & location, uint8_t dim_x, uint8_t dim_y, bool isUnit);
     size_t get_width();
     size_t get_height();
+    void move_unit(Position from, Position to);
 };
+
+inline Board board(45,25);
+

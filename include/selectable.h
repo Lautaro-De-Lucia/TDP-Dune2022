@@ -16,16 +16,19 @@ class Selectable {
     uint8_t dim_x;
     uint8_t dim_y;
     bool selected;
+    bool is_movable;
+    std::vector<Position> remaining_path;
 
     public:
-    Selectable(uint16_t LP,Position pos, uint8_t dim_x, uint8_t dim_y);
+    Selectable(uint16_t LP,Position pos, uint8_t dim_x, uint8_t dim_y, bool moves);
     void selection(Area & mouse_area);
     bool isSelected();
+    bool moves();
     void select();
     void unselect();
-    bool contains(const Position & position);
+    bool contains(const Position & pos);
     bool isWithin(const Area & selection);
-    void react(Cell & location);
+    virtual void react(Cell & location);
     std::string getName();
     std::vector<Position> getPositions();
     std::vector<Position> getSurroundings(); 
@@ -34,5 +37,6 @@ class Selectable {
     uint8_t getDimX();
     uint8_t getDimY();
     void getState(State & state);
+    std::vector<Position>& get_remaining_path();
+    virtual ~Selectable();
 };
-

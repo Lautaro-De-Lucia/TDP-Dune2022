@@ -1,3 +1,5 @@
+#pragma once
+
 class Terrain {
 public:
     bool occupied;

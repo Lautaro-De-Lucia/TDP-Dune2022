@@ -60,3 +60,4 @@ void CPlayer::renderHud(){
     this->game_renderer.SetScale(1,1);
     this->hud.render(this->game_renderer);
 }
+
