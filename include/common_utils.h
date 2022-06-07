@@ -3,15 +3,54 @@
 #include <string>
 #include <iostream>
 
+#define TILE_SIZE 16
+
+//  These would be lifted from a file
+#define HARVESTER_LP 500
+#define HARVESTER_SPICE_COST 500
+#define HARVESTER_SPICE_CAPACITY 800
+#define HARVESTER_SPEED 2
+#define HARVESTER_DIM_X 1
+#define HARVESTER_DIM_Y 1
+
+#define TRIKE_LP 800
+#define TRIKE_SPICE_COST 500
+#define TRIKE_SPEED 5
+#define TRIKE_ATTACK 3
+#define TRIKE_DIM_X 1
+#define TRIKE_DIM_Y 1
+
+//  These would be lifted from a file
+#define AIR_TRAP_LP 500
+#define AIR_TRAP_ENERGY 500
+#define AIR_TRAP_SPICE 800
+#define AIR_TRAP_DIM_X 3
+#define AIR_TRAP_DIM_Y 3
+#define AIR_TRAP_CAPACITY 500
+
+#define BARRACK_LP 300
+#define BARRACK_ENERGY 100
+#define BARRACK_SPICE 300
+#define BARRACK_DIM_X 2
+#define BARRACK_DIM_Y 3
+
+#define REFINERY_LP 1000
+#define REFINERY_ENERGY 400
+#define REFINERY_SPICE 500
+#define REFINERY_DIM_X 3
+#define REFINERY_DIM_Y 3
+#define REFINERY_CAPACITY 5000
+
 enum unit_t{
     HARVESTER = 1,
     TRIKE = 2
 }; 
 
 enum cell_t{
-    ROCK = 1,
-    SAND = 2,
-    DUNE = 3
+    ROCK = 0,
+    SAND = 1,
+    DUNE = 2,
+    PIT = 3
 };
 
 enum building_t {
