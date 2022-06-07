@@ -4,7 +4,8 @@ CPlayer::CPlayer(SDL2pp::Window & window,SDL2pp::Renderer & renderer,size_t spic
 :   
 game_window(window),
 game_renderer(renderer),
-map(renderer,map_data)
+map(renderer,map_data),
+hud(renderer)
 {
     this->spice = spice;
     this->c_spice = c_spice;
@@ -43,12 +44,19 @@ void CPlayer::addElement(building_t type,State & desc){
 
 void CPlayer::update(std::vector<State> & server_data){
     this->game_renderer.Clear();
-    this->renderMap();    
+    this->renderMap();
     for (State data : server_data)
-        (*(this->elements.at(data.ID))).update(data,this->game_renderer);  
+        (*(this->elements.at(data.ID))).update(data,this->game_renderer);
+    this->renderHud();
     this->game_renderer.Present();
 }
 
 void CPlayer::renderMap(){
+    this->game_renderer.SetScale(2,2);
     this->map.render(this->game_renderer);
+}
+
+void CPlayer::renderHud(){
+    this->game_renderer.SetScale(1,1);
+    this->hud.render(this->game_renderer);
 }

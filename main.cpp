@@ -53,13 +53,14 @@ Camera cam(320,180,640,360,1280,720);
 
 
 void run_sdl() {
-    SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH/2, SCREEN_HEIGHT/2,SDL_WINDOW_ALWAYS_ON_TOP);
+    SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,SDL_WINDOW_ALWAYS_ON_TOP);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
     Board board(45,25);
     SDL_Event event;
     std::vector<std::vector<cell_t>> cells = generate_random_map();
     CPlayer client_player(game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cells);
     client_player.renderMap();
+    client_player.renderHud();
     game_renderer.Present();
     State air_trap_state;
     air_trap_state.ID = 0;
@@ -156,6 +157,6 @@ int main(int argc, char *argv[]) {
     */
 
     run_sdl();
-
+    return 0;
 }
 
