@@ -98,27 +98,6 @@ void run_sdl() {
     states.push_back(trike_state);
     states.push_back(harvester_state);
     client_player.update(states);
-    /*
-    for(size_t i = 0 ; i < 5 ; i++) {
-        states[3].position = Position (40+i,20+i);
-        states[4].position = Position (40-i,30-i);
-        states[4].LP -= 100;
-        client_player.update(states);
-        sleep(1);
-    }
-    */
-    /*
-    for(size_t i = 0 ; i < 200 ; i++){
-        cam.move(2,1);
-        sleepcp(10);
-        client_player.update(states);
-    }
-    for(size_t i = 0 ; i < 200 ; i++){
-        cam.move(-2,-1);
-        sleepcp(10);
-        client_player.update(states);
-    }
-    */
     //Handle events on queue
     while( true )
     {
@@ -126,13 +105,11 @@ void run_sdl() {
         //User requests quit
         if( event.type == SDL_QUIT )
         {
-            exit(1);
+            game_window.Hide();
+            break;
         }
         int x, y;
 		SDL_GetMouseState( &x, &y );
-
-        std::cout << x << std::endl;
-        std::cout << y << std::endl;
 
         if(x < 80){
             cam.move(-1,0);
@@ -154,7 +131,6 @@ void run_sdl() {
             sleepcp(360-y);
             client_player.update(states);
         }
-
     }    
     
     Player server(board,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY);
