@@ -6,6 +6,7 @@ lp_texture(renderer,lp_path)
 {
     this->name = name;
     this->LP = state.LP;
+    this->max_LP = state.LP;
     this->position = state.position;
     this->selected = false;
 }
@@ -18,53 +19,13 @@ void CSelectable::update(State & new_state,SDL2pp::Renderer & renderer){
 }
 
 void CStatic::update(State & new_state,SDL2pp::Renderer & renderer){
-    if(this->name == "Wind Trap"){
-        if(this->LP > (AIR_TRAP_LP -(AIR_TRAP_LP / 7)*1))
-            this->health = VERY_HIGH;
-        if(this->LP > (AIR_TRAP_LP -(AIR_TRAP_LP / 7)*2) && this->LP < (AIR_TRAP_LP -(AIR_TRAP_LP / 7)*1))
-            this->health = HIGH;
-        if(this->LP > (AIR_TRAP_LP -(AIR_TRAP_LP / 7)*3) && this->LP < (AIR_TRAP_LP -(AIR_TRAP_LP / 7)*2))
-            this->health = MEDIUM_HIGH;
-        if(this->LP > (AIR_TRAP_LP -(AIR_TRAP_LP / 7)*4) && this->LP < (AIR_TRAP_LP -(AIR_TRAP_LP / 7)*3))
-            this->health = MEDIUM;
-        if(this->LP > (AIR_TRAP_LP -(AIR_TRAP_LP / 7)*5) && this->LP < (AIR_TRAP_LP -(AIR_TRAP_LP / 7)*4))
-            this->health = MEDIUM_LOW;
-        if(this->LP > (AIR_TRAP_LP -(AIR_TRAP_LP / 7)*6) && this->LP < (AIR_TRAP_LP -(AIR_TRAP_LP / 7)*5))
-            this->health = LOW;
-        if(this->LP > (AIR_TRAP_LP -(AIR_TRAP_LP / 7)*7) && this->LP < (AIR_TRAP_LP -(AIR_TRAP_LP / 7)*6))
-            this->health = VERY_LOW;                   
-    }
-    if(this->name == "Barrack"){
-        if(this->LP > (BARRACK_LP -(BARRACK_LP / 7)*1))
-            this->health = VERY_HIGH;
-        if(this->LP > (BARRACK_LP -(BARRACK_LP / 7)*2) && this->LP < (BARRACK_LP -(BARRACK_LP / 7)*1))
-            this->health = HIGH;
-        if(this->LP > (BARRACK_LP -(BARRACK_LP / 7)*3) && this->LP < (BARRACK_LP -(BARRACK_LP / 7)*2))
-            this->health = MEDIUM_HIGH;
-        if(this->LP > (BARRACK_LP -(BARRACK_LP / 7)*4) && this->LP < (BARRACK_LP -(BARRACK_LP / 7)*3))
-            this->health = MEDIUM;
-        if(this->LP > (BARRACK_LP -(BARRACK_LP / 7)*5) && this->LP < (BARRACK_LP -(BARRACK_LP / 7)*4))
-            this->health = MEDIUM_LOW;
-        if(this->LP > (BARRACK_LP -(BARRACK_LP / 7)*6) && this->LP < (BARRACK_LP -(BARRACK_LP / 7)*5))
-            this->health = LOW;
-        if(this->LP > (BARRACK_LP -(BARRACK_LP / 7)*7) && this->LP < (BARRACK_LP -(BARRACK_LP / 7)*6))
-            this->health = VERY_LOW;                   
-    }
-    if(this->name == "Refinery"){
-        if(this->LP > (REFINERY_LP -(REFINERY_LP / 7)*1))
-            this->health = VERY_HIGH;
-        if(this->LP > (REFINERY_LP -(REFINERY_LP / 7)*2) && this->LP < (REFINERY_LP -(REFINERY_LP / 7)*1))
-            this->health = HIGH;
-        if(this->LP > (REFINERY_LP -(REFINERY_LP / 7)*3) && this->LP < (REFINERY_LP -(REFINERY_LP / 7)*2))
-            this->health = MEDIUM_HIGH;
-        if(this->LP > (REFINERY_LP -(REFINERY_LP / 7)*4) && this->LP < (REFINERY_LP -(REFINERY_LP / 7)*3))
-            this->health = MEDIUM;
-        if(this->LP > (REFINERY_LP -(REFINERY_LP / 7)*5) && this->LP < (REFINERY_LP -(REFINERY_LP / 7)*4))
-            this->health = MEDIUM_LOW;
-        if(this->LP > (REFINERY_LP -(REFINERY_LP / 7)*6) && this->LP < (REFINERY_LP -(REFINERY_LP / 7)*5))
-            this->health = LOW;
-        if(this->LP > (REFINERY_LP -(REFINERY_LP / 7)*7) && this->LP < (REFINERY_LP -(REFINERY_LP / 7)*6))
-            this->health = VERY_LOW;                   
+    //  Update health
+    uint8_t hsprites = 7;
+    for (size_t state = 1 ; state < hsprites ; state++){
+        if(LP > (max_LP -(max_LP / 7)*state) && LP <= (max_LP -(max_LP / hsprites)*(state-1))){
+            this->health = (health_t) state;
+            break;
+        }
     }
     this->LP = new_state.LP;
     this->position = new_state.position;
@@ -73,70 +34,32 @@ void CStatic::update(State & new_state,SDL2pp::Renderer & renderer){
 }
 
 void CMovable::update(State & new_state,SDL2pp::Renderer & renderer){
-    if(this->name == "Trike"){
-        if(this->LP > (TRIKE_LP -(TRIKE_LP / 7)*1))
-            this->health = VERY_HIGH;
-        if(this->LP > (TRIKE_LP -(TRIKE_LP / 7)*2) && this->LP < (TRIKE_LP -(TRIKE_LP / 7)*1))
-            this->health = HIGH;
-        if(this->LP > (TRIKE_LP -(TRIKE_LP / 7)*3) && this->LP < (TRIKE_LP -(TRIKE_LP / 7)*2))
-            this->health = MEDIUM_HIGH;
-        if(this->LP > (TRIKE_LP -(TRIKE_LP / 7)*4) && this->LP < (TRIKE_LP -(TRIKE_LP / 7)*3))
-            this->health = MEDIUM;
-        if(this->LP > (TRIKE_LP -(TRIKE_LP / 7)*5) && this->LP < (TRIKE_LP -(TRIKE_LP / 7)*4))
-            this->health = MEDIUM_LOW;
-        if(this->LP > (TRIKE_LP -(TRIKE_LP / 7)*6) && this->LP < (TRIKE_LP -(TRIKE_LP / 7)*5))
-            this->health = LOW;
-        if(this->LP > (TRIKE_LP -(TRIKE_LP / 7)*7) && this->LP < (TRIKE_LP -(TRIKE_LP / 7)*6))
-            this->health = VERY_LOW;                   
+    
+    uint8_t hsprites = 7;
+    for (size_t state = 1 ; state < hsprites ; state++){
+        if(LP > (max_LP -(max_LP / 7)*state) && LP <= (max_LP -(max_LP / hsprites)*(state-1))){
+            this->health = (health_t) state;
+            break;
+        }
     }
-    if(this->name == "Harvester"){
-        if(this->LP > (HARVESTER_LP -(HARVESTER_LP / 7)*1))
-            this->health = VERY_HIGH;
-        if(this->LP > (HARVESTER_LP -(HARVESTER_LP / 7)*2) && this->LP < (HARVESTER_LP -(HARVESTER_LP / 7)*1))
-            this->health = HIGH;
-        if(this->LP > (HARVESTER_LP -(HARVESTER_LP / 7)*3) && this->LP < (HARVESTER_LP -(HARVESTER_LP / 7)*2))
-            this->health = MEDIUM_HIGH;
-        if(this->LP > (HARVESTER_LP -(HARVESTER_LP / 7)*4) && this->LP < (HARVESTER_LP -(HARVESTER_LP / 7)*3))
-            this->health = MEDIUM;
-        if(this->LP > (HARVESTER_LP -(HARVESTER_LP / 7)*5) && this->LP < (HARVESTER_LP -(HARVESTER_LP / 7)*4))
-            this->health = MEDIUM_LOW;
-        if(this->LP > (HARVESTER_LP -(HARVESTER_LP / 7)*6) && this->LP < (HARVESTER_LP -(HARVESTER_LP / 7)*5))
-            this->health = LOW;
-        if(this->LP > (HARVESTER_LP -(HARVESTER_LP / 7)*7) && this->LP < (HARVESTER_LP -(HARVESTER_LP / 7)*6))
-            this->health = VERY_LOW;                   
-    }
-    if (new_state.position.x == this->position.x && new_state.position.y > this->position.y){
-        std::cout << "changing to BOTTOM" << std::endl;
+
+    if (new_state.position.x == this->position.x && new_state.position.y > this->position.y)
         this->dir = BOTTOM;
-    }
-    if (new_state.position.x > this->position.x && new_state.position.y > this->position.y){
-        std::cout << "changing to BOTTOM RIGHT" << std::endl;
-        this->dir = BOTTOM_RIGHT;
-    }
-    if (new_state.position.x > this->position.x && new_state.position.y == this->position.y){
-        std::cout << "changing to RIGHT" << std::endl;
+    if (new_state.position.x > this->position.x && new_state.position.y > this->position.y)
+        this->dir = BOTTOM_RIGHT;    
+    if (new_state.position.x > this->position.x && new_state.position.y == this->position.y)
         this->dir = RIGHT;
-    }
-    if (new_state.position.x > this->position.x && new_state.position.y < this->position.y){
-        std::cout << "changing to TOP RIGHT" << std::endl; 
+    if (new_state.position.x > this->position.x && new_state.position.y < this->position.y)
         this->dir = TOP_RIGHT;
-    }
-    if (new_state.position.x == this->position.x && new_state.position.y < this->position.y){
-        std::cout << "changing to TOP" << std::endl; 
+    if (new_state.position.x == this->position.x && new_state.position.y < this->position.y)
         this->dir = TOP;
-    }
-    if (new_state.position.x < this->position.x && new_state.position.y < this->position.y){
-        std::cout << "changing to TOP LEFT" << std::endl;
+    if (new_state.position.x < this->position.x && new_state.position.y < this->position.y)
         this->dir = TOP_LEFT; 
-    }
-    if (new_state.position.x < this->position.x && new_state.position.y == this->position.y){
-        std::cout << "changing to LEFT" << std::endl;
+    if (new_state.position.x < this->position.x && new_state.position.y == this->position.y)
         this->dir = LEFT;
-    }
-    if (new_state.position.x < this->position.x && new_state.position.y > this->position.y){
-        std::cout << "changing to BOTTOM LEFT" << std::endl;
+    if (new_state.position.x < this->position.x && new_state.position.y > this->position.y)
         this->dir = BOTTOM_LEFT;                    
-    }
+
     this->LP = new_state.LP;
     this->position = new_state.position;
     this->selected = new_state.selected;
@@ -144,6 +67,13 @@ void CMovable::update(State & new_state,SDL2pp::Renderer & renderer){
 }
 
 void CSelectable::render(SDL2pp::Renderer & renderer){
+    //  Render Health
+    if(this->selected == true)
+        renderer.Copy(
+            lp_texture,
+            SDL2pp::Rect(30,20*(this->health-1),100,20),
+            SDL2pp::Rect((this->position.x-0.5)*TILE_SIZE-cam.pos_x,(this->position.y-0.5)*TILE_SIZE-cam.pos_y,30,5) 		
+        );
 }
 
 CMovable::CMovable(std::string name,State & state,SDL2pp::Renderer & renderer,const std::string& lp_path ,const std::string& path)
@@ -228,7 +158,6 @@ void CMovable::render(SDL2pp::Renderer & renderer){
             default:
                 break;              
         }
-
     } 
     if (this->name == "Harvester"){
         switch(this->dir){
@@ -302,14 +231,14 @@ void CMovable::render(SDL2pp::Renderer & renderer){
     }
     if(this->selected == true)
         renderer.Copy(
-            lp_texture,						//	The sprite
-                    //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
-            SDL2pp::Rect(30,20*this->health,100,20),		//	'cut' from the sprite (NullOpt for no cut)
-            SDL2pp::Rect((this->position.x-0.5)*TILE_SIZE-cam.pos_x,(this->position.y-1)*TILE_SIZE-cam.pos_y,30,5) //	set to this part of the window		
-        );    
+            lp_texture,
+            SDL2pp::Rect(30,20*(this->health-1),100,20),
+            SDL2pp::Rect((this->position.x-0.5)*TILE_SIZE-cam.pos_x,(this->position.y-0.5)*TILE_SIZE-cam.pos_y,30,5) 		
+    );
 }
 
 void CStatic::render(SDL2pp::Renderer & renderer){
+    CSelectable::render(renderer);
     if (this->name == "Wind Trap"){
         renderer.Copy(
 		    texture,						//	The sprite
@@ -342,9 +271,8 @@ void CStatic::render(SDL2pp::Renderer & renderer){
     }
     if(this->selected == true)
         renderer.Copy(
-            lp_texture,						//	The sprite
-                    //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
-            SDL2pp::Rect(30,20*this->health,100,20),		//	'cut' from the sprite (NullOpt for no cut)
-            SDL2pp::Rect((this->position.x+0.5)*TILE_SIZE-cam.pos_x,(this->position.y)*TILE_SIZE-cam.pos_y,30,5) //	set to this part of the window		
-        );
+            lp_texture,
+            SDL2pp::Rect(30,20*(this->health-1),100,20),
+            SDL2pp::Rect((this->position.x-0.5)*TILE_SIZE-cam.pos_x,(this->position.y-0.5)*TILE_SIZE-cam.pos_y,30,5) 		
+    );
 }
