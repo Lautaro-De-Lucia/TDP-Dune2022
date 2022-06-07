@@ -19,8 +19,7 @@ void MapCell::render(SDL2pp::Renderer & renderer){
 GameMap::GameMap(SDL2pp::Renderer & renderer,std::vector<std::vector<cell_t>> & cells) {
 	size_t dim_x = cells.size();
 	size_t dim_y = cells[0].size();
-	std::cout << dim_x << std::endl;
-	std::cout << dim_y << std::endl;
+	std::cout << "Generating map of size " << dim_x << "x" << dim_y << std::endl;
     for (size_t j = 0 ; j < dim_y ; j++) {
         for (size_t i = 0 ; i < dim_x ; i++) {
             switch(cells[i][j]){

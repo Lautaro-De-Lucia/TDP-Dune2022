@@ -51,10 +51,19 @@ void sleepcp(int milliseconds) // Cross-platform sleep function
 
 Camera cam(320,180,640,360,1280,720);
 
-
+void greet(SDL2pp::Renderer &game_renderer) {
+    std::string text = "Loading map... please wait";
+    SDL2pp::SDLTTF ttf;
+    SDL2pp::Font font("../src/ui/resources/fonts/beyond-mars.ttf", 64);
+	SDL2pp::Texture text_sprite(game_renderer, font.RenderText_Blended(text, SDL_Color{255, 255, 255, 255}));
+	game_renderer.Copy(text_sprite, SDL2pp::NullOpt, SDL2pp::Rect((SCREEN_WIDTH/2 - text_sprite.GetWidth()/2), 
+        SCREEN_HEIGHT/2, text_sprite.GetWidth(), text_sprite.GetHeight()));
+    game_renderer.Present();
+}
 void run_sdl() {
     SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,SDL_WINDOW_ALWAYS_ON_TOP);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
+    greet(game_renderer);
     Board board(45,25);
     SDL_Event event;
     std::vector<std::vector<cell_t>> cells = generate_random_map();
@@ -100,14 +109,26 @@ void run_sdl() {
     states.push_back(harvester_state);
     client_player.update(states);
     //Handle events on queue
-    while( true )
-    {
-        SDL_PollEvent( &event );
-        //User requests quit
-        if( event.type == SDL_QUIT )
-        {
-            game_window.Hide();
-            break;
+    bool running = true;
+    while(running)
+    {   
+        while (SDL_PollEvent( &event )) {
+            switch (event.type) {
+                //User requests quit
+                case SDL_QUIT:
+                    running = false;
+                    SDL_Quit();
+                    break;
+                //User clicks
+                case SDL_MOUSEBUTTONUP:
+                    if (event.button.button == SDL_BUTTON_LEFT) {
+                        std::cout << "Click izq \n";
+                    }
+                    else if (event.button.button == SDL_BUTTON_RIGHT) {
+                        std::cout << "Click der \n";
+                    }
+                    break;
+            }
         }
         int x, y;
 		SDL_GetMouseState( &x, &y );
@@ -140,8 +161,7 @@ void run_sdl() {
 
 
 int main(int argc, char *argv[]) {
-
-
+    
     /*
     QApplication a(argc, argv);
     a.setWindowIcon(QIcon("./src/resources/img/icon.png"));
@@ -155,7 +175,6 @@ int main(int argc, char *argv[]) {
 
     return a.exec();
     */
-
     run_sdl();
     return 0;
 }
