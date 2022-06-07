@@ -1,6 +1,5 @@
 #include "client_gamemap.h"
 
-
 MapCell::MapCell( SDL2pp::Renderer & renderer, const std::string& path,size_t pos_x, size_t pos_y)
 :
 position(pos_x,pos_y),
@@ -9,11 +8,11 @@ texture(renderer,path)
 }
 
 void MapCell::render(SDL2pp::Renderer & renderer){
-    renderer.Copy(
+	renderer.Copy(
 		texture,						//	The sprite
 		//	(x,y,w,h) -> top-left (x,y) coordinates, height & width
 		SDL2pp::NullOpt,		//	'cut' from the sprite (NullOpt for no cut)
-		SDL2pp::Rect(this->position.x*TILE_DIM,this->position.y*TILE_DIM,TILE_DIM,TILE_DIM)				//	set to this part of the window		
+		SDL2pp::Rect(this->position.x*TILE_DIM-cam.pos_x,this->position.y*TILE_DIM-cam.pos_y,TILE_DIM,TILE_DIM)				//	set to this part of the window		
 	);
 }
 

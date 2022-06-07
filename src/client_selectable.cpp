@@ -166,7 +166,7 @@ void CMovable::render(SDL2pp::Renderer & renderer){
                     texture,						//	The sprite
                     //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
                     SDL2pp::Rect(2,2,32,32),		//	'cut' from the sprite (NullOpt for no cut)
-                    SDL2pp::Rect(this->position.x*TILE_SIZE,this->position.y*TILE_SIZE,16,16)				//	set to this part of the window		
+                    SDL2pp::Rect(this->position.x*TILE_SIZE-cam.pos_x,this->position.y*TILE_SIZE-cam.pos_y,16,16)				//	set to this part of the window		
                 );
                 break; 
             case TOP_RIGHT:
@@ -174,7 +174,7 @@ void CMovable::render(SDL2pp::Renderer & renderer){
                     texture,						//	The sprite
                     //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
                     SDL2pp::Rect(33*4,0,32,32),		//	'cut' from the sprite (NullOpt for no cut)
-                    SDL2pp::Rect(this->position.x*TILE_SIZE,this->position.y*TILE_SIZE,16,16)				//	set to this part of the window		
+                    SDL2pp::Rect(this->position.x*TILE_SIZE-cam.pos_x,this->position.y*TILE_SIZE-cam.pos_y,16,16)				//	set to this part of the window		
                 );
                 break; 
             case RIGHT:
@@ -182,7 +182,7 @@ void CMovable::render(SDL2pp::Renderer & renderer){
                     texture,						//	The sprite
                     //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
                     SDL2pp::Rect(0,30,32,32),		//	'cut' from the sprite (NullOpt for no cut)
-                    SDL2pp::Rect(this->position.x*TILE_SIZE,this->position.y*TILE_SIZE,16,16)				//	set to this part of the window		
+                    SDL2pp::Rect(this->position.x*TILE_SIZE-cam.pos_x,this->position.y*TILE_SIZE-cam.pos_y,16,16)				//	set to this part of the window		
                 );
                 break;             
             case BOTTOM_RIGHT:
@@ -190,7 +190,7 @@ void CMovable::render(SDL2pp::Renderer & renderer){
                     texture,						//	The sprite
                     //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
                     SDL2pp::Rect(33*4,30,32,32),		//	'cut' from the sprite (NullOpt for no cut)
-                    SDL2pp::Rect(this->position.x*TILE_SIZE,this->position.y*TILE_SIZE,16,16)				//	set to this part of the window		
+                    SDL2pp::Rect(this->position.x*TILE_SIZE-cam.pos_x,this->position.y*TILE_SIZE-cam.pos_y,16,16)				//	set to this part of the window		
                 );
                 break;
             case BOTTOM:
@@ -198,7 +198,7 @@ void CMovable::render(SDL2pp::Renderer & renderer){
                     texture,						//	The sprite
                     //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
                     SDL2pp::Rect(0,30*2,32,32),		//	'cut' from the sprite (NullOpt for no cut)
-                    SDL2pp::Rect(this->position.x*TILE_SIZE,this->position.y*TILE_SIZE,16,16)				//	set to this part of the window		
+                    SDL2pp::Rect(this->position.x*TILE_SIZE-cam.pos_x,this->position.y*TILE_SIZE-cam.pos_y,16,16)				//	set to this part of the window		
                 );
                 break;
             case BOTTOM_LEFT:
@@ -206,7 +206,7 @@ void CMovable::render(SDL2pp::Renderer & renderer){
                     texture,						//	The sprite
                     //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
                     SDL2pp::Rect(33*4,30*2,32,32),		//	'cut' from the sprite (NullOpt for no cut)
-                    SDL2pp::Rect(this->position.x*TILE_SIZE,this->position.y*TILE_SIZE,16,16)				//	set to this part of the window		
+                    SDL2pp::Rect(this->position.x*TILE_SIZE-cam.pos_x,this->position.y*TILE_SIZE-cam.pos_y,16,16)				//	set to this part of the window		
                 );
                 break;
             case LEFT:
@@ -214,7 +214,7 @@ void CMovable::render(SDL2pp::Renderer & renderer){
                     texture,						//	The sprite
                     //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
                     SDL2pp::Rect(0,30*3,32,32),		//	'cut' from the sprite (NullOpt for no cut)
-                    SDL2pp::Rect(this->position.x*TILE_SIZE,this->position.y*TILE_SIZE,16,16)				//	set to this part of the window		
+                    SDL2pp::Rect(this->position.x*TILE_SIZE-cam.pos_x,this->position.y*TILE_SIZE-cam.pos_y,16,16)				//	set to this part of the window		
                 );
                 break;  
             case TOP_LEFT:
@@ -222,7 +222,7 @@ void CMovable::render(SDL2pp::Renderer & renderer){
                     texture,						//	The sprite
                     //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
                     SDL2pp::Rect(33*4,30*3,32,32),		//	'cut' from the sprite (NullOpt for no cut)
-                    SDL2pp::Rect(this->position.x*TILE_SIZE,this->position.y*TILE_SIZE,16,16)				//	set to this part of the window		
+                    SDL2pp::Rect(this->position.x*TILE_SIZE-cam.pos_x,this->position.y*TILE_SIZE-cam.pos_y,16,16)				//	set to this part of the window		
                 );
                 break;
             default:
@@ -237,7 +237,7 @@ void CMovable::render(SDL2pp::Renderer & renderer){
                     texture,						//	The sprite
                     //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
                     SDL2pp::Rect(0,0,50,50),		//	'cut' from the sprite (NullOpt for no cut)
-                    SDL2pp::Rect(this->position.x*TILE_SIZE,this->position.y*TILE_SIZE,16,16)				//	set to this part of the window		
+                    SDL2pp::Rect(this->position.x*TILE_SIZE-cam.pos_x,this->position.y*TILE_SIZE-cam.pos_y,16,16)				//	set to this part of the window		
                 );
                 break; 
             case TOP_RIGHT:
@@ -245,7 +245,7 @@ void CMovable::render(SDL2pp::Renderer & renderer){
                     texture,						//	The sprite
                     //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
                     SDL2pp::Rect(52*3,0,50,50),		//	'cut' from the sprite (NullOpt for no cut)
-                    SDL2pp::Rect(this->position.x*TILE_SIZE,this->position.y*TILE_SIZE,16,16)				//	set to this part of the window		
+                    SDL2pp::Rect(this->position.x*TILE_SIZE-cam.pos_x,this->position.y*TILE_SIZE-cam.pos_y,16,16)				//	set to this part of the window		
                 );
                 break; 
             case RIGHT:
@@ -253,7 +253,7 @@ void CMovable::render(SDL2pp::Renderer & renderer){
                     texture,						//	The sprite
                     //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
                     SDL2pp::Rect(0,48,50,50),		//	'cut' from the sprite (NullOpt for no cut)
-                    SDL2pp::Rect(this->position.x*TILE_SIZE,this->position.y*TILE_SIZE,16,16)				//	set to this part of the window		
+                    SDL2pp::Rect(this->position.x*TILE_SIZE-cam.pos_x,this->position.y*TILE_SIZE-cam.pos_y,16,16)				//	set to this part of the window		
                 );
                 break;             
             case BOTTOM_RIGHT:
@@ -261,7 +261,7 @@ void CMovable::render(SDL2pp::Renderer & renderer){
                     texture,						//	The sprite
                     //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
                     SDL2pp::Rect(52*3,48,50,50),		//	'cut' from the sprite (NullOpt for no cut)
-                    SDL2pp::Rect(this->position.x*TILE_SIZE,this->position.y*TILE_SIZE,16,16)				//	set to this part of the window		
+                    SDL2pp::Rect(this->position.x*TILE_SIZE-cam.pos_x,this->position.y*TILE_SIZE-cam.pos_y,16,16)				//	set to this part of the window		
                 );
                 break;
             case BOTTOM:
@@ -269,7 +269,7 @@ void CMovable::render(SDL2pp::Renderer & renderer){
                     texture,						//	The sprite
                     //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
                     SDL2pp::Rect(0,48*2,50,50),		//	'cut' from the sprite (NullOpt for no cut)
-                    SDL2pp::Rect(this->position.x*TILE_SIZE,this->position.y*TILE_SIZE,16,16)				//	set to this part of the window		
+                    SDL2pp::Rect(this->position.x*TILE_SIZE-cam.pos_x,this->position.y*TILE_SIZE-cam.pos_y,16,16)				//	set to this part of the window		
                 );
                 break;
             case BOTTOM_LEFT:
@@ -277,7 +277,7 @@ void CMovable::render(SDL2pp::Renderer & renderer){
                     texture,						//	The sprite
                     //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
                     SDL2pp::Rect(52*3,48*2,50,50),		//	'cut' from the sprite (NullOpt for no cut)
-                    SDL2pp::Rect(this->position.x*TILE_SIZE,this->position.y*TILE_SIZE,16,16)				//	set to this part of the window		
+                    SDL2pp::Rect(this->position.x*TILE_SIZE-cam.pos_x,this->position.y*TILE_SIZE-cam.pos_y,16,16)				//	set to this part of the window		
                 );
                 break;
             case LEFT:
@@ -285,7 +285,7 @@ void CMovable::render(SDL2pp::Renderer & renderer){
                     texture,						//	The sprite
                     //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
                     SDL2pp::Rect(0,48*3,50,50),		//	'cut' from the sprite (NullOpt for no cut)
-                    SDL2pp::Rect(this->position.x*TILE_SIZE,this->position.y*TILE_SIZE,16,16)				//	set to this part of the window		
+                    SDL2pp::Rect(this->position.x*TILE_SIZE-cam.pos_x,this->position.y*TILE_SIZE-cam.pos_y,16,16)				//	set to this part of the window		
                 );
                 break;  
             case TOP_LEFT:
@@ -293,7 +293,7 @@ void CMovable::render(SDL2pp::Renderer & renderer){
                     texture,						//	The sprite
                     //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
                     SDL2pp::Rect(52*3,48*3,50,50),		//	'cut' from the sprite (NullOpt for no cut)
-                    SDL2pp::Rect(this->position.x*TILE_SIZE,this->position.y*TILE_SIZE,16,16)				//	set to this part of the window		
+                    SDL2pp::Rect(this->position.x*TILE_SIZE-cam.pos_x,this->position.y*TILE_SIZE-cam.pos_y,16,16)				//	set to this part of the window		
                 );
                 break;
             default:
@@ -305,7 +305,7 @@ void CMovable::render(SDL2pp::Renderer & renderer){
             lp_texture,						//	The sprite
                     //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
             SDL2pp::Rect(30,20*this->health,100,20),		//	'cut' from the sprite (NullOpt for no cut)
-            SDL2pp::Rect((this->position.x-0.5)*TILE_SIZE,(this->position.y-1)*TILE_SIZE,30,5) //	set to this part of the window		
+            SDL2pp::Rect((this->position.x-0.5)*TILE_SIZE-cam.pos_x,(this->position.y-1)*TILE_SIZE-cam.pos_y,30,5) //	set to this part of the window		
         );    
 }
 
@@ -315,7 +315,7 @@ void CStatic::render(SDL2pp::Renderer & renderer){
 		    texture,						//	The sprite
 		    //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
 		    SDL2pp::Rect(0,0,65,80),		//	'cut' from the sprite (NullOpt for no cut)
-		    SDL2pp::Rect(this->position.x*TILE_SIZE,this->position.y*TILE_SIZE,AIR_TRAP_DIM_X*TILE_SIZE,AIR_TRAP_DIM_Y*TILE_SIZE)				//	set to this part of the window		
+		    SDL2pp::Rect(this->position.x*TILE_SIZE-cam.pos_x,this->position.y*TILE_SIZE-cam.pos_y,AIR_TRAP_DIM_X*TILE_SIZE,AIR_TRAP_DIM_Y*TILE_SIZE)				//	set to this part of the window		
 	    );
     }
     if (this->name == "Barrack"){
@@ -323,7 +323,7 @@ void CStatic::render(SDL2pp::Renderer & renderer){
 		    texture,						//	The sprite
 		    //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
 		    SDL2pp::Rect(0,0,75,80),		//	'cut' from the sprite (NullOpt for no cut)
-		    SDL2pp::Rect(this->position.x*TILE_SIZE,this->position.y*TILE_SIZE,BARRACK_DIM_X*TILE_SIZE,BARRACK_DIM_Y*TILE_SIZE)				//	set to this part of the window		
+		    SDL2pp::Rect(this->position.x*TILE_SIZE-cam.pos_x,this->position.y*TILE_SIZE-cam.pos_y,BARRACK_DIM_X*TILE_SIZE,BARRACK_DIM_Y*TILE_SIZE)				//	set to this part of the window		
 	    );
     }
     if (this->name == "Refinery"){
@@ -331,13 +331,13 @@ void CStatic::render(SDL2pp::Renderer & renderer){
 		    texture,						//	The sprite
 		    //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
 		    SDL2pp::Rect(0,0,110,82),		//	'cut' from the sprite (NullOpt for no cut)
-		    SDL2pp::Rect(this->position.x*TILE_SIZE,this->position.y*TILE_SIZE,REFINERY_DIM_X*TILE_SIZE,REFINERY_DIM_Y*TILE_SIZE)				//	set to this part of the window		
+		    SDL2pp::Rect(this->position.x*TILE_SIZE-cam.pos_x,this->position.y*TILE_SIZE-cam.pos_y,REFINERY_DIM_X*TILE_SIZE,REFINERY_DIM_Y*TILE_SIZE)				//	set to this part of the window		
 	    );
         renderer.Copy(
 		    texture,						//	The sprite
 		    //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
 		    SDL2pp::Rect(100,12,110,82),		//	'cut' from the sprite (NullOpt for no cut)
-		    SDL2pp::Rect(this->position.x*TILE_SIZE,this->position.y*TILE_SIZE,REFINERY_DIM_X*TILE_SIZE,REFINERY_DIM_Y*TILE_SIZE)				//	set to this part of the window		
+		    SDL2pp::Rect(this->position.x*TILE_SIZE-cam.pos_x,this->position.y*TILE_SIZE-cam.pos_y,REFINERY_DIM_X*TILE_SIZE,REFINERY_DIM_Y*TILE_SIZE)				//	set to this part of the window		
 	    );
     }
     if(this->selected == true)
@@ -345,6 +345,6 @@ void CStatic::render(SDL2pp::Renderer & renderer){
             lp_texture,						//	The sprite
                     //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
             SDL2pp::Rect(30,20*this->health,100,20),		//	'cut' from the sprite (NullOpt for no cut)
-            SDL2pp::Rect((this->position.x+0.5)*TILE_SIZE,(this->position.y)*TILE_SIZE,30,5) //	set to this part of the window		
+            SDL2pp::Rect((this->position.x+0.5)*TILE_SIZE-cam.pos_x,(this->position.y)*TILE_SIZE-cam.pos_y,30,5) //	set to this part of the window		
         );
 }

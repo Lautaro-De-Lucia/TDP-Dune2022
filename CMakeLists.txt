@@ -41,6 +41,7 @@ ADD_EXECUTABLE("${PROJECT_NAME}" main.cpp
             src/client_selectable.cpp
             src/client_gamemap.cpp
             src/common_utils.cpp
+            src/client_camera.cpp
             src/ui/vistas.h
             src/ui/mainwindow.cpp
             src/ui/mainwindow.ui

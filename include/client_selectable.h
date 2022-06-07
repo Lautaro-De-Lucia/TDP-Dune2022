@@ -3,6 +3,9 @@
 #include <string>
 #include "board.h"
 #include "common_utils.h"
+#include "client_camera.h"
+
+extern Camera cam;
 
 #include <SDL2pp/SDL2pp.hh>
 

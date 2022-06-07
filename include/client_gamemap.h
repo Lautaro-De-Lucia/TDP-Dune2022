@@ -6,6 +6,9 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "common_utils.h"
+#include "client_camera.h"
+
+extern Camera cam;
 
 #define TILE_DIM 16
 #define ROCK_PATH "/mapsprites/rock_1.png"

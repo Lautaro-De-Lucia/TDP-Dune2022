@@ -1,8 +1,10 @@
 #include <iostream>
 #include <stdlib.h>
+#include <time.h>
 #include "player.h"
 #include "client_player.h"
 #include "common_utils.h"
+#include "client_camera.h"
 #include <SDL2pp/SDL2pp.hh>
 
 #include "src/ui/vistas.h"
@@ -37,8 +39,21 @@ std::vector<std::vector<cell_t>> generate_random_map () {
     return map_cells;
 }
 
+
+void sleepcp(int milliseconds) // Cross-platform sleep function
+{
+    clock_t time_end;
+    time_end = clock() + milliseconds * CLOCKS_PER_SEC/1000;
+    while (clock() < time_end)
+    {
+    }
+}
+
+Camera cam(320,180,640,360,1280,720);
+
+
 void run_sdl() {
-    SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,SDL_WINDOW_ALWAYS_ON_TOP);
+    SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH/2, SCREEN_HEIGHT/2,SDL_WINDOW_ALWAYS_ON_TOP);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
     Board board(45,25);
     std::vector<std::vector<cell_t>> cells = generate_random_map();
@@ -82,6 +97,7 @@ void run_sdl() {
     states.push_back(trike_state);
     states.push_back(harvester_state);
     client_player.update(states);
+    /*
     for(size_t i = 0 ; i < 5 ; i++) {
         states[3].position = Position (40+i,20+i);
         states[4].position = Position (40-i,30-i);
@@ -89,9 +105,22 @@ void run_sdl() {
         client_player.update(states);
         sleep(1);
     }
+    */
+    for(size_t i = 0 ; i < 200 ; i++){
+        cam.move(2,1);
+        sleepcp(10);
+        client_player.update(states);
+    }
+    for(size_t i = 0 ; i < 200 ; i++){
+        cam.move(-2,-1);
+        sleepcp(10);
+        client_player.update(states);
+    }
+    
     Player server(board,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY);
     server.run();
 };
+
 
 int main(int argc, char *argv[]) {
 
