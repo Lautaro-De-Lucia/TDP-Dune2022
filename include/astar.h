@@ -1,5 +1,4 @@
-#ifndef ASTAR_H_
-#define ASTAR_H_
+#pragma once
 
 #include <vector>
 #include <algorithm>
@@ -20,11 +19,10 @@ class HashFn {
 class aStar {
  public:
     std::vector<Position> adjacents;
-    Board& maze;
     std::unordered_map<Position, Position, HashFn> predecessors;
     std::unordered_map<Position, int, HashFn> f;
     std::unordered_map<Position, int, HashFn> g;
-    aStar(Board& maze);
+    aStar();
     std::vector<Position> algorithm(Position start, Position end);
     std::vector<Position> reconstruct_path(Position current);
     void set_predecessor(Position position, Position predecessor);
@@ -32,6 +30,3 @@ class aStar {
     Position pop_lowest_f_from(std::vector<Position>& set);
     bool validate_position(Position position);
 };
-
-
-#endif // ASTAR_H_

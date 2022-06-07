@@ -14,7 +14,7 @@ Board::Board(uint16_t dim_x, uint16_t dim_y)
     }    
 }
 
-status_t Board::place(const Position & location, uint8_t dim_x,uint8_t dim_y) {
+status_t Board::place(const Position & location, uint8_t dim_x,uint8_t dim_y,bool isUnit) {
     //  See if any of the positions to build is already occupied
     for (size_t j = 0 ; j < dim_y ; j++) {
         for (size_t i = 0 ; i < dim_x ; i++) {
@@ -24,8 +24,13 @@ status_t Board::place(const Position & location, uint8_t dim_x,uint8_t dim_y) {
     }
     //  If not, mark them as occupied
     for (size_t j = 0 ; j < dim_y ; j++) 
-        for (size_t i = 0 ; i < dim_x ; i++) 
+        for (size_t i = 0 ; i < dim_x ; i++) {
             this->cells[location.x+i][location.y+j].occupy();
+            if (isUnit)
+                this->cells[location.x+i][location.y+j].placeUnit();
+            
+        }
+            
         
     return SUCCESS;
 }
@@ -55,7 +60,7 @@ void Board::print(std::vector<Position> path) {
     for (size_t j = 0 ; j < this->dim_y ; j++) {
         for (size_t i = 0 ; i < this->dim_x ; i++) {
             if ((paths_board)[i][j]) {
-                std::cout << "#";
+                std::cout << "# ";
                 continue;
             }
             this->cells[i][j].print();
@@ -72,3 +77,8 @@ size_t Board::get_height() {
     return (size_t) this->dim_y;
 }
 
+void Board::move_unit(Position from, Position to) {
+
+    (this->cells)[from.x][from.y].removeUnit();
+    (this->cells)[to.x][to.y].placeUnit();
+}
