@@ -29,4 +29,3 @@ class Cell {
     void free();
     void print();
 };
-

@@ -1,9 +1,8 @@
 #pragma once
 
 class Terrain {
-public:
+ public:
     bool occupied;
-
     Terrain();
     bool isOccupied();
     void occupy();
@@ -14,20 +13,21 @@ public:
 };
 
 class Sand : public Terrain {
-    
-    public:
+ public:
     bool isTraversable();
     bool isExtractible();
     bool canBuild();
 };
+
 class Rock : public Terrain {
-    public:
+ public:
     bool isTraversable();
     bool isExtractible();
     bool canBuild();
 };
+
 class Pit : public Terrain {
-    public:
+ public:
     bool isTraversable();
     bool isExtractible();
     bool canBuild();

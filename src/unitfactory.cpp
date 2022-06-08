@@ -1,5 +1,3 @@
-/*
-
 #include "unitfactory.h"
 
 std::unique_ptr<Unit> UnitFactory::create(unit_t unit) {
@@ -18,4 +16,3 @@ std::unique_ptr<Unit> UnitFactory::create(unit_t unit) {
     }
     return std::make_unique<Unit>(0,0,Position(0,0),0,0,0); // REFACTOR: Handle this kind of stuff with an exception
 }
-*/

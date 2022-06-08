@@ -12,7 +12,7 @@
 #include "client_gamehud.h"
 
 class CPlayer {
-private:
+ private:
     size_t spice;
     size_t c_spice;
     size_t c_energy;
@@ -24,7 +24,7 @@ private:
     SDL2pp::Window & game_window;
     SDL2pp::Renderer & game_renderer;
 
-public:
+ public:
     CPlayer(SDL2pp::Window & window,SDL2pp::Renderer & renderer,size_t spice, size_t c_spice, int energy, size_t c_energy, std::vector<std::vector<cell_t>> & map_data);
     void renderMap();
     void renderHud();
@@ -32,4 +32,3 @@ public:
     void addElement(building_t type,State & desc);
     void update(std::vector<State> & server_data);
 };
-

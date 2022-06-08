@@ -8,7 +8,7 @@
 #include "common_utils.h"
 
 class Selectable {
-    protected:
+ protected:
     std::string name;
     std::string imagepath;
     int LP;
@@ -19,7 +19,7 @@ class Selectable {
     bool is_movable;
     std::vector<Position> remaining_path;
 
-    public:
+ public:
     Selectable(int LP,Position pos, int dim_x, int dim_y, bool moves);
     void selection(Area & mouse_area);
     bool isSelected();

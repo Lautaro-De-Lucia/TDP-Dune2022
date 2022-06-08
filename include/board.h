@@ -30,4 +30,3 @@ class Board{
 };
 
 inline Board board(45,25);
-

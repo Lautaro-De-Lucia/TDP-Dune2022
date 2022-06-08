@@ -228,7 +228,7 @@ void Player::createUnit(){
     //  Attempt to add to board
         //  create the unit
     std::vector<Position> positions = elements.at(creators.at((unit_t)type))->getSurroundings(); //  FAILING HERE
-    std::unique_ptr<Trike> unit = TrikeFactory::create((unit_t)type);
+    std::unique_ptr<Unit> unit = UnitFactory::create((unit_t)type);
     //  Attempt adding it
     //  REFACTOR: place should probably be a method of the Player class
         // place(Board & board,Building & building,Position & position)
@@ -304,7 +304,7 @@ bool Player::place(Refinery & building,Position & position){
     std::cout << "Placing a new refinery" << std::endl;
     return true;
 }
-bool Player::place(Trike & unit,std::vector<Position> positions){
+bool Player::place(Unit & unit,std::vector<Position> positions){
     std::cout << "Placing a new unit" << std::endl;
     return true;
 }

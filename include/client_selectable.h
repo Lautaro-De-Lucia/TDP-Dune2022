@@ -42,7 +42,7 @@ enum health_t {
 };
 
 class CSelectable {
-protected:
+ protected:
     SDL2pp::Texture lp_texture;  
     int ID;
     std::string name;
@@ -51,7 +51,7 @@ protected:
     Position position;
     bool selected;
     health_t health;
-public:
+ public:
     CSelectable(std::string name,State & initial_state,SDL2pp::Renderer & renderer, const std::string& lp_path);
     virtual void update(State & new_state,SDL2pp::Renderer & renderer);
     virtual void render(SDL2pp::Renderer & renderer);
@@ -64,20 +64,20 @@ public:
 //  a otro corte de la sprite en el caso de la unidad
 
 class CMovable : public CSelectable {
-  private:
-      SDL2pp::Texture texture;  
-      move_direction dir;
-  public:
-      CMovable(std::string name,State & state,SDL2pp::Renderer & renderer, const std::string& lp_path , const std::string& path);
-      void render(SDL2pp::Renderer & renderer);
-      void update(State & new_state,SDL2pp::Renderer & renderer);
+ private:
+    SDL2pp::Texture texture;  
+    move_direction dir;
+ public:
+    CMovable(std::string name,State & state,SDL2pp::Renderer & renderer, const std::string& lp_path , const std::string& path);
+    void render(SDL2pp::Renderer & renderer);
+    void update(State & new_state,SDL2pp::Renderer & renderer);
 }; 
 
 class CStatic : public CSelectable {
-  private:
-      SDL2pp::Texture texture;  
-  public:
-      CStatic(std::string name,State & state,SDL2pp::Renderer & renderer, const std::string& lp_path ,const std::string& path);
-      void render(SDL2pp::Renderer & renderer);
-      void update(State & new_state,SDL2pp::Renderer & renderer);
+ private:
+    SDL2pp::Texture texture;  
+ public:
+    CStatic(std::string name,State & state,SDL2pp::Renderer & renderer, const std::string& lp_path ,const std::string& path);
+    void render(SDL2pp::Renderer & renderer);
+    void update(State & new_state,SDL2pp::Renderer & renderer);
 };

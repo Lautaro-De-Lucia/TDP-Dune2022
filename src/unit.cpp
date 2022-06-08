@@ -2,7 +2,7 @@
 
 #include "board.h"
 
-/*
+
 Unit::Unit(int LP,int spice, Position pos, int dim_x, int dim_y,int speed) 
 :
 Selectable(LP,pos,dim_x,dim_y,true)
@@ -30,12 +30,6 @@ bool Unit::place(Board & board,std::vector<Position> & positions,int & spice){
 void Unit::react(Cell & location){
     std::cout << "reacting to cell in location: " << location.getPosition() << " [unit]" << std::endl;
 }
-
-Unit::~Unit() {
-    
-}
-*/
-
 
 /*
 Harvester::Harvester(int LP,int spice, Position pos, int dim_x, int dim_y,int speed,int stored_spice, int max_spice) 
@@ -88,8 +82,4 @@ bool Trike::place(Board & board,std::vector<Position> & positions,int & spice){
         }
     }
     return false;
-}
-
-Trike::~Trike() {
-    
 }

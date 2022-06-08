@@ -1,4 +1,4 @@
-/*
+
 #pragma once
 
 #include <memory>
@@ -10,4 +10,3 @@ class UnitFactory{
  public:
     static std::unique_ptr<Unit> create(unit_t unit);
 };
-*/

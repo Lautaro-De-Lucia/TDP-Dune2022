@@ -5,22 +5,18 @@
 
 #include "astar.h"
 
-/*
 class Unit : public Selectable {
  protected:
-    std::string name;
-    int spice;
-    int speed;
+   std::string name;
+   int spice;
+   int speed;
 
  public:
-    Unit() = default;
-    Unit(int LP,int spice, Position pos, int dim_x, int dim_y,int speed);
-    bool place(Board & board,std::vector<Position> & positions,int & spice);
-    virtual void react(Cell & location);
-    virtual ~Unit();
+   Unit() = default;
+   Unit(int LP,int spice, Position pos, int dim_x, int dim_y,int speed);
+   bool place(Board & board,std::vector<Position> & positions,int & spice);
+   virtual void react(Cell & location);
 };
-*/
-
 
 /*
 class Harvester : public Unit {
@@ -32,15 +28,15 @@ public:
     void react(Cell & location);
 };
 */
+
 class Trike : public Selectable {
    std::string name;
    int spice;
    int speed;
    int attack;
-public:
-    Trike(int LP,int spice, Position pos, int dim_x, int dim_y,int speed,int attack);
-    void create();
-    void react(Cell & location);
-    bool place(Board & board,std::vector<Position> & positions,int & spice);
-    ~Trike();
+ public:
+   Trike(int LP,int spice, Position pos, int dim_x, int dim_y,int speed,int attack);
+   void create();
+   void react(Cell & location);
+   bool place(Board & board,std::vector<Position> & positions,int & spice);
 };

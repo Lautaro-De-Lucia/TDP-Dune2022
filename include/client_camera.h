@@ -16,5 +16,4 @@ struct Camera {
 
     Camera(int pos_x, int pos_y, int width, int height, int screen_width, int screen_height);
     void move(int x,int y);
-
 };

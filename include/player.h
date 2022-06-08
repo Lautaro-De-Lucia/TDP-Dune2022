@@ -10,7 +10,7 @@
 #include "textfilehandler.h"
 #include "selectable.h"
 #include "buildingfactory.h"
-#include "trikefactory.h"
+#include "unit.h"
 
 #define INSTRUCTIONS_FILE "/instr.txt"
 
@@ -26,7 +26,7 @@ enum command_t {
 };
 
 class Player {
-private:
+ private:
     int ID;
     int spice;
     int c_spice;
@@ -37,8 +37,8 @@ private:
     std::map<unit_t,int> creators;
     bool place(Building & building,Position position);
     bool place(Refinery & refinery,Position & position);
-    bool place(Trike & unit,std::vector<Position> positions);
-public:    
+    bool place(Unit & unit,std::vector<Position> positions);
+ public:    
     Player (int spice, int c_spice, int energy, int c_energy);
     void makeCreator();
     void print();
@@ -52,5 +52,3 @@ public:
     void reportState();
     void updateState();
 };
-
-
