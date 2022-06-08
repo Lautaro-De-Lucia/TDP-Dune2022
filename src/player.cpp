@@ -8,7 +8,7 @@ size_t game_time = 0;
 
 std::vector<std::string> file_input;
 
-Player::Player(int spice, int c_spice, int energy, int c_energy) {
+Player::Player(int spice, int c_spice, int energy, int c_energy, CPlayer& client_player) : cplayer(client_player) {
     this->ID = 0;
     this->spice = spice;
     this->c_spice = c_spice;

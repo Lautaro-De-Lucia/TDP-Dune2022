@@ -60,14 +60,19 @@ void greet(SDL2pp::Renderer &game_renderer) {
     game_renderer.Present();
 }
 void run_sdl() {
-    /*
+
     SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,SDL_WINDOW_ALWAYS_ON_TOP);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
-    greet(game_renderer);
     Board board(45,25);
     SDL_Event event;
     std::vector<std::vector<cell_t>> cells = generate_random_map();
     CPlayer client_player(game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cells);
+
+    Player server(INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY, client_player);
+
+    server.run();
+
+    /*
     client_player.renderMap();
     client_player.renderHud();
     game_renderer.Present();
@@ -109,61 +114,50 @@ void run_sdl() {
     states.push_back(harvester_state);
     client_player.update(states);
     //  Silly test
-    for ( size_t i = 0; i < 8 ; i++){
+    for( size_t i = 0; i < 8 ; i++){
         states[4].LP-=60;    
         states[4].position = Position(40-i,30-i);
         client_player.update(states);
         sleepcp(500);
     }
     //Handle events on queue
-    bool running = true;
-    while (running)
-    {   
-        while (SDL_PollEvent( &event )) {
-            switch (event.type) {
-                //User requests quit
-                case SDL_QUIT:
-                    running = false;
-                    SDL_Quit();
-                    break;
-                //User clicks
-                case SDL_MOUSEBUTTONUP:
-                    if (event.button.button == SDL_BUTTON_LEFT) {
-                        std::cout << "Click izq \n";
-                    }
-                    else if (event.button.button == SDL_BUTTON_RIGHT) {
-                        std::cout << "Click der \n";
-                    }
-                    break;
-            }
+    while( true )
+    {
+        SDL_PollEvent( &event );
+        //User requests quit
+        if( event.type == SDL_QUIT )
+        {
+            game_window.Hide();
+            break;
         }
         int x, y;
 		SDL_GetMouseState( &x, &y );
 
-        if (x < 80){
+        if(x < 80){
             cam.move(-1,0);
             sleepcp(x);
             client_player.update(states);
         }
-        if (x > 560){
+        if(x > 560){
             cam.move(1,0);
             sleepcp(640-x);
             client_player.update(states);
         }
-        if (y < 60){
+        if(y < 60){
             cam.move(0,-1);
             sleepcp(y);
             client_player.update(states);
         }
-        if (y > 300){
+        if(y > 300){
             cam.move(0,1);
             sleepcp(360-y);
             client_player.update(states);
         }
     }
     */
-    Player server(INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY);
-    server.run();
+
+
+
 };
 
 

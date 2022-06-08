@@ -12,6 +12,7 @@
 #include "buildingfactory.h"
 #include "unitfactory.h"
 #include "unit.h"
+#include "client_player.h"
 
 #define INSTRUCTIONS_FILE "/instr.txt"
 
@@ -34,13 +35,14 @@ class Player {
     int energy;
     int c_energy;
     double efficiency;
+    CPlayer& cplayer;
     std::map<int,std::unique_ptr<Selectable>> elements;
     std::map<unit_t,int> creators;
     bool place(Building & building,Position position);
     bool place(Refinery & refinery,Position & position);
     bool place(Unit & unit,std::vector<Position> positions);
  public:    
-    Player (int spice, int c_spice, int energy, int c_energy);
+    Player (int spice, int c_spice, int energy, int c_energy, CPlayer& client_player);
     void makeCreator();
     void print();
     void run(); // This should receive the socket in the future

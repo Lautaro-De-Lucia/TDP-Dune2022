@@ -66,14 +66,6 @@ void Trike::react(Cell& location) {
     if (!location.isOccupied()) {
         aStar aStar;
         std::vector<Position> new_path = aStar.algorithm(this->getPosition(), location.getPosition());
-
-        /*
-        std::cout << "printing path" << '\n';
-        for (size_t i = 0; i < new_path.size(); i++) {
-            std::cout << new_path[i] << '\n';
-        }
-        */
-
         this->remaining_path = new_path;
     }
 }
