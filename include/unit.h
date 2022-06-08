@@ -16,6 +16,7 @@ class Unit : public Selectable {
    Unit(int LP,int spice, Position pos, int dim_x, int dim_y,int speed);
    bool place(Board & board,std::vector<Position> & positions,int & spice);
    virtual void react(Cell & location);
+   virtual ~Unit();
 };
 
 /*
@@ -29,7 +30,7 @@ public:
 };
 */
 
-class Trike : public Selectable {
+class Trike : public Unit {
    std::string name;
    int spice;
    int speed;
@@ -38,5 +39,4 @@ class Trike : public Selectable {
    Trike(int LP,int spice, Position pos, int dim_x, int dim_y,int speed,int attack);
    void create();
    void react(Cell & location);
-   bool place(Board & board,std::vector<Position> & positions,int & spice);
 };

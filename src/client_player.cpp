@@ -18,7 +18,7 @@ void CPlayer::addElement(unit_t type,State & desc){
     //  Ahora estamos hablando de SPRITES
     //  Va a ser una imágen con la unidad en muchas posiciones
     //  Los cortes quedan a cargo de la unidad
-    switch(type){
+    switch (type){
         case HARVESTER: 
             this->elements.insert({desc.ID,std::unique_ptr<CSelectable>(new CMovable("Harvester",desc,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH HARVESTER_PATH))});
             break;
@@ -29,7 +29,7 @@ void CPlayer::addElement(unit_t type,State & desc){
 }
 
 void CPlayer::addElement(building_t type,State & desc){
-    switch(type){
+    switch (type){
         case AIR_TRAP: 
             this->elements.insert({desc.ID,std::unique_ptr<CSelectable>(new CStatic("Wind Trap",desc,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH WIND_TRAP_PATH))});
             break;

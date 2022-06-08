@@ -47,17 +47,15 @@ const char * cmddict [8] {
 void Player::run(){
 
     TextFileHandler command_reader(DATA_PATH INSTRUCTIONS_FILE);
-
     while (command_reader.readInput(file_input)){
-        std::system("clear");
-
+        //std::system("clear");
         //  Read first line to get command
-            //  With sockets: read 1 byte from the socket
+        //  With sockets: read 1 byte from the socket
         command_t command = (command_t)(file_input[0][0]-'0');
         std::cout << command << ": " << cmddict[command-1] <<std::endl;
         printSeparator();
 
-        switch(command){
+        switch (command){
             case CREATE_UNIT:
                 createUnit();
                 board.print();
@@ -121,15 +119,15 @@ and will be stored in the Factory class.
         SERVER ------------[FAILURE](8)--------------------> CLIENT
             //  Client does nothing
 */
-void Player::createBuilding(){
 
+void Player::createBuilding(){
     //  Get Parameters
-    int type = (int) (file_input[1][0]-'0');
-    int pos_x = (int) std::stoi(file_input[2]);
-    int pos_y = (int) std::stoi(file_input[3]);
+    int type = (file_input[1][0]-'0');
+    int pos_x = std::stoi(file_input[2]);
+    int pos_y = std::stoi(file_input[3]);
     std::cout<< "Adding new building in position " << "("<< pos_x << "," << pos_y << ")" <<std::endl;
     //  Attempt to add to board
-        //  Manufacture the building
+    //  Manufacture the building
     std::unique_ptr<Building> building = BuildingFactory::manufacture((building_t)type);
     //  Attempt adding it
     (this->place)((*building),Position(pos_x,pos_y));
@@ -141,8 +139,35 @@ void Player::createBuilding(){
         return;
     }
     std::cout << "Can't build here" << std::endl;
-
 }
+
+/*
+We only need unit <type>
+[TYPE](8)
+*/
+void Player::createUnit(){
+    //  Get Parameters
+    int type = (file_input[1][0]-'0');
+    std::cout<< "Creating new unit" << std::endl;
+    //  Attempt to add to board
+        //  create the unit
+    std::vector<Position> positions = elements.at(creators.at((unit_t)type))->getSurroundings(); //  FAILING HERE
+    
+    std::unique_ptr<Unit> unit = UnitFactory::create((unit_t)type);
+    //  Attempt adding it
+    //  REFACTOR: place should probably be a method of the Player class
+        // place(Board & board,Building & building,Position & position)
+        // place(Board & board,Unit & unit,std::vector<Positions> positions)
+
+    if ((*unit).place(board,positions,this->spice)){
+        (this->elements).insert({ID++, std::move(unit)});
+        
+        std::cout << "Unit succesfully created" << std::endl;
+        return;
+    }
+    std::cout << "Can't build here" << std::endl;
+}
+
 /*
 (SEND)   
     SERVER <---------------[POS_X](16)[ṔOS_Y](16)--------- CLIENT
@@ -153,12 +178,12 @@ void Player::createBuilding(){
 void Player::handleLeftClick(){
     std::cout << "Client just did a left click on the map" << std::endl;
     //  Get positions
-    int pos_x = (int) std::stoi(file_input[1]);
-    int pos_y = (int) std::stoi(file_input[2]);
+    int pos_x = std::stoi(file_input[1]);
+    int pos_y = std::stoi(file_input[2]);
     std::cout << "On position: " << Position(pos_x,pos_y) << std::endl;
     //  Leave selected only the units at that position
-    for (auto & e : this->elements){
-        if(e.second->contains(Position(pos_x,pos_y)))
+    for (auto& e : this->elements){
+        if (e.second->contains(Position(pos_x,pos_y)))
             e.second->select();
         else
             e.second->unselect();
@@ -176,16 +201,16 @@ void Player::handleLeftClick(){
 void Player::handleSelection(){
     std::cout << "Client just selected a part of the map" << std::endl;
     //  Get selection limits
-    int Xmin = (int) std::stoi(file_input[1]);
-    int Xmax = (int) std::stoi(file_input[2]);
-    int Ymin = (int) std::stoi(file_input[3]);
-    int Ymax = (int) std::stoi(file_input[4]);
+    int Xmin = std::stoi(file_input[1]);
+    int Xmax = std::stoi(file_input[2]);
+    int Ymin = std::stoi(file_input[3]);
+    int Ymax = std::stoi(file_input[4]);
     std::cout << "Selection: (" << Xmin << "," << Xmax << "," << Ymin << "," << Ymax << ")" << std::endl;
     //  Traverse and mark as selected those that are included
     Area selection(Xmin,Xmax,Ymin,Ymax);
     for (auto & e : this->elements){
         e.second->unselect();
-        if(e.second->isWithin(selection))
+        if (e.second->isWithin(selection))
             e.second->select();
     }
     //  notify success
@@ -201,47 +226,22 @@ void Player::handleSelection(){
 void Player::handleRightClick(){
     std::cout << "Client just did a right click on the map" << std::endl;
     //  Get positions
-    int pos_x = (int) std::stoi(file_input[1]);
-    int pos_y = (int) std::stoi(file_input[2]);
-    std::cout << "On position: " << Position(pos_x,pos_y) << std::endl;
+    int pos_x = std::stoi(file_input[1]);
+    int pos_y = std::stoi(file_input[2]);
+    std::cout << "On position: " << Position(pos_x, pos_y) << std::endl;
     //  Traverse elements and make each selected unit handle the cell
     for (auto & e : this->elements){
-        if(e.second->isSelected()){
+        if (e.second->isSelected()){
             std::cout << e.first << ": ";
             e.second->react(board.getCell(pos_x,pos_y));
         }
     }
 }
-/*
-We only need unit <type>
-[TYPE](8)
-*/
 
 void Player::handleIdle(){
     std::cout << "Client just did nothing" << std::endl;
 }
 
-void Player::createUnit(){
-    //  Get Parameters
-    int type = (int) (file_input[1][0]-'0');
-    std::cout<< "Creating new unit" << std::endl;
-    //  Attempt to add to board
-        //  create the unit
-    std::vector<Position> positions = elements.at(creators.at((unit_t)type))->getSurroundings(); //  FAILING HERE
-    std::unique_ptr<Unit> unit = UnitFactory::create((unit_t)type);
-    //  Attempt adding it
-    //  REFACTOR: place should probably be a method of the Player class
-        // place(Board & board,Building & building,Position & position)
-        // place(Board & board,Unit & unit,std::vector<Positions> positions)
-
-    if ((*unit).place(board,positions,this->spice)){
-        (this->elements).insert({ID++, std::move(unit)});
-        
-        std::cout << "Unit succesfully created" << std::endl;
-        return;
-    }
-    std::cout << "Can't build here" << std::endl;
-}
 /*
 (RECEIVE)
     CASE SUCCESS: 
@@ -271,9 +271,6 @@ void Player::updateState(){
 
             std::vector<Position>& path = e.second->get_remaining_path();  
             if (path.size() != 0) {
-
-                std::cout << "path_size() != 0: ID number " << id << " moves..." << '\n';
-
                 e.second->getState(state);
                 Position current_position(state.position);
                 Position next_position = path.back();
@@ -285,7 +282,6 @@ void Player::updateState(){
     }
 }
 
-
 void Player::makeCreator(){
     int building_ID = (int) std::stoi(file_input[1]);
     if (this->elements.at(building_ID)->getName() == "Refinery")
@@ -296,15 +292,17 @@ void Player::makeCreator(){
     std::cout << this->elements.at(building_ID)->getName() << " of ID: " << building_ID << " is now a creator" << std::endl;
 }
 
-bool Player::place(Building & building,Position position){
+bool Player::place(Building& building,Position position){
     std::cout << "Placing a new building" << std::endl;
     return true;
 }
-bool Player::place(Refinery & building,Position & position){
+
+bool Player::place(Refinery& building,Position& position){
     std::cout << "Placing a new refinery" << std::endl;
     return true;
 }
-bool Player::place(Unit & unit,std::vector<Position> positions){
+
+bool Player::place(Unit& unit,std::vector<Position> positions){
     std::cout << "Placing a new unit" << std::endl;
     return true;
 }

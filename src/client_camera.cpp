@@ -12,13 +12,13 @@ Camera::Camera(int pos_x, int pos_y, int width, int height, int screen_width, in
 void Camera::move(int x, int y){
     this->pos_x += x;
     this->pos_y += y;
-    if( this->pos_x < 0 )
+    if ( this->pos_x < 0 )
         pos_x = 0;
-    if( this->pos_y < 0 )
+    if ( this->pos_y < 0 )
         pos_y = 0;
-    if( this->pos_x > this->screen_width-this->width)
+    if ( this->pos_x > this->screen_width-this->width)
         this->pos_x = this->screen_width-this->width;
-    if( this->pos_y > this->screen_height-this->height)
+    if ( this->pos_y > this->screen_height-this->height)
         this->pos_y = this->screen_height-this->height;
 }
 

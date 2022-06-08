@@ -8,11 +8,11 @@ std::unique_ptr<Unit> UnitFactory::create(unit_t unit) {
         //    break;
         
         case TRIKE:
-            return std::make_unique<Trike>(TRIKE_LP,TRIKE_SPICE_COST,Position(0,0),TRIKE_DIM_X,TRIKE_DIM_Y,TRIKE_SPEED,TRIKE_ATTACK);
+            return std::unique_ptr<Trike>(new Trike(TRIKE_LP,TRIKE_SPICE_COST,Position(0,0),TRIKE_DIM_X,TRIKE_DIM_Y,TRIKE_SPEED,TRIKE_ATTACK));
             //return std::make_unique<Trike>(TRIKE_LP,TRIKE_SPICE_COST,Position(0,0),TRIKE_DIM_X,TRIKE_DIM_Y,TRIKE_SPEED,TRIKE_ATTACK);
             break;
         default:
             std::cout << "No such thing" << std::endl;
     }
-    return std::make_unique<Unit>(0,0,Position(0,0),0,0,0); // REFACTOR: Handle this kind of stuff with an exception
+    throw std::runtime_error("Unknown unit"); 
 }

@@ -10,6 +10,7 @@
 #include "textfilehandler.h"
 #include "selectable.h"
 #include "buildingfactory.h"
+#include "unitfactory.h"
 #include "unit.h"
 
 #define INSTRUCTIONS_FILE "/instr.txt"
@@ -43,8 +44,8 @@ class Player {
     void makeCreator();
     void print();
     void run(); // This should receive the socket in the future
-    void createUnit();
     void createBuilding();
+    void createUnit();
     void handleLeftClick();
     void handleRightClick();
     void handleSelection();

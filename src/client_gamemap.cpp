@@ -22,7 +22,7 @@ GameMap::GameMap(SDL2pp::Renderer & renderer,std::vector<std::vector<cell_t>> & 
 	std::cout << "Generating map of size " << dim_x << "x" << dim_y << std::endl;
     for (size_t j = 0 ; j < dim_y ; j++) {
         for (size_t i = 0 ; i < dim_x ; i++) {
-            switch(cells[i][j]){
+            switch (cells[i][j]){
 				case ROCK:
 					map_cells.push_back(MapCell(renderer,DATA_PATH ROCK_PATH,i,j));
 					break;
@@ -43,6 +43,6 @@ GameMap::GameMap(SDL2pp::Renderer & renderer,std::vector<std::vector<cell_t>> & 
 }
 
 void GameMap::render(SDL2pp::Renderer & renderer){
-	for(size_t i = 0 ; i < this->map_cells.size() ; i++)
+	for (size_t i = 0 ; i < this->map_cells.size() ; i++)
 		this->map_cells[i].render(renderer);
 }

@@ -22,7 +22,7 @@ void CStatic::update(State & new_state,SDL2pp::Renderer & renderer){
     //  Update health
     int hsprites = 7;
     for (size_t state = 1 ; state < hsprites ; state++){
-        if(LP > (max_LP -(max_LP / 7)*state) && LP <= (max_LP -(max_LP / hsprites)*(state-1))){
+        if (LP > (max_LP -(max_LP / 7)*state) && LP <= (max_LP -(max_LP / hsprites)*(state-1))){
             this->health = (health_t) state;
             break;
         }
@@ -37,7 +37,7 @@ void CMovable::update(State & new_state,SDL2pp::Renderer & renderer){
     
     int hsprites = 7;
     for (size_t state = 1 ; state < hsprites ; state++){
-        if(LP > (max_LP -(max_LP / 7)*state) && LP <= (max_LP -(max_LP / hsprites)*(state-1))){
+        if (LP > (max_LP -(max_LP / 7)*state) && LP <= (max_LP -(max_LP / hsprites)*(state-1))){
             this->health = (health_t) state;
             break;
         }
@@ -68,7 +68,7 @@ void CMovable::update(State & new_state,SDL2pp::Renderer & renderer){
 
 void CSelectable::render(SDL2pp::Renderer & renderer){
     //  Render Health
-    if(this->selected == true)
+    if (this->selected == true)
         renderer.Copy(
             lp_texture,
             SDL2pp::Rect(30,20*(this->health-1),100,20),
@@ -90,7 +90,7 @@ texture(renderer,path)
 
 void CMovable::render(SDL2pp::Renderer & renderer){
     if (this->name == "Trike"){
-        switch(this->dir){
+        switch (this->dir){
             case TOP:
                 renderer.Copy(
                     texture,						//	The sprite
@@ -160,7 +160,7 @@ void CMovable::render(SDL2pp::Renderer & renderer){
         }
     } 
     if (this->name == "Harvester"){
-        switch(this->dir){
+        switch (this->dir){
             case TOP:
                 renderer.Copy(
                     texture,						//	The sprite
@@ -229,7 +229,7 @@ void CMovable::render(SDL2pp::Renderer & renderer){
                 break;              
         }
     }
-    if(this->selected == true)
+    if (this->selected == true)
         renderer.Copy(
             lp_texture,
             SDL2pp::Rect(30,20*(this->health-1),100,20),
@@ -269,7 +269,7 @@ void CStatic::render(SDL2pp::Renderer & renderer){
 		    SDL2pp::Rect(this->position.x*TILE_SIZE-cam.pos_x,this->position.y*TILE_SIZE-cam.pos_y,REFINERY_DIM_X*TILE_SIZE,REFINERY_DIM_Y*TILE_SIZE)				//	set to this part of the window		
 	    );
     }
-    if(this->selected == true)
+    if (this->selected == true)
         renderer.Copy(
             lp_texture,
             SDL2pp::Rect(30,20*(this->health-1),100,20),

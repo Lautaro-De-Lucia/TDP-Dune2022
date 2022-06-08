@@ -41,8 +41,8 @@ bool Selectable::contains(const Position & pos){
     if ((pos.x == (this->position.x)) && (pos.y == (this->position.y)))
         return true;
 
-    for (size_t j = 0 ; j < this->dim_y ; j++) {
-        for (size_t i = 0 ; i < this->dim_x ; i++) {
+    for (size_t i = 0 ; i < this->dim_x ; i++) {
+        for (size_t j = 0 ; j < this->dim_y ; j++) {
             if ((pos.x == ((this->position.x)+i)) && (pos.y == ((this->position.y)+j)))
                 return true;
         }
@@ -56,9 +56,9 @@ void Selectable::react(Cell & location){
 
 
 bool Selectable::isWithin(const Area & selection){
-    for (size_t j = 0 ; j < this->dim_y ; j++) {
-        for (size_t i = 0 ; i < this->dim_x ; i++) {           
-            if(
+    for (size_t i = 0 ; i < this->dim_x ; i++) {
+        for (size_t j = 0 ; j < this->dim_y ; j++) {           
+            if (
             (this->position.x+i<selection.Xmax && this->position.x+i>selection.Xmin)
             &&
             (this->position.y+j<selection.Ymax && this->position.y+j>selection.Ymin)
@@ -72,8 +72,8 @@ bool Selectable::isWithin(const Area & selection){
 
 std::vector<Position> Selectable::getSurroundings(){
     std::vector <Position> surroundings;
-    for (size_t j = 0 ; j < this->dim_y ; j++) {
-        for (size_t i = 0 ; i < this->dim_x ; i++) {
+    for (size_t i = 0 ; i < this->dim_x ; i++) {
+        for (size_t j = 0 ; j < this->dim_y ; j++) {
             if ( j == 0 ){
                 if (i == 0){        
                     surroundings.push_back(Position(this->position.x+i-1,this->position.y+j-1));
@@ -87,9 +87,9 @@ std::vector<Position> Selectable::getSurroundings(){
                 }
             } 
             if ( j > 0 && j < this->dim_y-1 ){
-                if( i == 0)
+                if ( i == 0)
                     surroundings.push_back(Position(this->position.x+i-1,this->position.y+j));
-                if( i == this->dim_x-1 ) 
+                if ( i == this->dim_x-1 ) 
                     surroundings.push_back(Position(this->position.x+i-1,this->position.y+j));
             }
             if ( j == this->dim_y-1){
@@ -127,7 +127,7 @@ int Selectable::getDimY(){
     return this->dim_y;
 }
 
-void Selectable::getState(State & state){
+void Selectable::getState(State& state){
     state.LP = this->LP;
     state.position = this->position;
     state.selected = this->selected;

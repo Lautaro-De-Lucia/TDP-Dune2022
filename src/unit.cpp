@@ -1,7 +1,5 @@
 #include "unit.h"
-
 #include "board.h"
-
 
 Unit::Unit(int LP,int spice, Position pos, int dim_x, int dim_y,int speed) 
 :
@@ -31,6 +29,8 @@ void Unit::react(Cell & location){
     std::cout << "reacting to cell in location: " << location.getPosition() << " [unit]" << std::endl;
 }
 
+Unit::~Unit(){}
+
 /*
 Harvester::Harvester(int LP,int spice, Position pos, int dim_x, int dim_y,int speed,int stored_spice, int max_spice) 
 :
@@ -42,19 +42,16 @@ Unit(LP,spice,pos,dim_x,dim_y,speed)
 */
 Trike::Trike(int LP,int spice, Position pos, int dim_x, int dim_y,int speed,int attack)
 :
-Selectable(LP,pos,dim_x,dim_y,true)
+Unit(LP,spice,pos,dim_x,dim_y,speed)
 {
-    this->spice = spice;
-    this->speed = speed;
     this->attack = attack;
 }
-
 
 void Trike::react(Cell& location) {
 
     std::cout << "Trike::react!!!!!!!!!!" << '\n';
 
-    if(!location.isOccupied()) {
+    if (!location.isOccupied()) {
         aStar aStar;
         std::vector<Position> new_path = aStar.algorithm(this->getPosition(), location.getPosition());
 
@@ -67,19 +64,4 @@ void Trike::react(Cell& location) {
 
         this->remaining_path = new_path;
     }
-}
-
-bool Trike::place(Board & board,std::vector<Position> & positions,int & spice){
-    if ((spice - this->spice) < 0){
-        std::cout << "Not enough Spice!!!" << std::endl;
-        return false;
-    }
-    for (Position position : positions){
-        if (board.place(position,1,1,true) == SUCCESS){
-            this->setPosition(position);
-            spice -= this->spice;
-            return true;
-        }
-    }
-    return false;
 }
