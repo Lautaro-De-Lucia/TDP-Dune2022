@@ -7,13 +7,13 @@ Area::Area(int Xmin,int Xmax, int Ymin, int Ymax){
     this->Ymax = Ymax;
 }
 
-Selectable::Selectable(int LP, Position pos, int dim_x, int dim_y, bool is_movable){
+Selectable::Selectable(int LP, Position position, int dim_x, int dim_y, bool moves){
     this->LP = LP;
-    this->position = pos;
+    this->position = position;
     this->dim_x = dim_x;
     this->dim_y = dim_y;
     this->selected = false;
-    this->is_movable = is_movable;
+    this->is_movable = moves;
     std::vector<Position> empty_path;
     this->remaining_path = empty_path;
 }
@@ -36,7 +36,7 @@ void Selectable::unselect(){
     this->selected = false;
 }
 
-bool Selectable::contains(const Position & pos){
+bool Selectable::contains(const Position& pos){
 
     if ((pos.x == (this->position.x)) && (pos.y == (this->position.y)))
         return true;
@@ -50,12 +50,12 @@ bool Selectable::contains(const Position & pos){
     return false;
 }
 
-void Selectable::react(Cell & location){
+void Selectable::react(Cell& location){
     std::cout << "reacting to cell in location: " << location.getPosition() << " [selectable]" << std::endl;
 }
 
 
-bool Selectable::isWithin(const Area & selection){
+bool Selectable::isWithin(const Area& selection){
     for (size_t i = 0 ; i < this->dim_x ; i++) {
         for (size_t j = 0 ; j < this->dim_y ; j++) {           
             if (
@@ -127,12 +127,13 @@ int Selectable::getDimY(){
     return this->dim_y;
 }
 
+std::vector<Position>& Selectable::get_remaining_path() {
+    return this->remaining_path;
+}
+
 void Selectable::getState(State& state){
+
     state.LP = this->LP;
     state.position = this->position;
     state.selected = this->selected;
-}
-
-std::vector<Position>& Selectable::get_remaining_path() {
-    return this->remaining_path;
 }

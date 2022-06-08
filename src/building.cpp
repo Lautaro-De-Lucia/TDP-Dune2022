@@ -63,6 +63,8 @@ bool Barrack::place(Board & board,int pos_x,int pos_y,int & spice,int & spice_ca
     return true;
 }
 
+
+
 Refinery::Refinery(int LP,int spice,int energy, Position pos, int dim_x,int dim_y, int c_spice)
 :
 Building(LP,spice,energy,pos,dim_x,dim_y)

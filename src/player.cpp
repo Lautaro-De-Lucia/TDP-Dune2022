@@ -121,20 +121,32 @@ and will be stored in the Factory class.
 */
 
 void Player::createBuilding(){
+
     //  Get Parameters
     int type = (file_input[1][0]-'0');
     int pos_x = std::stoi(file_input[2]);
     int pos_y = std::stoi(file_input[3]);
+
     std::cout<< "Adding new building in position " << "("<< pos_x << "," << pos_y << ")" <<std::endl;
-    //  Attempt to add to board
+
     //  Manufacture the building
-    std::unique_ptr<Building> building = BuildingFactory::manufacture((building_t)type);
-    //  Attempt adding it
-    (this->place)((*building),Position(pos_x,pos_y));
-    // changing this->spice for 2000
+    std::unique_ptr<Building> building = BuildingFactory::manufacture((building_t) type);
+
+    //  Attempt to add to board
+    (this->place)((*building),Position(pos_x, pos_y));
+
+    // Changing this->spice for 2000
     int test_spice = 2000;
+
     if ((*building).place(board,pos_x,pos_y,test_spice,this->c_spice,this->energy,this->c_energy)){
         (this->elements).insert({ID++, std::move(building)});
+
+        State state;
+
+        (this->elements)[ID-1]->getState(state);
+        state.ID = ID-1;
+        (this->cplayer).addElement((building_t) type, state);
+
         std::cout << "Building succesfully created" << std::endl;
         return;
     }
@@ -150,10 +162,10 @@ void Player::createUnit(){
     int type = (file_input[1][0]-'0');
     std::cout<< "Creating new unit" << std::endl;
     //  Attempt to add to board
-        //  create the unit
-    std::vector<Position> positions = elements.at(creators.at((unit_t)type))->getSurroundings(); //  FAILING HERE
+    //  Create the unit
+    std::vector<Position> positions = elements.at(creators.at((unit_t) type))->getSurroundings(); //  FAILING HERE
     
-    std::unique_ptr<Unit> unit = UnitFactory::create((unit_t)type);
+    std::unique_ptr<Unit> unit = UnitFactory::create((unit_t) type);
     //  Attempt adding it
     //  REFACTOR: place should probably be a method of the Player class
         // place(Board & board,Building & building,Position & position)
@@ -161,6 +173,11 @@ void Player::createUnit(){
 
     if ((*unit).place(board,positions,this->spice)){
         (this->elements).insert({ID++, std::move(unit)});
+
+        State state;
+        (this->elements)[ID-1]->getState(state);
+        state.ID = ID-1;
+        (this->cplayer).addElement((unit_t) type, state);
         
         std::cout << "Unit succesfully created" << std::endl;
         return;
@@ -249,6 +266,7 @@ void Player::handleIdle(){
 */
 void Player::reportState(){
     State state;
+    /*
     std::cout << "Sending data to client" << std::endl;
     std::cout << "Total units to update: " << this->elements.size() << std::endl;
     std::cout << "|  ID  |  LP  |  pos  |  sel  |"<<std::endl;
@@ -260,15 +278,24 @@ void Player::reportState(){
         std::cout << "    " << state.selected;
         std::cout << "    " << std::endl;
     }
+    */
+    std::vector<State> states;
+
+    for (auto& e : this->elements){
+        state.ID = e.first;
+        e.second->getState(state);
+        states.push_back(state);
+    }
+
+    this->cplayer.update(states);
 }
 
 void Player::updateState(){
     State state;
-    for (auto & e : this->elements){
+    for (auto& e : this->elements){
         if (e.second->moves()) {
 
             int id = e.first;
-
             std::vector<Position>& path = e.second->get_remaining_path();  
             if (path.size() != 0) {
                 e.second->getState(state);
