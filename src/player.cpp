@@ -8,7 +8,7 @@ size_t game_time = 0;
 
 std::vector<std::string> file_input;
 
-Player::Player(uint16_t spice, uint16_t c_spice, uint16_t energy, uint16_t c_energy) {
+Player::Player(int spice, int c_spice, int energy, int c_energy) {
     this->ID = 0;
     this->spice = spice;
     this->c_spice = c_spice;
@@ -124,9 +124,9 @@ and will be stored in the Factory class.
 void Player::createBuilding(){
 
     //  Get Parameters
-    uint8_t type = (uint8_t) (file_input[1][0]-'0');
-    uint16_t pos_x = (uint16_t) std::stoi(file_input[2]);
-    uint16_t pos_y = (uint16_t) std::stoi(file_input[3]);
+    int type = (int) (file_input[1][0]-'0');
+    int pos_x = (int) std::stoi(file_input[2]);
+    int pos_y = (int) std::stoi(file_input[3]);
     std::cout<< "Adding new building in position " << "("<< pos_x << "," << pos_y << ")" <<std::endl;
     //  Attempt to add to board
         //  Manufacture the building
@@ -134,7 +134,7 @@ void Player::createBuilding(){
     //  Attempt adding it
     (this->place)((*building),Position(pos_x,pos_y));
     // changing this->spice for 2000
-    uint16_t test_spice = 2000;
+    int test_spice = 2000;
     if ((*building).place(board,pos_x,pos_y,test_spice,this->c_spice,this->energy,this->c_energy)){
         (this->elements).insert({ID++, std::move(building)});
         std::cout << "Building succesfully created" << std::endl;
@@ -153,8 +153,8 @@ void Player::createBuilding(){
 void Player::handleLeftClick(){
     std::cout << "Client just did a left click on the map" << std::endl;
     //  Get positions
-    uint16_t pos_x = (uint16_t) std::stoi(file_input[1]);
-    uint16_t pos_y = (uint16_t) std::stoi(file_input[2]);
+    int pos_x = (int) std::stoi(file_input[1]);
+    int pos_y = (int) std::stoi(file_input[2]);
     std::cout << "On position: " << Position(pos_x,pos_y) << std::endl;
     //  Leave selected only the units at that position
     for (auto & e : this->elements){
@@ -176,10 +176,10 @@ void Player::handleLeftClick(){
 void Player::handleSelection(){
     std::cout << "Client just selected a part of the map" << std::endl;
     //  Get selection limits
-    uint16_t Xmin = (uint16_t) std::stoi(file_input[1]);
-    uint16_t Xmax = (uint16_t) std::stoi(file_input[2]);
-    uint16_t Ymin = (uint16_t) std::stoi(file_input[3]);
-    uint16_t Ymax = (uint16_t) std::stoi(file_input[4]);
+    int Xmin = (int) std::stoi(file_input[1]);
+    int Xmax = (int) std::stoi(file_input[2]);
+    int Ymin = (int) std::stoi(file_input[3]);
+    int Ymax = (int) std::stoi(file_input[4]);
     std::cout << "Selection: (" << Xmin << "," << Xmax << "," << Ymin << "," << Ymax << ")" << std::endl;
     //  Traverse and mark as selected those that are included
     Area selection(Xmin,Xmax,Ymin,Ymax);
@@ -201,8 +201,8 @@ void Player::handleSelection(){
 void Player::handleRightClick(){
     std::cout << "Client just did a right click on the map" << std::endl;
     //  Get positions
-    uint16_t pos_x = (uint16_t) std::stoi(file_input[1]);
-    uint16_t pos_y = (uint16_t) std::stoi(file_input[2]);
+    int pos_x = (int) std::stoi(file_input[1]);
+    int pos_y = (int) std::stoi(file_input[2]);
     std::cout << "On position: " << Position(pos_x,pos_y) << std::endl;
     //  Traverse elements and make each selected unit handle the cell
     for (auto & e : this->elements){
@@ -223,7 +223,7 @@ void Player::handleIdle(){
 
 void Player::createUnit(){
     //  Get Parameters
-    uint8_t type = (uint8_t) (file_input[1][0]-'0');
+    int type = (int) (file_input[1][0]-'0');
     std::cout<< "Creating new unit" << std::endl;
     //  Attempt to add to board
         //  create the unit
@@ -267,7 +267,7 @@ void Player::updateState(){
     for (auto & e : this->elements){
         if (e.second->moves()) {
 
-            uint16_t id = e.first;
+            int id = e.first;
 
             std::vector<Position>& path = e.second->get_remaining_path();  
             if (path.size() != 0) {
@@ -287,7 +287,7 @@ void Player::updateState(){
 
 
 void Player::makeCreator(){
-    uint16_t building_ID = (uint16_t) std::stoi(file_input[1]);
+    int building_ID = (int) std::stoi(file_input[1]);
     if (this->elements.at(building_ID)->getName() == "Refinery")
         this->creators[HARVESTER] = building_ID; 
     if (this->elements.at(building_ID)->getName() == "Barrack"){

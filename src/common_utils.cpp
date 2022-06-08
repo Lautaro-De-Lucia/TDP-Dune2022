@@ -2,7 +2,7 @@
 
 Position::Position() {}
 
-Position::Position(uint16_t x, uint16_t y) {
+Position::Position(int x, int y) {
     this->x = x;
     this->y = y;
 }

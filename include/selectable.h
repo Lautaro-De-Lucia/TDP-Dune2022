@@ -11,16 +11,16 @@ class Selectable {
     protected:
     std::string name;
     std::string imagepath;
-    uint16_t LP;
+    int LP;
     Position position;
-    uint8_t dim_x;
-    uint8_t dim_y;
+    int dim_x;
+    int dim_y;
     bool selected;
     bool is_movable;
     std::vector<Position> remaining_path;
 
     public:
-    Selectable(uint16_t LP,Position pos, uint8_t dim_x, uint8_t dim_y, bool moves);
+    Selectable(int LP,Position pos, int dim_x, int dim_y, bool moves);
     void selection(Area & mouse_area);
     bool isSelected();
     bool moves();
@@ -34,8 +34,8 @@ class Selectable {
     std::vector<Position> getSurroundings(); 
     void setPosition(Position position);
     Position getPosition();
-    uint8_t getDimX();
-    uint8_t getDimY();
+    int getDimX();
+    int getDimY();
     void getState(State & state);
     std::vector<Position>& get_remaining_path();
     virtual ~Selectable();

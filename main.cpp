@@ -39,7 +39,6 @@ std::vector<std::vector<cell_t>> generate_random_map () {
     return map_cells;
 }
 
-
 void sleepcp(int milliseconds) // Cross-platform sleep function
 {
     clock_t time_end;

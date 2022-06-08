@@ -44,10 +44,10 @@ enum health_t {
 class CSelectable {
 protected:
     SDL2pp::Texture lp_texture;  
-    uint16_t ID;
+    int ID;
     std::string name;
-    uint16_t LP;
-    uint16_t max_LP;
+    int LP;
+    int max_LP;
     Position position;
     bool selected;
     health_t health;

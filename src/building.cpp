@@ -1,6 +1,6 @@
 #include "building.h"
 
-Building::Building(uint16_t LP,uint16_t spice,uint16_t energy, Position pos, uint8_t dim_x, uint8_t dim_y)
+Building::Building(int LP,int spice,int energy, Position pos, int dim_x, int dim_y)
 :
 Selectable(LP,pos,dim_x,dim_y,false)
 {
@@ -8,7 +8,7 @@ Selectable(LP,pos,dim_x,dim_y,false)
     this->energy = energy;
 }
 
-bool Building::place(Board & board,uint16_t pos_x, uint16_t pos_y,uint16_t & spice,uint16_t & spice_capacity,int & energy,uint16_t & energy_capacity){
+bool Building::place(Board & board,int pos_x, int pos_y,int & spice,int & spice_capacity,int & energy,int & energy_capacity){
     if ((spice - this->getSpice()) < 0){
         std::cout << "Not enough Spice!!!" << std::endl;
         return false;
@@ -25,14 +25,14 @@ bool Building::place(Board & board,uint16_t pos_x, uint16_t pos_y,uint16_t & spi
     return true;
 }
 
-uint16_t Building::getSpice(){
+int Building::getSpice(){
     return this->spice;
 }
-uint16_t Building::getEnergy(){
+int Building::getEnergy(){
     return this->energy;
 }
 
-AirTrap::AirTrap(uint16_t LP,uint16_t spice,uint16_t energy, Position pos, uint8_t dim_x,uint8_t dim_y, uint16_t c_energy)
+AirTrap::AirTrap(int LP,int spice,int energy, Position pos, int dim_x,int dim_y, int c_energy)
 :
 Building(LP,spice,energy,pos,dim_x,dim_y)
 {
@@ -40,7 +40,7 @@ Building(LP,spice,energy,pos,dim_x,dim_y)
     this->c_energy = c_energy;
 }
 
-bool AirTrap::place(Board & board,uint16_t pos_x,uint16_t pos_y,uint16_t & spice,uint16_t & spice_capacity,int & energy,uint16_t & energy_capacity){
+bool AirTrap::place(Board & board,int pos_x,int pos_y,int & spice,int & spice_capacity,int & energy,int & energy_capacity){
     if (!Building::place(board,pos_x,pos_y,spice,spice_capacity,energy,energy_capacity))
         return false;
     spice -= this->spice;
@@ -48,14 +48,14 @@ bool AirTrap::place(Board & board,uint16_t pos_x,uint16_t pos_y,uint16_t & spice
     return true;
 }
 
-Barrack::Barrack(uint16_t LP,uint16_t spice,uint16_t energy, Position pos, uint8_t dim_x,uint8_t dim_y)
+Barrack::Barrack(int LP,int spice,int energy, Position pos, int dim_x,int dim_y)
 :
 Building(LP,spice,energy,pos,dim_x,dim_y)
 {
     this->name = "Barrack";
 }
 
-bool Barrack::place(Board & board,uint16_t pos_x,uint16_t pos_y,uint16_t & spice,uint16_t & spice_capacity,int & energy,uint16_t & energy_capacity){
+bool Barrack::place(Board & board,int pos_x,int pos_y,int & spice,int & spice_capacity,int & energy,int & energy_capacity){
     if (!Building::place(board,pos_x,pos_y,spice,spice_capacity,energy,energy_capacity))
         return false;
     spice -= this->spice;
@@ -63,7 +63,7 @@ bool Barrack::place(Board & board,uint16_t pos_x,uint16_t pos_y,uint16_t & spice
     return true;
 }
 
-Refinery::Refinery(uint16_t LP,uint16_t spice,uint16_t energy, Position pos, uint8_t dim_x,uint8_t dim_y, uint16_t c_spice)
+Refinery::Refinery(int LP,int spice,int energy, Position pos, int dim_x,int dim_y, int c_spice)
 :
 Building(LP,spice,energy,pos,dim_x,dim_y)
 {
@@ -71,7 +71,7 @@ Building(LP,spice,energy,pos,dim_x,dim_y)
     this->c_spice= c_spice;
 }
 
-bool Refinery::place(Board & board,uint16_t pos_x,uint16_t pos_y,uint16_t & spice,uint16_t & spice_capacity,int & energy,uint16_t & energy_capacity){
+bool Refinery::place(Board & board,int pos_x,int pos_y,int & spice,int & spice_capacity,int & energy,int & energy_capacity){
     if (!Building::place(board,pos_x,pos_y,spice,spice_capacity,energy,energy_capacity))
         return false;
     spice -= this->spice;

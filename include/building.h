@@ -5,30 +5,30 @@
 
 class Building : public Selectable {
 protected:    
-    uint16_t spice;
-    uint16_t energy;
+    int spice;
+    int energy;
 public:
-    Building(uint16_t LP,uint16_t spice,uint16_t energy,Position pos,uint8_t dim_x, uint8_t dim_y);
-    uint16_t getSpice();
-    uint16_t getEnergy();
-    virtual bool place(Board & board,uint16_t pos_x, uint16_t pos_y,uint16_t & spice,uint16_t & spice_capacity,int & energy,uint16_t & energy_capacity);
+    Building(int LP,int spice,int energy,Position pos,int dim_x, int dim_y);
+    int getSpice();
+    int getEnergy();
+    virtual bool place(Board & board,int pos_x, int pos_y,int & spice,int & spice_capacity,int & energy,int & energy_capacity);
 };
 class AirTrap : public Building {
-    uint16_t c_energy;
+    int c_energy;
 public:
-    AirTrap(uint16_t LP,uint16_t spice,uint16_t energy,Position pos, uint8_t dim_x, uint8_t dim_y, uint16_t c_energy);
-    bool place(Board & board,uint16_t pos_x,uint16_t pos_y,uint16_t & spice,uint16_t & spice_capacity,int & energy,uint16_t & energy_capacity);
+    AirTrap(int LP,int spice,int energy,Position pos, int dim_x, int dim_y, int c_energy);
+    bool place(Board & board,int pos_x,int pos_y,int & spice,int & spice_capacity,int & energy,int & energy_capacity);
 };
 
 class Barrack : public Building {
 public:
-    Barrack(uint16_t LP,uint16_t spice,uint16_t energy, Position pos,uint8_t dim_x, uint8_t dim_y);
-    bool place(Board & board,uint16_t pos_x,uint16_t pos_y,uint16_t & spice,uint16_t & spice_capacity,int & energy,uint16_t & energy_capacity);
+    Barrack(int LP,int spice,int energy, Position pos,int dim_x, int dim_y);
+    bool place(Board & board,int pos_x,int pos_y,int & spice,int & spice_capacity,int & energy,int & energy_capacity);
 };
 
 class Refinery : public Building {
-    uint16_t c_spice;
+    int c_spice;
 public:
-    Refinery(uint16_t LP,uint16_t spice,uint16_t energy, Position pos, uint8_t dim_x, uint8_t dim_y, uint16_t c_spice);
-    bool place(Board & board,uint16_t pos_x,uint16_t pos_y,uint16_t & spice,uint16_t & spice_capacity,int & energy,uint16_t & energy_capacity);
+    Refinery(int LP,int spice,int energy, Position pos, int dim_x, int dim_y, int c_spice);
+    bool place(Board & board,int pos_x,int pos_y,int & spice,int & spice_capacity,int & energy,int & energy_capacity);
 };

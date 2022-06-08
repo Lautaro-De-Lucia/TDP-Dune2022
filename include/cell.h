@@ -19,7 +19,7 @@ class Cell {
 
  public:
     Cell();
-    void setPosition(uint16_t x, uint16_t y);
+    void setPosition(int x, int y);
     Position getPosition();
     bool isOccupied();
     bool hasUnit();

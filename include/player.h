@@ -27,19 +27,19 @@ enum command_t {
 
 class Player {
 private:
-    uint16_t ID;
-    uint16_t spice;
-    uint16_t c_spice;
+    int ID;
+    int spice;
+    int c_spice;
     int energy;
-    uint16_t c_energy;
+    int c_energy;
     double efficiency;
-    std::map<uint16_t,std::unique_ptr<Selectable>> elements;
-    std::map<unit_t,uint16_t> creators;
+    std::map<int,std::unique_ptr<Selectable>> elements;
+    std::map<unit_t,int> creators;
     bool place(Building & building,Position position);
     bool place(Refinery & refinery,Position & position);
     bool place(Trike & unit,std::vector<Position> positions);
 public:    
-    Player (uint16_t spice, uint16_t c_spice, uint16_t energy, uint16_t c_energy);
+    Player (int spice, int c_spice, int energy, int c_energy);
     void makeCreator();
     void print();
     void run(); // This should receive the socket in the future

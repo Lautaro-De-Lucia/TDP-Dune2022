@@ -1,13 +1,13 @@
 #include "selectable.h"
 
-Area::Area(uint16_t Xmin,uint16_t Xmax, uint16_t Ymin, uint16_t Ymax){
+Area::Area(int Xmin,int Xmax, int Ymin, int Ymax){
     this->Xmin = Xmin;
     this->Xmax = Xmax;
     this->Ymin = Ymin;
     this->Ymax = Ymax;
 }
 
-Selectable::Selectable(uint16_t LP, Position pos, uint8_t dim_x, uint8_t dim_y, bool is_movable){
+Selectable::Selectable(int LP, Position pos, int dim_x, int dim_y, bool is_movable){
     this->LP = LP;
     this->position = pos;
     this->dim_x = dim_x;
@@ -120,10 +120,10 @@ Position Selectable::getPosition(){
 void Selectable::setPosition(Position position){
     this->position = position;
 }
-uint8_t Selectable::getDimX(){
+int Selectable::getDimX(){
     return this->dim_x;
 }
-uint8_t Selectable::getDimY(){
+int Selectable::getDimY(){
     return this->dim_y;
 }
 

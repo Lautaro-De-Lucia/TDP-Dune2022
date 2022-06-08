@@ -6,7 +6,7 @@ Cell::Cell(){
     this->unit = false;
 }
 
-void Cell::setPosition(uint16_t x, uint16_t y){
+void Cell::setPosition(int x, int y){
     this->position.x = x;
     this->position.y = y;
 }

@@ -20,7 +20,7 @@ void CSelectable::update(State & new_state,SDL2pp::Renderer & renderer){
 
 void CStatic::update(State & new_state,SDL2pp::Renderer & renderer){
     //  Update health
-    uint8_t hsprites = 7;
+    int hsprites = 7;
     for (size_t state = 1 ; state < hsprites ; state++){
         if(LP > (max_LP -(max_LP / 7)*state) && LP <= (max_LP -(max_LP / hsprites)*(state-1))){
             this->health = (health_t) state;
@@ -35,7 +35,7 @@ void CStatic::update(State & new_state,SDL2pp::Renderer & renderer){
 
 void CMovable::update(State & new_state,SDL2pp::Renderer & renderer){
     
-    uint8_t hsprites = 7;
+    int hsprites = 7;
     for (size_t state = 1 ; state < hsprites ; state++){
         if(LP > (max_LP -(max_LP / 7)*state) && LP <= (max_LP -(max_LP / hsprites)*(state-1))){
             this->health = (health_t) state;

@@ -15,15 +15,15 @@ enum status_t {
 
 class Board{
  private:
-    uint16_t dim_x;
-    uint16_t dim_y;
+    int dim_x;
+    int dim_y;
     std::vector<std::vector<Cell>> cells;
  public:
-    Board(uint16_t dim_x, uint16_t dim_y);
-    Cell& getCell(uint16_t x, uint16_t y);
+    Board(int dim_x, int dim_y);
+    Cell& getCell(int x, int y);
     void print();
     void print(std::vector<Position> path);
-    status_t place(const Position & location, uint8_t dim_x, uint8_t dim_y, bool isUnit);
+    status_t place(const Position & location, int dim_x, int dim_y, bool isUnit);
     size_t get_width();
     size_t get_height();
     void move_unit(Position from, Position to);

@@ -18,7 +18,7 @@ private:
     size_t c_energy;
     int energy;
     double efficiency;
-    std::map<uint16_t,std::unique_ptr<CSelectable>> elements;
+    std::map<int,std::unique_ptr<CSelectable>> elements;
     GameMap map;
     GameHud hud;
     SDL2pp::Window & game_window;

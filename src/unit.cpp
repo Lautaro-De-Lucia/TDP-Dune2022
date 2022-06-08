@@ -3,7 +3,7 @@
 #include "board.h"
 
 /*
-Unit::Unit(uint16_t LP,uint16_t spice, Position pos, uint8_t dim_x, uint8_t dim_y,uint16_t speed) 
+Unit::Unit(int LP,int spice, Position pos, int dim_x, int dim_y,int speed) 
 :
 Selectable(LP,pos,dim_x,dim_y,true)
 {
@@ -11,7 +11,7 @@ Selectable(LP,pos,dim_x,dim_y,true)
     this->speed = speed;
 }
 
-bool Unit::place(Board & board,std::vector<Position> & positions,uint16_t & spice){
+bool Unit::place(Board & board,std::vector<Position> & positions,int & spice){
     if ((spice - this->spice) < 0){
         std::cout << "Not enough Spice!!!" << std::endl;
         return false;
@@ -38,7 +38,7 @@ Unit::~Unit() {
 
 
 /*
-Harvester::Harvester(uint16_t LP,uint16_t spice, Position pos, uint8_t dim_x, uint8_t dim_y,uint16_t speed,uint16_t stored_spice, uint16_t max_spice) 
+Harvester::Harvester(int LP,int spice, Position pos, int dim_x, int dim_y,int speed,int stored_spice, int max_spice) 
 :
 Unit(LP,spice,pos,dim_x,dim_y,speed)
 {
@@ -46,7 +46,7 @@ Unit(LP,spice,pos,dim_x,dim_y,speed)
     this->max_spice = max_spice;
 }
 */
-Trike::Trike(uint16_t LP,uint16_t spice, Position pos, uint8_t dim_x, uint8_t dim_y,uint16_t speed,uint16_t attack)
+Trike::Trike(int LP,int spice, Position pos, int dim_x, int dim_y,int speed,int attack)
 :
 Selectable(LP,pos,dim_x,dim_y,true)
 {
@@ -75,7 +75,7 @@ void Trike::react(Cell& location) {
     }
 }
 
-bool Trike::place(Board & board,std::vector<Position> & positions,uint16_t & spice){
+bool Trike::place(Board & board,std::vector<Position> & positions,int & spice){
     if ((spice - this->spice) < 0){
         std::cout << "Not enough Spice!!!" << std::endl;
         return false;
