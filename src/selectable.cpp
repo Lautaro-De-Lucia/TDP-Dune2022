@@ -136,7 +136,3 @@ void Selectable::getState(State& state){
 std::vector<Position>& Selectable::get_remaining_path() {
     return this->remaining_path;
 }
-
-Selectable::~Selectable() {
-
-}

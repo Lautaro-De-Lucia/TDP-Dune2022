@@ -38,5 +38,5 @@ class Selectable {
     int getDimY();
     void getState(State & state);
     std::vector<Position>& get_remaining_path();
-    virtual ~Selectable();
+    virtual ~Selectable(){}
 };
