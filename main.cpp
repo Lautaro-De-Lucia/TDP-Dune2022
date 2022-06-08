@@ -129,36 +129,36 @@ void run_sdl() {
                     break;
                 //User clicks
                 case SDL_MOUSEBUTTONUP:
-                    if (event.button.button == SDL_BUTTON_LEFT) {
-                        std::cout << "Click izq \n";
-                    }
-                    else if (event.button.button == SDL_BUTTON_RIGHT) {
-                        std::cout << "Click der \n";
-                    }
+                    int c_x, c_y;
+                    SDL_GetMouseState( &c_x, &c_y );
+                    c_x = (c_x/32) + (cam.pos_x/16);
+                    c_y = (c_y/32) + (cam.pos_y/16);
+
+                    if (event.button.button == SDL_BUTTON_LEFT) {}
+                    else if (event.button.button == SDL_BUTTON_RIGHT) {}
                     break;
             }
         }
         int x, y;
 		SDL_GetMouseState( &x, &y );
-
         if(x < 80){
-            cam.move(-1,0);
+            cam.move(-2,0);
             sleepcp(x);
             client_player.update(states);
         }
         if(x > 560){
-            cam.move(1,0);
-            sleepcp(640-x);
+            cam.move(2,0);
+            sleepcp(320-x);
             client_player.update(states);
         }
         if(y < 60){
-            cam.move(0,-1);
+            cam.move(0,-2);
             sleepcp(y);
             client_player.update(states);
         }
         if(y > 300){
-            cam.move(0,1);
-            sleepcp(360-y);
+            cam.move(0,2);
+            sleepcp(180-y);
             client_player.update(states);
         }
     }
