@@ -46,7 +46,9 @@ const char * cmddict [8] {
 
 void Player::run(){
 
+    // @ignore
     TextFileHandler command_reader(DATA_PATH INSTRUCTIONS_FILE);
+
     while (command_reader.readInput(file_input)){
         //std::system("clear");
         //  Read first line to get command
@@ -58,38 +60,38 @@ void Player::run(){
         switch (command){
             case CREATE_UNIT:
                 createUnit();
-                board.print();
-                this->print();
+                //board.print();
+                //this->print();
                 break;
             case CREATE_BUILDING:
                 createBuilding();
-                board.print();
-                this->print();
+                //board.print();
+                //this->print();
                 break;
             case MAKE_CREATOR:
                 makeCreator();
-                board.print();
-                this->print();    
+                //board.print();
+                //this->print();    
                 break;
             case MOUSE_LEFT_CLICK:
                 handleLeftClick();
-                board.print();
-                this->print();
+                //board.print();
+                //this->print();
                 break;
             case MOUSE_RIGHT_CLICK:
                 handleRightClick();
-                board.print();
-                this->print();
+                //board.print();
+                //this->print();
                 break;
             case MOUSE_SELECTION:
                 handleSelection();
-                board.print();
-                this->print();
+                //board.print();
+                //this->print();
                 break;
             case IDLE:
                 handleIdle();
-                board.print();
-                this->print();
+                //board.print();
+                //this->print();
                 break;
             default:
                 break;
@@ -98,7 +100,7 @@ void Player::run(){
         reportState();
         printSeparator();
         //  Render to screen
-        usleep(500000);
+        usleep(200000);
         game_time++;
     }
 }
@@ -142,7 +144,6 @@ void Player::createBuilding(){
         (this->elements).insert({ID++, std::move(building)});
 
         State state;
-
         (this->elements)[ID-1]->getState(state);
         state.ID = ID-1;
         (this->cplayer).addElement((building_t) type, state);
@@ -264,8 +265,10 @@ void Player::handleIdle(){
     CASE SUCCESS: 
         SERVER ------------>{...,[sel][pos_y][pos_x][LP][ID],...}[total]---------> CLIENT
 */
+
+
 void Player::reportState(){
-    State state;
+
     /*
     std::cout << "Sending data to client" << std::endl;
     std::cout << "Total units to update: " << this->elements.size() << std::endl;
@@ -279,15 +282,17 @@ void Player::reportState(){
         std::cout << "    " << std::endl;
     }
     */
-    std::vector<State> states;
 
+    State state;
+    
+    std::vector<State> states;
     for (auto& e : this->elements){
         state.ID = e.first;
         e.second->getState(state);
         states.push_back(state);
     }
 
-    this->cplayer.update(states);
+    (this->cplayer).update(states);
 }
 
 void Player::updateState(){

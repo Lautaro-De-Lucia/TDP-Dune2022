@@ -30,11 +30,16 @@ void CPlayer::addElement(unit_t type,State & desc){
 
 void CPlayer::addElement(building_t type,State & desc){
     switch (type){
-        case AIR_TRAP: 
+        case AIR_TRAP:
             this->elements.insert({desc.ID,std::unique_ptr<CSelectable>(new CStatic("Wind Trap",desc,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH WIND_TRAP_PATH))});
             break;
         case BARRACK:
+
+            
+
             this->elements.insert({desc.ID,std::unique_ptr<CSelectable>(new CStatic("Barrack",desc,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH BARRACK_PATH))});
+
+
             break; 
         case REFINERY:
             this->elements.insert({desc.ID,std::unique_ptr<CSelectable>(new CStatic("Refinery",desc,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH REFINERY_PATH))});
@@ -42,11 +47,12 @@ void CPlayer::addElement(building_t type,State & desc){
     }
 }
 
-void CPlayer::update(std::vector<State> & server_data){
+void CPlayer::update(std::vector<State>& server_data){
     this->game_renderer.Clear();
     this->renderMap();
     for (State data : server_data)
         (*(this->elements.at(data.ID))).update(data,this->game_renderer);
+
     this->renderHud();
     this->game_renderer.Present();
 }

@@ -55,6 +55,8 @@ class CSelectable {
     CSelectable(std::string name,State & initial_state,SDL2pp::Renderer & renderer, const std::string& lp_path);
     virtual void update(State & new_state,SDL2pp::Renderer & renderer);
     virtual void render(SDL2pp::Renderer & renderer);
+    int get_life_points();
+    int getID();
 };
 
 //  Tengo que definir una clase CMovable y otra clase CStatic

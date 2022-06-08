@@ -4,6 +4,7 @@ CSelectable::CSelectable(std::string name,State & state,SDL2pp::Renderer & rende
 :
 lp_texture(renderer,lp_path)
 {
+    this->ID = state.ID;
     this->name = name;
     this->LP = state.LP;
     this->max_LP = state.LP;
@@ -19,6 +20,9 @@ void CSelectable::update(State & new_state,SDL2pp::Renderer & renderer){
 }
 
 void CStatic::update(State & new_state,SDL2pp::Renderer & renderer){
+
+    std::cout << "UPDATING " << this->ID << ", " << this->name << std::endl;
+
     //  Update health
     int hsprites = 7;
     for (size_t state = 1 ; state < hsprites ; state++){
@@ -30,6 +34,7 @@ void CStatic::update(State & new_state,SDL2pp::Renderer & renderer){
     this->LP = new_state.LP;
     this->position = new_state.position;
     this->selected = new_state.selected;
+
     this->render(renderer);
 }
 
@@ -75,6 +80,18 @@ void CSelectable::render(SDL2pp::Renderer & renderer){
             SDL2pp::Rect((this->position.x-0.5)*TILE_SIZE-cam.pos_x,(this->position.y-0.5)*TILE_SIZE-cam.pos_y,30,5) 		
         );
 }
+
+int CSelectable::get_life_points() {
+
+    return this->LP;
+}
+
+int CSelectable::getID() {
+
+    return this->ID;
+}
+
+
 
 CMovable::CMovable(std::string name,State & state,SDL2pp::Renderer & renderer,const std::string& lp_path ,const std::string& path)
 :

@@ -48,7 +48,7 @@ void sleepcp(int milliseconds) // Cross-platform sleep function
     }
 }
 
-Camera cam(320,180,640,360,1280,720);
+Camera cam(0,0,640,360,1280,720);
 
 void greet(SDL2pp::Renderer &game_renderer) {
     std::string text = "Loading map... please wait";
@@ -68,9 +68,10 @@ void run_sdl() {
     std::vector<std::vector<cell_t>> cells = generate_random_map();
     CPlayer client_player(game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cells);
 
-    Player server(INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY, client_player);
 
+    Player server(INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY, client_player);
     server.run();
+
 
     /*
     client_player.renderMap();
