@@ -22,12 +22,12 @@ class MapCell{
     SDL2pp::Texture texture;
  public:
     MapCell( SDL2pp::Renderer & renderer, const std::string& path,size_t pos_x, size_t pos_y);
-    void render(SDL2pp::Renderer & renderer);
+    void render(SDL2pp::Renderer & renderer, int cam_pos_x, int cam_pos_y);
 };
 class GameMap {
  private:
     std::vector<MapCell> map_cells;
  public:
     GameMap(SDL2pp::Renderer & renderer,std::vector<std::vector<cell_t>> & cells);
-    void render(SDL2pp::Renderer & renderer);
+    void render(SDL2pp::Renderer & renderer, int cam_pos_x, int cam_pos_y);
 };

@@ -10,15 +10,15 @@ Selectable(LP,pos,dim_x,dim_y,false)
 
 bool Building::place(Board & board,int pos_x, int pos_y,int & spice,int & spice_capacity,int & energy,int & energy_capacity){
     if ((spice - this->getSpice()) < 0){
-        std::cout << "Not enough Spice!!!" << std::endl;
+        std::cerr << "Not enough Spice!!!" << std::endl;
         return false;
     }
     if ((energy - this->getEnergy()) < 0){
-        std::cout << "Not enough Energy!!!" << std::endl;
+        std::cerr << "Not enough Energy!!!" << std::endl;
         return false;
     }
     if (board.place(Position(pos_x,pos_y),this->getDimX(),this->getDimY(), false) == FAILED_TO_ADD){
-        std::cout << "Can't build in this position!!!" << std::endl;
+        std::cerr << "Can't build in this position!!!" << std::endl;
         return false;
     }
     this->setPosition(Position(pos_x,pos_y));

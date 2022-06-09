@@ -52,9 +52,9 @@ class CSelectable {
     bool selected;
     health_t health;
  public:
-    CSelectable(std::string name,State & initial_state,SDL2pp::Renderer & renderer, const std::string& lp_path);
-    virtual void update(State & new_state,SDL2pp::Renderer & renderer);
-    virtual void render(SDL2pp::Renderer & renderer);
+    CSelectable(std::string name,State& initial_state,SDL2pp::Renderer& renderer, const std::string& lp_path);
+    virtual void update(State& new_state,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
+    virtual void render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
     int get_life_points();
     int getID();
 };
@@ -70,16 +70,16 @@ class CMovable : public CSelectable {
     SDL2pp::Texture texture;  
     move_direction dir;
  public:
-    CMovable(std::string name,State & state,SDL2pp::Renderer & renderer, const std::string& lp_path , const std::string& path);
-    void render(SDL2pp::Renderer & renderer);
-    void update(State & new_state,SDL2pp::Renderer & renderer);
+    CMovable(std::string name,State& state,SDL2pp::Renderer& renderer, const std::string& lp_path , const std::string& path);
+    void render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
+    void update(State& new_state,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
 }; 
 
 class CStatic : public CSelectable {
  private:
     SDL2pp::Texture texture;  
  public:
-    CStatic(std::string name,State & state,SDL2pp::Renderer & renderer, const std::string& lp_path ,const std::string& path);
-    void render(SDL2pp::Renderer & renderer);
-    void update(State & new_state,SDL2pp::Renderer & renderer);
+    CStatic(std::string name,State& state,SDL2pp::Renderer& renderer, const std::string& lp_path ,const std::string& path);
+    void render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
+    void update(State& new_state,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
 };

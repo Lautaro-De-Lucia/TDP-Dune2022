@@ -4,7 +4,7 @@
 
 #include <unistd.h>
 
-size_t game_time = 0;
+bool game_has_not_started  = true;
 
 std::vector<std::string> file_input;
 
@@ -44,64 +44,64 @@ const char * cmddict [8] {
     "IDLE",
 };
 
-void Player::run(){
+void Player::run() {
 
     // @ignore
     TextFileHandler command_reader(DATA_PATH INSTRUCTIONS_FILE);
+    auto base_time_instruction = clock();
 
-    while (command_reader.readInput(file_input)){
-        //std::system("clear");
-        //  Read first line to get command
-        //  With sockets: read 1 byte from the socket
-        command_t command = (command_t)(file_input[0][0]-'0');
-        std::cout << command << ": " << cmddict[command-1] <<std::endl;
-        printSeparator();
+    while (1) {
 
-        switch (command){
-            case CREATE_UNIT:
-                createUnit();
-                //board.print();
-                //this->print();
-                break;
-            case CREATE_BUILDING:
-                createBuilding();
-                //board.print();
-                //this->print();
-                break;
-            case MAKE_CREATOR:
-                makeCreator();
-                //board.print();
-                //this->print();    
-                break;
-            case MOUSE_LEFT_CLICK:
-                handleLeftClick();
-                //board.print();
-                //this->print();
-                break;
-            case MOUSE_RIGHT_CLICK:
-                handleRightClick();
-                //board.print();
-                //this->print();
-                break;
-            case MOUSE_SELECTION:
-                handleSelection();
-                //board.print();
-                //this->print();
-                break;
-            case IDLE:
-                handleIdle();
-                //board.print();
-                //this->print();
-                break;
-            default:
-                break;
-        }
-        updateState();
+        auto current_time = clock();
+		auto frame_time_instruction = current_time - base_time_instruction;
+       
+        this->cplayer.updateCamera();
         reportState();
-        printSeparator();
-        //  Render to screen
-        usleep(200000);
-        game_time++;
+
+        if(frame_time_instruction > 100000 || game_has_not_started) {
+
+            game_has_not_started = false;
+            base_time_instruction = current_time;
+            //std::cout << "game frame!!" << std::endl;
+            if (command_reader.readInput(file_input)) {
+                //std::system("clear");
+                //  Read first line to get command
+                //  With sockets: read 1 byte from the socket
+                command_t command = (command_t)(file_input[0][0]-'0');
+                //std::cout << command << ": " << cmddict[command-1] <<std::endl;
+                //printSeparator();
+                switch (command){
+                    case CREATE_UNIT:
+                        createUnit();
+                        break;
+                    case CREATE_BUILDING:
+                        createBuilding();
+                        break;
+                    case MAKE_CREATOR:
+                        makeCreator();  
+                        break;
+                    case MOUSE_LEFT_CLICK:
+                        handleLeftClick();
+                        break;
+                    case MOUSE_RIGHT_CLICK:
+                        handleRightClick();
+                        break;
+                    case MOUSE_SELECTION:
+                        handleSelection();
+                        break;
+                    case IDLE:
+                        handleIdle();
+                        break;
+                    default:
+                        break;
+                }
+
+                //board.print();
+                //this->print();
+
+                updateMovables();
+            }
+        }
     }
 }
 
@@ -295,7 +295,7 @@ void Player::reportState(){
     (this->cplayer).update(states);
 }
 
-void Player::updateState(){
+void Player::updateMovables(){
     State state;
     for (auto& e : this->elements){
         if (e.second->moves()) {

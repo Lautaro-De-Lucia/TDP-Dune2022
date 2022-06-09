@@ -53,5 +53,5 @@ class Player {
     void handleSelection();
     void handleIdle();
     void reportState();
-    void updateState();
+    void updateMovables();
 };

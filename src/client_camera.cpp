@@ -1,6 +1,6 @@
 #include "client_camera.h"
 
-Camera::Camera(int pos_x, int pos_y, int width, int height, int screen_width, int screen_height){
+Camera::Camera(int pos_x, int pos_y, int width, int height, int screen_width, int screen_height) {
     this->pos_x = pos_x;
     this->pos_y = pos_y;
     this->width = width;
@@ -21,4 +21,3 @@ void Camera::move(int x, int y){
     if ( this->pos_y > this->screen_height-this->height)
         this->pos_y = this->screen_height-this->height;
 }
-

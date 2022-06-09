@@ -1,16 +1,85 @@
 1 2 2 2 	    //Create a barrack on (2,2)
+8
+8
+8
 1 3 5 5		    //Create a refinery on (5,5)
+8
+8
+8
 1 3 10 10		//Create a refinery on (10,10)
+8
+8
+8
+8
+8
+8
+8
 1 3 15 10		//Create a refinery on (15,10)
-1 1 5 10	    //Create a wind trap on (5,10)	
-1 1 15 20	    //Create a wind trap on (15,20)	
+8
+8
+8
+8
+8
+8
+1 1 5 10	    //Create a wind trap on (5,10)
+8
+8
+1 1 15 20	    //Create a wind trap on (15,20)
+8
+8
 1 3 0 15	    //Create a refinery on (0,15)
+8
 3 0		        //Make the first barrack a creator
+8
+8
 3 1		        //Make the first refinery a creator
+8
+8
 2 2		        //Create a trike
+8
+8
+8
+8
+8
 2 2		        //Create a trike
+8
+8
+8
+8
 4 1 2		    //Position (1,2) is left-clicked
 5 40 20		    //Position (40,20) is right-clicked
+8
+8
+8
+8
+4 1 1		    //Position (1,1) is left-clicked
+5 42 10		    //Position (42,10) is right-clicked
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
+8
 8
 8
 8

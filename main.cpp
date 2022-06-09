@@ -39,17 +39,6 @@ std::vector<std::vector<cell_t>> generate_random_map () {
     return map_cells;
 }
 
-void sleepcp(int milliseconds) // Cross-platform sleep function
-{
-    clock_t time_end;
-    time_end = clock() + milliseconds * CLOCKS_PER_SEC/1000;
-    while (clock() < time_end)
-    {
-    }
-}
-
-Camera cam(0,0,640,360,1280,720);
-
 void greet(SDL2pp::Renderer &game_renderer) {
     std::string text = "Loading map... please wait";
     SDL2pp::SDLTTF ttf;
@@ -63,15 +52,17 @@ void run_sdl() {
 
     SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,SDL_WINDOW_ALWAYS_ON_TOP);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
+
+    Camera cam(0,0,640,360,1280,720);
+
     Board board(45,25);
-    SDL_Event event;
+
     std::vector<std::vector<cell_t>> cells = generate_random_map();
-    CPlayer client_player(game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cells);
+    CPlayer client_player(cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cells);
 
 
     Player server(INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY, client_player);
     server.run();
-
 
     /*
     client_player.renderMap();

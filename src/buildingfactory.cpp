@@ -18,7 +18,7 @@ std::unique_ptr<Building> BuildingFactory::manufacture(building_t unit) {
             return std::unique_ptr<Refinery>(new Refinery(REFINERY_LP,AIR_TRAP_SPICE,AIR_TRAP_ENERGY,Position(0,0),REFINERY_DIM_X,REFINERY_DIM_Y,REFINERY_CAPACITY));
             break;
         default:
-            std::cout << "No such thing" << std::endl;
+            std::cerr << "No such thing" << std::endl;
     }
     throw std::runtime_error("Unknown building"); 
 }

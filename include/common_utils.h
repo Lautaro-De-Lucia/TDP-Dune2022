@@ -88,3 +88,5 @@ struct Area {
     int Ymax;
     Area(int Xmin,int Xmax, int Ymin, int Ymax);
 };
+
+void sleepcp(int milliseconds);
