@@ -83,20 +83,20 @@ void CPlayer::updateCamera() {
 
     if (x < 80) {
         this->camera.move(-1,0);
-        sleepcp(x);
+        //sleepcp(x);
         //this->client_player.update(states);
-    } else if (x > 560) {
+    } else if (x > 1010 && x < 1090) {
         this->camera.move(1,0);
-        sleepcp(640-x);
+        //sleepcp(640-x);
         //this->client_player.update(states);
     }
     if (y < 60) {
         this->camera.move(0,-1);
-        sleepcp(y);
+        //sleepcp(y);
         //this->client_player.update(states);
-    } else if (y > 300) {
+    } else if (y > 660) {
         this->camera.move(0,1);
-        sleepcp(360-y);
+        //sleepcp(360-y);
         //this->client_player.update(states);
     }
 }
