@@ -10,7 +10,9 @@
 #include "textfilehandler.h"
 #include "selectable.h"
 #include "buildingfactory.h"
-#include "trikefactory.h"
+#include "unitfactory.h"
+#include "unit.h"
+#include "client_player.h"
 
 #define INSTRUCTIONS_FILE "/instr.txt"
 
@@ -26,31 +28,30 @@ enum command_t {
 };
 
 class Player {
-private:
-    uint16_t ID;
-    uint16_t spice;
-    uint16_t c_spice;
+ private:
+    int ID;
+    int spice;
+    int c_spice;
     int energy;
-    uint16_t c_energy;
+    int c_energy;
     double efficiency;
-    std::map<uint16_t,std::unique_ptr<Selectable>> elements;
-    std::map<unit_t,uint16_t> creators;
+    CPlayer& cplayer;
+    std::map<int,std::unique_ptr<Selectable>> elements;
+    std::map<unit_t,int> creators;
     bool place(Building & building,Position position);
     bool place(Refinery & refinery,Position & position);
-    bool place(Trike & unit,std::vector<Position> positions);
-public:    
-    Player (uint16_t spice, uint16_t c_spice, uint16_t energy, uint16_t c_energy);
+    bool place(Unit & unit,std::vector<Position> positions);
+ public:    
+    Player (int spice, int c_spice, int energy, int c_energy, CPlayer& client_player);
     void makeCreator();
     void print();
     void run(); // This should receive the socket in the future
-    void createUnit();
     void createBuilding();
+    void createUnit();
     void handleLeftClick();
     void handleRightClick();
     void handleSelection();
     void handleIdle();
     void reportState();
-    void updateState();
+    void updateMovables();
 };
-
-

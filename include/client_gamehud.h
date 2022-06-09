@@ -6,9 +6,9 @@ const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
 
 class GameHud {
-private:
+ private:
     SDL2pp::Texture texture;
-public:
+ public:
     GameHud(SDL2pp::Renderer & renderer);
     void render(SDL2pp::Renderer & renderer);
 };

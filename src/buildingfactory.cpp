@@ -5,6 +5,8 @@ https://stackoverflow.com/questions/54830073/how-make-the-factory-design-pattern
 */
 
 std::unique_ptr<Building> BuildingFactory::manufacture(building_t unit) {
+
+
     switch (unit) {
         case AIR_TRAP:
             return std::unique_ptr<AirTrap>(new AirTrap(AIR_TRAP_LP,AIR_TRAP_SPICE,AIR_TRAP_ENERGY,Position(0,0),AIR_TRAP_DIM_X,AIR_TRAP_DIM_Y,AIR_TRAP_CAPACITY));
@@ -16,7 +18,7 @@ std::unique_ptr<Building> BuildingFactory::manufacture(building_t unit) {
             return std::unique_ptr<Refinery>(new Refinery(REFINERY_LP,AIR_TRAP_SPICE,AIR_TRAP_ENERGY,Position(0,0),REFINERY_DIM_X,REFINERY_DIM_Y,REFINERY_CAPACITY));
             break;
         default:
-            std::cout << "No such thing" << std::endl;
+            std::cerr << "No such thing" << std::endl;
     }
-    return std::make_unique<Building>(0,0,0,Position(0,0),0,0); // REFACTOR: Handle this kind of stuff with an exception
+    throw std::runtime_error("Unknown building"); 
 }

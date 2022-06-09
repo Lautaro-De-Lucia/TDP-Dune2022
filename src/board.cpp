@@ -1,6 +1,6 @@
 #include "board.h"
 
-Board::Board(uint16_t dim_x, uint16_t dim_y)
+Board::Board(int dim_x, int dim_y)
 : dim_x(dim_x), dim_y(dim_y), cells() {
     //  Allocate memory in the stack
         cells.resize(dim_x);
@@ -14,7 +14,7 @@ Board::Board(uint16_t dim_x, uint16_t dim_y)
     }    
 }
 
-status_t Board::place(const Position & location, uint8_t dim_x,uint8_t dim_y,bool isUnit) {
+status_t Board::place(const Position & location, int dim_x,int dim_y,bool isUnit) {
     //  See if any of the positions to build is already occupied
     for (size_t j = 0 ; j < dim_y ; j++) {
         for (size_t i = 0 ; i < dim_x ; i++) {
@@ -35,7 +35,7 @@ status_t Board::place(const Position & location, uint8_t dim_x,uint8_t dim_y,boo
     return SUCCESS;
 }
 
-Cell& Board::getCell(uint16_t x, uint16_t y){
+Cell& Board::getCell(int x, int y){
     return this->cells[x][y];
 }
 

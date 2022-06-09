@@ -39,18 +39,6 @@ std::vector<std::vector<cell_t>> generate_random_map () {
     return map_cells;
 }
 
-
-void sleepcp(int milliseconds) // Cross-platform sleep function
-{
-    clock_t time_end;
-    time_end = clock() + milliseconds * CLOCKS_PER_SEC/1000;
-    while (clock() < time_end)
-    {
-    }
-}
-
-Camera cam(320,180,640,360,1280,720);
-
 void greet(SDL2pp::Renderer &game_renderer) {
     std::string text = "Loading map... please wait";
     SDL2pp::SDLTTF ttf;
@@ -64,11 +52,19 @@ void run_sdl() {
 
     SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,SDL_WINDOW_ALWAYS_ON_TOP);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
-    greet(game_renderer);
+
+    Camera cam(0,0,640,360,1280,720);
+
     Board board(45,25);
-    SDL_Event event;
+
     std::vector<std::vector<cell_t>> cells = generate_random_map();
-    CPlayer client_player(game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cells);
+    CPlayer client_player(cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cells);
+
+
+    Player server(INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY, client_player);
+    server.run();
+
+    /*
     client_player.renderMap();
     client_player.renderHud();
     game_renderer.Present();
@@ -117,86 +113,43 @@ void run_sdl() {
         sleepcp(500);
     }
     //Handle events on queue
-    bool running = true;
-    //Player server(INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY);
-    //server.run();
-    bool drag = false;
-    int c_x, c_y;
-    int c_x2, c_y2; // Drag clicks
-    while(running)
-    {   
-        while (SDL_PollEvent( &event )) {
-            if (drag == false) {
-                SDL_GetMouseState( &c_x, &c_y );
-                c_x = (c_x/(TILE_DIM*2)) + (cam.pos_x/TILE_DIM);
-                c_y = (c_y/(TILE_DIM*2)) + (cam.pos_y/TILE_DIM);
-            }
-
-            switch (event.type) {
-                //User requests quit
-                case SDL_QUIT:
-                    running = false;
-                    SDL_Quit();
-                    break;
-                
-                //User clicks
-
-                case SDL_MOUSEMOTION:
-                    if (drag == true) {
-                        SDL_GetMouseState( &c_x2, &c_y2 );
-                        c_x2 = (c_x2/(TILE_DIM*2)) + (cam.pos_x/TILE_DIM);
-                        c_y2 = (c_y2/(TILE_DIM*2)) + (cam.pos_y/TILE_DIM);
-                    } break;
-                case SDL_MOUSEBUTTONUP:
-                        if (event.button.button == SDL_BUTTON_LEFT) {
-                            if (drag == true) {
-                                //server.handleSelection(min(c_x, c_x2), max(c_x, c_x2),
-                                    // min(c_y, c_y2), max(c_y, c_y2));
-                            } else {
-                                //server.handleLeftClick();
-                            }
-                        }
-                        else if (event.button.button == SDL_BUTTON_RIGHT) {
-                            //server.handleRightClick();
-                        }
-                        break;
-
-                case SDL_KEYDOWN:
-                    if(event.key.keysym.sym == SDLK_SPACE){
-                        drag = true;
-                    }
-                    break;
-
-                case SDL_KEYUP:
-                    if(event.key.keysym.sym == SDLK_SPACE){
-                        drag = false;
-                    }
-                    break;
-            }
+    while( true )
+    {
+        SDL_PollEvent( &event );
+        //User requests quit
+        if( event.type == SDL_QUIT )
+        {
+            game_window.Hide();
+            break;
         }
         int x, y;
 		SDL_GetMouseState( &x, &y );
+
         if(x < 80){
-            cam.move(-2,0);
+            cam.move(-1,0);
             sleepcp(x);
             client_player.update(states);
         }
         if(x > 560){
-            cam.move(2,0);
-            sleepcp(320-x);
+            cam.move(1,0);
+            sleepcp(640-x);
             client_player.update(states);
         }
         if(y < 60){
-            cam.move(0,-2);
+            cam.move(0,-1);
             sleepcp(y);
             client_player.update(states);
         }
         if(y > 300){
-            cam.move(0,2);
-            sleepcp(180-y);
+            cam.move(0,1);
+            sleepcp(360-y);
             client_player.update(states);
         }
     }
+    */
+
+
+
 };
 
 

@@ -61,11 +61,11 @@ enum building_t {
 
 struct Position {
  public:
-    uint16_t x;
-    uint16_t y;
+    int x;
+    int y;
 
     Position();
-    Position(uint16_t x, uint16_t y);
+    Position(int x, int y);
     Position(const Position& o);
     friend std::ostream& operator<<(std::ostream& os, const Position& pos);
     bool operator==( const Position& o ) const { return o.x == x && o.y == y; };
@@ -75,16 +75,18 @@ struct Position {
 };
 
 struct State {
-    uint16_t ID;
-    uint16_t LP;
+    int ID;
+    int LP;
     Position position;
     bool selected;
 };
 
 struct Area {
-    uint16_t Xmin;
-    uint16_t Xmax;
-    uint16_t Ymin;
-    uint16_t Ymax;
-    Area(uint16_t Xmin,uint16_t Xmax, uint16_t Ymin, uint16_t Ymax);
+    int Xmin;
+    int Xmax;
+    int Ymin;
+    int Ymax;
+    Area(int Xmin,int Xmax, int Ymin, int Ymax);
 };
+
+void sleepcp(int milliseconds);

@@ -5,42 +5,37 @@
 
 #include "astar.h"
 
-/*
 class Unit : public Selectable {
  protected:
     std::string name;
-    uint16_t spice;
-    uint16_t speed;
+    int spice;
+    int speed;
 
  public:
     Unit() = default;
-    Unit(uint16_t LP,uint16_t spice, Position pos, uint8_t dim_x, uint8_t dim_y,uint16_t speed);
-    bool place(Board & board,std::vector<Position> & positions,uint16_t & spice);
-    virtual void react(Cell & location);
-    virtual ~Unit();
+    Unit(int LP, int spice, Position pos, int dim_x, int dim_y, int speed);
+    bool place(Board& board, std::vector<Position>& positions, int& spice);
+    virtual void react(Cell& location);
 };
-*/
 
 
-/*
 class Harvester : public Unit {
-   uint16_t stored_spice;
-   uint16_t max_spice;
-public:
-    Harvester(uint16_t LP,uint16_t spice, Position pos, uint8_t dim_x, uint8_t dim_y,uint16_t speed,uint16_t stored_spice, uint16_t max_spice);
+    int stored_spice;
+    int max_spice;
+ public:
+    Harvester(int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int stored_spice, int max_spice);
     void create();
-    void react(Cell & location);
+    virtual void react(Cell& location);
 };
-*/
-class Trike : public Selectable {
-   std::string name;
-   uint16_t spice;
-   uint16_t speed;
-   uint16_t attack;
-public:
-    Trike(uint16_t LP,uint16_t spice, Position pos, uint8_t dim_x, uint8_t dim_y,uint16_t speed,uint16_t attack);
+
+
+class Trike : public Unit {
+    std::string name;
+    int spice;
+    int speed;
+    int attack;
+ public:
+    Trike(int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int attack);
     void create();
-    void react(Cell & location);
-    bool place(Board & board,std::vector<Position> & positions,uint16_t & spice);
-    ~Trike();
+    virtual void react(Cell& location);
 };

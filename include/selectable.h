@@ -8,35 +8,35 @@
 #include "common_utils.h"
 
 class Selectable {
-    protected:
+ protected:
     std::string name;
     std::string imagepath;
-    uint16_t LP;
+    int LP;
     Position position;
-    uint8_t dim_x;
-    uint8_t dim_y;
+    int dim_x;
+    int dim_y;
     bool selected;
     bool is_movable;
     std::vector<Position> remaining_path;
 
-    public:
-    Selectable(uint16_t LP,Position pos, uint8_t dim_x, uint8_t dim_y, bool moves);
-    void selection(Area & mouse_area);
+ public:
+    Selectable(int LP, Position position, int dim_x, int dim_y, bool moves);
+    void selection(Area& mouse_area);
     bool isSelected();
     bool moves();
     void select();
     void unselect();
-    bool contains(const Position & pos);
-    bool isWithin(const Area & selection);
-    virtual void react(Cell & location);
+    bool contains(const Position& pos);
+    bool isWithin(const Area& selection);
+    virtual void react(Cell& location);
     std::string getName();
     std::vector<Position> getPositions();
     std::vector<Position> getSurroundings(); 
     void setPosition(Position position);
     Position getPosition();
-    uint8_t getDimX();
-    uint8_t getDimY();
-    void getState(State & state);
+    int getDimX();
+    int getDimY();
+    void getState(State& state);
     std::vector<Position>& get_remaining_path();
-    virtual ~Selectable();
+    virtual ~Selectable(){}
 };

@@ -16,19 +16,18 @@ extern Camera cam;
 #define DUNE_PATH "/mapsprites/dune_1.png"
 #define PIT_PATH "/mapsprites/pit_1.png"
 
-
 class MapCell{
-private:    
+ private:    
     Position position;
     SDL2pp::Texture texture;
-public:
+ public:
     MapCell( SDL2pp::Renderer & renderer, const std::string& path,size_t pos_x, size_t pos_y);
-    void render(SDL2pp::Renderer & renderer);
+    void render(SDL2pp::Renderer & renderer, int cam_pos_x, int cam_pos_y);
 };
 class GameMap {
-private:
+ private:
     std::vector<MapCell> map_cells;
-public:
+ public:
     GameMap(SDL2pp::Renderer & renderer,std::vector<std::vector<cell_t>> & cells);
-    void render(SDL2pp::Renderer & renderer);
+    void render(SDL2pp::Renderer & renderer, int cam_pos_x, int cam_pos_y);
 };

@@ -1,19 +1,19 @@
 #include "selectable.h"
 
-Area::Area(uint16_t Xmin,uint16_t Xmax, uint16_t Ymin, uint16_t Ymax){
+Area::Area(int Xmin,int Xmax, int Ymin, int Ymax){
     this->Xmin = Xmin;
     this->Xmax = Xmax;
     this->Ymin = Ymin;
     this->Ymax = Ymax;
 }
 
-Selectable::Selectable(uint16_t LP, Position pos, uint8_t dim_x, uint8_t dim_y, bool is_movable){
+Selectable::Selectable(int LP, Position position, int dim_x, int dim_y, bool moves){
     this->LP = LP;
-    this->position = pos;
+    this->position = position;
     this->dim_x = dim_x;
     this->dim_y = dim_y;
     this->selected = false;
-    this->is_movable = is_movable;
+    this->is_movable = moves;
     std::vector<Position> empty_path;
     this->remaining_path = empty_path;
 }
@@ -36,13 +36,13 @@ void Selectable::unselect(){
     this->selected = false;
 }
 
-bool Selectable::contains(const Position & pos){
+bool Selectable::contains(const Position& pos){
 
     if ((pos.x == (this->position.x)) && (pos.y == (this->position.y)))
         return true;
 
-    for (size_t j = 0 ; j < this->dim_y ; j++) {
-        for (size_t i = 0 ; i < this->dim_x ; i++) {
+    for (size_t i = 0 ; i < this->dim_x ; i++) {
+        for (size_t j = 0 ; j < this->dim_y ; j++) {
             if ((pos.x == ((this->position.x)+i)) && (pos.y == ((this->position.y)+j)))
                 return true;
         }
@@ -50,15 +50,15 @@ bool Selectable::contains(const Position & pos){
     return false;
 }
 
-void Selectable::react(Cell & location){
+void Selectable::react(Cell& location){
     std::cout << "reacting to cell in location: " << location.getPosition() << " [selectable]" << std::endl;
 }
 
 
-bool Selectable::isWithin(const Area & selection){
-    for (size_t j = 0 ; j < this->dim_y ; j++) {
-        for (size_t i = 0 ; i < this->dim_x ; i++) {           
-            if(
+bool Selectable::isWithin(const Area& selection){
+    for (size_t i = 0 ; i < this->dim_x ; i++) {
+        for (size_t j = 0 ; j < this->dim_y ; j++) {           
+            if (
             (this->position.x+i<selection.Xmax && this->position.x+i>selection.Xmin)
             &&
             (this->position.y+j<selection.Ymax && this->position.y+j>selection.Ymin)
@@ -72,8 +72,8 @@ bool Selectable::isWithin(const Area & selection){
 
 std::vector<Position> Selectable::getSurroundings(){
     std::vector <Position> surroundings;
-    for (size_t j = 0 ; j < this->dim_y ; j++) {
-        for (size_t i = 0 ; i < this->dim_x ; i++) {
+    for (size_t i = 0 ; i < this->dim_x ; i++) {
+        for (size_t j = 0 ; j < this->dim_y ; j++) {
             if ( j == 0 ){
                 if (i == 0){        
                     surroundings.push_back(Position(this->position.x+i-1,this->position.y+j-1));
@@ -87,9 +87,9 @@ std::vector<Position> Selectable::getSurroundings(){
                 }
             } 
             if ( j > 0 && j < this->dim_y-1 ){
-                if( i == 0)
+                if ( i == 0)
                     surroundings.push_back(Position(this->position.x+i-1,this->position.y+j));
-                if( i == this->dim_x-1 ) 
+                if ( i == this->dim_x-1 ) 
                     surroundings.push_back(Position(this->position.x+i-1,this->position.y+j));
             }
             if ( j == this->dim_y-1){
@@ -120,23 +120,20 @@ Position Selectable::getPosition(){
 void Selectable::setPosition(Position position){
     this->position = position;
 }
-uint8_t Selectable::getDimX(){
+int Selectable::getDimX(){
     return this->dim_x;
 }
-uint8_t Selectable::getDimY(){
+int Selectable::getDimY(){
     return this->dim_y;
-}
-
-void Selectable::getState(State & state){
-    state.LP = this->LP;
-    state.position = this->position;
-    state.selected = this->selected;
 }
 
 std::vector<Position>& Selectable::get_remaining_path() {
     return this->remaining_path;
 }
 
-Selectable::~Selectable() {
+void Selectable::getState(State& state){
 
+    state.LP = this->LP;
+    state.position = this->position;
+    state.selected = this->selected;
 }

@@ -10,7 +10,7 @@
 #include "board.h"
 
 class HashFn {
-  public:
+ public:
     size_t operator() (const Position& p) const {
       return (p.x + p.y) * (p.x + p.y + 1) / 2 + p.x;
     }

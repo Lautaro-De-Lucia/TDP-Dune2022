@@ -37,7 +37,6 @@ ADD_EXECUTABLE("${PROJECT_NAME}" main.cpp
             src/textfilehandler.cpp
             src/unit.cpp
             src/unitfactory.cpp
-            src/trikefactory.cpp
             src/client_player.cpp 
             src/client_selectable.cpp
             src/client_gamemap.cpp

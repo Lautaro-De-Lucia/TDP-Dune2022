@@ -47,7 +47,7 @@ std::vector<Position> aStar::reconstruct_path(Position current) {
     Position none_position(-1, -1);
     while (1) {
         path.push_back(current);
-        if(get_predecessor_of(current) == none_position)
+        if (get_predecessor_of(current) == none_position)
             break;
         current = (this->predecessors)[(current)];
     }
@@ -60,10 +60,10 @@ bool aStar::validate_position(Position position) {
     if (board.getCell(position.x, position.y).isOccupied())
         return false;
     // position.x out of bounds
-    else if(position.x > board.get_width() - 1 || position.x < 0) 
+    else if (position.x > board.get_width() - 1 || position.x < 0) 
         return false;
     // position.y out of bounds
-    else if(position.y > board.get_height() - 1 || position.y < 0) 
+    else if (position.y > board.get_height() - 1 || position.y < 0) 
         return false;
     return true;
 }
@@ -83,7 +83,7 @@ std::vector<Position> aStar::algorithm(Position start, Position end) {
 
     std::vector<Position> empty_path;
 
-    if(/*!validate_position(start) ||*/ !validate_position(end))
+    if (/*!validate_position(start) ||*/ !validate_position(end))
         return empty_path;
         
     Position none_position(-1, -1);
