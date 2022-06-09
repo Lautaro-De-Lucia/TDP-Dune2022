@@ -118,24 +118,59 @@ void run_sdl() {
     }
     //Handle events on queue
     bool running = true;
+    //Player server(INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY);
+    //server.run();
+    bool drag = false;
+    int c_x, c_y;
+    int c_x2, c_y2; // Drag clicks
     while(running)
     {   
         while (SDL_PollEvent( &event )) {
+            if (drag == false) {
+                SDL_GetMouseState( &c_x, &c_y );
+                c_x = (c_x/(TILE_DIM*2)) + (cam.pos_x/TILE_DIM);
+                c_y = (c_y/(TILE_DIM*2)) + (cam.pos_y/TILE_DIM);
+            }
+
             switch (event.type) {
                 //User requests quit
                 case SDL_QUIT:
                     running = false;
                     SDL_Quit();
                     break;
+                
                 //User clicks
-                case SDL_MOUSEBUTTONUP:
-                    int c_x, c_y;
-                    SDL_GetMouseState( &c_x, &c_y );
-                    c_x = (c_x/32) + (cam.pos_x/16);
-                    c_y = (c_y/32) + (cam.pos_y/16);
 
-                    if (event.button.button == SDL_BUTTON_LEFT) {}
-                    else if (event.button.button == SDL_BUTTON_RIGHT) {}
+                case SDL_MOUSEMOTION:
+                    if (drag == true) {
+                        SDL_GetMouseState( &c_x2, &c_y2 );
+                        c_x2 = (c_x2/(TILE_DIM*2)) + (cam.pos_x/TILE_DIM);
+                        c_y2 = (c_y2/(TILE_DIM*2)) + (cam.pos_y/TILE_DIM);
+                    } break;
+                case SDL_MOUSEBUTTONUP:
+                        if (event.button.button == SDL_BUTTON_LEFT) {
+                            if (drag == true) {
+                                //server.handleSelection(min(c_x, c_x2), max(c_x, c_x2),
+                                    // min(c_y, c_y2), max(c_y, c_y2));
+                            } else {
+                                //server.handleLeftClick();
+                            }
+                        }
+                        else if (event.button.button == SDL_BUTTON_RIGHT) {
+                            //server.handleRightClick();
+                        }
+                        break;
+
+                case SDL_KEYDOWN:
+                    if(event.key.keysym.sym == SDLK_SPACE){
+                        drag = true;
+                    }
+                    break;
+
+                case SDL_KEYUP:
+                    if(event.key.keysym.sym == SDLK_SPACE){
+                        drag = false;
+                    }
                     break;
             }
         }
@@ -162,10 +197,6 @@ void run_sdl() {
             client_player.update(states);
         }
     }
-    /*
-    Player server(INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY);
-    server.run();
-    */
 };
 
 
