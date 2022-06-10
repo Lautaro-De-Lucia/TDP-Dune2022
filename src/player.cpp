@@ -11,7 +11,8 @@ std::vector<std::string> file_input;
 Player::Player(player_t faction, int spice, int c_spice, int energy, int c_energy,Board & shared_board, CPlayer& client_player) 
 : 
 cplayer(client_player),
-board(shared_board)
+board(shared_board),
+actions(0, std::vector<int>(0,0))
 {
     this->ID = 0;
     this->faction = faction;
@@ -71,8 +72,11 @@ void Player::run() {
             base_time_instruction = current_time;
             //std::cout << "game frame!!" << std::endl;
             command_t command;
+            std::vector<int> action;
             if (actions.size() > 0) {
-                command = (command_t)actions[0][0];
+                action = actions[0];
+                actions.pop_back();
+                command = (command_t)action[0];
             } else command = IDLE;
             //if (command_reader.readInput(file_input)) {
                 //std::system("clear");
@@ -81,38 +85,40 @@ void Player::run() {
                 //command_t command = (command_t)(file_input[0][0]-'0');
                 //std::cout << command << ": " << cmddict[command-1] <<std::endl;
                 //printSeparator();
-                switch (command){
-                    case CREATE_UNIT:
-                        createUnit(actions[0][0]);
-                        break;
-                    case CREATE_BUILDING:
-                        createBuilding(actions[0][1], actions[0][2], actions[0][3]);
-                        break;
-                    case MAKE_CREATOR:
-                        makeCreator(actions[0][1]);
-                        break;
-                    case MOUSE_LEFT_CLICK:
-                        handleLeftClick(actions[0][1], actions[0][2]);
-                        break;
-                    case MOUSE_RIGHT_CLICK:
-                        handleRightClick(actions[0][1], actions[0][2]);
-                        break;
-                    case MOUSE_SELECTION:
-                        handleSelection(actions[0][1], actions[0][2], actions[0][3], actions[0][4]);
-                        break;
-                    case IDLE:
-                        handleIdle();
-                        sleep(1);
-                        break;
-                    default:
-                        break;
-                }
-            updateMovables();
+            switch (command){
+                case CREATE_UNIT:
+                    createUnit(action[1]);
+                    break;
+                case CREATE_BUILDING:
+                    createBuilding(action[1], action[2], action[3]);
+                    break;
+                case MAKE_CREATOR:
+                    makeCreator(action[1]);
+                    break;
+                case MOUSE_LEFT_CLICK:
+                    handleLeftClick(action[1], action[2]);
+                    break;
+                case MOUSE_RIGHT_CLICK:
+                    handleRightClick(action[1], action[2]);
+                    break;
+                case MOUSE_SELECTION:
+                    handleSelection(action[1], action[2], action[3], action[4]);
+                    break;
+                case IDLE:
+                    handleIdle();
+                    sleep(1);
+                    break;
+                default:
+                    break;
+            } updateMovables();
         }
     }
 }
 
-
+void Player::addAction(std::vector<int> action){
+    std::vector<int> v = action;
+    actions.push_back(v);
+}
 /*
 We only need building <type> and <position>.
 Other parameters like the dimensions are lifted from
@@ -154,7 +160,7 @@ void Player::createBuilding(int &type, int &pos_x, int &pos_y){
         (this->elements)[ID-1]->getState(state);
         state.ID = ID-1;
         (this->cplayer).addElement((building_t) type, state);
-
+        this->makeCreator(state.ID);
         std::cout << "Building succesfully created" << std::endl;
         return;
     }

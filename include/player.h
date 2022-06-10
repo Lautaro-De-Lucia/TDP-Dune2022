@@ -57,4 +57,5 @@ class Player {
     void handleIdle();
     void reportState();
     void updateMovables();
+    void addAction(std::vector<int> action);
 };

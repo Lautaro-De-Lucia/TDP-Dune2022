@@ -10,7 +10,7 @@
 #include "src/ui/vistas.h"
 #include <QApplication>
 #include <QtConcurrent/QtConcurrent>
-
+#include <vector> 
 
 #define INIT_SPICE 5000
 #define INIT_CSPICE 5000
@@ -67,8 +67,8 @@ void run_sdl() {
     std::thread thread_server(run_server, std::ref(server));
 
     bool running = true;
-    
     bool drag = false;
+    
     int x, y;
     int x_coord, y_coord;
     int x_drag, y_drag;
@@ -77,7 +77,7 @@ void run_sdl() {
 
     int unit, building;
     bool build = false;
-
+    //std::vector<int> action;
     SDL_Event event;
     while(running) {   
         while (SDL_PollEvent( &event )) {
@@ -101,22 +101,34 @@ void run_sdl() {
                 case SDL_MOUSEBUTTONUP:
                     if (event.button.button == SDL_BUTTON_LEFT) {
                         if (build) {
-                            server.createBuilding(building, x_coord, y_coord);
+                            //action = {CREATE_BUILDING, building, x_coord, y_coord};
+                            //server.addAction(action);
+                            server.addAction({CREATE_BUILDING, building, x_coord, y_coord});
                             build = false;
                         }
                         else {
                             if (client_player.checkHud(x, y)) {
                                 unit = client_player.checkUnit(x, y);
-                                if (unit != -1) server.createUnit(unit);
-                                else {  
+                                if (unit != -1) {
+                                    //action = {CREATE_UNIT, unit};
+                                    //server.addAction(action);
+                                    server.addAction({CREATE_UNIT, unit});
+
+                                } else {  
                                     building = client_player.checkBuild(x, y);
                                     if (building != -1) build = true;
                                 }
-                            } else server.handleLeftClick(x_coord, y_coord);
+                            } else {
+                                //action = {MOUSE_LEFT_CLICK, x_coord, y_coord};
+                                //server.addAction(action);
+                                server.addAction({MOUSE_LEFT_CLICK, x_coord, y_coord});
+                            }
                         } 
-                    } else if (event.button.button == SDL_BUTTON_RIGHT)
-                        server.handleRightClick(x_coord, y_coord);
-                    break;
+                    } else if (event.button.button == SDL_BUTTON_RIGHT) {
+                        //action = {MOUSE_RIGHT_CLICK, x_coord, y_coord};
+                        //server.addAction(action);
+                        server.addAction({MOUSE_RIGHT_CLICK, x_coord, y_coord});
+                    } break;
                 case SDL_KEYDOWN:
                     if(event.key.keysym.sym == SDLK_SPACE) {
                         if (drag == false) {
@@ -129,12 +141,18 @@ void run_sdl() {
                 case SDL_KEYUP:
                     if(event.key.keysym.sym == SDLK_SPACE) {
                         if (drag == true) {
-                            int x = 0;
-                            server.makeCreator(x);
-                            x = 1;
-                            server.makeCreator(x);
-                            server.handleSelection(std::min(x_coord_drag, x_drag_finish), std::max(x_coord_drag, x_drag_finish),
-                                std::min(y_coord_drag, y_drag_finish), std::max(y_coord_drag, y_drag_finish));
+                            /*action = {MOUSE_SELECTION, 
+                                std::min(x_coord_drag, x_drag_finish), 
+                                std::max(x_coord_drag, x_drag_finish),
+                                std::min(y_coord_drag, y_drag_finish), 
+                                std::max(y_coord_drag, y_drag_finish)};
+                            server.addAction(action);
+                            */
+                            server.addAction({MOUSE_SELECTION, 
+                                std::min(x_coord_drag, x_drag_finish), 
+                                std::max(x_coord_drag, x_drag_finish),
+                                std::min(y_coord_drag, y_drag_finish), 
+                                std::max(y_coord_drag, y_drag_finish)});
                             drag = false;
                         } break;
                 }
@@ -142,7 +160,6 @@ void run_sdl() {
         }
     }
 };
-
 
 int main(int argc, char *argv[]) {
     /*
