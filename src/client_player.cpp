@@ -63,11 +63,31 @@ void CPlayer::renderHud(){
     this->game_renderer.SetScale(1,1);
     this->hud.render(this->game_renderer);
 }
+void CPlayer::addUnitButton(std::string &IMG_PATH, int &x, int &y, int &id) {
+    this->hud.addUnitButton(this->game_renderer, IMG_PATH, x, y, id);
+}
+
+void CPlayer::addBuildButton(std::string &IMG_PATH, int &x, int &y, int &id) {
+    this->hud.addBuildButton(this->game_renderer, IMG_PATH, x, y, id);
+}
+
+int CPlayer::checkBuild(int &x, int &y) {
+    return this->hud.checkBuild(x, y);
+}
+
+int CPlayer::checkUnit(int &x, int &y) {
+    return this->hud.checkUnit(x, y);
+}
+
+bool CPlayer::checkHud(int &x, int &y) {
+    return this->hud.clickOnHud(x, y);
+}
 
 void CPlayer::updateCamera() {
 
     SDL_Event event;
     SDL_PollEvent( &event );
+
     //User requests quit
     if( event.type == SDL_QUIT ) {
         this->game_window.Hide();

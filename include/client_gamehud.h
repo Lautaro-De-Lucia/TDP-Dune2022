@@ -11,4 +11,9 @@ class GameHud {
  public:
     GameHud(SDL2pp::Renderer & renderer);
     void render(SDL2pp::Renderer & renderer);
+    void addUnitButton(SDL2pp::Renderer &renderer, std::string IMG_PATH, int x, int y, int id);
+    void addBuildButton(SDL2pp::Renderer &renderer, std::string IMG_PATH, int x, int y, int id);
+    int checkUnit(int &x, int &y);
+    int checkBuild(int &x, int &y);
+    bool clickOnHud(int &x, int &y);
 };

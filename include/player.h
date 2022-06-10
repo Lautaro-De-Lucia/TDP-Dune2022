@@ -40,19 +40,20 @@ class Player {
     Board & board;
     std::map<int,std::unique_ptr<Selectable>> elements;
     std::map<unit_t,int> creators;
+    std::vector<std::vector<int>> actions;
     bool place(Building & building,Position position);
     bool place(Refinery & refinery,Position & position);
     bool place(Unit & unit,std::vector<Position> positions);
  public:    
+    void makeCreator(int &building_ID);
     Player (player_t faction ,int spice, int c_spice, int energy, int c_energy,Board & shared_board ,CPlayer& client_player);
-    void makeCreator();
     void print();
     void run(); // This should receive the socket in the future
-    void createBuilding();
-    void createUnit();
-    void handleLeftClick();
-    void handleRightClick();
-    void handleSelection();
+    void createBuilding(int &type, int &pos_x, int &pos_y);
+    void createUnit(int &type);
+    void handleLeftClick(int &pos_x, int &pos_y);
+    void handleRightClick(int &pos_x, int &pos_y);
+    void handleSelection(const int Xmin, const int Xmax, const int Ymin, const int Ymax);
     void handleIdle();
     void reportState();
     void updateMovables();
