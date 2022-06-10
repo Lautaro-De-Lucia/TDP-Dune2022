@@ -1,35 +1,41 @@
 #include "board.h"
 
-Board::Board(int dim_x, int dim_y)
-: dim_x(dim_x), dim_y(dim_y), cells() {
-    //  Allocate memory in the stack
+Board::Board(std::vector<std::vector<cell_t>> cell_types) :
+cells() {
+    //  Get board dimentions
+    this->dim_x = cell_types.size();
+    this->dim_y = cell_types[0].size();
+    //  Allocate memory for the cells
         cells.resize(dim_x);
         for ( size_t i = 0; i < dim_x; ++i )
             cells[i].resize(dim_y);
-    //  Load values for cell positions
+    //  Load position & terrain type for each cell
     for (size_t j = 0 ; j < dim_y ; j++) {
         for (size_t i = 0 ; i < dim_x ; i++) {
             cells[i][j].setPosition(i,j);
+            cells[i][j].setTerrain(cell_types[i][j]);
         }
-    }    
+    }
 }
 
-status_t Board::place(const Position & location, int dim_x,int dim_y,bool isUnit) {
+status_t Board::place(const Position & location, int dim_x,int dim_y,player_t faction) {
     //  See if any of the positions to build is already occupied
     for (size_t j = 0 ; j < dim_y ; j++) {
         for (size_t i = 0 ; i < dim_x ; i++) {
-            if (this->cells[location.x+i][location.y+j].isOccupied() == true)
+            if (this->cells[location.x+i][location.y+j].isOccupied() == true){
+                std::cout << "Location: (" << location.x+i << "," << location.y+j << ") was occupied!" << std::endl;      
                 return FAILED_TO_ADD;
+            }
         }
     }
     //  If not, mark them as occupied
-    for (size_t j = 0 ; j < dim_y ; j++) 
-        for (size_t i = 0 ; i < dim_x ; i++) {
-            this->cells[location.x+i][location.y+j].occupy();
-            if (isUnit)
-                this->cells[location.x+i][location.y+j].placeUnit();
-            
+    for (size_t j = 0 ; j < dim_y ; j++){ 
+        for (size_t i = 0 ; i < dim_x ; i++){
+            this->cells[location.x+i][location.y+j].occupy(faction);
+            std::cout << "Location: (" << location.x+i << "," << location.y+j << ") is now occupied" << std::endl;      
+            std::cout << "With the faction number: " << faction << std::endl;
         }
+    }
             
         
     return SUCCESS;
@@ -77,8 +83,7 @@ size_t Board::get_height() {
     return (size_t) this->dim_y;
 }
 
-void Board::move_unit(Position from, Position to) {
-
-    (this->cells)[from.x][from.y].removeUnit();
-    (this->cells)[to.x][to.y].placeUnit();
+void Board::move_unit(Position from, Position to, player_t faction) {
+    (this->cells)[from.x][from.y].disoccupy();
+    (this->cells)[to.x][to.y].occupy(faction);
 }

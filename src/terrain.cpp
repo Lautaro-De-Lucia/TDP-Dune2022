@@ -14,14 +14,22 @@ void Terrain::free(){
     this->occupied = false;
 }
 
-bool Sand::isTraversable(){return occupied;}
-bool Sand::isExtractible(){return true;}
+Sand::Sand():Terrain(){} 
+bool Sand::canTraverse(){return true;}
+bool Sand::canExtract(){return this->spice > 0 ? true : false;}
 bool Sand::canBuild(){return false;}
 
-bool Rock::isTraversable(){return occupied;}
-bool Rock::isExtractible(){return false;}
+Rock::Rock():Terrain(){} 
+bool Rock::canTraverse(){return !occupied;}
+bool Rock::canExtract(){return false;}
 bool Rock::canBuild(){return true;}
 
-bool Pit::isTraversable(){return true;}
-bool Pit::isExtractible(){return true;}
+Dune::Dune():Terrain(){} 
+bool Dune::canTraverse(){return true;}
+bool Dune::canExtract(){return false;}
+bool Dune::canBuild(){return false;}
+
+Pit::Pit():Terrain(){}
+bool Pit::canTraverse(){return false;}
+bool Pit::canExtract(){return false;}
 bool Pit::canBuild(){return false;}

@@ -41,6 +41,14 @@
 #define REFINERY_DIM_Y 3
 #define REFINERY_CAPACITY 5000
 
+#define DEF_SAND_SPICE 200
+
+enum player_t {
+    HARKONNEN = 1,
+    ATREIDES = 2,
+    ORDOS = 3
+};
+
 enum unit_t{
     HARVESTER = 1,
     TRIKE = 2
