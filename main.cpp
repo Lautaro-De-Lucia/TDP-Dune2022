@@ -49,19 +49,21 @@ void greet(SDL2pp::Renderer &game_renderer) {
     game_renderer.Present();
 }
 
-
+void run_server(Player &server) {
+    server.run();
+}
 void run_sdl() {
 
     SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,SDL_WINDOW_ALWAYS_ON_TOP);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
-
+    greet(game_renderer);
     std::vector<std::vector<cell_t>> cells = generate_random_map();
 
     Camera cam(0,0,640,360,1280,720);
     CPlayer client_player(cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cells);
     Board board(cells);
 
-    Player server(INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY, client_player);
+    Player server(HARKONNEN,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,board,client_player);
     std::thread thread_server(run_server, std::ref(server));
 
     bool running = true;
@@ -81,26 +83,6 @@ void run_sdl() {
         while (SDL_PollEvent( &event )) {
             if (drag == false) {
                 SDL_GetMouseState( &x, &y);
-                if(x < 80){
-                  cam.move(-1,0);
-                  sleepcp(x);
-                  client_player.update(states);
-                }
-                if(x > 560){
-                  cam.move(1,0);
-                  sleepcp(640-x);
-                  client_player.update(states);
-                }
-                if(y < 60){
-                  cam.move(0,-1);
-                  sleepcp(y);
-                  client_player.update(states);
-                }
-                if(y > 300){
-                  cam.move(0,1);
-                  sleepcp(360-y);
-                  client_player.update(states);
-                }
                 x_coord = (x/(TILE_DIM*2)) + (cam.pos_x/TILE_DIM);
                 y_coord = (y/(TILE_DIM*2)) + (cam.pos_y/TILE_DIM);
             }

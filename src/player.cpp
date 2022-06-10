@@ -70,8 +70,10 @@ void Player::run() {
             game_has_not_started = false;
             base_time_instruction = current_time;
             //std::cout << "game frame!!" << std::endl;
+            command_t command;
             if (actions.size() > 0) {
-                command_t command = (command_t)actions[0][0];
+                command = (command_t)actions[0][0];
+            } else command = IDLE;
             //if (command_reader.readInput(file_input)) {
                 //std::system("clear");
                 //  Read first line to get command
@@ -100,19 +102,16 @@ void Player::run() {
                         break;
                     case IDLE:
                         handleIdle();
+                        sleep(1);
                         break;
                     default:
                         break;
                 }
-                updateMovables();
-            } else {
-                handleIdle();
-                sleep(1);
-            }
-            
+            updateMovables();
         }
     }
 }
+
 
 /*
 We only need building <type> and <position>.
