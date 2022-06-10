@@ -77,7 +77,6 @@ void run_sdl() {
 
     int unit, building;
     bool build = false;
-    //std::vector<int> action;
     SDL_Event event;
     while(running) {   
         while (SDL_PollEvent( &event )) {
@@ -87,49 +86,35 @@ void run_sdl() {
                 y_coord = (y/(TILE_DIM*2)) + (cam.pos_y/TILE_DIM);
             }
             switch (event.type) {
-                //User requests quit
-                case SDL_QUIT:
+                case SDL_QUIT: //User requests quit
                     running = false;
                     SDL_Quit();
                     break;
-                case SDL_MOUSEMOTION:
+                case SDL_MOUSEMOTION: // User moves cursor
                     if (drag == true) {
                         SDL_GetMouseState( &x, &y);
                         x_drag_finish = (x/(TILE_DIM*2)) + (cam.pos_x/TILE_DIM);
                         y_drag_finish = (y/(TILE_DIM*2)) + (cam.pos_y/TILE_DIM);
                     } break;
-                case SDL_MOUSEBUTTONUP:
+                case SDL_MOUSEBUTTONUP:  // User releases mouseclick
                     if (event.button.button == SDL_BUTTON_LEFT) {
                         if (build) {
-                            //action = {CREATE_BUILDING, building, x_coord, y_coord};
-                            //server.addAction(action);
                             server.addAction({CREATE_BUILDING, building, x_coord, y_coord});
                             build = false;
                         }
                         else {
                             if (client_player.checkHud(x, y)) {
                                 unit = client_player.checkUnit(x, y);
-                                if (unit != -1) {
-                                    //action = {CREATE_UNIT, unit};
-                                    //server.addAction(action);
-                                    server.addAction({CREATE_UNIT, unit});
-
-                                } else {  
+                                if (unit != -1) server.addAction({CREATE_UNIT, unit});
+                                else {  
                                     building = client_player.checkBuild(x, y);
                                     if (building != -1) build = true;
                                 }
-                            } else {
-                                //action = {MOUSE_LEFT_CLICK, x_coord, y_coord};
-                                //server.addAction(action);
-                                server.addAction({MOUSE_LEFT_CLICK, x_coord, y_coord});
-                            }
+                            } else server.addAction({MOUSE_LEFT_CLICK, x_coord, y_coord});
                         } 
-                    } else if (event.button.button == SDL_BUTTON_RIGHT) {
-                        //action = {MOUSE_RIGHT_CLICK, x_coord, y_coord};
-                        //server.addAction(action);
-                        server.addAction({MOUSE_RIGHT_CLICK, x_coord, y_coord});
-                    } break;
-                case SDL_KEYDOWN:
+                    } else if (event.button.button == SDL_BUTTON_RIGHT) server.addAction({MOUSE_RIGHT_CLICK, x_coord, y_coord});
+                    break;
+                case SDL_KEYDOWN: // User unreleases key
                     if(event.key.keysym.sym == SDLK_SPACE) {
                         if (drag == false) {
                             drag = true;
@@ -138,16 +123,9 @@ void run_sdl() {
                             y_coord_drag = (y_drag/(TILE_DIM*2)) + (cam.pos_y/TILE_DIM);
                         } break; 
                     }
-                case SDL_KEYUP:
+                case SDL_KEYUP: // User releases key
                     if(event.key.keysym.sym == SDLK_SPACE) {
                         if (drag == true) {
-                            /*action = {MOUSE_SELECTION, 
-                                std::min(x_coord_drag, x_drag_finish), 
-                                std::max(x_coord_drag, x_drag_finish),
-                                std::min(y_coord_drag, y_drag_finish), 
-                                std::max(y_coord_drag, y_drag_finish)};
-                            server.addAction(action);
-                            */
                             server.addAction({MOUSE_SELECTION, 
                                 std::min(x_coord_drag, x_drag_finish), 
                                 std::max(x_coord_drag, x_drag_finish),
