@@ -55,7 +55,7 @@ std::vector<Position> aStar::reconstruct_path(Position current) {
     return path;
 }
 
-bool aStar::validate_position(Position position) {
+bool aStar::validate_position(Position position,Board & board) {
     // position is an obstacle
     if (board.getCell(position.x, position.y).isOccupied())
         return false;
@@ -68,7 +68,7 @@ bool aStar::validate_position(Position position) {
     return true;
 }
 
-std::vector<Position> aStar::algorithm(Position start, Position end) {
+std::vector<Position> aStar::algorithm(Position start, Position end, Board & board) {
 
     size_t board_width = board.get_width();
     size_t board_height = board.get_height();
@@ -83,7 +83,7 @@ std::vector<Position> aStar::algorithm(Position start, Position end) {
 
     std::vector<Position> empty_path;
 
-    if (/*!validate_position(start) ||*/ !validate_position(end))
+    if (/*!validate_position(start) ||*/ !validate_position(end,board))
         return empty_path;
         
     Position none_position(-1, -1);
@@ -108,7 +108,7 @@ std::vector<Position> aStar::algorithm(Position start, Position end) {
             int pos_x = (current).x + offset.x;
             int pos_y = (current).y + offset.y;
 
-            if (!validate_position(Position(pos_x, pos_y)))
+            if (!validate_position(Position(pos_x, pos_y),board))
                 continue;
             
             Position new_position(pos_x, pos_y);

@@ -8,5 +8,5 @@
 
 class UnitFactory{
  public:
-    static std::unique_ptr<Unit> create(unit_t unit);
+    static std::unique_ptr<Unit> create(unit_t unit, player_t faction);
 };

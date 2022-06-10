@@ -29,11 +29,11 @@ std::vector<std::vector<cell_t>> generate_random_map () {
     //  
     for (size_t j = 0 ; j < MAP_DIM_Y ; j++) {
         for (size_t i = 0 ; i < MAP_DIM_X ; i++) {
-            if (j > 15 && j < 30 && i > 20  && i < 60){
+            //if (j >= 0 && j < 30 && i >= 0  && i < 40){
                 map_cells[i][j] = ROCK;
-                continue;
-            }    
-            map_cells[i][j] = (cell_t) (rand() % 4);
+              //  continue;
+            //}    
+            //map_cells[i][j] = (cell_t) (rand() % 4);
         }
     }
     return map_cells;
@@ -49,21 +49,17 @@ void greet(SDL2pp::Renderer &game_renderer) {
     game_renderer.Present();
 }
 
-void run_server(Player &server) {
-    server.run();
-}
 
 void run_sdl() {
 
     SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,SDL_WINDOW_ALWAYS_ON_TOP);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
-    greet(game_renderer);
-    Camera cam(0,0,640,360,1280,720);
-
-    Board board(45,25);
 
     std::vector<std::vector<cell_t>> cells = generate_random_map();
+
+    Camera cam(0,0,640,360,1280,720);
     CPlayer client_player(cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cells);
+    Board board(cells);
 
     Player server(INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY, client_player);
     std::thread thread_server(run_server, std::ref(server));
@@ -85,6 +81,26 @@ void run_sdl() {
         while (SDL_PollEvent( &event )) {
             if (drag == false) {
                 SDL_GetMouseState( &x, &y);
+                if(x < 80){
+                  cam.move(-1,0);
+                  sleepcp(x);
+                  client_player.update(states);
+                }
+                if(x > 560){
+                  cam.move(1,0);
+                  sleepcp(640-x);
+                  client_player.update(states);
+                }
+                if(y < 60){
+                  cam.move(0,-1);
+                  sleepcp(y);
+                  client_player.update(states);
+                }
+                if(y > 300){
+                  cam.move(0,1);
+                  sleepcp(360-y);
+                  client_player.update(states);
+                }
                 x_coord = (x/(TILE_DIM*2)) + (cam.pos_x/TILE_DIM);
                 y_coord = (y/(TILE_DIM*2)) + (cam.pos_y/TILE_DIM);
             }
@@ -129,7 +145,7 @@ void run_sdl() {
                         } break; 
                     }
                 case SDL_KEYUP:
-                    if(event.key.keysym.sym == SDLK_SPACE){
+                    if(event.key.keysym.sym == SDLK_SPACE) {
                         if (drag == true) {
                             int x = 0;
                             server.makeCreator(x);
@@ -139,11 +155,10 @@ void run_sdl() {
                                 std::min(y_coord_drag, y_drag_finish), std::max(y_coord_drag, y_drag_finish));
                             drag = false;
                         } break;
-                    }
+                }
             }
         }
     }
-    thread_server.join();
 };
 
 

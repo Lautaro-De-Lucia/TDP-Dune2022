@@ -8,8 +8,13 @@ bool game_has_not_started  = true;
 
 std::vector<std::string> file_input;
 
-Player::Player(int spice, int c_spice, int energy, int c_energy, CPlayer& client_player) : cplayer(client_player), actions(0, std::vector<int>(0, 0)) {
+Player::Player(player_t faction, int spice, int c_spice, int energy, int c_energy,Board & shared_board, CPlayer& client_player) 
+: 
+cplayer(client_player),
+board(shared_board)
+{
     this->ID = 0;
+    this->faction = faction;
     this->spice = spice;
     this->c_spice = c_spice;
     this->energy = energy;
@@ -99,10 +104,6 @@ void Player::run() {
                     default:
                         break;
                 }
-
-                //board.print();
-                //this->print();
-
                 updateMovables();
             } else {
                 handleIdle();
@@ -138,9 +139,8 @@ void Player::createBuilding(int &type, int &pos_x, int &pos_y){
     //int pos_y = std::stoi(file_input[3]);
 
     std::cout<< "Adding new building in position " << "("<< pos_x << "," << pos_y << ")" <<std::endl;
-
     //  Manufacture the building
-    std::unique_ptr<Building> building = BuildingFactory::manufacture((building_t) type);
+    std::unique_ptr<Building> building = BuildingFactory::manufacture((building_t) type, this->faction);
 
     //  Attempt to add to board
     (this->place)((*building),Position(pos_x, pos_y));
@@ -174,7 +174,7 @@ void Player::createUnit(int &type){
     //  Create the unit
     std::vector<Position> positions = elements.at(creators.at((unit_t) type))->getSurroundings(); //  FAILING HERE
     
-    std::unique_ptr<Unit> unit = UnitFactory::create((unit_t) type);
+    std::unique_ptr<Unit> unit = UnitFactory::create((unit_t) type,this->faction);
     //  Attempt adding it
     //  REFACTOR: place should probably be a method of the Player class
         // place(Board & board,Building & building,Position & position)
@@ -259,13 +259,12 @@ void Player::handleRightClick(int &pos_x, int &pos_y){
     for (auto & e : this->elements){
         if (e.second->isSelected()){
             std::cout << e.first << ": ";
-            e.second->react(board.getCell(pos_x,pos_y));
+            e.second->react(pos_x,pos_y,board);
         }
     }
 }
 
 void Player::handleIdle(){
-    std::cout << "Client just did nothing" << std::endl;
 }
 
 /*
@@ -316,7 +315,7 @@ void Player::updateMovables(){
                 Position next_position = path.back();
                 path.pop_back();
                 e.second->setPosition(next_position);
-                board.move_unit(current_position, next_position);
+                board.move_unit(current_position, next_position, e.second->getFaction());
             }
         }
     }

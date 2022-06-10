@@ -35,12 +35,7 @@ void CPlayer::addElement(building_t type,State & desc){
             this->elements.insert({desc.ID,std::unique_ptr<CSelectable>(new CStatic("Wind Trap",desc,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH WIND_TRAP_PATH))});
             break;
         case BARRACK:
-
-            
-
             this->elements.insert({desc.ID,std::unique_ptr<CSelectable>(new CStatic("Barrack",desc,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH BARRACK_PATH))});
-
-
             break; 
         case REFINERY:
             this->elements.insert({desc.ID,std::unique_ptr<CSelectable>(new CStatic("Refinery",desc,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH REFINERY_PATH))});
@@ -68,7 +63,6 @@ void CPlayer::renderHud(){
     this->game_renderer.SetScale(1,1);
     this->hud.render(this->game_renderer);
 }
-
 void CPlayer::addUnitButton(std::string &IMG_PATH, int &x, int &y, int &id) {
     this->hud.addUnitButton(this->game_renderer, IMG_PATH, x, y, id);
 }
@@ -93,29 +87,31 @@ void CPlayer::updateCamera() {
 
     SDL_Event event;
     SDL_PollEvent( &event );
-        //User requests quit
-        if( event.type == SDL_QUIT ) {
-            SDL_Quit();
-        }
-        int x, y;
-        SDL_GetMouseState( &x, &y );
 
-        if (x < 80) {
-            this->camera.move(-1,0);
-            //sleepcp(x);
-            //this->client_player.update(states);
-        } else if (x > 1010 && x < 1090) {
-            this->camera.move(1,0);
-            //sleepcp(640-x);
-            //this->client_player.update(states);
-        }
-        if (y < 60) {
-            this->camera.move(0,-1);
-            //sleepcp(y);
-            //this->client_player.update(states);
-        } else if (y > 660) {
-            this->camera.move(0,1);
-            //sleepcp(360-y);
-            //this->client_player.update(states);
-        }
+    //User requests quit
+    if( event.type == SDL_QUIT ) {
+        this->game_window.Hide();
+        return;
+    }
+    int x, y;
+    SDL_GetMouseState( &x, &y );
+
+    if (x < 80) {
+        this->camera.move(-1,0);
+        //sleepcp(x);
+        //this->client_player.update(states);
+    } else if (x > 1010 && x < 1090) {
+        this->camera.move(1,0);
+        //sleepcp(640-x);
+        //this->client_player.update(states);
+    }
+    if (y < 60) {
+        this->camera.move(0,-1);
+        //sleepcp(y);
+        //this->client_player.update(states);
+    } else if (y > 660) {
+        this->camera.move(0,1);
+        //sleepcp(360-y);
+        //this->client_player.update(states);
+    }
 }
