@@ -8,8 +8,13 @@ bool game_has_not_started  = true;
 
 std::vector<std::string> file_input;
 
-Player::Player(int spice, int c_spice, int energy, int c_energy, CPlayer& client_player) : cplayer(client_player) {
+Player::Player(player_t faction, int spice, int c_spice, int energy, int c_energy,Board & shared_board, CPlayer& client_player) 
+: 
+cplayer(client_player),
+board(shared_board)
+{
     this->ID = 0;
+    this->faction = faction;
     this->spice = spice;
     this->c_spice = c_spice;
     this->energy = energy;
@@ -62,14 +67,8 @@ void Player::run() {
 
             game_has_not_started = false;
             base_time_instruction = current_time;
-            //std::cout << "game frame!!" << std::endl;
             if (command_reader.readInput(file_input)) {
-                //std::system("clear");
-                //  Read first line to get command
-                //  With sockets: read 1 byte from the socket
                 command_t command = (command_t)(file_input[0][0]-'0');
-                //std::cout << command << ": " << cmddict[command-1] <<std::endl;
-                //printSeparator();
                 switch (command){
                     case CREATE_UNIT:
                         createUnit();
@@ -95,10 +94,6 @@ void Player::run() {
                     default:
                         break;
                 }
-
-                //board.print();
-                //this->print();
-
                 updateMovables();
             }
         }
@@ -128,11 +123,9 @@ void Player::createBuilding(){
     int type = (file_input[1][0]-'0');
     int pos_x = std::stoi(file_input[2]);
     int pos_y = std::stoi(file_input[3]);
-
-    std::cout<< "Adding new building in position " << "("<< pos_x << "," << pos_y << ")" <<std::endl;
-
+    
     //  Manufacture the building
-    std::unique_ptr<Building> building = BuildingFactory::manufacture((building_t) type);
+    std::unique_ptr<Building> building = BuildingFactory::manufacture((building_t) type, this->faction);
 
     //  Attempt to add to board
     (this->place)((*building),Position(pos_x, pos_y));
@@ -166,7 +159,7 @@ void Player::createUnit(){
     //  Create the unit
     std::vector<Position> positions = elements.at(creators.at((unit_t) type))->getSurroundings(); //  FAILING HERE
     
-    std::unique_ptr<Unit> unit = UnitFactory::create((unit_t) type);
+    std::unique_ptr<Unit> unit = UnitFactory::create((unit_t) type,this->faction);
     //  Attempt adding it
     //  REFACTOR: place should probably be a method of the Player class
         // place(Board & board,Building & building,Position & position)
@@ -251,13 +244,12 @@ void Player::handleRightClick(){
     for (auto & e : this->elements){
         if (e.second->isSelected()){
             std::cout << e.first << ": ";
-            e.second->react(board.getCell(pos_x,pos_y));
+            e.second->react(pos_x,pos_y,board);
         }
     }
 }
 
 void Player::handleIdle(){
-    std::cout << "Client just did nothing" << std::endl;
 }
 
 /*
@@ -308,7 +300,7 @@ void Player::updateMovables(){
                 Position next_position = path.back();
                 path.pop_back();
                 e.second->setPosition(next_position);
-                board.move_unit(current_position, next_position);
+                board.move_unit(current_position, next_position, e.second->getFaction());
             }
         }
     }

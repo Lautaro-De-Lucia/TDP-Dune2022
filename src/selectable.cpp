@@ -7,7 +7,8 @@ Area::Area(int Xmin,int Xmax, int Ymin, int Ymax){
     this->Ymax = Ymax;
 }
 
-Selectable::Selectable(int LP, Position position, int dim_x, int dim_y, bool moves){
+Selectable::Selectable(player_t faction,int LP, Position position, int dim_x, int dim_y, bool moves){
+    this->faction = faction;
     this->LP = LP;
     this->position = position;
     this->dim_x = dim_x;
@@ -50,8 +51,8 @@ bool Selectable::contains(const Position& pos){
     return false;
 }
 
-void Selectable::react(Cell& location){
-    std::cout << "reacting to cell in location: " << location.getPosition() << " [selectable]" << std::endl;
+void Selectable::react(int x, int y, Board & board){
+    std::cout << "reacting to cell in location: (" << x << "," << y << ") [selectable]" << std::endl;
 }
 
 
@@ -117,6 +118,10 @@ Position Selectable::getPosition(){
     return this->position;
 }
 
+player_t Selectable::getFaction(){
+    return this->faction;
+}
+
 void Selectable::setPosition(Position position){
     this->position = position;
 }
@@ -132,7 +137,6 @@ std::vector<Position>& Selectable::get_remaining_path() {
 }
 
 void Selectable::getState(State& state){
-
     state.LP = this->LP;
     state.position = this->position;
     state.selected = this->selected;

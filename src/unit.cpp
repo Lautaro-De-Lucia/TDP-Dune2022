@@ -1,9 +1,9 @@
 #include "unit.h"
 #include "board.h"
 
-Unit::Unit(int LP,int spice, Position pos, int dim_x, int dim_y,int speed) 
+Unit::Unit(player_t faction, int LP,int spice, Position pos, int dim_x, int dim_y,int speed) 
 :
-Selectable(LP,pos,dim_x,dim_y,true)
+Selectable(faction, LP,pos,dim_x,dim_y,true)
 {
     this->spice = spice;
     this->speed = speed;
@@ -15,7 +15,7 @@ bool Unit::place(Board & board,std::vector<Position> & positions,int & spice){
         return false;
     }
     for (Position position : positions){
-        if (board.place(position,1,1,true) == SUCCESS){
+        if (board.place(position,1,1,this->faction) == SUCCESS){
             this->setPosition(position);
             spice -= this->spice;
             return true;
@@ -25,23 +25,23 @@ bool Unit::place(Board & board,std::vector<Position> & positions,int & spice){
 }
 
 
-void Unit::react(Cell & location){
-    std::cout << "reacting to cell in location: " << location.getPosition() << " [unit]" << std::endl;
+void Unit::react(int x, int y, Board & board){
+    std::cout << "reacting to cell in location: " << board.getCell(x,y).getPosition() << " [unit]" << std::endl;
 }
 
-Harvester::Harvester(int LP,int spice, Position pos, int dim_x, int dim_y,int speed,int stored_spice, int max_spice) 
+Harvester::Harvester(player_t faction,int LP,int spice, Position pos, int dim_x, int dim_y,int speed,int stored_spice, int max_spice) 
 :
-Unit(LP,spice,pos,dim_x,dim_y,speed)
+Unit(faction,LP,spice,pos,dim_x,dim_y,speed)
 {
     this->stored_spice = stored_spice;
     this->max_spice = max_spice;
 }
 
-void Harvester::react(Cell& location) {
+void Harvester::react(int x, int y, Board & board) {
 
-    if (!location.isOccupied()) {
+    if (!board.getCell(x,y).isOccupied()) {
         aStar aStar;
-        std::vector<Position> new_path = aStar.algorithm(this->getPosition(), location.getPosition());
+        std::vector<Position> new_path = aStar.algorithm(this->getPosition(),Position(x,y),board);
 
         /*
         std::cout << "printing path" << '\n';
@@ -54,18 +54,27 @@ void Harvester::react(Cell& location) {
     }
 }
 
-Trike::Trike(int LP,int spice, Position pos, int dim_x, int dim_y,int speed,int attack)
+Trike::Trike(player_t faction, int LP,int spice, Position pos, int dim_x, int dim_y,int speed,int attack)
 :
-Unit(LP,spice,pos,dim_x,dim_y,speed)
+Unit(faction,LP,spice,pos,dim_x,dim_y,speed)
 {
     this->attack = attack;
 }
 
-void Trike::react(Cell& location) {
+void Trike::react(int x, int y, Board & board) {
 
-    if (!location.isOccupied()) {
-        aStar aStar;
-        std::vector<Position> new_path = aStar.algorithm(this->getPosition(), location.getPosition());
-        this->remaining_path = new_path;
-    }
+    Cell & location = board.getCell(x,y);
+
+    if (location.isOccupied())
+        return;
+    if (!location.canTraverse())        
+        return;    
+    //  FALTA LÓGICA DE ATAQUE
+    this->move(x,y,board);
+}
+
+void Trike::move(int x, int y, Board & board) {
+    aStar aStar;
+    std::vector<Position> new_path = aStar.algorithm(this->getPosition(),Position(x,y),board);
+    this->remaining_path = new_path;
 }

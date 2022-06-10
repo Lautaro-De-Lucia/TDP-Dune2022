@@ -1,31 +1,28 @@
 #pragma once
 
 #include <iostream>
+#include <memory>
 
-#include "terrain.h"
 #include "common_utils.h"
-
-enum status_cl{
-    UNNOCCUPIED = 0,
-    OCCUPIED = 1
-};
+#include "terrain.h"
 
 class Cell {
  private:
-    Terrain terrain;
+    std::unique_ptr<Terrain> terrain;
     Position position;
-    bool unit;
-    //  TODO: The isue of cell visibility for different players ¿Should that logic be left to the client?
+    int occupied;
 
  public:
     Cell();
     void setPosition(int x, int y);
+    void setTerrain(cell_t terrain);
     Position getPosition();
-    bool isOccupied();
-    bool hasUnit();
-    void placeUnit();
-    void removeUnit();
-    void occupy();
-    void free();
+    void occupy(player_t faction);
+    int  disoccupy();
+    bool  isOccupied();
+    bool canTraverse();
+    bool canExtract();
+    bool canBuild();
     void print();
 };
+

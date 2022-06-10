@@ -9,6 +9,7 @@
 
 class Selectable {
  protected:
+    player_t faction;
     std::string name;
     std::string imagepath;
     int LP;
@@ -20,7 +21,7 @@ class Selectable {
     std::vector<Position> remaining_path;
 
  public:
-    Selectable(int LP, Position position, int dim_x, int dim_y, bool moves);
+    Selectable(player_t faction, int LP, Position position, int dim_x, int dim_y, bool moves);
     void selection(Area& mouse_area);
     bool isSelected();
     bool moves();
@@ -28,7 +29,8 @@ class Selectable {
     void unselect();
     bool contains(const Position& pos);
     bool isWithin(const Area& selection);
-    virtual void react(Cell& location);
+    virtual void react(int x, int y, Board & board);
+    player_t getFaction();
     std::string getName();
     std::vector<Position> getPositions();
     std::vector<Position> getSurroundings(); 

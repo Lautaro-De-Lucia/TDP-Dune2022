@@ -7,5 +7,5 @@
 
 class BuildingFactory{
  public:
-    static std::unique_ptr<Building> manufacture(building_t unit);
+    static std::unique_ptr<Building> manufacture(building_t unit, player_t faction);
 };
