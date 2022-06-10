@@ -77,30 +77,25 @@ void CPlayer::addBuildButton(std::string &IMG_PATH, int &x, int &y, int &id) {
     this->hud.addBuildButton(this->game_renderer, IMG_PATH, x, y, id);
 }
 
-void CPlayer::checkBuild(int &x, int &y) {
-    int id = this->hud.checkBuild(x, y);
-    if (id > -1) {
-        std::cout << "Build: " << std::to_string(id) << std::endl;
-        //createBuild();
-    }
+int CPlayer::checkBuild(int &x, int &y) {
+    return this->hud.checkBuild(x, y);
 }
 
-void CPlayer::checkUnit(int &x, int &y) {
-    int id = this->hud.checkUnit(x, y);
-    if (id > -1) {
-        std::cout << "Unit: " << std::to_string(id) << std::endl;
-        //createUnit();
-    }
+int CPlayer::checkUnit(int &x, int &y) {
+    return this->hud.checkUnit(x, y);
+}
+
+bool CPlayer::checkHud(int &x, int &y) {
+    return this->hud.clickOnHud(x, y);
 }
 
 void CPlayer::updateCamera() {
 
     SDL_Event event;
-    while (SDL_PollEvent( &event )) {
+    SDL_PollEvent( &event );
         //User requests quit
         if( event.type == SDL_QUIT ) {
             SDL_Quit();
-            break;
         }
         int x, y;
         SDL_GetMouseState( &x, &y );
@@ -122,6 +117,5 @@ void CPlayer::updateCamera() {
             this->camera.move(0,1);
             //sleepcp(360-y);
             //this->client_player.update(states);
-        }
         }
 }

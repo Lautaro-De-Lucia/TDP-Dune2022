@@ -69,17 +69,24 @@ void run_sdl() {
     std::thread thread_server(run_server, std::ref(server));
 
     bool running = true;
+    
     bool drag = false;
     int x, y;
-    int c_x, c_y;
-    int c_x2, c_y2;
+    int x_coord, y_coord;
+    int x_drag, y_drag;
+    int x_coord_drag, y_coord_drag;
+    int x_drag_finish, y_drag_finish;
+
+    int unit, building;
+    bool build = false;
+
     SDL_Event event;
     while(running) {   
         while (SDL_PollEvent( &event )) {
             if (drag == false) {
                 SDL_GetMouseState( &x, &y);
-                c_x = (x/(TILE_DIM*2)) + (cam.pos_x/TILE_DIM);
-                c_y = (y/(TILE_DIM*2)) + (cam.pos_y/TILE_DIM);
+                x_coord = (x/(TILE_DIM*2)) + (cam.pos_x/TILE_DIM);
+                y_coord = (y/(TILE_DIM*2)) + (cam.pos_y/TILE_DIM);
             }
             switch (event.type) {
                 //User requests quit
@@ -87,33 +94,52 @@ void run_sdl() {
                     running = false;
                     SDL_Quit();
                     break;
-
                 case SDL_MOUSEMOTION:
                     if (drag == true) {
-                        SDL_GetMouseState( &c_x2, &c_y2 );
-                        c_x2 = (c_x2/(TILE_DIM*2)) + (cam.pos_x/TILE_DIM);
-                        c_y2 = (c_y2/(TILE_DIM*2)) + (cam.pos_y/TILE_DIM);
+                        SDL_GetMouseState( &x, &y);
+                        x_drag_finish = (x/(TILE_DIM*2)) + (cam.pos_x/TILE_DIM);
+                        y_drag_finish = (y/(TILE_DIM*2)) + (cam.pos_y/TILE_DIM);
                     } break;
                 case SDL_MOUSEBUTTONUP:
                     if (event.button.button == SDL_BUTTON_LEFT) {
-                            if (drag == true) {
-                                //server.handleSelection(min(c_x, c_x2), max(c_x, c_x2),
-                                    // min(c_y, c_y2), max(c_y, c_y2));
-                            } else {
-                                client_player.checkBuild(x, y);
-                                client_player.checkUnit(x, y);
-                                //server.handleLeftClick();
-                            }
+                        if (build) {
+                            server.createBuilding(building, x_coord, y_coord);
+                            build = false;
                         }
-                        else if (event.button.button == SDL_BUTTON_RIGHT) {
-                            //server.handleRightClick();
-                        } break;
+                        else {
+                            if (client_player.checkHud(x, y)) {
+                                unit = client_player.checkUnit(x, y);
+                                if (unit != -1) server.createUnit(unit);
+                                else {  
+                                    building = client_player.checkBuild(x, y);
+                                    if (building != -1) build = true;
+                                }
+                            } else server.handleLeftClick(x_coord, y_coord);
+                        } 
+                    } else if (event.button.button == SDL_BUTTON_RIGHT)
+                        server.handleRightClick(x_coord, y_coord);
+                    break;
                 case SDL_KEYDOWN:
                     if(event.key.keysym.sym == SDLK_SPACE) {
-                        drag = true; break; }
+                        if (drag == false) {
+                            drag = true;
+                            SDL_GetMouseState( &x_drag, &y_drag);
+                            x_coord_drag = (x_drag/(TILE_DIM*2)) + (cam.pos_x/TILE_DIM);
+                            y_coord_drag = (y_drag/(TILE_DIM*2)) + (cam.pos_y/TILE_DIM);
+                        } break; 
+                    }
                 case SDL_KEYUP:
                     if(event.key.keysym.sym == SDLK_SPACE){
-                        drag = false; break; }
+                        if (drag == true) {
+                            int x = 0;
+                            server.makeCreator(x);
+                            x = 1;
+                            server.makeCreator(x);
+                            server.handleSelection(std::min(x_coord_drag, x_drag_finish), std::max(x_coord_drag, x_drag_finish),
+                                std::min(y_coord_drag, y_drag_finish), std::max(y_coord_drag, y_drag_finish));
+                            drag = false;
+                        } break;
+                    }
             }
         }
     }

@@ -8,7 +8,7 @@ bool game_has_not_started  = true;
 
 std::vector<std::string> file_input;
 
-Player::Player(int spice, int c_spice, int energy, int c_energy, CPlayer& client_player) : cplayer(client_player) {
+Player::Player(int spice, int c_spice, int energy, int c_energy, CPlayer& client_player) : cplayer(client_player), actions(0, std::vector<int>(0, 0)) {
     this->ID = 0;
     this->spice = spice;
     this->c_spice = c_spice;
@@ -47,7 +47,9 @@ const char * cmddict [8] {
 void Player::run() {
 
     // @ignore
-    TextFileHandler command_reader(DATA_PATH INSTRUCTIONS_FILE);
+    
+    //TextFileHandler command_reader(DATA_PATH INSTRUCTIONS_FILE);
+
     auto base_time_instruction = clock();
 
     while (1) {
@@ -63,31 +65,33 @@ void Player::run() {
             game_has_not_started = false;
             base_time_instruction = current_time;
             //std::cout << "game frame!!" << std::endl;
-            if (command_reader.readInput(file_input)) {
+            if (actions.size() > 0) {
+                command_t command = (command_t)actions[0][0];
+            //if (command_reader.readInput(file_input)) {
                 //std::system("clear");
                 //  Read first line to get command
                 //  With sockets: read 1 byte from the socket
-                command_t command = (command_t)(file_input[0][0]-'0');
+                //command_t command = (command_t)(file_input[0][0]-'0');
                 //std::cout << command << ": " << cmddict[command-1] <<std::endl;
                 //printSeparator();
                 switch (command){
                     case CREATE_UNIT:
-                        createUnit();
+                        createUnit(actions[0][0]);
                         break;
                     case CREATE_BUILDING:
-                        createBuilding();
+                        createBuilding(actions[0][1], actions[0][2], actions[0][3]);
                         break;
                     case MAKE_CREATOR:
-                        makeCreator();  
+                        makeCreator(actions[0][1]);
                         break;
                     case MOUSE_LEFT_CLICK:
-                        handleLeftClick();
+                        handleLeftClick(actions[0][1], actions[0][2]);
                         break;
                     case MOUSE_RIGHT_CLICK:
-                        handleRightClick();
+                        handleRightClick(actions[0][1], actions[0][2]);
                         break;
                     case MOUSE_SELECTION:
-                        handleSelection();
+                        handleSelection(actions[0][1], actions[0][2], actions[0][3], actions[0][4]);
                         break;
                     case IDLE:
                         handleIdle();
@@ -100,7 +104,11 @@ void Player::run() {
                 //this->print();
 
                 updateMovables();
+            } else {
+                handleIdle();
+                sleep(1);
             }
+            
         }
     }
 }
@@ -122,12 +130,12 @@ and will be stored in the Factory class.
             //  Client does nothing
 */
 
-void Player::createBuilding(){
+void Player::createBuilding(int &type, int &pos_x, int &pos_y){
 
     //  Get Parameters
-    int type = (file_input[1][0]-'0');
-    int pos_x = std::stoi(file_input[2]);
-    int pos_y = std::stoi(file_input[3]);
+    //int type = (file_input[1][0]-'0');
+    //int pos_x = std::stoi(file_input[2]);
+    //int pos_y = std::stoi(file_input[3]);
 
     std::cout<< "Adding new building in position " << "("<< pos_x << "," << pos_y << ")" <<std::endl;
 
@@ -158,9 +166,9 @@ void Player::createBuilding(){
 We only need unit <type>
 [TYPE](8)
 */
-void Player::createUnit(){
+void Player::createUnit(int &type){
     //  Get Parameters
-    int type = (file_input[1][0]-'0');
+    //int type = (file_input[1][0]-'0');
     std::cout<< "Creating new unit" << std::endl;
     //  Attempt to add to board
     //  Create the unit
@@ -193,11 +201,11 @@ void Player::createUnit(){
     CASE SUCCESS: 
         SERVER ------------[SUCCESS](8)--------------------> CLIENT
 */
-void Player::handleLeftClick(){
+void Player::handleLeftClick(int &pos_x, int &pos_y){
     std::cout << "Client just did a left click on the map" << std::endl;
     //  Get positions
-    int pos_x = std::stoi(file_input[1]);
-    int pos_y = std::stoi(file_input[2]);
+    //int pos_x = std::stoi(file_input[1]);
+    //int pos_y = std::stoi(file_input[2]);
     std::cout << "On position: " << Position(pos_x,pos_y) << std::endl;
     //  Leave selected only the units at that position
     for (auto& e : this->elements){
@@ -216,13 +224,13 @@ void Player::handleLeftClick(){
     CASE SUCCESS: 
         SERVER ------------[SUCCESS](8)--------------------> CLIENT
 */
-void Player::handleSelection(){
+void Player::handleSelection(const int Xmin, const int Xmax, const int Ymin, const int Ymax){
     std::cout << "Client just selected a part of the map" << std::endl;
     //  Get selection limits
-    int Xmin = std::stoi(file_input[1]);
-    int Xmax = std::stoi(file_input[2]);
-    int Ymin = std::stoi(file_input[3]);
-    int Ymax = std::stoi(file_input[4]);
+    //int Xmin = std::stoi(file_input[1]);
+    //int Xmax = std::stoi(file_input[2]);
+    //int Ymin = std::stoi(file_input[3]);
+    //int Ymax = std::stoi(file_input[4]);
     std::cout << "Selection: (" << Xmin << "," << Xmax << "," << Ymin << "," << Ymax << ")" << std::endl;
     //  Traverse and mark as selected those that are included
     Area selection(Xmin,Xmax,Ymin,Ymax);
@@ -241,11 +249,11 @@ void Player::handleSelection(){
     CASE SUCCESS: 
         SERVER ------------[SUCCESS](8)--------------------> CLIENT
 */
-void Player::handleRightClick(){
+void Player::handleRightClick(int &pos_x, int &pos_y){
     std::cout << "Client just did a right click on the map" << std::endl;
     //  Get positions
-    int pos_x = std::stoi(file_input[1]);
-    int pos_y = std::stoi(file_input[2]);
+    //int pos_x = std::stoi(file_input[1]);
+    //int pos_y = std::stoi(file_input[2]);
     std::cout << "On position: " << Position(pos_x, pos_y) << std::endl;
     //  Traverse elements and make each selected unit handle the cell
     for (auto & e : this->elements){
@@ -314,8 +322,8 @@ void Player::updateMovables(){
     }
 }
 
-void Player::makeCreator(){
-    int building_ID = (int) std::stoi(file_input[1]);
+void Player::makeCreator(int &building_ID){
+    //int building_ID = (int) std::stoi(file_input[1]);
     if (this->elements.at(building_ID)->getName() == "Refinery")
         this->creators[HARVESTER] = building_ID; 
     if (this->elements.at(building_ID)->getName() == "Barrack"){

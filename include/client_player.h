@@ -25,7 +25,6 @@ class CPlayer {
     SDL2pp::Renderer& game_renderer;
     Camera& camera;
 
-
  public:
     CPlayer(Camera& cam, SDL2pp::Window & window,SDL2pp::Renderer & renderer,size_t spice, size_t c_spice, int energy, size_t c_energy, std::vector<std::vector<cell_t>> & map_data);
     void renderMap();
@@ -36,6 +35,7 @@ class CPlayer {
     void updateCamera();
     void addUnitButton(std::string &IMG_PATH, int &x, int &y, int &id);
     void addBuildButton(std::string &IMG_PATH, int &x, int &y, int &id);
-    void checkBuild(int &x, int &y);
-    void checkUnit(int &x, int &y);
+    int checkBuild(int &x, int &y);
+    int checkUnit(int &x, int &y);
+    bool checkHud(int &x, int &y);
 };
