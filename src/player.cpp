@@ -106,7 +106,6 @@ void Player::run() {
                     break;
                 case IDLE:
                     handleIdle();
-                    sleep(1);
                     break;
                 default:
                     break;
