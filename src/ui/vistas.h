@@ -1,0 +1,61 @@
+#ifndef VISTAS_H
+#define VISTAS_H
+
+#include <QMainWindow>
+#include <QButtonGroup>
+
+QT_BEGIN_NAMESPACE
+namespace Ui {
+    class MainWindow;
+    class LobbyWindow;
+}
+QT_END_NAMESPACE
+
+class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
+
+signals:
+    void jugar();
+
+private slots:
+  void handleCreditos();
+
+private:
+    Ui::MainWindow *ui;
+};
+
+class QMediaPlayer;
+
+class LobbyWindow : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    LobbyWindow(QWidget *parent = nullptr);
+    ~LobbyWindow();
+
+signals:
+    void jugar();
+
+private slots:
+  void handleOpcionCrear();
+  void handleOpcionConectarse();
+  void handleListar();
+  void handleCrear();
+  void handleConectarse();
+  void on_toggle_clicked();
+  void on_mute_clicked();
+  void on_volumen_valueChanged(int value);
+
+private:
+    Ui::LobbyWindow *ui;
+    QButtonGroup *buttongroup;
+    QMediaPlayer *mMediaPlayer;
+};
+
+#endif // VISTAS_H
