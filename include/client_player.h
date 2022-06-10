@@ -34,4 +34,8 @@ class CPlayer {
     void addElement(building_t type,State & desc);
     void update(std::vector<State> & server_data);
     void updateCamera();
+    void addUnitButton(std::string &IMG_PATH, int &x, int &y, int &id);
+    void addBuildButton(std::string &IMG_PATH, int &x, int &y, int &id);
+    void checkBuild(int &x, int &y);
+    void checkUnit(int &x, int &y);
 };
