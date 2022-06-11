@@ -3,10 +3,11 @@
 #include <string>
 
 #define HUD_IMG_PATH "../src/ui/resources/img/menu.png"
-#define BARRACK_PATH "../src/ui/resources/img/barrack.png"
-#define REFINERY_PATH "../src/ui/resources/img/refinery.png"
-#define AIR_TRAP_PATH "../src/ui/resources/img/windtrap.png"
+#define BARRACK_PATH "../src/ui/resources/img/barrack.bmp"
+#define REFINERY_PATH "../src/ui/resources/img/refinery.bmp"
+#define AIR_TRAP_PATH "../src/ui/resources/img/windtrap.bmp"
 #define TRIKE_PATH "../src/ui/resources/img/trike.bmp"
+#define HARVESTER_PATH "../src/ui/resources/img/harvester.bmp"
 
 GameHud::GameHud(SDL2pp::Renderer & renderer) : texture(renderer, HUD_IMG_PATH) {
 	int w = texture.GetWidth();
@@ -14,10 +15,11 @@ GameHud::GameHud(SDL2pp::Renderer & renderer) : texture(renderer, HUD_IMG_PATH) 
 	int x = SCREEN_WIDTH - w;
 	int y = SCREEN_HEIGHT - h;
 	dRect = {x, y, w, h};
-	addBuildButton(renderer, BARRACK_PATH, SCREEN_WIDTH - 155, SCREEN_HEIGHT - 495, 2);
-	addBuildButton(renderer, REFINERY_PATH, SCREEN_WIDTH - 155, SCREEN_HEIGHT - 435, 3);
-	addBuildButton(renderer, AIR_TRAP_PATH, SCREEN_WIDTH - 155, SCREEN_HEIGHT - 375, 1);
-	addUnitButton(renderer, TRIKE_PATH, SCREEN_WIDTH - 80, SCREEN_HEIGHT - 495, 2);
+	addBuildButton(renderer, BARRACK_PATH, SCREEN_WIDTH - 155, SCREEN_HEIGHT - 495, BARRACK);
+	addBuildButton(renderer, REFINERY_PATH, SCREEN_WIDTH - 155, SCREEN_HEIGHT - 435, REFINERY);
+	addBuildButton(renderer, AIR_TRAP_PATH, SCREEN_WIDTH - 155, SCREEN_HEIGHT - 375, AIR_TRAP);
+	addUnitButton(renderer, TRIKE_PATH, SCREEN_WIDTH - 80, SCREEN_HEIGHT - 495, TRIKE);
+	addUnitButton(renderer, HARVESTER_PATH, SCREEN_WIDTH - 80, SCREEN_HEIGHT - 435, HARVESTER);
 }
 
 void GameHud::render(SDL2pp::Renderer & renderer){

@@ -22,4 +22,3 @@ int Button::checkIntersection(int &x, int &y) {
 	if (dRect.Intersects(aux)) return id;
 	return -1;
 }
-

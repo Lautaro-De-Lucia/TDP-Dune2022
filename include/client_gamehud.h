@@ -2,6 +2,8 @@
 
 #include <SDL2pp/SDL2pp.hh>
 #include "client_gamehud_button.h"
+#include "common_utils.h"
+
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
 

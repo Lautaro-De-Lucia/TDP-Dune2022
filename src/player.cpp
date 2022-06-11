@@ -193,7 +193,15 @@ void Player::createUnit(int type){
     std::cout<< "Creating new unit" << std::endl;
     //  Attempt to add to board
     //  Create the unit
+
+    std::cout << "type: " << type << std::endl;
+
     std::vector<Position> positions = elements.at(creators.at((unit_t) type))->getSurroundings(); //  FAILING HERE
+
+
+
+    
+
     
     std::unique_ptr<Unit> unit = UnitFactory::create((unit_t) type,this->faction);
     //  Attempt adding it
