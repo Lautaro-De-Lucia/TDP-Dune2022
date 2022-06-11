@@ -72,34 +72,7 @@ void Player::run() {
 
             game_has_not_started = false;
             base_time_instruction = current_time;
-            if (command_reader.readInput(file_input)) {
-                command_t command = (command_t)(file_input[0][0]-'0');
-                switch (command){
-                    case CREATE_UNIT:
-                        createUnit(file_input[1][0]-'0');
-                        break;
-                    case CREATE_BUILDING:
-                        createBuilding(file_input[1][0]-'0', std::stoi(file_input[2]), std::stoi(file_input[3]));
-                        break;
-                    case MAKE_CREATOR:
-                        makeCreator(std::stoi(file_input[1]));  
-                        break;
-                    case MOUSE_LEFT_CLICK:
-                        handleLeftClick(std::stoi(file_input[1]),std::stoi(file_input[2]));
-                        break;
-                    case MOUSE_RIGHT_CLICK:
-                        handleRightClick(std::stoi(file_input[1]),std::stoi(file_input[2]));
-                        break;
-                    case MOUSE_SELECTION:
-                        handleSelection(std::stoi(file_input[1]),std::stoi(file_input[2]),std::stoi(file_input[3]),std::stoi(file_input[4]));
-                        break;
-                    case IDLE:
-                        handleIdle();
-                        break;
-                    default:
-                        break;
-                }
-            }
+
             if (this->mouse_events.size() > 0) {
                 std::cout << "Thus I am handling the event" << std::endl;
                 std::vector<int> new_event = this->mouse_events.front();
