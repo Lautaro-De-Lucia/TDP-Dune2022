@@ -1,12 +1,5 @@
 #include "selectable.h"
 
-Area::Area(int Xmin,int Xmax, int Ymin, int Ymax){
-    this->Xmin = Xmin;
-    this->Xmax = Xmax;
-    this->Ymin = Ymin;
-    this->Ymax = Ymax;
-}
-
 Selectable::Selectable(player_t faction,int LP, Position position, int dim_x, int dim_y, bool moves){
     this->faction = faction;
     this->LP = LP;

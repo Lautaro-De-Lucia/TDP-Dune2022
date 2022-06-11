@@ -11,8 +11,7 @@ std::vector<std::string> file_input;
 Player::Player(player_t faction, int spice, int c_spice, int energy, int c_energy,Board & shared_board, CPlayer& client_player) 
 : 
 cplayer(client_player),
-board(shared_board),
-actions(0, std::vector<int>(0,0))
+board(shared_board)
 {
     this->ID = 0;
     this->faction = faction;
@@ -53,71 +52,95 @@ const char * cmddict [8] {
 void Player::run() {
 
     // @ignore
-    
-    //TextFileHandler command_reader(DATA_PATH INSTRUCTIONS_FILE);
-
+    TextFileHandler command_reader(DATA_PATH INSTRUCTIONS_FILE);
     auto base_time_instruction = clock();
 
     while (1) {
 
         auto current_time = clock();
 		auto frame_time_instruction = current_time - base_time_instruction;
-       
-        this->cplayer.updateCamera();
+        //  
+        std::vector<int> action;
+        this->cplayer.clientUpdate(action);
+        if(action.size() > 0){
+            std::cout << "Client sent a new mouse action" << std::endl;
+            this->mouse_events.push(action);    
+        }
         reportState();
 
-        if(frame_time_instruction > 100000 || game_has_not_started) {
+        if(frame_time_instruction > 10000 || game_has_not_started) {
 
             game_has_not_started = false;
             base_time_instruction = current_time;
-            //std::cout << "game frame!!" << std::endl;
-            command_t command;
-            std::vector<int> action;
-            if (actions.size() > 0) {
-                action = actions[0];
-                actions.pop_back();
-                command = (command_t)action[0];
-            } else command = IDLE;
-            //if (command_reader.readInput(file_input)) {
-                //std::system("clear");
-                //  Read first line to get command
-                //  With sockets: read 1 byte from the socket
-                //command_t command = (command_t)(file_input[0][0]-'0');
-                //std::cout << command << ": " << cmddict[command-1] <<std::endl;
-                //printSeparator();
-            switch (command){
-                case CREATE_UNIT:
-                    createUnit(action[1]);
-                    break;
-                case CREATE_BUILDING:
-                    createBuilding(action[1], action[2], action[3]);
-                    break;
-                case MAKE_CREATOR:
-                    makeCreator(action[1]);
-                    break;
-                case MOUSE_LEFT_CLICK:
-                    handleLeftClick(action[1], action[2]);
-                    break;
-                case MOUSE_RIGHT_CLICK:
-                    handleRightClick(action[1], action[2]);
-                    break;
-                case MOUSE_SELECTION:
-                    handleSelection(action[1], action[2], action[3], action[4]);
-                    break;
-                case IDLE:
-                    handleIdle();
-                    break;
-                default:
-                    break;
-            } updateMovables();
+            if (command_reader.readInput(file_input)) {
+                command_t command = (command_t)(file_input[0][0]-'0');
+                switch (command){
+                    case CREATE_UNIT:
+                        createUnit();
+                        break;
+                    case CREATE_BUILDING:
+                        createBuilding();
+                        break;
+                    case MAKE_CREATOR:
+                        makeCreator();  
+                        break;
+                    case MOUSE_LEFT_CLICK:
+                        handleLeftClick(std::stoi(file_input[1]),std::stoi(file_input[2]));
+                        break;
+                    case MOUSE_RIGHT_CLICK:
+                        handleRightClick(std::stoi(file_input[1]),std::stoi(file_input[2]));
+                        break;
+                    case MOUSE_SELECTION:
+                        handleSelection(std::stoi(file_input[1]),std::stoi(file_input[2]),std::stoi(file_input[3]),std::stoi(file_input[4]));
+                        break;
+                    case IDLE:
+                        handleIdle();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            if (this->mouse_events.size() > 0) {
+                std::cout << "Thus I am handling the event" << std::endl;
+                std::vector<int> new_event = this->mouse_events.front();
+                this->mouse_events.pop();
+                std::cout << "The new event has values:" << std::endl;
+                for (int value : new_event){
+                    std::cout << " " << value;
+                }
+                std::cout << std::endl;
+                command_t command = (command_t)(new_event[0]);
+                switch (command){
+                    case CREATE_UNIT:
+                        createUnit();
+                        break;
+                    case CREATE_BUILDING:
+                        createBuilding();
+                        break;
+                    case MAKE_CREATOR:
+                        makeCreator();  
+                        break;
+                    case MOUSE_LEFT_CLICK:
+                        handleLeftClick(new_event[1],new_event[2]);
+                        break;
+                    case MOUSE_RIGHT_CLICK:
+                        handleRightClick(new_event[1],new_event[2]);
+                        break;
+                    case MOUSE_SELECTION:
+                        handleSelection(new_event[1],new_event[2],new_event[3],new_event[4]);
+                        break;
+                    case IDLE:
+                        handleIdle();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            updateMovables();
         }
     }
 }
 
-void Player::addAction(std::vector<int> action){
-    std::vector<int> v = action;
-    actions.push_back(v);
-}
 /*
 We only need building <type> and <position>.
 Other parameters like the dimensions are lifted from
@@ -135,14 +158,13 @@ and will be stored in the Factory class.
             //  Client does nothing
 */
 
-void Player::createBuilding(int &type, int &pos_x, int &pos_y){
+void Player::createBuilding(){
 
     //  Get Parameters
-    //int type = (file_input[1][0]-'0');
-    //int pos_x = std::stoi(file_input[2]);
-    //int pos_y = std::stoi(file_input[3]);
-
-    std::cout<< "Adding new building in position " << "("<< pos_x << "," << pos_y << ")" <<std::endl;
+    int type = (file_input[1][0]-'0');
+    int pos_x = std::stoi(file_input[2]);
+    int pos_y = std::stoi(file_input[3]);
+    
     //  Manufacture the building
     std::unique_ptr<Building> building = BuildingFactory::manufacture((building_t) type, this->faction);
 
@@ -159,7 +181,7 @@ void Player::createBuilding(int &type, int &pos_x, int &pos_y){
         (this->elements)[ID-1]->getState(state);
         state.ID = ID-1;
         (this->cplayer).addElement((building_t) type, state);
-        this->makeCreator(state.ID);
+
         std::cout << "Building succesfully created" << std::endl;
         return;
     }
@@ -170,9 +192,9 @@ void Player::createBuilding(int &type, int &pos_x, int &pos_y){
 We only need unit <type>
 [TYPE](8)
 */
-void Player::createUnit(int &type){
+void Player::createUnit(){
     //  Get Parameters
-    //int type = (file_input[1][0]-'0');
+    int type = (file_input[1][0]-'0');
     std::cout<< "Creating new unit" << std::endl;
     //  Attempt to add to board
     //  Create the unit
@@ -205,11 +227,11 @@ void Player::createUnit(int &type){
     CASE SUCCESS: 
         SERVER ------------[SUCCESS](8)--------------------> CLIENT
 */
-void Player::handleLeftClick(int &pos_x, int &pos_y){
+void Player::handleLeftClick(int x, int y){
     std::cout << "Client just did a left click on the map" << std::endl;
     //  Get positions
-    //int pos_x = std::stoi(file_input[1]);
-    //int pos_y = std::stoi(file_input[2]);
+    int pos_x = x;
+    int pos_y = y;
     std::cout << "On position: " << Position(pos_x,pos_y) << std::endl;
     //  Leave selected only the units at that position
     for (auto& e : this->elements){
@@ -228,13 +250,13 @@ void Player::handleLeftClick(int &pos_x, int &pos_y){
     CASE SUCCESS: 
         SERVER ------------[SUCCESS](8)--------------------> CLIENT
 */
-void Player::handleSelection(const int Xmin, const int Xmax, const int Ymin, const int Ymax){
+void Player::handleSelection(int xmin, int xmax, int ymin, int ymax){
     std::cout << "Client just selected a part of the map" << std::endl;
     //  Get selection limits
-    //int Xmin = std::stoi(file_input[1]);
-    //int Xmax = std::stoi(file_input[2]);
-    //int Ymin = std::stoi(file_input[3]);
-    //int Ymax = std::stoi(file_input[4]);
+    int Xmin = xmin;
+    int Xmax = xmax;
+    int Ymin = ymin;
+    int Ymax = ymax;
     std::cout << "Selection: (" << Xmin << "," << Xmax << "," << Ymin << "," << Ymax << ")" << std::endl;
     //  Traverse and mark as selected those that are included
     Area selection(Xmin,Xmax,Ymin,Ymax);
@@ -253,11 +275,11 @@ void Player::handleSelection(const int Xmin, const int Xmax, const int Ymin, con
     CASE SUCCESS: 
         SERVER ------------[SUCCESS](8)--------------------> CLIENT
 */
-void Player::handleRightClick(int &pos_x, int &pos_y){
+void Player::handleRightClick(int x, int y){
     std::cout << "Client just did a right click on the map" << std::endl;
     //  Get positions
-    //int pos_x = std::stoi(file_input[1]);
-    //int pos_y = std::stoi(file_input[2]);
+    int pos_x = x;
+    int pos_y = y;
     std::cout << "On position: " << Position(pos_x, pos_y) << std::endl;
     //  Traverse elements and make each selected unit handle the cell
     for (auto & e : this->elements){
@@ -325,8 +347,8 @@ void Player::updateMovables(){
     }
 }
 
-void Player::makeCreator(int &building_ID){
-    //int building_ID = (int) std::stoi(file_input[1]);
+void Player::makeCreator(){
+    int building_ID = (int) std::stoi(file_input[1]);
     if (this->elements.at(building_ID)->getName() == "Refinery")
         this->creators[HARVESTER] = building_ID; 
     if (this->elements.at(building_ID)->getName() == "Barrack"){

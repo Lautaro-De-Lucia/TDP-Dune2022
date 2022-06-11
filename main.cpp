@@ -10,7 +10,7 @@
 #include "src/ui/vistas.h"
 #include <QApplication>
 #include <QtConcurrent/QtConcurrent>
-#include <vector> 
+
 
 #define INIT_SPICE 5000
 #define INIT_CSPICE 5000
@@ -49,14 +49,12 @@ void greet(SDL2pp::Renderer &game_renderer) {
     game_renderer.Present();
 }
 
-void run_server(Player &server) {
-    server.run();
-}
+
 void run_sdl() {
 
     SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,SDL_WINDOW_ALWAYS_ON_TOP);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
-    greet(game_renderer);
+
     std::vector<std::vector<cell_t>> cells = generate_random_map();
 
     Camera cam(0,0,640,360,1280,720);
@@ -64,80 +62,96 @@ void run_sdl() {
     Board board(cells);
 
     Player server(HARKONNEN,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,board,client_player);
-    std::thread thread_server(run_server, std::ref(server));
+    server.run();
 
-    bool running = true;
-    bool drag = false;
-    
-    int x, y;
-    int x_coord, y_coord;
-    int x_drag, y_drag;
-    int x_coord_drag, y_coord_drag;
-    int x_drag_finish, y_drag_finish;
+    /*
+    client_player.renderMap();
+    client_player.renderHud();
+    game_renderer.Present();
+    State air_trap_state;
+    air_trap_state.ID = 0;
+    air_trap_state.LP = AIR_TRAP_LP;
+    air_trap_state.position = Position(25,20);
+    air_trap_state.selected = false;    
+    client_player.addElement(AIR_TRAP,air_trap_state);
+    State refinery_state;
+    refinery_state.ID = 1;
+    refinery_state.LP = REFINERY_LP;
+    refinery_state.position = Position(30,25);
+    refinery_state.selected = false;   
+    client_player.addElement(REFINERY,refinery_state);
+    State barrack_state;
+    barrack_state.ID = 2;
+    barrack_state.LP = BARRACK_LP;
+    barrack_state.position = Position(30,20);
+    barrack_state.selected = true;   
+    client_player.addElement(BARRACK,barrack_state);
+    State trike_state;
+    trike_state.ID = 3;
+    trike_state.LP = TRIKE_LP;
+    trike_state.position = Position(40,20);
+    trike_state.selected = true;   
+    client_player.addElement(TRIKE,trike_state);
+    State harvester_state;
+    harvester_state.ID = 4;
+    harvester_state.LP = HARVESTER_LP;
+    harvester_state.position = Position(40,30);
+    harvester_state.selected = true;   
+    client_player.addElement(HARVESTER,harvester_state);
+    std::vector<State> states;
+    states.push_back(air_trap_state);
+    states.push_back(refinery_state);
+    states.push_back(barrack_state);
+    states.push_back(trike_state);
+    states.push_back(harvester_state);
+    client_player.update(states);
+    //  Silly test
+    for( size_t i = 0; i < 8 ; i++){
+        states[4].LP-=60;    
+        states[4].position = Position(40-i,30-i);
+        client_player.update(states);
+        sleepcp(500);
+    }
+    //Handle events on queue
+    while( true )
+    {
+        SDL_PollEvent( &event );
+        //User requests quit
+        if( event.type == SDL_QUIT )
+        {
+            game_window.Hide();
+            break;
+        }
+        int x, y;
+		SDL_GetMouseState( &x, &y );
 
-    int unit, building;
-    bool build = false;
-    SDL_Event event;
-    while(running) {   
-        while (SDL_PollEvent( &event )) {
-            if (drag == false) {
-                SDL_GetMouseState( &x, &y);
-                x_coord = (x/(TILE_DIM*2)) + (cam.pos_x/TILE_DIM);
-                y_coord = (y/(TILE_DIM*2)) + (cam.pos_y/TILE_DIM);
-            }
-            switch (event.type) {
-                case SDL_QUIT: //User requests quit
-                    running = false;
-                    SDL_Quit();
-                    break;
-                case SDL_MOUSEMOTION: // User moves cursor
-                    if (drag == true) {
-                        SDL_GetMouseState( &x, &y);
-                        x_drag_finish = (x/(TILE_DIM*2)) + (cam.pos_x/TILE_DIM);
-                        y_drag_finish = (y/(TILE_DIM*2)) + (cam.pos_y/TILE_DIM);
-                    } break;
-                case SDL_MOUSEBUTTONUP:  // User releases mouseclick
-                    if (event.button.button == SDL_BUTTON_LEFT) {
-                        if (build) {
-                            server.addAction({CREATE_BUILDING, building, x_coord, y_coord});
-                            build = false;
-                        }
-                        else {
-                            if (client_player.checkHud(x, y)) {
-                                unit = client_player.checkUnit(x, y);
-                                if (unit != -1) server.addAction({CREATE_UNIT, unit});
-                                else {  
-                                    building = client_player.checkBuild(x, y);
-                                    if (building != -1) build = true;
-                                }
-                            } else server.addAction({MOUSE_LEFT_CLICK, x_coord, y_coord});
-                        } 
-                    } else if (event.button.button == SDL_BUTTON_RIGHT) server.addAction({MOUSE_RIGHT_CLICK, x_coord, y_coord});
-                    break;
-                case SDL_KEYDOWN: // User unreleases key
-                    if(event.key.keysym.sym == SDLK_SPACE) {
-                        if (drag == false) {
-                            drag = true;
-                            SDL_GetMouseState( &x_drag, &y_drag);
-                            x_coord_drag = (x_drag/(TILE_DIM*2)) + (cam.pos_x/TILE_DIM);
-                            y_coord_drag = (y_drag/(TILE_DIM*2)) + (cam.pos_y/TILE_DIM);
-                        } break; 
-                    }
-                case SDL_KEYUP: // User releases key
-                    if(event.key.keysym.sym == SDLK_SPACE) {
-                        if (drag == true) {
-                            server.addAction({MOUSE_SELECTION, 
-                                std::min(x_coord_drag, x_drag_finish), 
-                                std::max(x_coord_drag, x_drag_finish),
-                                std::min(y_coord_drag, y_drag_finish), 
-                                std::max(y_coord_drag, y_drag_finish)});
-                            drag = false;
-                        } break;
-                }
-            }
+        if(x < 80){
+            cam.move(-1,0);
+            sleepcp(x);
+            client_player.update(states);
+        }
+        if(x > 560){
+            cam.move(1,0);
+            sleepcp(640-x);
+            client_player.update(states);
+        }
+        if(y < 60){
+            cam.move(0,-1);
+            sleepcp(y);
+            client_player.update(states);
+        }
+        if(y > 300){
+            cam.move(0,1);
+            sleepcp(360-y);
+            client_player.update(states);
         }
     }
+    */
+
+
+
 };
+
 
 int main(int argc, char *argv[]) {
     /*

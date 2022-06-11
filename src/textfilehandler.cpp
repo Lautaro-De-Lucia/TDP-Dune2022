@@ -1,6 +1,5 @@
 #include "textfilehandler.h"
 
-
 std::string TextFileHandler::remove_spaces(std::string old_string) {
         std::string new_string;
         for (size_t i=0 ; i < old_string.size() ; i++) {

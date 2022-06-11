@@ -49,6 +49,18 @@ enum player_t {
     ORDOS = 3
 };
 
+enum command_t {
+    CREATE_BUILDING = 1,
+    CREATE_UNIT = 2, 
+    MAKE_CREATOR = 3,
+    MOUSE_LEFT_CLICK = 4,
+    MOUSE_RIGHT_CLICK = 5,
+    MOUSE_SELECTION = 6,
+    TEST_ASTAR = 7,
+    IDLE = 8,
+};
+
+
 enum unit_t{
     HARVESTER = 1,
     TRIKE = 2
@@ -94,7 +106,12 @@ struct Area {
     int Xmax;
     int Ymin;
     int Ymax;
-    Area(int Xmin,int Xmax, int Ymin, int Ymax);
+    Area(int Xmin,int Xmax, int Ymin, int Ymax){
+        this->Xmin=Xmin;
+        this->Xmax=Xmax;
+        this->Ymin=Ymin;
+        this->Ymax=Ymax;
+    }
 };
 
 void sleepcp(int milliseconds);

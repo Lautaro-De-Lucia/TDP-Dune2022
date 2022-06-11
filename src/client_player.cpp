@@ -6,7 +6,8 @@ camera(cam),
 game_window(window),
 game_renderer(renderer),
 map(renderer,map_data),
-hud(renderer)
+hud(renderer),
+mouse(TILE_DIM,cam)
 {
     this->spice = spice;
     this->c_spice = c_spice;
@@ -63,31 +64,49 @@ void CPlayer::renderHud(){
     this->game_renderer.SetScale(1,1);
     this->hud.render(this->game_renderer);
 }
-void CPlayer::addUnitButton(std::string &IMG_PATH, int &x, int &y, int &id) {
-    this->hud.addUnitButton(this->game_renderer, IMG_PATH, x, y, id);
-}
 
-void CPlayer::addBuildButton(std::string &IMG_PATH, int &x, int &y, int &id) {
-    this->hud.addBuildButton(this->game_renderer, IMG_PATH, x, y, id);
-}
+void CPlayer::clientUpdate(std::vector<int> & mouse_event) {
 
-int CPlayer::checkBuild(int &x, int &y) {
-    return this->hud.checkBuild(x, y);
-}
-
-int CPlayer::checkUnit(int &x, int &y) {
-    return this->hud.checkUnit(x, y);
-}
-
-bool CPlayer::checkHud(int &x, int &y) {
-    return this->hud.clickOnHud(x, y);
-}
-
-void CPlayer::updateCamera() {
+//  GET MOUSE EVENT AND PUT ON QUEUE:
 
     SDL_Event event;
+    mouse.getEvent(&event);
     SDL_PollEvent( &event );
+    switch(event.type){
+        case SDL_MOUSEBUTTONDOWN:
+            if (mouse.leftClick()){
+                mouse.click();
+                mouse_event.push_back(MOUSE_LEFT_CLICK);
+                Position clicked_pos = mouse.currentPosition();
+                mouse_event.push_back(clicked_pos.x);
+                mouse_event.push_back(clicked_pos.y);
+            }
+	        if (mouse.rightClick()){
+                mouse.unclick();
+                mouse_event.push_back(MOUSE_RIGHT_CLICK);
+                Position clicked_pos = mouse.currentPosition();
+                mouse_event.push_back(clicked_pos.x);
+                mouse_event.push_back(clicked_pos.y);
+            }
+            break;
+        case SDL_MOUSEBUTTONUP:
+            //	Si al soltarse no se movio de la posicion donde hizo click
+            if (!(mouse.clickedPosition() == mouse.currentPosition())){
+                Area selection = mouse.getSelection(mouse.clickedPosition(),mouse.currentPosition());
+                mouse_event.push_back(MOUSE_SELECTION);
+                mouse_event.push_back(selection.Xmin);
+                mouse_event.push_back(selection.Xmax);
+                mouse_event.push_back(selection.Ymin);
+                mouse_event.push_back(selection.Ymax);
+            }
+            break;
+        default:
+            break;
+    }
 
+
+//  UPDATE CAMERA:
+    SDL_PollEvent( &event );
     //User requests quit
     if( event.type == SDL_QUIT ) {
         this->game_window.Hide();
