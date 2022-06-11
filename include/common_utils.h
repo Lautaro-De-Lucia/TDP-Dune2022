@@ -115,3 +115,9 @@ struct Area {
 };
 
 void sleepcp(int milliseconds);
+
+enum hud_button_t {
+    UNKNOWN_BTN = 0,
+    BUILD_BTN = 1,
+    UNIT_BTN = 2
+};

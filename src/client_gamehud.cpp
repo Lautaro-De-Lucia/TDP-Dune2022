@@ -46,19 +46,19 @@ void GameHud::addBuildButton(SDL2pp::Renderer &renderer, std::string IMG_PATH, i
 }
 
 int GameHud::checkBuild(int &x, int &y) {
-	int id = -1;
+	int type = -1;
 	for (size_t i = 0; i < build_buttons.size(); i++) {
-		id = build_buttons[i].checkIntersection(x, y);
-		if (id != -1) return id;
-	} return id;
+		type = build_buttons[i].checkIntersection(x, y);
+		if (type != -1) return type;
+	} return type;
 }
 
 int GameHud::checkUnit(int &x, int &y) {
-	int id = -1;
+	int type = -1;
 	for (size_t i = 0; i < unit_buttons.size(); i++) {
-		id = unit_buttons[i].checkIntersection(x, y);
-		if (id != -1) return id;
-	} return id;
+		type = unit_buttons[i].checkIntersection(x, y);
+		if (type != -1) return type;
+	} return type;
 }
 
 bool GameHud::clickOnHud(int &x, int &y){

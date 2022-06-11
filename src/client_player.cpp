@@ -14,6 +14,8 @@ mouse(TILE_DIM,cam)
     this->energy = energy;
     this->c_energy = c_energy;
     this->efficiency = efficiency;
+    this->is_holding_building = false;
+    this->building_held = -1;
 }
 
 void CPlayer::addElement(unit_t type,State & desc){
@@ -71,25 +73,70 @@ void CPlayer::clientUpdate(std::vector<int> & mouse_event) {
 
     SDL_Event event;
     mouse.getEvent(&event);
-    SDL_PollEvent( &event );
+    SDL_PollEvent(&event);
+    Position current_pos = mouse.currentPosition();
+    int pixel_x = -1;
+    int pixel_y = -1;
+
     switch(event.type){
         case SDL_MOUSEBUTTONDOWN:
             if (mouse.leftClick()){
                 mouse.click();
-                mouse_event.push_back(MOUSE_LEFT_CLICK);
-                Position clicked_pos = mouse.currentPosition();
-                mouse_event.push_back(clicked_pos.x);
-                mouse_event.push_back(clicked_pos.y);
+                SDL_GetMouseState(&pixel_x, &pixel_y);
+                if (checkHud(pixel_x, pixel_y)) {
+                    mouse.unclick();
+                    switch (checkBtn(pixel_x, pixel_y))
+                    {
+                    case BUILD_BTN:
+                        this->is_holding_building = true;
+                        this->building_held = checkBuild(pixel_x, pixel_y);
+                        break;
+                    case UNIT_BTN:
+                        std::cout << "CREATING UNIT_BTN" << std::endl;
+                        mouse_event.push_back(CREATE_UNIT);
+                        mouse_event.push_back(checkUnit(pixel_x, pixel_y));
+                        mouse_event.push_back(current_pos.x);
+                        mouse_event.push_back(current_pos.y);
+                        this->is_holding_building = false;
+                        break;
+                    default:
+                        std::cout << "RELEASING BTN" << std::endl;
+                        this->is_holding_building = false;
+                        this->building_held = -1;
+                        break;
+                    }
+
+                } else if (this->is_holding_building) {
+
+                    mouse_event.push_back(CREATE_BUILDING);
+                    mouse_event.push_back(this->building_held);
+                    mouse_event.push_back(current_pos.x);
+                    mouse_event.push_back(current_pos.y);
+                    this->is_holding_building = false;
+                    this->building_held = -1;
+                } else {
+                    mouse_event.push_back(MOUSE_LEFT_CLICK);
+                    mouse_event.push_back(current_pos.x);
+                    mouse_event.push_back(current_pos.y);
+                    this->is_holding_building = false;
+                    //this->building_held = -1;
+                }
             }
 	        if (mouse.rightClick()){
                 mouse.unclick();
-                mouse_event.push_back(MOUSE_RIGHT_CLICK);
-                Position clicked_pos = mouse.currentPosition();
-                mouse_event.push_back(clicked_pos.x);
-                mouse_event.push_back(clicked_pos.y);
+                if(checkHud(pixel_x, pixel_y)) {
+
+                } else {
+                    mouse_event.push_back(MOUSE_RIGHT_CLICK);
+                    mouse_event.push_back(current_pos.x);
+                    mouse_event.push_back(current_pos.y);
+                }
             }
             break;
         case SDL_MOUSEBUTTONUP:
+            if(checkHud(pixel_x, pixel_y)) {
+                    break;
+            }
             //	Si al soltarse no se movio de la posicion donde hizo click
             if (!(mouse.clickedPosition() == mouse.currentPosition())){
                 Area selection = mouse.getSelection(mouse.clickedPosition(),mouse.currentPosition());
@@ -133,4 +180,32 @@ void CPlayer::clientUpdate(std::vector<int> & mouse_event) {
         //sleepcp(360-y);
         //this->client_player.update(states);
     }
+}
+
+void CPlayer::addUnitButton(std::string &IMG_PATH, int &x, int &y, int &id) {
+    this->hud.addUnitButton(this->game_renderer, IMG_PATH, x, y, id);
+}
+
+void CPlayer::addBuildButton(std::string &IMG_PATH, int &x, int &y, int &id) {
+    this->hud.addBuildButton(this->game_renderer, IMG_PATH, x, y, id);
+}
+
+int CPlayer::checkBuild(int &x, int &y) {
+    return this->hud.checkBuild(x, y);
+}
+
+int CPlayer::checkUnit(int &x, int &y) {
+    return this->hud.checkUnit(x, y);
+}
+
+bool CPlayer::checkHud(int &x, int &y) {
+    return this->hud.clickOnHud(x, y);
+}
+
+hud_button_t CPlayer::checkBtn(int &x, int &y) {
+    if (this->hud.checkBuild(x, y) != -1)
+        return BUILD_BTN;
+    if (this->hud.checkUnit(x, y) != -1)
+        return UNIT_BTN;
+    return UNKNOWN_BTN;
 }

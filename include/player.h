@@ -37,11 +37,11 @@ class Player {
     bool place(Unit & unit,std::vector<Position> positions);
  public:    
     Player (player_t faction ,int spice, int c_spice, int energy, int c_energy,Board & shared_board ,CPlayer& client_player);
-    void makeCreator();
+    void makeCreator(int building_ID);
     void print();
     void run(); // This should receive the socket in the future
-    void createBuilding();
-    void createUnit();
+    void createBuilding(int type, int pos_x, int pos_y);
+    void createUnit(int type);
     void handleLeftClick(int x, int y);
     void handleRightClick(int x, int y);
     void handleSelection(int xmin, int xmax, int ymin, int ymax);

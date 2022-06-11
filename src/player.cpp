@@ -68,7 +68,7 @@ void Player::run() {
         }
         reportState();
 
-        if(frame_time_instruction > 10000 || game_has_not_started) {
+        if(frame_time_instruction > 100000 || game_has_not_started) {
 
             game_has_not_started = false;
             base_time_instruction = current_time;
@@ -76,13 +76,13 @@ void Player::run() {
                 command_t command = (command_t)(file_input[0][0]-'0');
                 switch (command){
                     case CREATE_UNIT:
-                        createUnit();
+                        createUnit(file_input[1][0]-'0');
                         break;
                     case CREATE_BUILDING:
-                        createBuilding();
+                        createBuilding(file_input[1][0]-'0', std::stoi(file_input[2]), std::stoi(file_input[3]));
                         break;
                     case MAKE_CREATOR:
-                        makeCreator();  
+                        makeCreator(std::stoi(file_input[1]));  
                         break;
                     case MOUSE_LEFT_CLICK:
                         handleLeftClick(std::stoi(file_input[1]),std::stoi(file_input[2]));
@@ -112,13 +112,13 @@ void Player::run() {
                 command_t command = (command_t)(new_event[0]);
                 switch (command){
                     case CREATE_UNIT:
-                        createUnit();
+                        createUnit(new_event[1]);
                         break;
                     case CREATE_BUILDING:
-                        createBuilding();
+                        createBuilding(new_event[1], new_event[2], new_event[3]);
                         break;
                     case MAKE_CREATOR:
-                        makeCreator();  
+                        //makeCreator(action[1]);
                         break;
                     case MOUSE_LEFT_CLICK:
                         handleLeftClick(new_event[1],new_event[2]);
@@ -158,12 +158,8 @@ and will be stored in the Factory class.
             //  Client does nothing
 */
 
-void Player::createBuilding(){
+void Player::createBuilding(int type, int pos_x, int pos_y) {
 
-    //  Get Parameters
-    int type = (file_input[1][0]-'0');
-    int pos_x = std::stoi(file_input[2]);
-    int pos_y = std::stoi(file_input[3]);
     
     //  Manufacture the building
     std::unique_ptr<Building> building = BuildingFactory::manufacture((building_t) type, this->faction);
@@ -181,6 +177,7 @@ void Player::createBuilding(){
         (this->elements)[ID-1]->getState(state);
         state.ID = ID-1;
         (this->cplayer).addElement((building_t) type, state);
+        this->makeCreator(state.ID);
 
         std::cout << "Building succesfully created" << std::endl;
         return;
@@ -192,9 +189,7 @@ void Player::createBuilding(){
 We only need unit <type>
 [TYPE](8)
 */
-void Player::createUnit(){
-    //  Get Parameters
-    int type = (file_input[1][0]-'0');
+void Player::createUnit(int type){
     std::cout<< "Creating new unit" << std::endl;
     //  Attempt to add to board
     //  Create the unit
@@ -347,8 +342,7 @@ void Player::updateMovables(){
     }
 }
 
-void Player::makeCreator(){
-    int building_ID = (int) std::stoi(file_input[1]);
+void Player::makeCreator(int building_ID){
     if (this->elements.at(building_ID)->getName() == "Refinery")
         this->creators[HARVESTER] = building_ID; 
     if (this->elements.at(building_ID)->getName() == "Barrack"){

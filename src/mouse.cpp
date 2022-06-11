@@ -13,10 +13,8 @@ void MouseHandler::getEvent(SDL_Event * mouse_event){
     this->mouse_event = mouse_event;
 }
 
-Position MouseHandler::currentPosition(){
-    int x,y;
+Position MouseHandler::pixelToGP(int x, int y) {
     Position pos;
-    SDL_GetMouseState( &x, &y );
     int i = 0;
     while (true){
         if(x < i*tile_dim*2){
@@ -33,11 +31,28 @@ Position MouseHandler::currentPosition(){
         }
         i++;
     }
-    std::cout << "Current Mouse Position: " << pos << std::endl;
-    std::cout << "Current Camera Position: (" << std::round(this->camera.pos_x/tile_dim) <<","<<std::round(this->camera.pos_y/tile_dim*2) <<")"<< std::endl;
+
+    return pos;
+}
+
+void MouseHandler::GPToPixel(Position pos, int& pixel_x, int& pixel_y) {
+
+    pixel_x = 2 * pos.x * tile_dim + tile_dim;
+    pixel_y = 2 * pos.y * tile_dim + tile_dim;
+}
+
+Position MouseHandler::currentPosition(){
+    int x,y;
+    Position pos;
+    SDL_GetMouseState( &x, &y );
+    
+    pos = pixelToGP(x, y);
+
+    //std::cout << "Current Mouse Position: " << pos << std::endl;
+    //std::cout << "Current Camera Position: (" << std::round(this->camera.pos_x/tile_dim) <<","<<std::round(this->camera.pos_y/tile_dim*2) <<")"<< std::endl;
     pos.x = pos.x + std::round(this->camera.pos_x/tile_dim);
     pos.y = pos.y + std::round(this->camera.pos_y/tile_dim);
-    std::cout << "Mouse Position after summing camera: " << pos << std::endl;
+    //std::cout << "Mouse Position after summing camera: " << pos << std::endl;
     return pos;
 }
 
@@ -72,3 +87,4 @@ Area MouseHandler::getSelection(Position init_pos, Position final_pos){
     );
     return selection;
 }
+

@@ -23,5 +23,7 @@ class MouseHandler {
 		void click(); // Mark as clicked and update click position
 		void unclick(); // Mark as un-clicked and update click position
 		Area getSelection(Position init_pos, Position final_pos); // 		Get area from two positions
+		Position pixelToGP(int x, int y);
+		void GPToPixel(Position pos, int& pixel_x, int& pixel_y);
 };
 

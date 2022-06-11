@@ -21,12 +21,12 @@ bool Selectable::moves() {
 }
 
 void Selectable::select(){
-    std::cout << "Unit selected!" << std::endl;
+    //std::cout << "Unit selected!" << std::endl;
     this->selected = true;
 }
 
 void Selectable::unselect(){
-    std::cout << "Unit unselected!" << std::endl;
+    //std::cout << "Unit unselected!" << std::endl;
     this->selected = false;
 }
 
