@@ -52,7 +52,6 @@ void CPlayer::update(std::vector<State>& server_data){
     this->renderMap();
     for (State data : server_data)
         (*(this->elements.at(data.ID))).update(data,this->game_renderer, this->camera.pos_x, this->camera.pos_y);
-
     this->renderHud();
     this->game_renderer.Present();
 }
@@ -151,7 +150,6 @@ void CPlayer::clientUpdate(std::vector<int>& mouse_event) {
             break;
     }
 
-
 //  UPDATE CAMERA:
     SDL_PollEvent(&event);
     //User requests quit
@@ -180,6 +178,19 @@ void CPlayer::clientUpdate(std::vector<int>& mouse_event) {
         //sleepcp(360-y);
         //this->client_player.update(states);
     }
+}
+
+void CPlayer::print(std::string toprint, std::string fontpath, int x, int y, int size ,SDL_Color color){
+    std::cout << "Initializing font" << std::endl;
+    SDL2pp::Font font(fontpath,10);
+    std::cout << "Getting surface" << std::endl;
+    SDL2pp::Surface surface = font.RenderText_Solid(toprint,color);
+    std::cout << "Making Texture from surface" << std::endl;
+    SDL2pp::Texture texture(this->game_renderer,surface);
+    std::cout << "Rendering to Screen" << std::endl;
+    this->game_renderer.Copy(texture,SDL2pp::NullOpt,SDL2pp::Rect(x,y,toprint.size()*size,2*size));
+    this->game_renderer.Present();
+    sleep(1);
 }
 
 void CPlayer::addUnitButton(std::string& IMG_PATH, int& x, int& y, int& id) {

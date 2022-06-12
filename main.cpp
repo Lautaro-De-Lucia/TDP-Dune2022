@@ -52,6 +52,9 @@ void greet(SDL2pp::Renderer& game_renderer) {
 
 void run_sdl() {
 
+    //  This is only to initialize TTF
+	SDL2pp::SDLTTF ttf;
+
     SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,SDL_WINDOW_ALWAYS_ON_TOP);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
 

@@ -1,5 +1,11 @@
 #include "common_utils.h"
 
+std::map<color_t,SDL_Color> colors = {
+    {RED,SDL_Color{250,0,0,0}},
+    {GREEN,SDL_Color{0,250,0,0}},
+    {BLUE,SDL_Color{0,0,250,0}}
+};
+
 Position::Position() {}
 
 Position::Position(int x, int y) {

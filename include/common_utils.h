@@ -2,6 +2,8 @@
 
 #include <string>
 #include <iostream>
+#include <map>
+#include <SDL2pp/SDL2pp.hh>
 
 #define TILE_SIZE 16
 
@@ -42,6 +44,14 @@
 #define REFINERY_CAPACITY 5000
 
 #define DEF_SAND_SPICE 200
+
+
+
+enum color_t {
+    RED,
+    BLUE,
+    GREEN
+};
 
 enum player_t {
     HARKONNEN = 1,

@@ -19,6 +19,7 @@ class CPlayer {
    size_t c_energy;
    int energy;
    double efficiency;
+   std::unique_ptr<SDL2pp::Texture> user_message;
    std::map<int,std::unique_ptr<CSelectable>> elements;
    MouseHandler mouse;
    GameMap map;
@@ -39,6 +40,8 @@ class CPlayer {
    void update(std::vector<State>& server_data);
    void clientUpdate(std::vector<int>& mouse_event);
 
+   void print(std::string toprint, std::string fontpath, int x, int y, int size ,SDL_Color color);
+   
    void addUnitButton(std::string& IMG_PATH, int& x, int& y, int& id);
    void addBuildButton(std::string& IMG_PATH, int& x, int& y, int& id);
    int checkBuild(int& x, int& y);

@@ -1,8 +1,10 @@
 #include "player.h"
 
 #include "astar.h"
-
 #include <unistd.h>
+#define FONT_IMPACT_PATH "/fonts/impact/impact.ttf"
+
+extern std::map<color_t,SDL_Color> colors;
 
 bool game_has_not_started  = true;
 
@@ -169,7 +171,13 @@ void Player::createUnit(int type){
     //  Create the unit
 
     if (creators.at((unit_t) type) == -1) {
-        std::cerr << "No creator for units right now" << std::endl;
+        this->cplayer.print(
+            "No creator for this unit right now",
+            DATA_PATH FONT_IMPACT_PATH,
+            400,
+            600,
+            10,
+            colors[RED]);
         return;
     }
 
