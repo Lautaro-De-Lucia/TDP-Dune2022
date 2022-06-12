@@ -10,6 +10,7 @@
 #include "client_selectable.h"
 #include "client_gamemap.h"
 #include "client_gamehud.h"
+#include "client_printer.h"
 #include "mouse.h"
 
 class CPlayer {
@@ -22,6 +23,7 @@ class CPlayer {
    std::unique_ptr<SDL2pp::Texture> user_message;
    std::map<int,std::unique_ptr<CSelectable>> elements;
    MouseHandler mouse;
+   CPrinter printer;
    GameMap map;
    GameHud hud;
    SDL2pp::Window& game_window;
@@ -40,7 +42,7 @@ class CPlayer {
    void update(std::vector<State>& server_data);
    void clientUpdate(std::vector<int>& mouse_event);
 
-   void print(std::string toprint, std::string fontpath, int x, int y, int size ,SDL_Color color);
+   void print(std::string toprint, std::string fontpath, int x, int y, int size ,SDL_Color color,size_t time);
    
    void addUnitButton(std::string& IMG_PATH, int& x, int& y, int& id);
    void addBuildButton(std::string& IMG_PATH, int& x, int& y, int& id);

@@ -1,5 +1,8 @@
 #include "client_player.h"
 
+extern std::map<color_t,SDL_Color> colors;
+
+
 CPlayer::CPlayer(Camera& cam, SDL2pp::Window& window,SDL2pp::Renderer& renderer,size_t spice, size_t cspice, int energy, size_t c_energy, std::vector<std::vector<cell_t>>& map_data)
 :
 camera(cam),
@@ -47,9 +50,9 @@ void CPlayer::addElement(building_t type, State& desc){
 }
 
 void CPlayer::update(std::vector<State>& server_data){
-
     this->game_renderer.Clear();
     this->renderMap();
+    this->printer.render(this->game_renderer);
     for (State data : server_data)
         (*(this->elements.at(data.ID))).update(data,this->game_renderer, this->camera.pos_x, this->camera.pos_y);
     this->renderHud();
@@ -87,6 +90,14 @@ void CPlayer::clientUpdate(std::vector<int>& mouse_event) {
                     switch (checkBtn(pixel_x, pixel_y))
                     {
                     case BUILD_BTN:
+                        this->print(
+                        "Place building on screen",
+                        DATA_PATH FONT_IMPACT_PATH,
+                        200,
+                        300,
+                        10,
+                        colors[YELLOW],
+                        1000);
                         this->is_holding_building = true;
                         this->building_held = checkBuild(pixel_x, pixel_y);
                         break;
@@ -106,7 +117,6 @@ void CPlayer::clientUpdate(std::vector<int>& mouse_event) {
                     }
 
                 } else if (this->is_holding_building) {
-
                     mouse_event.push_back(CREATE_BUILDING);
                     mouse_event.push_back(this->building_held);
                     mouse_event.push_back(current_pos.x);
@@ -180,17 +190,11 @@ void CPlayer::clientUpdate(std::vector<int>& mouse_event) {
     }
 }
 
-void CPlayer::print(std::string toprint, std::string fontpath, int x, int y, int size ,SDL_Color color){
-    std::cout << "Initializing font" << std::endl;
-    SDL2pp::Font font(fontpath,10);
-    std::cout << "Getting surface" << std::endl;
+void CPlayer::print(std::string toprint, std::string fontpath, int x, int y, int size ,SDL_Color color,size_t time){
+    SDL2pp::Font font(fontpath,size);
     SDL2pp::Surface surface = font.RenderText_Solid(toprint,color);
-    std::cout << "Making Texture from surface" << std::endl;
-    SDL2pp::Texture texture(this->game_renderer,surface);
-    std::cout << "Rendering to Screen" << std::endl;
-    this->game_renderer.Copy(texture,SDL2pp::NullOpt,SDL2pp::Rect(x,y,toprint.size()*size,2*size));
-    this->game_renderer.Present();
-    sleep(1);
+    std::unique_ptr texture = std::make_unique<SDL2pp::Texture>(SDL2pp::Texture(this->game_renderer,surface));
+    this->printer.newPrint(std::move(texture),x,y,toprint.size(),size,time);
 }
 
 void CPlayer::addUnitButton(std::string& IMG_PATH, int& x, int& y, int& id) {

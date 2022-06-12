@@ -3,7 +3,8 @@
 std::map<color_t,SDL_Color> colors = {
     {RED,SDL_Color{250,0,0,0}},
     {GREEN,SDL_Color{0,250,0,0}},
-    {BLUE,SDL_Color{0,0,250,0}}
+    {BLUE,SDL_Color{0,0,250,0}},
+    {YELLOW,SDL_Color{250,250,0,0}}
 };
 
 Position::Position() {}

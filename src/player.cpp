@@ -2,7 +2,6 @@
 
 #include "astar.h"
 #include <unistd.h>
-#define FONT_IMPACT_PATH "/fonts/impact/impact.ttf"
 
 extern std::map<color_t,SDL_Color> colors;
 
@@ -174,10 +173,11 @@ void Player::createUnit(int type){
         this->cplayer.print(
             "No creator for this unit right now",
             DATA_PATH FONT_IMPACT_PATH,
-            400,
-            600,
+            200,
+            300,
             10,
-            colors[RED]);
+            colors[RED],
+            1000);
         return;
     }
 
@@ -307,7 +307,6 @@ void Player::reportState(){
         e.second->getState(state);
         states.push_back(state);
     }
-
     (this->cplayer).update(states);
 }
 

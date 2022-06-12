@@ -63,7 +63,6 @@ void run_sdl() {
     Camera cam(0,0,640,360,1280,720);
     CPlayer client_player(cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cells);
     Board board(cells);
-
     Player server(HARKONNEN,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,board,client_player);
     server.run();
 

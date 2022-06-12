@@ -45,12 +45,13 @@
 
 #define DEF_SAND_SPICE 200
 
-
+#define FONT_IMPACT_PATH "/fonts/impact/impact.ttf"
 
 enum color_t {
     RED,
     BLUE,
-    GREEN
+    GREEN,
+    YELLOW
 };
 
 enum player_t {
