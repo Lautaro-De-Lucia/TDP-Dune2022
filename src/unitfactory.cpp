@@ -1,6 +1,6 @@
 #include "unitfactory.h"
 
-std::unique_ptr<Unit> UnitFactory::create(unit_t unit,player_t faction) {
+std::unique_ptr<Unit> UnitFactory::create(unit_t unit, player_t faction) {
     switch (unit) {
         case HARVESTER:
             return std::unique_ptr<Harvester>(new Harvester(faction,HARVESTER_LP,HARVESTER_SPICE_COST,Position(0,0),HARVESTER_DIM_X,HARVESTER_DIM_Y,HARVESTER_SPEED,0,HARVESTER_SPICE_CAPACITY));

@@ -3,10 +3,10 @@
 
 #define DIM_BUTTON 50
 
-Button::Button(SDL2pp::Renderer & renderer, std::string IMG_PATH, int x, int y, int id) : texture(renderer, IMG_PATH),
+Button::Button(SDL2pp::Renderer& renderer, std::string IMG_PATH, int x, int y, int id) : texture(renderer, IMG_PATH),
     x(x), y(y), dRect{x, y, DIM_BUTTON, DIM_BUTTON}, id(id) {}
 
-void Button::render(SDL2pp::Renderer &renderer){
+void Button::render(SDL2pp::Renderer& renderer){
 
 	renderer.Copy(
 		texture,						//	The sprite
@@ -16,7 +16,7 @@ void Button::render(SDL2pp::Renderer &renderer){
 	);
 }
 
-int Button::checkIntersection(int &x, int &y) {
+int Button::checkIntersection(int& x, int& y) {
 
 	SDL2pp::Rect aux{x, y, 1, 1};
 	if (dRect.Intersects(aux)) return id;

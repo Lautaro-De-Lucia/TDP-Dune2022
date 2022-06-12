@@ -1,6 +1,6 @@
 #include "building.h"
 
-Building::Building(player_t faction,int LP,int spice,int energy, Position pos, int dim_x, int dim_y)
+Building::Building(player_t faction, int LP, int spice, int energy, Position pos, int dim_x, int dim_y)
 :
 Selectable(faction,LP,pos,dim_x,dim_y,false)
 {
@@ -9,7 +9,7 @@ Selectable(faction,LP,pos,dim_x,dim_y,false)
     std::cout << "New building created of faction: " << faction << this->faction << std::endl;
 }
 
-bool Building::place(Board & board,int pos_x, int pos_y,int & spice,int & spice_capacity,int & energy,int & energy_capacity){
+bool Building::place(Board& board, int pos_x, int pos_y, int& spice, int& spice_capacity, int& energy, int& energy_capacity){
     
     if ((spice - this->getSpice()) < 0){
         std::cerr << "Not enough Spice!!!" << std::endl;
@@ -42,7 +42,7 @@ Building(faction, LP,spice,energy,pos,dim_x,dim_y)
     this->c_energy = c_energy;
 }
 
-bool AirTrap::place(Board & board,int pos_x,int pos_y,int & spice,int & spice_capacity,int & energy,int & energy_capacity){
+bool AirTrap::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capacity,int& energy,int& energy_capacity){
     if (!Building::place(board,pos_x,pos_y,spice,spice_capacity,energy,energy_capacity))
         return false;
     spice -= this->spice;
@@ -57,7 +57,7 @@ Building(faction,LP,spice,energy,pos,dim_x,dim_y)
     this->name = "Barrack";
 }
 
-bool Barrack::place(Board & board,int pos_x,int pos_y,int & spice,int & spice_capacity,int & energy,int & energy_capacity){
+bool Barrack::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capacity,int& energy,int& energy_capacity){
     if (!Building::place(board,pos_x,pos_y,spice,spice_capacity,energy,energy_capacity))
         return false;
     spice -= this->spice;
@@ -75,7 +75,7 @@ Building(faction,LP,spice,energy,pos,dim_x,dim_y)
     this->c_spice= c_spice;
 }
 
-bool Refinery::place(Board & board,int pos_x,int pos_y,int & spice,int & spice_capacity,int & energy,int & energy_capacity){
+bool Refinery::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capacity,int& energy,int& energy_capacity){
     if (!Building::place(board,pos_x,pos_y,spice,spice_capacity,energy,energy_capacity))
         return false;
     spice -= this->spice;

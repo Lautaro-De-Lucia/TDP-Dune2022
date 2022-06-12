@@ -9,7 +9,7 @@
 #define TRIKE_PATH "../src/ui/resources/img/trike.bmp"
 #define HARVESTER_PATH "../src/ui/resources/img/harvester.bmp"
 
-GameHud::GameHud(SDL2pp::Renderer & renderer) : texture(renderer, HUD_IMG_PATH) {
+GameHud::GameHud(SDL2pp::Renderer& renderer) : texture(renderer, HUD_IMG_PATH) {
 	int w = texture.GetWidth();
 	int h = texture.GetHeight();
 	int x = SCREEN_WIDTH - w;
@@ -22,7 +22,7 @@ GameHud::GameHud(SDL2pp::Renderer & renderer) : texture(renderer, HUD_IMG_PATH) 
 	addUnitButton(renderer, HARVESTER_PATH, SCREEN_WIDTH - 80, SCREEN_HEIGHT - 435, HARVESTER);
 }
 
-void GameHud::render(SDL2pp::Renderer & renderer){
+void GameHud::render(SDL2pp::Renderer& renderer){
 	renderer.Copy(
 		texture,						//	The sprite
 		//	(x,y,w,h) -> top-left (x,y), height & width
@@ -39,15 +39,15 @@ void GameHud::render(SDL2pp::Renderer & renderer){
 	}
 }
 
-void GameHud::addUnitButton(SDL2pp::Renderer &renderer, std::string IMG_PATH, int x, int y, int id) {
+void GameHud::addUnitButton(SDL2pp::Renderer& renderer, std::string IMG_PATH, int x, int y, int id) {
 	this->unit_buttons.emplace_back(renderer, IMG_PATH, x, y, id);
 }
 
-void GameHud::addBuildButton(SDL2pp::Renderer &renderer, std::string IMG_PATH, int x, int y, int id) {
+void GameHud::addBuildButton(SDL2pp::Renderer& renderer, std::string IMG_PATH, int x, int y, int id) {
 	this->build_buttons.emplace_back(renderer, IMG_PATH, x, y, id);
 }
 
-int GameHud::checkBuild(int &x, int &y) {
+int GameHud::checkBuild(int& x, int& y) {
 	int type = -1;
 	for (size_t i = 0; i < build_buttons.size(); i++) {
 		type = build_buttons[i].checkIntersection(x, y);
@@ -55,7 +55,7 @@ int GameHud::checkBuild(int &x, int &y) {
 	} return type;
 }
 
-int GameHud::checkUnit(int &x, int &y) {
+int GameHud::checkUnit(int& x, int& y) {
 	int type = -1;
 	for (size_t i = 0; i < unit_buttons.size(); i++) {
 		type = unit_buttons[i].checkIntersection(x, y);
@@ -63,7 +63,7 @@ int GameHud::checkUnit(int &x, int &y) {
 	} return type;
 }
 
-bool GameHud::clickOnHud(int &x, int &y){
+bool GameHud::clickOnHud(int& x, int& y){
 	SDL2pp::Rect aux{x, y, 1, 1};
 	return (dRect.Intersects(aux));
 }

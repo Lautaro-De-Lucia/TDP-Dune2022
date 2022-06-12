@@ -9,7 +9,7 @@ cells() {
         cells.resize(dim_x);
         for ( size_t i = 0; i < dim_x; ++i )
             cells[i].resize(dim_y);
-    //  Load position & terrain type for each cell
+    //  Load Position& terrain type for each cell
     for (size_t j = 0 ; j < dim_y ; j++) {
         for (size_t i = 0 ; i < dim_x ; i++) {
             cells[i][j].setPosition(i,j);
@@ -18,7 +18,7 @@ cells() {
     }
 }
 
-status_t Board::place(const Position & location, int dim_x,int dim_y,player_t faction) {
+status_t Board::place(const Position& location, int dim_x,int dim_y,player_t faction) {
     //  See if any of the positions to build is already occupied
     for (size_t j = 0 ; j < dim_y ; j++) {
         for (size_t i = 0 ; i < dim_x ; i++) {

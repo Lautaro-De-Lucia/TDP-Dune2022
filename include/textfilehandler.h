@@ -17,5 +17,5 @@ class TextFileHandler {
  public:
    explicit TextFileHandler(std::string filename);
    ~TextFileHandler();
-   bool readInput(std::vector<std::string> & contents);
+   bool readInput(std::vector<std::string>& contents);
 };

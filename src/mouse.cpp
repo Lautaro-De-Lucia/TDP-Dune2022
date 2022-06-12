@@ -2,14 +2,14 @@
 
 
 
-MouseHandler::MouseHandler(size_t tile_dim,Camera & camera)
+MouseHandler::MouseHandler(size_t tile_dim, Camera& camera)
 :
 camera(camera)
 {
     this->tile_dim = tile_dim;
 }
 
-void MouseHandler::getEvent(SDL_Event * mouse_event){
+void MouseHandler::getEvent(SDL_Event* mouse_event){
     this->mouse_event = mouse_event;
 }
 
@@ -44,7 +44,7 @@ void MouseHandler::GPToPixel(Position pos, int& pixel_x, int& pixel_y) {
 Position MouseHandler::currentPosition(){
     int x,y;
     Position pos;
-    SDL_GetMouseState( &x, &y );
+    SDL_GetMouseState(&x, &y);
     
     pos = pixelToGP(x, y);
 

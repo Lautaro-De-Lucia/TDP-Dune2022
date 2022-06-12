@@ -1,6 +1,6 @@
 #include "client_selectable.h"
 
-CSelectable::CSelectable(std::string name,State & state,SDL2pp::Renderer & renderer,const std::string& lp_path)
+CSelectable::CSelectable(std::string name, State& state, SDL2pp::Renderer& renderer, const std::string& lp_path)
 :
 lp_texture(renderer,lp_path)
 {
@@ -12,14 +12,14 @@ lp_texture(renderer,lp_path)
     this->selected = false;
 }
 
-void CSelectable::update(State & new_state,SDL2pp::Renderer & renderer, int cam_pos_x, int cam_pos_y){
+void CSelectable::update(State& new_state, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
     this->LP = new_state.LP;
     this->position = new_state.position;
     this->selected = new_state.selected;
     this->render(renderer, cam_pos_x, cam_pos_y);
 }
 
-void CStatic::update(State & new_state,SDL2pp::Renderer & renderer, int cam_pos_x, int cam_pos_y){
+void CStatic::update(State& new_state, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
 
     //  Update health
     int hsprites = 7;
@@ -36,7 +36,7 @@ void CStatic::update(State & new_state,SDL2pp::Renderer & renderer, int cam_pos_
     this->render(renderer, cam_pos_x, cam_pos_y);
 }
 
-void CMovable::update(State & new_state,SDL2pp::Renderer & renderer, int cam_pos_x, int cam_pos_y){
+void CMovable::update(State& new_state, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
     
     int hsprites = 7;
     for (size_t state = 1 ; state < hsprites ; state++){
@@ -69,7 +69,7 @@ void CMovable::update(State & new_state,SDL2pp::Renderer & renderer, int cam_pos
     this->render(renderer, cam_pos_x, cam_pos_y);
 }
 
-void CSelectable::render(SDL2pp::Renderer & renderer, int cam_pos_x, int cam_pos_y){
+void CSelectable::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
     //  Render Health
     if (this->selected == true)
         renderer.Copy(
@@ -91,19 +91,19 @@ int CSelectable::getID() {
 
 
 
-CMovable::CMovable(std::string name,State & state,SDL2pp::Renderer & renderer,const std::string& lp_path ,const std::string& path)
+CMovable::CMovable(std::string name, State& state, SDL2pp::Renderer& renderer, const std::string& lp_path , const std::string& path)
 :
 CSelectable(name,state,renderer,lp_path),
 texture(renderer,path)
 {}
 
-CStatic::CStatic(std::string name,State & state,SDL2pp::Renderer & renderer,const std::string& lp_path, const std::string& path)
+CStatic::CStatic(std::string name, State& state, SDL2pp::Renderer& renderer, const std::string& lp_path, const std::string& path)
 :
 CSelectable(name,state,renderer,lp_path),
 texture(renderer,path)
 {}
 
-void CMovable::render(SDL2pp::Renderer & renderer, int cam_pos_x, int cam_pos_y){
+void CMovable::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
     if (this->name == "Trike"){
         switch (this->dir){
             case TOP:
@@ -252,7 +252,7 @@ void CMovable::render(SDL2pp::Renderer & renderer, int cam_pos_x, int cam_pos_y)
     );
 }
 
-void CStatic::render(SDL2pp::Renderer & renderer, int cam_pos_x, int cam_pos_y){
+void CStatic::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
     CSelectable::render(renderer, cam_pos_x, cam_pos_y);
     if (this->name == "Wind Trap"){
         renderer.Copy(

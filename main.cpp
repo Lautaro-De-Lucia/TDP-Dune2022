@@ -39,7 +39,7 @@ std::vector<std::vector<cell_t>> generate_random_map () {
     return map_cells;
 }
 
-void greet(SDL2pp::Renderer &game_renderer) {
+void greet(SDL2pp::Renderer& game_renderer) {
     std::string text = "Loading map... please wait";
     SDL2pp::SDLTTF ttf;
     SDL2pp::Font font("../src/ui/resources/fonts/beyond-mars.ttf", 64);

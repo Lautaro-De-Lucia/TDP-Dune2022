@@ -23,7 +23,7 @@ class Board{
     Cell& getCell(int x, int y);
     void print();
     void print(std::vector<Position> path);
-    status_t place(const Position & location, int dim_x, int dim_y, player_t faction);
+    status_t place(const Position& location, int dim_x, int dim_y, player_t faction);
     size_t get_width();
     size_t get_height();
     void move_unit(Position from, Position to,player_t faction);

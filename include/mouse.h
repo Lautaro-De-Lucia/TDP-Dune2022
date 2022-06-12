@@ -8,14 +8,14 @@
 
 class MouseHandler {
 	private:
-		SDL_Event * mouse_event;
-		Camera & camera;
+		SDL_Event* mouse_event;
+		Camera& camera;
 		size_t tile_dim;
 		Position mpos_on_click;
 		bool clicked;
 	public:
-		MouseHandler(size_t tile_dim,Camera & camera);
-		void getEvent(SDL_Event * mouse_event);
+		MouseHandler(size_t tile_dim,Camera& camera);
+		void getEvent(SDL_Event* mouse_event);
 		Position currentPosition();
 		Position clickedPosition();
 		bool leftClick(); // Check for left click

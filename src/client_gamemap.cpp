@@ -1,13 +1,13 @@
 #include "client_gamemap.h"
 
-MapCell::MapCell( SDL2pp::Renderer & renderer, const std::string& path,size_t pos_x, size_t pos_y)
+MapCell::MapCell( SDL2pp::Renderer& renderer, const std::string& path,size_t pos_x, size_t pos_y)
 :
 position(pos_x,pos_y),
 texture(renderer,path)
 {
 }
 
-void MapCell::render(SDL2pp::Renderer & renderer, int cam_pos_x, int cam_pos_y){
+void MapCell::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
 	renderer.Copy(
 		texture,						//	The sprite
 		//	(x,y,w,h) -> top-left (x,y) coordinates, height & width
@@ -16,7 +16,7 @@ void MapCell::render(SDL2pp::Renderer & renderer, int cam_pos_x, int cam_pos_y){
 	);
 }
 
-GameMap::GameMap(SDL2pp::Renderer & renderer,std::vector<std::vector<cell_t>> & cells) {
+GameMap::GameMap(SDL2pp::Renderer& renderer,std::vector<std::vector<cell_t>>& cells) {
 	size_t dim_x = cells.size();
 	size_t dim_y = cells[0].size();
 	std::cout << "Generating map of size " << dim_x << "x" << dim_y << std::endl;
@@ -42,7 +42,7 @@ GameMap::GameMap(SDL2pp::Renderer & renderer,std::vector<std::vector<cell_t>> & 
     }
 }
 
-void GameMap::render(SDL2pp::Renderer & renderer, int cam_pos_x, int cam_pos_y){
+void GameMap::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
 	for (size_t i = 0 ; i < this->map_cells.size() ; i++)
 		this->map_cells[i].render(renderer, cam_pos_x, cam_pos_y);
 }

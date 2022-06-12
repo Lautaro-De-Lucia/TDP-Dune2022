@@ -44,7 +44,7 @@ bool Selectable::contains(const Position& pos){
     return false;
 }
 
-void Selectable::react(int x, int y, Board & board){
+void Selectable::react(int x, int y, Board& board){
     std::cout << "reacting to cell in location: (" << x << "," << y << ") [selectable]" << std::endl;
 }
 

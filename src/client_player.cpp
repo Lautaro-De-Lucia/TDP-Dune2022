@@ -1,6 +1,6 @@
 #include "client_player.h"
 
-CPlayer::CPlayer(Camera& cam, SDL2pp::Window & window,SDL2pp::Renderer & renderer,size_t spice, size_t cspice, int energy, size_t c_energy, std::vector<std::vector<cell_t>> & map_data)
+CPlayer::CPlayer(Camera& cam, SDL2pp::Window& window,SDL2pp::Renderer& renderer,size_t spice, size_t cspice, int energy, size_t c_energy, std::vector<std::vector<cell_t>>& map_data)
 :
 camera(cam),
 game_window(window),
@@ -18,7 +18,7 @@ mouse(TILE_DIM,cam)
     this->building_held = -1;
 }
 
-void CPlayer::addElement(unit_t type,State & desc){
+void CPlayer::addElement(unit_t type,State& desc){
     //  Ahora estamos hablando de SPRITES
     //  Va a ser una imágen con la unidad en muchas posiciones
     //  Los cortes quedan a cargo de la unidad
@@ -32,7 +32,7 @@ void CPlayer::addElement(unit_t type,State & desc){
     }
 }
 
-void CPlayer::addElement(building_t type,State & desc){
+void CPlayer::addElement(building_t type, State& desc){
     switch (type){
         case AIR_TRAP:
             this->elements.insert({desc.ID,std::unique_ptr<CSelectable>(new CStatic("Wind Trap",desc,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH WIND_TRAP_PATH))});
@@ -67,7 +67,7 @@ void CPlayer::renderHud(){
     this->hud.render(this->game_renderer);
 }
 
-void CPlayer::clientUpdate(std::vector<int> & mouse_event) {
+void CPlayer::clientUpdate(std::vector<int>& mouse_event) {
 
 //  GET MOUSE EVENT AND PUT ON QUEUE:
 
@@ -153,14 +153,14 @@ void CPlayer::clientUpdate(std::vector<int> & mouse_event) {
 
 
 //  UPDATE CAMERA:
-    SDL_PollEvent( &event );
+    SDL_PollEvent(&event);
     //User requests quit
     if( event.type == SDL_QUIT ) {
         this->game_window.Hide();
         return;
     }
     int x, y;
-    SDL_GetMouseState( &x, &y );
+    SDL_GetMouseState(&x, &y);
 
     if (x < 80) {
         this->camera.move(-1,0);
@@ -182,27 +182,27 @@ void CPlayer::clientUpdate(std::vector<int> & mouse_event) {
     }
 }
 
-void CPlayer::addUnitButton(std::string &IMG_PATH, int &x, int &y, int &id) {
+void CPlayer::addUnitButton(std::string& IMG_PATH, int& x, int& y, int& id) {
     this->hud.addUnitButton(this->game_renderer, IMG_PATH, x, y, id);
 }
 
-void CPlayer::addBuildButton(std::string &IMG_PATH, int &x, int &y, int &id) {
+void CPlayer::addBuildButton(std::string& IMG_PATH, int& x, int& y, int& id) {
     this->hud.addBuildButton(this->game_renderer, IMG_PATH, x, y, id);
 }
 
-int CPlayer::checkBuild(int &x, int &y) {
+int CPlayer::checkBuild(int& x, int& y) {
     return this->hud.checkBuild(x, y);
 }
 
-int CPlayer::checkUnit(int &x, int &y) {
+int CPlayer::checkUnit(int& x, int& y) {
     return this->hud.checkUnit(x, y);
 }
 
-bool CPlayer::checkHud(int &x, int &y) {
+bool CPlayer::checkHud(int& x, int& y) {
     return this->hud.clickOnHud(x, y);
 }
 
-hud_button_t CPlayer::checkBtn(int &x, int &y) {
+hud_button_t CPlayer::checkBtn(int& x, int& y) {
     if (this->hud.checkBuild(x, y) != -1)
         return BUILD_BTN;
     if (this->hud.checkUnit(x, y) != -1)

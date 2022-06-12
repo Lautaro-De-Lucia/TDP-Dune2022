@@ -8,7 +8,7 @@ bool game_has_not_started  = true;
 
 std::vector<std::string> file_input;
 
-Player::Player(player_t faction, int spice, int c_spice, int energy, int c_energy,Board & shared_board, CPlayer& client_player) 
+Player::Player(player_t faction, int spice, int c_spice, int energy, int c_energy,Board& shared_board, CPlayer& client_player) 
 : 
 cplayer(client_player),
 board(shared_board)
@@ -178,8 +178,8 @@ void Player::createUnit(int type){
     std::unique_ptr<Unit> unit = UnitFactory::create((unit_t) type,this->faction);
     //  Attempt adding it
     //  REFACTOR: place should probably be a method of the Player class
-        // place(Board & board,Building & building,Position & position)
-        // place(Board & board,Unit & unit,std::vector<Positions> positions)
+        // place(Board& board,Building & building,Position& position)
+        // place(Board& board,Unit & unit,std::vector<Positions> positions)
 
     if ((*unit).place(board,positions,this->spice)){
         (this->elements).insert({ID++, std::move(unit)});
@@ -235,7 +235,7 @@ void Player::handleSelection(int xmin, int xmax, int ymin, int ymax){
     std::cout << "Selection: (" << Xmin << "," << Xmax << "," << Ymin << "," << Ymax << ")" << std::endl;
     //  Traverse and mark as selected those that are included
     Area selection(Xmin,Xmax,Ymin,Ymax);
-    for (auto & e : this->elements){
+    for (auto& e : this->elements){
         e.second->unselect();
         if (e.second->isWithin(selection))
             e.second->select();
@@ -257,7 +257,7 @@ void Player::handleRightClick(int x, int y){
     int pos_y = y;
     std::cout << "On position: " << Position(pos_x, pos_y) << std::endl;
     //  Traverse elements and make each selected unit handle the cell
-    for (auto & e : this->elements){
+    for (auto& e : this->elements){
         if (e.second->isSelected()){
             std::cout << e.first << ": ";
             e.second->react(pos_x,pos_y,board);
@@ -281,7 +281,7 @@ void Player::reportState(){
     std::cout << "Sending data to client" << std::endl;
     std::cout << "Total units to update: " << this->elements.size() << std::endl;
     std::cout << "|  ID  |  LP  |  pos  |  sel  |"<<std::endl;
-    for (auto & e : this->elements){
+    for (auto& e : this->elements){
         e.second->getState(state);
         std::cout << "    " << e.first; 
         std::cout << "    " << state.LP;

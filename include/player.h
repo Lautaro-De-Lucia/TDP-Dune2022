@@ -27,16 +27,16 @@ class Player {
     int c_energy;
     player_t faction;
     double efficiency;
-    CPlayer & cplayer;
-    Board & board;
+    CPlayer& cplayer;
+    Board& board;
     std::map<int,std::unique_ptr<Selectable>> elements;
     std::map<unit_t,int> creators;
     std::queue<std::vector<int>> mouse_events;
-    bool place(Building & building,Position position);
-    bool place(Refinery & refinery,Position & position);
-    bool place(Unit & unit,std::vector<Position> positions);
+    bool place(Building& building,Position position);
+    bool place(Refinery& refinery,Position& position);
+    bool place(Unit& unit,std::vector<Position> positions);
  public:    
-    Player (player_t faction ,int spice, int c_spice, int energy, int c_energy,Board & shared_board ,CPlayer& client_player);
+    Player (player_t faction ,int spice, int c_spice, int energy, int c_energy,Board& shared_board ,CPlayer& client_player);
     void makeCreator(int building_ID);
     void print();
     void run(); // This should receive the socket in the future

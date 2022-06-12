@@ -37,7 +37,7 @@ TextFileHandler::~TextFileHandler() {
         this->text_file.close();
 }
 
-bool TextFileHandler::readInput(std::vector<std::string> & contents) {
+bool TextFileHandler::readInput(std::vector<std::string>& contents) {
     std::string input_line;
     std::getline(this->text_file, input_line);      //  Read line from file
     if (this->text_file.eof())                      //  Return if end of file

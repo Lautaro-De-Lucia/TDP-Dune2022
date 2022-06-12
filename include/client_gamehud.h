@@ -9,16 +9,16 @@ const int SCREEN_HEIGHT = 720;
 
 class GameHud {
  private:
-    SDL2pp::Texture texture;
-    std::vector<Button> build_buttons;
-    std::vector<Button> unit_buttons;
-    SDL2pp::Rect dRect;
+   SDL2pp::Texture texture;
+   std::vector<Button> build_buttons;
+   std::vector<Button> unit_buttons;
+   SDL2pp::Rect dRect;
  public:
-    GameHud(SDL2pp::Renderer & renderer);
-    void render(SDL2pp::Renderer & renderer);
-    void addUnitButton(SDL2pp::Renderer &renderer, std::string IMG_PATH, int x, int y, int id);
-    void addBuildButton(SDL2pp::Renderer &renderer, std::string IMG_PATH, int x, int y, int id);
-    int checkUnit(int &x, int &y);
-    int checkBuild(int &x, int &y);
-    bool clickOnHud(int &x, int &y);
+   GameHud(SDL2pp::Renderer& renderer);
+   void render(SDL2pp::Renderer& renderer);
+   void addUnitButton(SDL2pp::Renderer& renderer, std::string IMG_PATH, int x, int y, int id);
+   void addBuildButton(SDL2pp::Renderer& renderer, std::string IMG_PATH, int x, int y, int id);
+   int checkUnit(int& x, int& y);
+   int checkBuild(int& x, int& y);
+   bool clickOnHud(int& x, int& y);
 };

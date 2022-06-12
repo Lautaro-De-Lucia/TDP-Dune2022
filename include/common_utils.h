@@ -88,8 +88,8 @@ struct Position {
     Position(int x, int y);
     Position(const Position& o);
     friend std::ostream& operator<<(std::ostream& os, const Position& pos);
-    bool operator==( const Position& o ) const { return o.x == x && o.y == y; };
-    Position operator+( const Position& o ) { return Position( o.x + x, o.y + y ); };
+    bool operator==(const Position& o) const { return o.x == x && o.y == y; };
+    Position operator+(const Position& o) { return Position( o.x + x, o.y + y ); };
     Position& operator=(const Position& o) { if (this == &o) return *this; this->x = o.x; this->y = o.y; return *this; };
     void print();
 };

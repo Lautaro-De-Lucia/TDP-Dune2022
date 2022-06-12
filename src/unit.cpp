@@ -9,7 +9,7 @@ Selectable(faction, LP,pos,dim_x,dim_y,true)
     this->speed = speed;
 }
 
-bool Unit::place(Board & board,std::vector<Position> & positions,int & spice){
+bool Unit::place(Board& board,std::vector<Position>& positions,int& spice){
     if ((spice - this->spice) < 0){
         std::cout << "Not enough Spice!!!" << std::endl;
         return false;
@@ -25,7 +25,7 @@ bool Unit::place(Board & board,std::vector<Position> & positions,int & spice){
 }
 
 
-void Unit::react(int x, int y, Board & board){
+void Unit::react(int x, int y, Board& board){
     std::cout << "reacting to cell in location: " << board.getCell(x,y).getPosition() << " [unit]" << std::endl;
 }
 
@@ -37,7 +37,7 @@ Unit(faction,LP,spice,pos,dim_x,dim_y,speed)
     this->max_spice = max_spice;
 }
 
-void Harvester::react(int x, int y, Board & board) {
+void Harvester::react(int x, int y, Board& board) {
 
     if (!board.getCell(x,y).isOccupied()) {
         aStar aStar;
@@ -61,9 +61,9 @@ Unit(faction,LP,spice,pos,dim_x,dim_y,speed)
     this->attack = attack;
 }
 
-void Trike::react(int x, int y, Board & board) {
+void Trike::react(int x, int y, Board& board) {
 
-    Cell & location = board.getCell(x,y);
+    Cell& location = board.getCell(x,y);
 
     if (location.isOccupied())
         return;
@@ -73,7 +73,7 @@ void Trike::react(int x, int y, Board & board) {
     this->move(x,y,board);
 }
 
-void Trike::move(int x, int y, Board & board) {
+void Trike::move(int x, int y, Board& board) {
     aStar aStar;
     std::vector<Position> new_path = aStar.algorithm(this->getPosition(),Position(x,y),board);
     this->remaining_path = new_path;
