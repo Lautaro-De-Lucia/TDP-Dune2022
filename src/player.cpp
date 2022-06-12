@@ -310,17 +310,36 @@ void Player::updateMovables(){
 
             int id = e.first;
             std::vector<Position>& path = e.second->get_remaining_path();  
-            if (path.size() != 0) {
+            if (path.size() > 1) {
                 e.second->getState(state);
                 Position current_position(state.position);
                 Position next_position = path.back();
+                if (board.getCell(next_position.x, next_position.y).isOccupied()) {
+
+                    while (board.getCell(next_position.x, next_position.y).isOccupied()) {
+                        if (path.size() == 1) {
+                            return;
+                        }
+                        path.pop_back();
+                        next_position = path.back();
+                    }
+                    aStar aStar;
+                    std::vector<Position> new_path = aStar.algorithm(current_position, next_position, board);
+                    new_path.erase(new_path.begin());
+                    while (new_path.size() > 1) {
+                        path.push_back(new_path.front());
+                        new_path.erase(new_path.begin());
+                    }
+                }
                 path.pop_back();
                 e.second->setPosition(next_position);
                 board.move_unit(current_position, next_position, e.second->getFaction());
             }
+            
         }
     }
 }
+
 
 void Player::makeCreator(int building_ID){
     if (this->elements.at(building_ID)->getName() == "Refinery")
