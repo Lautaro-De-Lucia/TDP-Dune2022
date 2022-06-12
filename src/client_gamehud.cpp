@@ -5,9 +5,11 @@
 #define HUD_IMG_PATH "../src/ui/resources/img/menu.png"
 #define BARRACK_PATH "../src/ui/resources/img/barrack.bmp"
 #define REFINERY_PATH "../src/ui/resources/img/refinery.bmp"
+#define ENERGY_PATH "../src/ui/resources/img/energy.jpg"
 #define AIR_TRAP_PATH "../src/ui/resources/img/windtrap.bmp"
 #define TRIKE_PATH "../src/ui/resources/img/trike.bmp"
 #define HARVESTER_PATH "../src/ui/resources/img/harvester.bmp"
+
 
 GameHud::GameHud(SDL2pp::Renderer& renderer) : texture(renderer, HUD_IMG_PATH) {
 	int w = texture.GetWidth();
@@ -37,7 +39,25 @@ void GameHud::render(SDL2pp::Renderer& renderer){
 	for (size_t i = 0; i < unit_buttons.size(); i++) {
 		unit_buttons[i].render(renderer);
 	}
+	//	RENDER SPICE
+    SDL2pp::Font font(DATA_PATH FONT_IMPACT_PATH,10);
+    SDL2pp::Surface surface = font.RenderText_Solid(std::to_string(this->spice),SDL_Color{255,255,0});
+    SDL2pp::Texture spice_texture(renderer,surface);
+	renderer.Copy(spice_texture,SDL2pp::NullOpt,SDL2pp::Rect(1160,680,50,20));
+
+    SDL2pp::Texture energy_texture(renderer, ENERGY_PATH);
+	renderer.Copy(energy_texture,SDL2pp::NullOpt,SDL2pp::Rect(1097,680-this->energy/20,7,6+this->energy/20));
+
 }
+
+void GameHud::renderSpice(){
+
+}
+
+void GameHud::renderEnergy(){
+
+}
+	
 
 void GameHud::addUnitButton(SDL2pp::Renderer& renderer, std::string IMG_PATH, int x, int y, int id) {
 	this->unit_buttons.emplace_back(renderer, IMG_PATH, x, y, id);
@@ -66,4 +86,9 @@ int GameHud::checkUnit(int& x, int& y) {
 bool GameHud::clickOnHud(int& x, int& y){
 	SDL2pp::Rect aux{x, y, 1, 1};
 	return (dRect.Intersects(aux));
+}
+
+void GameHud::update(int spice, int energy){
+	this->spice = spice;
+	this->energy = energy;
 }

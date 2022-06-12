@@ -16,7 +16,8 @@ class CPrinter{
     std::unique_ptr<SDL2pp::Texture> texture;
     public:
     CPrinter();
-    void newPrint(std::unique_ptr<SDL2pp::Texture> texture,int x, int y, int font_size,int message_size, size_t time);
+    void print(std::unique_ptr<SDL2pp::Texture> texture,int x, int y, int font_size,int message_size);
+    void timedPrint(std::unique_ptr<SDL2pp::Texture> texture,int x, int y, int font_size,int message_size, size_t time);
     void render(SDL2pp::Renderer & renderer);
 
 };

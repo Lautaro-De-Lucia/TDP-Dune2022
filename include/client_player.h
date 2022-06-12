@@ -39,7 +39,7 @@ class CPlayer {
    void renderHud();
    void addElement(unit_t type,State& desc);
    void addElement(building_t type,State& desc);
-   void update(std::vector<State>& server_data);
+   void update(std::vector<State>& server_data, int spice, int energy);
    void clientUpdate(std::vector<int>& mouse_event);
 
    void print(std::string toprint, std::string fontpath, int x, int y, int size ,SDL_Color color,size_t time);

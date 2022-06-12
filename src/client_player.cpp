@@ -49,12 +49,13 @@ void CPlayer::addElement(building_t type, State& desc){
     }
 }
 
-void CPlayer::update(std::vector<State>& server_data){
+void CPlayer::update(std::vector<State>& server_data, int spice, int energy){
     this->game_renderer.Clear();
     this->renderMap();
     this->printer.render(this->game_renderer);
     for (State data : server_data)
         (*(this->elements.at(data.ID))).update(data,this->game_renderer, this->camera.pos_x, this->camera.pos_y);
+    this->hud.update(spice,energy);
     this->renderHud();
     this->game_renderer.Present();
 }
@@ -194,7 +195,7 @@ void CPlayer::print(std::string toprint, std::string fontpath, int x, int y, int
     SDL2pp::Font font(fontpath,size);
     SDL2pp::Surface surface = font.RenderText_Solid(toprint,color);
     std::unique_ptr texture = std::make_unique<SDL2pp::Texture>(SDL2pp::Texture(this->game_renderer,surface));
-    this->printer.newPrint(std::move(texture),x,y,toprint.size(),size,time);
+    this->printer.timedPrint(std::move(texture),x,y,toprint.size(),size,time);
 }
 
 void CPlayer::addUnitButton(std::string& IMG_PATH, int& x, int& y, int& id) {

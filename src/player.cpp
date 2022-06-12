@@ -307,7 +307,7 @@ void Player::reportState(){
         e.second->getState(state);
         states.push_back(state);
     }
-    (this->cplayer).update(states);
+    (this->cplayer).update(states,this->spice,this->energy);
 }
 
 void Player::updateMovables(){
