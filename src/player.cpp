@@ -141,10 +141,7 @@ void Player::createBuilding(int type, int pos_x, int pos_y) {
     //  Attempt to add to board
     (this->place)((*building),Position(pos_x, pos_y));
 
-    // Changing this->spice for 2000
-    int test_spice = 2000;
-
-    if ((*building).place(board,pos_x,pos_y,test_spice,this->c_spice,this->energy,this->c_energy)){
+    if ((*building).place(board,pos_x,pos_y,this->spice,this->c_spice,this->energy,this->c_energy)){
         (this->elements).insert({ID++, std::move(building)});
 
         State state;

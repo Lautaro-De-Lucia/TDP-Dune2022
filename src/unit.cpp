@@ -11,6 +11,7 @@ Selectable(faction, LP,pos,dim_x,dim_y,true)
 
 bool Unit::place(Board& board,std::vector<Position>& positions,int& spice){
     if ((spice - this->spice) < 0){
+        //  Refactor: Manejarlo con excepciones
         std::cout << "Not enough Spice!!!" << std::endl;
         return false;
     }

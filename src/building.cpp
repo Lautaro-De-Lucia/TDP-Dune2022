@@ -60,7 +60,10 @@ Building(faction,LP,spice,energy,pos,dim_x,dim_y)
 bool Barrack::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capacity,int& energy,int& energy_capacity){
     if (!Building::place(board,pos_x,pos_y,spice,spice_capacity,energy,energy_capacity))
         return false;
+    std::cout << "Placing a barrack" << std::endl;
+    std::cout << "The original amount of spice was:" << spice << std::endl;
     spice -= this->spice;
+    std::cout << "The new amount of spice is" << spice << std::endl;
     energy -= this->energy;
     return true;
 }

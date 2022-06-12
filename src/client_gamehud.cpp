@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 
-#define HUD_IMG_PATH "../src/ui/resources/img/menu.png"
+#define HUD_IMG_PATH "../src/ui/resources/img/newmenu.png"
 #define BARRACK_PATH "../src/ui/resources/img/barrack.bmp"
 #define REFINERY_PATH "../src/ui/resources/img/refinery.bmp"
 #define ENERGY_PATH "../src/ui/resources/img/energy.jpg"
@@ -43,7 +43,7 @@ void GameHud::render(SDL2pp::Renderer& renderer){
     SDL2pp::Font font(DATA_PATH FONT_IMPACT_PATH,10);
     SDL2pp::Surface surface = font.RenderText_Solid(std::to_string(this->spice),SDL_Color{255,255,0});
     SDL2pp::Texture spice_texture(renderer,surface);
-	renderer.Copy(spice_texture,SDL2pp::NullOpt,SDL2pp::Rect(1160,680,50,20));
+	renderer.Copy(spice_texture,SDL2pp::NullOpt,SDL2pp::Rect(1160,670,50,20));
 
     SDL2pp::Texture energy_texture(renderer, ENERGY_PATH);
 	renderer.Copy(energy_texture,SDL2pp::NullOpt,SDL2pp::Rect(1097,680-this->energy/20,7,6+this->energy/20));
