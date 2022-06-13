@@ -143,7 +143,9 @@ void Trike::update(State & state, Board& board){
         Position next = this->remaining_path.back();
         if(!board.getCell(next.x,next.y).canTraverse())
             this->move(this->remaining_path.front().x,this->remaining_path.front().y,board);		
+        board.getCell(this->position.x,this->position.y).disoccupy();
         this->position = this->remaining_path.back();
+        board.getCell(this->position.x,this->position.y).occupy(this->faction);
         this->remaining_path.pop_back();
     }
     
@@ -153,4 +155,3 @@ void Trike::update(State & state, Board& board){
     //  UPDATE STATE
     Selectable::getState(state);
 }
-

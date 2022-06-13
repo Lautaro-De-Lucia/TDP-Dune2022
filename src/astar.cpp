@@ -97,10 +97,8 @@ std::vector<Position> aStar::algorithm(Position start, Position end, Board& boar
             if (dist_from_end_to_new_end >= dist_from_start_to_end)
                 return empty_path;
             std::vector<Position> neighbors = board.get_traversable_neighbors_of(end, dist_from_end_to_new_end);
-
             if(neighbors.size() == 0)
                 continue;
-
             Position closest_neighbor = neighbors.front();
             size_t closest_distance = board.get_distance_between(start, closest_neighbor);
             for (Position neighbor : neighbors) {
