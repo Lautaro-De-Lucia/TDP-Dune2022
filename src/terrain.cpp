@@ -18,6 +18,15 @@ Sand::Sand():Terrain(){}
 bool Sand::canTraverse(){return true;}
 bool Sand::canExtract(){return this->spice > 0 ? true : false;}
 bool Sand::canBuild(){return false;}
+size_t Sand::extractSpice(){
+    if(this->spice > 0){
+        std::cout << "Remaining spice:" << this->spice << std::endl;
+        this->spice--;
+        return 1;
+    }
+    return 0;
+}
+
 
 Rock::Rock():Terrain(){} 
 bool Rock::canTraverse(){return !occupied;}

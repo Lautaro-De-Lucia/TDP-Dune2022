@@ -45,12 +45,13 @@ void Unit::move(int x, int y, Board& board) {
     this->remaining_path = new_path;
 }
 
-Harvester::Harvester(player_t faction,int LP,int spice, Position pos, int dim_x, int dim_y,int speed,int stored_spice, int max_spice) 
+Harvester::Harvester(player_t faction,int LP,int spice, Position pos, int dim_x, int dim_y,int speed, int max_spice) 
 :
 Unit(faction,LP,spice,pos,dim_x,dim_y,speed)
 {
-    this->stored_spice = stored_spice;
+    this->stored_spice = 0;
     this->max_spice = max_spice;
+    this->harvesting = false;
 }
 
 void Harvester::react(int x, int y, Board& board) {
@@ -59,21 +60,52 @@ void Harvester::react(int x, int y, Board& board) {
 
     if (!location.canTraverse())        
         return;    
-    //  FALTA LÓGICA DE ATAQUE
+    if (location.canHarvest() && this->stored_spice < this->max_spice){     
+        this->harvest(x,y,board);
+        return;
+    }
     this->move(x,y,board);
 }
 
+void Harvester::harvest(int x, int y, Board& board){
+    std::cout << "Imma harvest" << std::endl;
+    this->harvesting = true;
+    this->harvest_position.x = x;
+    this->harvest_position.y = y;
+    this->move(x,y,board);
+}
+
+
 void Harvester::update(State& state, Board& board){
     //  UPDATE MOVEMENT
-    if(this->moving == false)
+    if(this->moving == false){
+        if(this->harvesting == true){
+            if(this->position == this->harvest_position){
+                Cell& harvestcell = board.getCell(harvest_position.x,harvest_position.y);
+                int spice = harvestcell.extractSpice();
+                if(spice == 0){
+                    this->harvesting = false;
+                    return;
+                }
+                if(this->stored_spice == this->max_spice){
+                    this->harvesting = false;
+                    return;
+                }
+            } else {
+                this->harvesting == false;
+            }
+        } 
         return;
+    }    
     this->current_time++;
     if (this->current_time == this->movement_time) {
         this->current_time = 0;
         Position next = this->remaining_path.back();
         if(!board.getCell(next.x,next.y).canTraverse())
             this->move(this->remaining_path.front().x,this->remaining_path.front().y,board);		
+        board.getCell(this->position.x,this->position.y).disoccupy();
         this->position = this->remaining_path.back();
+        board.getCell(this->position.x,this->position.y).occupy(this->faction);
         this->remaining_path.pop_back();
     }
     if(remaining_path.size() == 0)

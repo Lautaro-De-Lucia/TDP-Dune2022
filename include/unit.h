@@ -28,11 +28,14 @@ class Unit : public Selectable {
 class Harvester : public Unit {
     int stored_spice;
     int max_spice;
+    bool harvesting;
+    Position harvest_position;
  public:
-    Harvester(player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int stored_spice, int max_spice);
+    Harvester(player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int max_spice);
     void create();
     virtual void react(int x, int y, Board& board);
     virtual void update(State& state, Board& board);
+    void harvest(int x, int y, Board& board);
 };
 
 

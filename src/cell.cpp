@@ -45,7 +45,8 @@ int Cell::disoccupy(){
 
 bool Cell::isOccupied(){return (this-> occupied > 0 ? true : false);}
 bool Cell::canTraverse(){return (terrain->canTraverse() && !(this->isOccupied()))? true : false;}
-bool Cell::canExtract(){return (terrain->canExtract() && !(this->isOccupied()))? true : false;}
+bool Cell::canHarvest(){return (terrain->canExtract() && !(this->isOccupied()))? true : false;}
 bool Cell::canBuild(){return (terrain->canBuild() && !(this->isOccupied()))? true : false;}
+size_t Cell::extractSpice(){return this->terrain->extractSpice();}
 
 void Cell::print(){}

@@ -18,10 +18,11 @@ class Cell {
     void setTerrain(cell_t terrain);
     Position getPosition();
     void occupy(player_t faction);
+    size_t extractSpice();
     int  disoccupy();
     bool  isOccupied();
     bool canTraverse();
-    bool canExtract();
+    bool canHarvest();
     bool canBuild();
     void print();
 };

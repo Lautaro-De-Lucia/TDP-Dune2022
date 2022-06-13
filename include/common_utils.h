@@ -10,7 +10,7 @@
 //  These would be lifted from a file
 #define HARVESTER_LP 500
 #define HARVESTER_SPICE_COST 500
-#define HARVESTER_SPICE_CAPACITY 800
+#define HARVESTER_SPICE_CAPACITY 50
 #define HARVESTER_SPEED 2
 #define HARVESTER_DIM_X 1
 #define HARVESTER_DIM_Y 1
