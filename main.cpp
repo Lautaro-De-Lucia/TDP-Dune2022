@@ -26,7 +26,6 @@ std::vector<std::vector<cell_t>> generate_random_map () {
     for (size_t i = 0 ; i < MAP_DIM_X ; i++) {
         map_cells[i].resize(MAP_DIM_Y);
     }
-    //  
     for (size_t j = 0 ; j < MAP_DIM_Y ; j++) {
         for (size_t i = 0 ; i < MAP_DIM_X ; i++) {
                 map_cells[i][j] = ROCK;
