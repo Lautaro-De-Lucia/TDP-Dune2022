@@ -46,6 +46,6 @@ class Player {
     void handleRightClick(int x, int y);
     void handleSelection(int xmin, int xmax, int ymin, int ymax);
     void handleIdle();
-    void reportState();
+    void reportStateToClient();
     void updateMovables();
 };

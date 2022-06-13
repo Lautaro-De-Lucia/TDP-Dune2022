@@ -19,11 +19,14 @@ cells() {
 }
 
 status_t Board::place(const Position& location, int dim_x,int dim_y,player_t faction) {
-    //  See if any of the positions to build is already occupied
+    //  See if any of the positions is occupaid or cant build there
     for (size_t j = 0 ; j < dim_y ; j++) {
         for (size_t i = 0 ; i < dim_x ; i++) {
-            if (this->cells[location.x+i][location.y+j].isOccupied() == true){
-                std::cout << "Location: (" << location.x+i << "," << location.y+j << ") was occupied!" << std::endl;      
+            if (    
+            this->cells[location.x+i][location.y+j].isOccupied() == true
+            ||
+            this->cells[location.x+i][location.y+j].canBuild() == false
+            ){
                 return FAILED_TO_ADD;
             }
         }
@@ -32,12 +35,8 @@ status_t Board::place(const Position& location, int dim_x,int dim_y,player_t fac
     for (size_t j = 0 ; j < dim_y ; j++){ 
         for (size_t i = 0 ; i < dim_x ; i++){
             this->cells[location.x+i][location.y+j].occupy(faction);
-            std::cout << "Location: (" << location.x+i << "," << location.y+j << ") is now occupied" << std::endl;      
-            std::cout << "With the faction number: " << faction << std::endl;
         }
     }
-            
-        
     return SUCCESS;
 }
 

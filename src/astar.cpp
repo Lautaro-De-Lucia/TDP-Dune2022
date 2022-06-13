@@ -57,7 +57,11 @@ std::vector<Position> aStar::reconstruct_path(Position current) {
 
 bool aStar::validate_position(Position position,Board& board) {
     // position is an obstacle
-    if (board.getCell(position.x, position.y).isOccupied())
+    if (
+    board.getCell(position.x, position.y).isOccupied() == true
+    ||
+    board.getCell(position.x, position.y).canTraverse() == false
+    )
         return false;
     // position.x out of bounds
     else if (position.x > board.get_width() - 1 || position.x < 0) 

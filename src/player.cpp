@@ -100,8 +100,8 @@ void Player::run() {
                 }
             }
             updateMovables();
-            reportState();
         }
+        reportStateToClient();
     }
 }
 
@@ -111,17 +111,15 @@ void Player::createBuilding(int type, int pos_x, int pos_y) {
     //  Attempt to add to board
     if ((*building).place(board,pos_x,pos_y,this->spice,this->c_spice,this->energy,this->c_energy)){
         (this->elements).insert({ID++, std::move(building)});
-
         State state;
         (this->elements)[ID-1]->getState(state);
         state.ID = ID-1;
         (this->cplayer).addElement((building_t) type, state);
         this->makeCreator(state.ID);
-
-        std::cout << "Building succesfully created" << std::endl;
+        this->cplayer.print("Building succesfully created!",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[YELLOW],1000);
         return;
     }
-    std::cout << "Can't build here" << std::endl;
+    this->cplayer.print("You can't build here!",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[RED],1000);
 }
 
 void Player::createUnit(int type){
@@ -148,11 +146,9 @@ void Player::createUnit(int type){
 }
 
 void Player::handleLeftClick(int x, int y){
-    std::cout << "Client just did a left click on the map" << std::endl;
     //  Get positions
     int pos_x = x;
     int pos_y = y;
-    std::cout << "On position: " << Position(pos_x,pos_y) << std::endl;
     //  Leave selected only the units at that position
     for (auto& e : this->elements){
         if (e.second->contains(Position(pos_x,pos_y)))
@@ -160,18 +156,14 @@ void Player::handleLeftClick(int x, int y){
         else
             e.second->unselect();
     }
-    //  Notify success  
-    std::cout << "All good" << std::endl;      
 }
 
 void Player::handleSelection(int xmin, int xmax, int ymin, int ymax){
-    std::cout << "Client just selected a part of the map" << std::endl;
     //  Get selection limits
     int Xmin = xmin;
     int Xmax = xmax;
     int Ymin = ymin;
     int Ymax = ymax;
-    std::cout << "Selection: (" << Xmin << "," << Xmax << "," << Ymin << "," << Ymax << ")" << std::endl;
     //  Traverse and mark as selected those that are included
     Area selection(Xmin,Xmax,Ymin,Ymax);
     for (auto& e : this->elements){
@@ -179,16 +171,12 @@ void Player::handleSelection(int xmin, int xmax, int ymin, int ymax){
         if (e.second->isWithin(selection))
             e.second->select();
     }
-    //  notify success
-    std::cout << "Selected units have been marked as selected!" << std::endl;
 }
 
 void Player::handleRightClick(int x, int y){
-    std::cout << "Client just did a right click on the map" << std::endl;
     //  Get positions
     int pos_x = x;
     int pos_y = y;
-    std::cout << "On position: " << Position(pos_x, pos_y) << std::endl;
     //  Traverse elements and make each selected unit handle the cell
     for (auto& e : this->elements){
         if (e.second->isSelected()){
@@ -198,10 +186,8 @@ void Player::handleRightClick(int x, int y){
     }
 }
 
-void Player::reportState(){
-
+void Player::reportStateToClient(){
     State state;
-    
     std::vector<State> states;
     for (auto& e : this->elements){
         state.ID = e.first;
@@ -215,15 +201,12 @@ void Player::updateMovables(){
     State state;
     for (auto& e : this->elements){
         if (e.second->moves()) {
-
-            int id = e.first;
             std::vector<Position>& path = e.second->get_remaining_path();  
             if (path.size() > 1) {
                 e.second->getState(state);
                 Position current_position(state.position);
                 Position next_position = path.back();
                 if (board.getCell(next_position.x, next_position.y).isOccupied()) {
-
                     while (board.getCell(next_position.x, next_position.y).isOccupied()) {
                         if (path.size() == 1) {
                             return;
@@ -243,11 +226,9 @@ void Player::updateMovables(){
                 e.second->setPosition(next_position);
                 board.move_unit(current_position, next_position, e.second->getFaction());
             }
-            
         }
     }
 }
-
 
 void Player::makeCreator(int building_ID){
     if (this->elements.at(building_ID)->getName() == "Refinery")
@@ -256,19 +237,4 @@ void Player::makeCreator(int building_ID){
         this->creators[TRIKE] = building_ID;     
     }
     std::cout << this->elements.at(building_ID)->getName() << " of ID: " << building_ID << " is now a creator" << std::endl;
-}
-
-bool Player::place(Building& building,Position position){
-    std::cout << "Placing a new building" << std::endl;
-    return true;
-}
-
-bool Player::place(Refinery& building,Position& position){
-    std::cout << "Placing a new refinery" << std::endl;
-    return true;
-}
-
-bool Player::place(Unit& unit,std::vector<Position> positions){
-    std::cout << "Placing a new unit" << std::endl;
-    return true;
 }

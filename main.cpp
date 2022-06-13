@@ -29,14 +29,20 @@ std::vector<std::vector<cell_t>> generate_random_map () {
     //  
     for (size_t j = 0 ; j < MAP_DIM_Y ; j++) {
         for (size_t i = 0 ; i < MAP_DIM_X ; i++) {
-            //if (j >= 0 && j < 30 && i >= 0  && i < 40){
                 map_cells[i][j] = ROCK;
-              //  continue;
-            //}    
-            //map_cells[i][j] = (cell_t) (rand() % 4);
         }
     }
+
+    map_cells[30][30] = PIT;
+    map_cells[30][31] = PIT;
+    map_cells[30][32] = PIT;
+
+    map_cells[40][30] = SAND;
+    map_cells[40][31] = SAND;
+    map_cells[40][32] = SAND;
+
     return map_cells;
+    
 }
 
 void greet(SDL2pp::Renderer& game_renderer) {
