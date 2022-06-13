@@ -102,10 +102,6 @@ void Trike::react(int x, int y, Board& board) {
 
 void Trike::update(State & state, Board& board){
     //  UPDATE MOVEMENT
-    std::cout << "Updating movement..." << std::endl;
-    std::cout << "Current time:" << this->current_time <<std::endl;
-    std::cout << "Time till movement" << this->movement_time - this->current_time<< std::endl;
-
     if(this->moving == false)
         return;
 
