@@ -27,4 +27,5 @@ class Board{
     size_t get_width();
     size_t get_height();
     void move_unit(Position from, Position to,player_t faction);
+    std::vector<Position> get_unoccupied_neighbors_of(Position pos);
 };

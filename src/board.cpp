@@ -23,9 +23,9 @@ status_t Board::place(const Position& location, int dim_x,int dim_y,player_t fac
     for (size_t j = 0 ; j < dim_y ; j++) {
         for (size_t i = 0 ; i < dim_x ; i++) {
             if (    
-            this->cells[location.x+i][location.y+j].isOccupied() == true
+            this->cells[location.x+i][location.y+j].isOccupied()
             ||
-            this->cells[location.x+i][location.y+j].canBuild() == false
+            !(this->cells[location.x+i][location.y+j].canBuild())
             ){
                 return FAILED_TO_ADD;
             }
@@ -85,4 +85,26 @@ size_t Board::get_height() {
 void Board::move_unit(Position from, Position to, player_t faction) {
     (this->cells)[from.x][from.y].disoccupy();
     (this->cells)[to.x][to.y].occupy(faction);
+}
+
+std::vector<Position> Board::get_unoccupied_neighbors_of(Position pos) {
+
+    std::vector<Position> valid_neighbors;
+
+    for (int i = -1; i <= 1; i++) {
+        for (int j = -1; i <= 1; i++) {
+            // if i == 0 and j == 0, this is "pos"
+            if (i == 0 && j == 0)
+                continue;
+            Position neighbor(pos.x+i, pos.y+j);
+            // check if neighbor is out of bounds
+            if (neighbor.x >= this->dim_x || neighbor.y >= this->dim_y)
+                continue;
+            // check if neighbor is occupied
+            if (this->cells[neighbor.x][neighbor.y].isOccupied())
+                continue;
+            valid_neighbors.push_back(neighbor);
+        }
+    }
+    return valid_neighbors;
 }

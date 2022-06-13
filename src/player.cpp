@@ -207,21 +207,35 @@ void Player::updateMovables(){
                 Position current_position(state.position);
                 Position next_position = path.back();
                 if (board.getCell(next_position.x, next_position.y).isOccupied()) {
-                    while (board.getCell(next_position.x, next_position.y).isOccupied()) {
-                        if (path.size() == 1) {
-                            return;
+                    Position end_position = path.front();
+                    if (board.getCell(end_position.x, end_position.y).isOccupied()) {
+                        std::vector<Position> neighbors = board.get_unoccupied_neighbors_of(end_position);
+                        if (neighbors.size() == 0) {
+                            // TODO: fix this border case
+                            std::cerr << "Can't go there, this unit stops here" << std::endl;
+                            continue;
                         }
-                        path.pop_back();
-                        next_position = path.back();
+                        // candidates for end_position
+                        Position end_position_candidate = neighbors.back();
+                        neighbors.pop_back();
+                        // unit stops here
+                        if (neighbors.size() == 0 && end_position_candidate == current_position)
+                            continue;                        
+                        if (end_position_candidate == current_position) {
+                            end_position_candidate = neighbors.back();
+                            neighbors.pop_back();
+                        }
+                        end_position = end_position_candidate;                                                
                     }
+                    // para esta altura ya defini un end_position válido
                     aStar aStar;
-                    std::vector<Position> new_path = aStar.algorithm(current_position, next_position, board);
-                    new_path.erase(new_path.begin());
-                    while (new_path.size() > 1) {
-                        path.push_back(new_path.front());
-                        new_path.erase(new_path.begin());
-                    }
+                    std::vector<Position> new_path = aStar.algorithm(current_position, end_position, board);
+                    // removing current_position from new_path
+                    new_path.pop_back();
+                    // now path is new_path
+                    path = new_path;
                 }
+                next_position = path.back();
                 path.pop_back();
                 e.second->setPosition(next_position);
                 board.move_unit(current_position, next_position, e.second->getFaction());
