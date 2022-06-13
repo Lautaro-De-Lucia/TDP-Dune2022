@@ -90,8 +90,8 @@ std::vector<Position> aStar::algorithm(Position start, Position end, Board& boar
     if (!validate_position(end,board)) {
 
         size_t dist_from_start_to_end = board.get_distance_between(start, end);
+
         size_t dist_from_end_to_new_end = 0;
-        Position new_end;
         while (1) {
             dist_from_end_to_new_end++;
             if (dist_from_end_to_new_end >= dist_from_start_to_end)
@@ -107,10 +107,9 @@ std::vector<Position> aStar::algorithm(Position start, Position end, Board& boar
                     closest_neighbor = neighbor;
                     closest_distance = new_dist;
                 }
-
             }
             end = closest_neighbor;
-            break;            
+            break;
         }
     }
 

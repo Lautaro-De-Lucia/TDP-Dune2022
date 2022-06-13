@@ -90,9 +90,8 @@ void Board::move_unit(Position from, Position to, player_t faction) {
 std::vector<Position> Board::get_traversable_neighbors_of(Position pos, size_t distance) {
 
     std::vector<Position> valid_neighbors;
-
     for (int i = -distance; i <= distance; i++) {
-        for (int j = -distance; i <= distance; i++) {
+        for (int j = -distance; j <= distance; j++) {
             // if i == 0 and j == 0, this is "pos"
             if (i == 0 && j == 0)
                 continue;
@@ -103,6 +102,7 @@ std::vector<Position> Board::get_traversable_neighbors_of(Position pos, size_t d
             // check if neighbor is occupied
             if (this->cells[neighbor.x][neighbor.y].isOccupied())
                 continue;
+            // check if neighbor is not traversable
             if (!(this->cells[neighbor.x][neighbor.y].canTraverse()))
                 continue;
             valid_neighbors.push_back(neighbor);
