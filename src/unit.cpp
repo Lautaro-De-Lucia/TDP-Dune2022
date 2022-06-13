@@ -75,8 +75,6 @@ void Trike::react(int x, int y, Board& board) {
 }
 
 void Trike::move(int x, int y, Board& board) {
-    //  Get path from A-Star algorithm
-    //  The unit will move in accordance to this path
     aStar aStar;
     std::vector<Position> new_path = aStar.algorithm(this->getPosition(),Position(x,y),board);
     this->remaining_path = new_path;
