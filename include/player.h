@@ -50,5 +50,4 @@ class Player {
     void handleSelection(int xmin, int xmax, int ymin, int ymax);
     void handleIdle();
     void reportStateToClient();
-    void updateMovables();
 };

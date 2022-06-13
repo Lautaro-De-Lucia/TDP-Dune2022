@@ -87,9 +87,35 @@ std::vector<Position> aStar::algorithm(Position start, Position end, Board& boar
 
     std::vector<Position> empty_path;
 
-    if (/*!validate_position(start) ||*/ !validate_position(end,board))
-        return empty_path;
-        
+    if (!validate_position(end,board)) {
+
+        size_t dist_from_start_to_end = board.get_distance_between(start, end);
+        size_t dist_from_end_to_new_end = 0;
+        Position new_end;
+        while (1) {
+            dist_from_end_to_new_end++;
+            if (dist_from_end_to_new_end >= dist_from_start_to_end)
+                return empty_path;
+            std::vector<Position> neighbors = board.get_traversable_neighbors_of(end, dist_from_end_to_new_end);
+
+            if(neighbors.size() == 0)
+                continue;
+
+            Position closest_neighbor = neighbors.front();
+            size_t closest_distance = board.get_distance_between(start, closest_neighbor);
+            for (Position neighbor : neighbors) {
+                size_t new_dist = board.get_distance_between(start, neighbor);
+                if (new_dist < closest_distance) {
+                    closest_neighbor = neighbor;
+                    closest_distance = new_dist;
+                }
+
+            }
+            end = closest_neighbor;
+            break;            
+        }
+    }
+
     Position none_position(-1, -1);
     set_predecessor(start, none_position);
     set_predecessor(end, none_position);
