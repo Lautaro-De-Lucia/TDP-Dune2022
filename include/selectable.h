@@ -30,6 +30,7 @@ class Selectable {
     bool contains(const Position& pos);
     bool isWithin(const Area& selection);
     virtual void react(int x, int y, Board& board);
+    virtual void update(State & state, Board& board);
     player_t getFaction();
     std::string getName();
     std::vector<Position> getPositions();

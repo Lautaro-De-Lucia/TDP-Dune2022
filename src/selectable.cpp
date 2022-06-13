@@ -48,6 +48,12 @@ void Selectable::react(int x, int y, Board& board){
     std::cout << "reacting to cell in location: (" << x << "," << y << ") [selectable]" << std::endl;
 }
 
+void Selectable::update(State& state, Board& board){
+    state.LP = this->LP;
+    state.position = this->position;
+    state.selected = this->selected;
+}
+
 
 bool Selectable::isWithin(const Area& selection){
     for (size_t i = 0 ; i < this->dim_x ; i++) {
@@ -134,3 +140,4 @@ void Selectable::getState(State& state){
     state.position = this->position;
     state.selected = this->selected;
 }
+

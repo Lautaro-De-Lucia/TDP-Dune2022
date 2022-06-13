@@ -99,7 +99,7 @@ void Player::run() {
                         break;
                 }
             }
-            updateMovables();
+            update();
         }
         reportStateToClient();
     }
@@ -188,13 +188,13 @@ void Player::handleRightClick(int x, int y){
 
 void Player::reportStateToClient(){
     State state;
-    std::vector<State> states;
+    this->states.clear();
     for (auto& e : this->elements){
         state.ID = e.first;
         e.second->getState(state);
         states.push_back(state);
     }
-    (this->cplayer).update(states,this->spice,this->energy);
+    (this->cplayer).update(this->states,this->spice,this->energy);
 }
 
 void Player::updateMovables(){
@@ -251,4 +251,14 @@ void Player::makeCreator(int building_ID){
         this->creators[TRIKE] = building_ID;     
     }
     std::cout << this->elements.at(building_ID)->getName() << " of ID: " << building_ID << " is now a creator" << std::endl;
+}
+
+void Player::update(){
+    State state;
+    std::vector<State> states;
+    for (auto& e : this->elements){
+        state.ID = e.first;
+        e.second->update(state,this->board);
+        states.push_back(state);
+    }
 }

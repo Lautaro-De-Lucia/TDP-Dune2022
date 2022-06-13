@@ -33,6 +33,7 @@ class Player {
     std::vector<std::unique_ptr<Unit>> movables;
     std::map<unit_t,int> creators;
     std::queue<std::vector<int>> mouse_events;
+    std::vector<State> states;
     bool place(Building& building,Position position);
     bool place(Refinery& refinery,Position& position);
     bool place(Unit& unit,std::vector<Position> positions);
@@ -41,6 +42,7 @@ class Player {
     void makeCreator(int building_ID);
     void print();
     void run(); // This should receive the socket in the future
+    void update();
     void createBuilding(int type, int pos_x, int pos_y);
     void createUnit(int type);
     void handleLeftClick(int x, int y);
