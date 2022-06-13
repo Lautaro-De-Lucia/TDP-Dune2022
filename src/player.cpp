@@ -52,37 +52,29 @@ const char * cmddict [8] {
 
 void Player::run() {
 
-    // @ignore
-    TextFileHandler command_reader(DATA_PATH INSTRUCTIONS_FILE);
-    auto base_time_instruction = clock();
 
-    while (1) {
+    auto base_time_instruction = clock();
+    std::vector<int> action;
+
+    while (true) {
 
         auto current_time = clock();
 		auto frame_time_instruction = current_time - base_time_instruction;
-        //  
-        std::vector<int> action;
-        this->cplayer.clientUpdate(action);
-        if(action.size() > 0){
-            std::cout << "Client sent a new mouse action" << std::endl;
-            this->mouse_events.push(action);    
-        }
-        reportState();
 
+        //  Load instructions from client  
+        action.clear();  
+        this->cplayer.clientUpdate(action);
+        if(action.size() > 0)
+            this->mouse_events.push(action);    
+        
         if(frame_time_instruction > 100000 || game_has_not_started) {
 
             game_has_not_started = false;
             base_time_instruction = current_time;
 
             if (this->mouse_events.size() > 0) {
-                std::cout << "Thus I am handling the event" << std::endl;
                 std::vector<int> new_event = this->mouse_events.front();
                 this->mouse_events.pop();
-                std::cout << "The new event has values:" << std::endl;
-                for (int value : new_event){
-                    std::cout << " " << value;
-                }
-                std::cout << std::endl;
                 command_t command = (command_t)(new_event[0]);
                 switch (command){
                     case CREATE_UNIT:
@@ -103,44 +95,20 @@ void Player::run() {
                     case MOUSE_SELECTION:
                         handleSelection(new_event[1],new_event[2],new_event[3],new_event[4]);
                         break;
-                    case IDLE:
-                        handleIdle();
-                        break;
                     default:
                         break;
                 }
             }
             updateMovables();
+            reportState();
         }
     }
 }
 
-/*
-We only need building <type> and <position>.
-Other parameters like the dimensions are lifted from
-a text file (as specified in the assignment's instructions)
-and will be stored in the Factory class.
-(SEND)   
-    SERVER <--------[TYPE](8)[POS_X](16)[ṔOS_Y](16)--------- CLIENT
-(RECEIVE)
-    CASE SUCCESS: 
-        SERVER ------------[SUCCESS](8)--------------------> CLIENT
-            //  Client is responsible for adding the new unit to it's selectable array                
-            //  And this unit is responsable for rendering itself on the board
-    CASE FAILURE:
-        SERVER ------------[FAILURE](8)--------------------> CLIENT
-            //  Client does nothing
-*/
-
-void Player::createBuilding(int type, int pos_x, int pos_y) {
-
-    
+void Player::createBuilding(int type, int pos_x, int pos_y) {    
     //  Manufacture the building
     std::unique_ptr<Building> building = BuildingFactory::manufacture((building_t) type, this->faction);
-
     //  Attempt to add to board
-    (this->place)((*building),Position(pos_x, pos_y));
-
     if ((*building).place(board,pos_x,pos_y,this->spice,this->c_spice,this->energy,this->c_energy)){
         (this->elements).insert({ID++, std::move(building)});
 
@@ -156,57 +124,29 @@ void Player::createBuilding(int type, int pos_x, int pos_y) {
     std::cout << "Can't build here" << std::endl;
 }
 
-/*
-We only need unit <type>
-[TYPE](8)
-*/
 void Player::createUnit(int type){
-
-    std::cout<< "Creating new unit" << std::endl;
-    //  Attempt to add to board
-    //  Create the unit
-
+    //  Check if creator exists
     if (creators.at((unit_t) type) == -1) {
-        this->cplayer.print(
-            "No creator for this unit right now",
-            DATA_PATH FONT_IMPACT_PATH,
-            200,
-            300,
-            10,
-            colors[RED],
-            1000);
+        this->cplayer.print("No creator for this unit right now",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[RED],1000);
         return;
     }
-
+    //  Get possible creating locations
     std::vector<Position> positions = elements.at(creators.at((unit_t) type))->getSurroundings(); //  FAILING HERE
-    
+    //  Create the unit
     std::unique_ptr<Unit> unit = UnitFactory::create((unit_t) type,this->faction);
     //  Attempt adding it
-    //  REFACTOR: place should probably be a method of the Player class
-        // place(Board& board,Building & building,Position& position)
-        // place(Board& board,Unit & unit,std::vector<Positions> positions)
-
     if ((*unit).place(board,positions,this->spice)){
         (this->elements).insert({ID++, std::move(unit)});
-
         State state;
         (this->elements)[ID-1]->getState(state);
         state.ID = ID-1;
-        (this->cplayer).addElement((unit_t) type, state);
-        
-        std::cout << "Unit succesfully created" << std::endl;
+        (this->cplayer).addElement((unit_t) type, state);        
+        this->cplayer.print("Unit succesfully created",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[YELLOW],1000);
         return;
     }
-    std::cout << "Can't build here" << std::endl;
+    this->cplayer.print("There's no space to build this unit!",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[RED],1000);
 }
 
-/*
-(SEND)   
-    SERVER <---------------[POS_X](16)[ṔOS_Y](16)--------- CLIENT
-(RECEIVE)
-    CASE SUCCESS: 
-        SERVER ------------[SUCCESS](8)--------------------> CLIENT
-*/
 void Player::handleLeftClick(int x, int y){
     std::cout << "Client just did a left click on the map" << std::endl;
     //  Get positions
@@ -223,13 +163,7 @@ void Player::handleLeftClick(int x, int y){
     //  Notify success  
     std::cout << "All good" << std::endl;      
 }
-/*
-(SEND)   
-    SERVER <-----[Xmin](16)[Xmax](16)[Ymin](16)[Ymax](16)--------- CLIENT
-(RECEIVE)
-    CASE SUCCESS: 
-        SERVER ------------[SUCCESS](8)--------------------> CLIENT
-*/
+
 void Player::handleSelection(int xmin, int xmax, int ymin, int ymax){
     std::cout << "Client just selected a part of the map" << std::endl;
     //  Get selection limits
@@ -248,13 +182,7 @@ void Player::handleSelection(int xmin, int xmax, int ymin, int ymax){
     //  notify success
     std::cout << "Selected units have been marked as selected!" << std::endl;
 }
-/*
-(SEND)   
-    SERVER <---------------[POS_X](16)[ṔOS_Y](16)--------- CLIENT
-(RECEIVE)
-    CASE SUCCESS: 
-        SERVER ------------[SUCCESS](8)--------------------> CLIENT
-*/
+
 void Player::handleRightClick(int x, int y){
     std::cout << "Client just did a right click on the map" << std::endl;
     //  Get positions
@@ -270,31 +198,7 @@ void Player::handleRightClick(int x, int y){
     }
 }
 
-void Player::handleIdle(){
-}
-
-/*
-(RECEIVE)
-    CASE SUCCESS: 
-        SERVER ------------>{...,[sel][pos_y][pos_x][LP][ID],...}[total]---------> CLIENT
-*/
-
-
 void Player::reportState(){
-
-    /*
-    std::cout << "Sending data to client" << std::endl;
-    std::cout << "Total units to update: " << this->elements.size() << std::endl;
-    std::cout << "|  ID  |  LP  |  pos  |  sel  |"<<std::endl;
-    for (auto& e : this->elements){
-        e.second->getState(state);
-        std::cout << "    " << e.first; 
-        std::cout << "    " << state.LP;
-        std::cout << "    " << state.position;
-        std::cout << "    " << state.selected;
-        std::cout << "    " << std::endl;
-    }
-    */
 
     State state;
     

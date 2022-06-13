@@ -45,8 +45,9 @@ void GameHud::render(SDL2pp::Renderer& renderer){
     SDL2pp::Texture spice_texture(renderer,surface);
 	renderer.Copy(spice_texture,SDL2pp::NullOpt,SDL2pp::Rect(1160,670,50,20));
 
+	//	RENDER ENERGY
     SDL2pp::Texture energy_texture(renderer, ENERGY_PATH);
-	renderer.Copy(energy_texture,SDL2pp::NullOpt,SDL2pp::Rect(1097,680-this->energy/20,7,6+this->energy/20));
+	renderer.Copy(energy_texture,SDL2pp::NullOpt,SDL2pp::Rect(1098,678-this->energy/20,7,6+this->energy/20));
 
 }
 

@@ -72,51 +72,56 @@ void CPlayer::renderHud(){
 
 void CPlayer::clientUpdate(std::vector<int>& mouse_event) {
 
-//  GET MOUSE EVENT AND PUT ON QUEUE:
-
+//  UPDATE CAMERA:
     SDL_Event event;
-    mouse.getEvent(&event);
     SDL_PollEvent(&event);
+
+    if( event.type == SDL_QUIT ) {
+        exit(1);
+    }
+    
+    int x, y;
+    SDL_GetMouseState(&x, &y);
+
+    if (x < 80) 
+        this->camera.move(-1,0);
+    if (x > 1010 && x < 1090) 
+        this->camera.move(1,0);
+    if (y < 60) 
+        this->camera.move(0,-1);
+    if (y > 660) 
+        this->camera.move(0,1);
+
+    mouse.getEvent(&event);
     Position current_pos = mouse.currentPosition();
-    int pixel_x = -1;
-    int pixel_y = -1;
 
     switch(event.type){
         case SDL_MOUSEBUTTONDOWN:
             if (mouse.leftClick()){
                 mouse.click();
-                SDL_GetMouseState(&pixel_x, &pixel_y);
-                if (checkHud(pixel_x, pixel_y)) {
+                SDL_GetMouseState(&x, &y);
+                if (checkHud(x,y)) {
                     mouse.unclick();
-                    switch (checkBtn(pixel_x, pixel_y))
+                    switch (checkBtn(x, y))
                     {
                     case BUILD_BTN:
-                        this->print(
-                        "Place building on screen",
-                        DATA_PATH FONT_IMPACT_PATH,
-                        200,
-                        300,
-                        10,
-                        colors[YELLOW],
-                        1000);
+                        this->print("Place building on screen", DATA_PATH FONT_IMPACT_PATH, 200, 300, 10, colors[YELLOW], 1000);
                         this->is_holding_building = true;
-                        this->building_held = checkBuild(pixel_x, pixel_y);
+                        this->building_held = checkBuild(x, y);
                         break;
                     case UNIT_BTN:
                         std::cout << "CREATING UNIT_BTN" << std::endl;
                         mouse_event.push_back(CREATE_UNIT);
-                        mouse_event.push_back(checkUnit(pixel_x, pixel_y));
+                        mouse_event.push_back(checkUnit(x,y));
                         mouse_event.push_back(current_pos.x);
                         mouse_event.push_back(current_pos.y);
                         this->is_holding_building = false;
                         break;
                     default:
-                        std::cout << "RELEASING BTN" << std::endl;
                         this->is_holding_building = false;
                         this->building_held = -1;
                         break;
                     }
-
                 } else if (this->is_holding_building) {
                     mouse_event.push_back(CREATE_BUILDING);
                     mouse_event.push_back(this->building_held);
@@ -134,8 +139,7 @@ void CPlayer::clientUpdate(std::vector<int>& mouse_event) {
             }
 	        if (mouse.rightClick()){
                 mouse.unclick();
-                if(checkHud(pixel_x, pixel_y)) {
-
+                if(checkHud(x,y)) {
                 } else {
                     mouse_event.push_back(MOUSE_RIGHT_CLICK);
                     mouse_event.push_back(current_pos.x);
@@ -144,10 +148,9 @@ void CPlayer::clientUpdate(std::vector<int>& mouse_event) {
             }
             break;
         case SDL_MOUSEBUTTONUP:
-            if(checkHud(pixel_x, pixel_y)) {
+            if(checkHud(x,y)) {
                     break;
             }
-            //	Si al soltarse no se movio de la posicion donde hizo click
             if (!(mouse.clickedPosition() == mouse.currentPosition())){
                 Area selection = mouse.getSelection(mouse.clickedPosition(),mouse.currentPosition());
                 mouse_event.push_back(MOUSE_SELECTION);
@@ -160,35 +163,7 @@ void CPlayer::clientUpdate(std::vector<int>& mouse_event) {
         default:
             break;
     }
-
-//  UPDATE CAMERA:
-    SDL_PollEvent(&event);
-    //User requests quit
-    if( event.type == SDL_QUIT ) {
-        this->game_window.Hide();
-        return;
-    }
-    int x, y;
-    SDL_GetMouseState(&x, &y);
-
-    if (x < 80) {
-        this->camera.move(-1,0);
-        //sleepcp(x);
-        //this->client_player.update(states);
-    } else if (x > 1010 && x < 1090) {
-        this->camera.move(1,0);
-        //sleepcp(640-x);
-        //this->client_player.update(states);
-    }
-    if (y < 60) {
-        this->camera.move(0,-1);
-        //sleepcp(y);
-        //this->client_player.update(states);
-    } else if (y > 660) {
-        this->camera.move(0,1);
-        //sleepcp(360-y);
-        //this->client_player.update(states);
-    }
+    
 }
 
 void CPlayer::print(std::string toprint, std::string fontpath, int x, int y, int size ,SDL_Color color,size_t time){
