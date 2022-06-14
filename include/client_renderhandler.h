@@ -3,6 +3,8 @@
 #include <iostream>
 #include <SDL2pp/SDL2pp.hh>
 
+#include "common_utils.h"
+
 enum move_direction {
     TOP = 0,
     TOP_RIGHT = 1,
@@ -21,14 +23,21 @@ class RenderHandler {
     void renderMovable(
         SDL2pp::Texture & texture,
         SDL2pp::Renderer & renderer,
+        unit_t type,
         move_direction dir,
         int pos_x,
         int pos_y, 
         int cam_pos_x,
         int cam_pos_y,
-        int tile_size,
-        int sprite_cut_x, 
-        int sprite_cut_y, 
-        int size);
-    void renderStatic(SDL2pp::Texture & texture,int size_x, int size_y);
+        int tile_size);
+    void renderStatic(
+        SDL2pp::Texture & texture,
+        SDL2pp::Renderer & renderer,
+        building_t type,
+        int pos_x,
+        int pos_y, 
+        int cam_pos_x,
+        int cam_pos_y,
+        int tile_size
+    );
 };
