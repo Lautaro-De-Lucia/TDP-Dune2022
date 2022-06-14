@@ -149,7 +149,6 @@ void Harvester::update(State& state, Board& board){
             }
         } 
     }
-<<<<<<< HEAD
     if(this->moving == true){
         if (this->harvesting == true){
             if(board.get_distance_between(this->harvest_position,this->position) <= 2){
@@ -157,22 +156,8 @@ void Harvester::update(State& state, Board& board){
                     this->moving == false;
                     return;
                 }
-=======
-    this->current_time++;
-    if (this->remaining_path.size() == 0) {
-        this->moving = false;
-    } else if (this->current_time == this->movement_time) {
-        this->current_time = 0;
-        Position next = this->remaining_path.back();
-        if(!(board.getCell(next.x,next.y).canTraverse())) {
-            if (this->remaining_path.size() <= 1) {
-                std::vector<Position> empty_path;
-                this->remaining_path = empty_path;
-            } else {
-                this->move(this->remaining_path.front().x,this->remaining_path.front().y,board);
->>>>>>> 045bc24fd7bfaa117916d5d8c6802c2ea9e2a7c4
             }
-        }
+        } 
         if (this->depositing == true){
             if(board.get_distance_between(this->position,this->deposit_position) <= 2){
                   if(board.getCell(deposit_position.x,deposit_position.y).isOccupied()){
@@ -206,8 +191,7 @@ void Harvester::update(State& state, Board& board){
             this->moving = false;
     }
     //  UPDATE STATE
-    Selectable::update(state,board);
-    
+    Selectable::update(state,board);   
 }
 
 void Harvester::occupy(Board & board){
