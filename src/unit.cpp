@@ -149,7 +149,7 @@ void Harvester::update(State& state, Board& board){
         this->current_time = 0;
         Position next = this->remaining_path.back();
         if(!(board.getCell(next.x,next.y).canTraverse())) {
-            if (this->remaining_path.size() <= 2) {
+            if (this->remaining_path.size() <= 1) {
                 std::vector<Position> empty_path;
                 this->remaining_path = empty_path;
             } else {
@@ -234,7 +234,7 @@ void Trike::update(State & state, Board& board){
         this->current_time = 0;
         Position next = this->remaining_path.back();
         if(!(board.getCell(next.x,next.y).canTraverse())) {
-            if (this->remaining_path.size() <= 2) {
+            if (this->remaining_path.size() <= 1) {
                 std::vector<Position> empty_path;
                 this->remaining_path = empty_path;
             } else {

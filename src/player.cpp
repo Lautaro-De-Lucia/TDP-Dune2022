@@ -36,7 +36,8 @@ void Player::print(){
 void printSeparator(){
     std::cout << "*****************************************************";
     std::cout << "*****************************************************";
-    std::cout << "*****************************************************" << std::endl;
+    std::cout << "*****************************************************";
+    std::cout << std::endl;
 }
 
 const char * cmddict [8] {
@@ -67,7 +68,7 @@ void Player::run() {
         if(action.size() > 0)
             this->mouse_events.push(action);    
         
-        if(frame_time_instruction > 100000 || game_has_not_started) {
+        if(frame_time_instruction > 10000 || game_has_not_started) {
 
             game_has_not_started = false;
             base_time_instruction = current_time;
