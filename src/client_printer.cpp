@@ -32,7 +32,7 @@ void CPrinter::render(SDL2pp::Renderer & renderer){
     if (SDL_GetTicks() <= end_time){
         renderer.Copy(*(this->texture),
         SDL2pp::NullOpt,
-        SDL2pp::Rect(this->x,this->y,this->font_size*(this->message_size/3),this->message_size));
+        SDL2pp::Rect(this->x,this->y,this->font_size*this->message_size/2,this->message_size));
     }
 }
 

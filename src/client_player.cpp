@@ -167,7 +167,7 @@ void CPlayer::clientUpdate(std::vector<int>& mouse_event) {
 }
 
 void CPlayer::print(std::string toprint, std::string fontpath, int x, int y, int size ,SDL_Color color,size_t time){
-    SDL2pp::Font font(fontpath,size);
+    SDL2pp::Font font(fontpath,size*10);
     SDL2pp::Surface surface = font.RenderText_Solid(toprint,color);
     std::unique_ptr texture = std::make_unique<SDL2pp::Texture>(SDL2pp::Texture(this->game_renderer,surface));
     this->printer.timedPrint(std::move(texture),x,y,toprint.size(),size,time);
