@@ -95,7 +95,7 @@ CMovable::CMovable(std::string name, State& state, SDL2pp::Renderer& renderer, c
 :
 CSelectable(name,state,renderer,lp_path),
 texture(renderer,path)
-{}
+{this->dir = BOTTOM;}
 
 CStatic::CStatic(std::string name, State& state, SDL2pp::Renderer& renderer, const std::string& lp_path, const std::string& path)
 :

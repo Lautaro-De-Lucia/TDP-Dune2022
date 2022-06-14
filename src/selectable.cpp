@@ -90,7 +90,7 @@ std::vector<Position> Selectable::getSurroundings(){
                 if ( i == 0)
                     surroundings.push_back(Position(this->position.x+i-1,this->position.y+j));
                 if ( i == this->dim_x-1 ) 
-                    surroundings.push_back(Position(this->position.x+i-1,this->position.y+j));
+                    surroundings.push_back(Position(this->position.x+i+1,this->position.y+j));
             }
             if ( j == this->dim_y-1){
                 if (i == 0){        
