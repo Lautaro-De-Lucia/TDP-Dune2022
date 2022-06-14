@@ -65,10 +65,13 @@ void Unit::move(int x, int y, Board& board) {
         this->remaining_path = new_path;
         return;
     }
+    std::cout << "Moving to that position" << std::endl;
     this->moving = true;
     aStar aStar;
     new_path = aStar.algorithm(this->getPosition(),Position(x,y),board);
     this->remaining_path = new_path;
+    if(new_path.size() == 0)
+        this->moving == false;
 }
 
 Harvester::Harvester(player_t faction,int LP,int spice, Position pos, int dim_x, int dim_y,int speed, int max_spice) 
@@ -109,15 +112,18 @@ void Harvester::harvest(int x, int y, Board& board){
 
 void Harvester::update(State& state, Board& board){
     //  UPDATE MOVEMENT
-    if (this->depositing == true){
-        if (this->position == this->deposit_position){
-            *(this->player_spice)+=this->stored_spice;
-            this->stored_spice = 0;
-            this->depositing = false;
-            this->harvest(this->harvest_position.x,this->harvest_position.y,board);
-        }
-    }
     if(this->moving == false){
+        if (this->depositing == true){
+            if (this->position == this->deposit_position){
+                *(this->player_spice)+=this->stored_spice;
+                this->stored_spice = 0;
+                this->depositing = false;
+                this->moving = false;
+                this->harvesting = true;
+            } else {
+                    this->deposit(board);
+            }
+        }
         if(this->harvesting == true){
             if(this->position == this->harvest_position){
                 Cell& harvestcell = board.getCell(harvest_position.x,harvest_position.y);
@@ -131,40 +137,59 @@ void Harvester::update(State& state, Board& board){
                 }
                 this->stored_spice += spice;
                 if(this->stored_spice == this->max_spice){
-                    std::cout << "Reached max spice!" << std::endl;
                     this->harvesting = false;
                     this->deposit(board);
                     return;
                 }
             } else {
+                if(board.getCell(harvest_position.x,harvest_position.y).isOccupied()){
+                    return;
+                }
                 this->harvest(harvest_position.x,harvest_position.y,board);
             }
         } 
-        return;
     }
-    this->current_time++;
-    if (this->remaining_path.size() == 0) {
-        this->moving = false;
-    } else if (this->current_time == this->movement_time) {
-        this->current_time = 0;
-        Position next = this->remaining_path.back();
-        if(!(board.getCell(next.x,next.y).canTraverse())) {
-            if (this->remaining_path.size() <= 2) {
-                std::vector<Position> empty_path;
-                this->remaining_path = empty_path;
-            } else {
-                this->move(this->remaining_path.front().x,this->remaining_path.front().y,board);
+    if(this->moving == true){
+        if (this->harvesting == true){
+            if(board.get_distance_between(this->harvest_position,this->position) <= 2){
+                if(board.getCell(harvest_position.x,harvest_position.y).isOccupied()){
+                    this->moving == false;
+                    return;
+                }
             }
         }
-        if (this->remaining_path.size() != 0) {
-            board.getCell(this->position.x,this->position.y).disoccupy();
-            this->position = this->remaining_path.back();
-            this->occupy(board);
-            this->remaining_path.pop_back();
+        if (this->depositing == true){
+            if(board.get_distance_between(this->position,this->deposit_position) <= 2){
+                  if(board.getCell(deposit_position.x,deposit_position.y).isOccupied()){
+                    this->moving == false;
+                    return;
+                }
+            }
         }
+        this->current_time++;
+        if (this->remaining_path.size() == 0) {
+            this->moving = false;
+        } else if (this->current_time == this->movement_time) {
+            this->current_time = 0;
+            Position next = this->remaining_path.back();
+            if(!(board.getCell(next.x,next.y).canTraverse())) {
+                if (this->remaining_path.size() <= 1) {
+                    std::vector<Position> empty_path;
+                    this->remaining_path = empty_path;
+                } else {
+                    this->move(this->remaining_path.front().x,this->remaining_path.front().y,board);
+                }
+            }
+            if (this->remaining_path.size() != 0) {
+                board.getCell(this->position.x,this->position.y).disoccupy();
+                this->position = this->remaining_path.back();
+                this->occupy(board);
+                this->remaining_path.pop_back();
+            }
+        }
+        if(remaining_path.size() == 0)
+            this->moving = false;
     }
-    if(remaining_path.size() == 0)
-        this->moving = false;
     //  UPDATE STATE
     Selectable::update(state,board);
     
@@ -178,6 +203,8 @@ void Harvester::deposit(Board & board){
     size_t best_distance = 1000;
     Position best_position;
     for (Position pos : board.getDepositPositions()){
+        if (board.getCell(pos.x,pos.y).isOccupied())
+            continue;
         size_t distance = board.get_distance_between(this->position,pos);
         if(distance < best_distance){
             best_distance = distance;
@@ -186,6 +213,7 @@ void Harvester::deposit(Board & board){
     }
     this->deposit_position = best_position;
     this->depositing = true;
+    std::cout << "Now I'm going to deposit this" << std::endl;
     this->move(this->deposit_position.x,this->deposit_position.y,board);
 }
 
@@ -234,7 +262,7 @@ void Trike::update(State & state, Board& board){
         this->current_time = 0;
         Position next = this->remaining_path.back();
         if(!(board.getCell(next.x,next.y).canTraverse())) {
-            if (this->remaining_path.size() <= 2) {
+            if (this->remaining_path.size() <= 1) {
                 std::vector<Position> empty_path;
                 this->remaining_path = empty_path;
             } else {
