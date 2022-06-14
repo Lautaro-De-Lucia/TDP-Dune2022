@@ -4,6 +4,7 @@
 #include "board.h"
 #include "common_utils.h"
 #include "client_camera.h"
+#include "client_renderhandler.h"
 
 extern Camera cam;
 
@@ -17,17 +18,6 @@ extern Camera cam;
 #define REFINERY_PATH "/buildingsprites/refinery/refinery.png"
 
 #define LP_PATH "/extrasprites/lp.png"
-
-enum move_direction {
-    TOP = 0,
-    TOP_RIGHT = 1,
-    RIGHT = 2,
-    BOTTOM_RIGHT = 3,
-    BOTTOM = 4,
-    BOTTOM_LEFT = 5,
-    LEFT = 6,
-    TOP_LEFT = 7
-};
 
 #define HEALTH_SPRITES 7
 
@@ -44,6 +34,7 @@ enum health_t {
 class CSelectable {
  protected:
     SDL2pp::Texture lp_texture;  
+    RenderHandler render_handler;
     int ID;
     std::string name;
     int LP;
@@ -52,7 +43,7 @@ class CSelectable {
     bool selected;
     health_t health;
  public:
-    CSelectable(std::string name,State& initial_state,SDL2pp::Renderer& renderer, const std::string& lp_path);
+    CSelectable(State& initial_state,SDL2pp::Renderer& renderer, const std::string& lp_path);
     virtual void update(State& new_state,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
     virtual void render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
     int get_life_points();
@@ -69,8 +60,9 @@ class CMovable : public CSelectable {
  private:
     SDL2pp::Texture texture;  
     move_direction dir;
+    unit_t type;
  public:
-    CMovable(std::string name,State& state,SDL2pp::Renderer& renderer, const std::string& lp_path , const std::string& path);
+    CMovable(unit_t type,State& state,SDL2pp::Renderer& renderer, const std::string& lp_path , const std::string& path);
     void render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
     void update(State& new_state,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
 }; 
@@ -78,8 +70,9 @@ class CMovable : public CSelectable {
 class CStatic : public CSelectable {
  private:
     SDL2pp::Texture texture;  
+    building_t type;
  public:
-    CStatic(std::string name,State& state,SDL2pp::Renderer& renderer, const std::string& lp_path ,const std::string& path);
+    CStatic(building_t type,State& state,SDL2pp::Renderer& renderer, const std::string& lp_path ,const std::string& path);
     void render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
     void update(State& new_state,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
 };

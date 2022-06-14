@@ -1,6 +1,6 @@
 #include "client_selectable.h"
 
-CSelectable::CSelectable(std::string name, State& state, SDL2pp::Renderer& renderer, const std::string& lp_path)
+CSelectable::CSelectable(State& state, SDL2pp::Renderer& renderer, const std::string& lp_path)
 :
 lp_texture(renderer,lp_path)
 {
@@ -91,20 +91,25 @@ int CSelectable::getID() {
 
 
 
-CMovable::CMovable(std::string name, State& state, SDL2pp::Renderer& renderer, const std::string& lp_path , const std::string& path)
+CMovable::CMovable(unit_t type, State& state, SDL2pp::Renderer& renderer, const std::string& lp_path , const std::string& path)
 :
-CSelectable(name,state,renderer,lp_path),
+CSelectable(state,renderer,lp_path),
 texture(renderer,path)
-{this->dir = BOTTOM;}
+{
+    this->dir = BOTTOM;
+    this->type = type;     
+}
 
-CStatic::CStatic(std::string name, State& state, SDL2pp::Renderer& renderer, const std::string& lp_path, const std::string& path)
+CStatic::CStatic(building_t type, State& state, SDL2pp::Renderer& renderer, const std::string& lp_path, const std::string& path) 
 :
-CSelectable(name,state,renderer,lp_path),
+CSelectable(state,renderer,lp_path),
 texture(renderer,path)
-{}
+{
+    this->type = type;     
+}
 
 void CMovable::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
-    if (this->name == "Trike"){
+    if (this->type == TRIKE){
         switch (this->dir){
             case TOP:
                 renderer.Copy(
@@ -174,7 +179,7 @@ void CMovable::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
                 break;              
         }
     } 
-    if (this->name == "Harvester"){
+    if (this->type == HARVESTER){
         switch (this->dir){
             case TOP:
                 renderer.Copy(
@@ -254,7 +259,7 @@ void CMovable::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
 
 void CStatic::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
     CSelectable::render(renderer, cam_pos_x, cam_pos_y);
-    if (this->name == "Wind Trap"){
+    if (this->type == AIR_TRAP){
         renderer.Copy(
 		    texture,						//	The sprite
 		    //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
@@ -262,7 +267,7 @@ void CStatic::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
 		    SDL2pp::Rect(this->position.x*TILE_SIZE-cam_pos_x,this->position.y*TILE_SIZE-cam_pos_y,AIR_TRAP_DIM_X*TILE_SIZE,AIR_TRAP_DIM_Y*TILE_SIZE)				//	set to this part of the window		
 	    );
     }
-    if (this->name == "Barrack"){
+    if (this->type == BARRACK){
         renderer.Copy(
 		    texture,						//	The sprite
 		    //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
@@ -270,7 +275,7 @@ void CStatic::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
 		    SDL2pp::Rect(this->position.x*TILE_SIZE-cam_pos_x,this->position.y*TILE_SIZE-cam_pos_y,BARRACK_DIM_X*TILE_SIZE,BARRACK_DIM_Y*TILE_SIZE)				//	set to this part of the window		
 	    );
     }
-    if (this->name == "Refinery"){
+    if (this->type == REFINERY){
         renderer.Copy(
 		    texture,						//	The sprite
 		    //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
