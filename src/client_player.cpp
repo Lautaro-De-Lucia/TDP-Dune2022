@@ -21,7 +21,7 @@ mouse(TILE_DIM,cam)
     this->building_held = -1;
 }
 
-void CPlayer::addElement(unit_t type,State& desc){
+void CPlayer::addElement(unit_t type,State& desc) {
     //  Ahora estamos hablando de SPRITES
     //  Va a ser una imágen con la unidad en muchas posiciones
     //  Los cortes quedan a cargo de la unidad
