@@ -13,15 +13,6 @@ lp_texture(renderer,lp_path)
 }
 
 void CSelectable::update(State& new_state, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
-    this->LP = new_state.LP;
-    this->position = new_state.position;
-    this->selected = new_state.selected;
-    this->render(renderer, cam_pos_x, cam_pos_y);
-}
-
-void CStatic::update(State& new_state, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
-
-    //  Update health
     int hsprites = 7;
     for (size_t state = 1 ; state < hsprites ; state++){
         if (LP > (max_LP -(max_LP / 7)*state) && LP <= (max_LP -(max_LP / hsprites)*(state-1))){
@@ -32,20 +23,15 @@ void CStatic::update(State& new_state, SDL2pp::Renderer& renderer, int cam_pos_x
     this->LP = new_state.LP;
     this->position = new_state.position;
     this->selected = new_state.selected;
+}
 
+void CStatic::update(State& new_state, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
+    CSelectable::update(new_state,renderer,cam_pos_x,cam_pos_y);
     this->render(renderer, cam_pos_x, cam_pos_y);
 }
 
 void CMovable::update(State& new_state, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
     
-    int hsprites = 7;
-    for (size_t state = 1 ; state < hsprites ; state++){
-        if (LP > (max_LP -(max_LP / 7)*state) && LP <= (max_LP -(max_LP / hsprites)*(state-1))){
-            this->health = (health_t) state;
-            break;
-        }
-    }
-
     if (new_state.position.x == this->position.x && new_state.position.y > this->position.y)
         this->dir = BOTTOM;
     if (new_state.position.x > this->position.x && new_state.position.y > this->position.y)
@@ -62,10 +48,8 @@ void CMovable::update(State& new_state, SDL2pp::Renderer& renderer, int cam_pos_
         this->dir = LEFT;
     if (new_state.position.x < this->position.x && new_state.position.y > this->position.y)
         this->dir = BOTTOM_LEFT;                    
-
-    this->LP = new_state.LP;
-    this->position = new_state.position;
-    this->selected = new_state.selected;
+        
+    CSelectable::update(new_state,renderer,cam_pos_x,cam_pos_y);
     this->render(renderer, cam_pos_x, cam_pos_y);
 }
 
