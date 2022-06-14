@@ -110,6 +110,8 @@ texture(renderer,path)
 
 void CMovable::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
     if (this->type == TRIKE){
+        this->render_handler.renderMovable(this->texture,renderer,this->dir,this->position.x,this->position.y,cam_pos_x,cam_pos_y,TILE_SIZE,33,30,32);
+        /*
         switch (this->dir){
             case TOP:
                 renderer.Copy(
@@ -178,7 +180,10 @@ void CMovable::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
             default:
                 break;              
         }
-    } 
+        */
+    }
+     
+    
     if (this->type == HARVESTER){
         switch (this->dir){
             case TOP:

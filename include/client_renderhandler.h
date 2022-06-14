@@ -16,7 +16,19 @@ enum move_direction {
 
 
 class RenderHandler {
+    private:
     public:
-    void renderMovable(SDL2pp::Texture & texture,move_direction dir, int sprite_cut_x, int sprite_cut_y, int size);
+    void renderMovable(
+        SDL2pp::Texture & texture,
+        SDL2pp::Renderer & renderer,
+        move_direction dir,
+        int pos_x,
+        int pos_y, 
+        int cam_pos_x,
+        int cam_pos_y,
+        int tile_size,
+        int sprite_cut_x, 
+        int sprite_cut_y, 
+        int size);
     void renderStatic(SDL2pp::Texture & texture,int size_x, int size_y);
 };
