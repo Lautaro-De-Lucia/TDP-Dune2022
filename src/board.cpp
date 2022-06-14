@@ -18,7 +18,7 @@ cells() {
     }
 }
 
-status_t Board::place(const Position& location, int dim_x,int dim_y,player_t faction) {
+status_t Board::canPlace(const Position& location, int dim_x,int dim_y) {
     //  See if any of the positions is occupaid or cant build there
     for (size_t j = 0 ; j < dim_y ; j++) {
         for (size_t i = 0 ; i < dim_x ; i++) {
@@ -29,12 +29,6 @@ status_t Board::place(const Position& location, int dim_x,int dim_y,player_t fac
             ){
                 return FAILED_TO_ADD;
             }
-        }
-    }
-    //  If not, mark them as occupied
-    for (size_t j = 0 ; j < dim_y ; j++){ 
-        for (size_t i = 0 ; i < dim_x ; i++){
-            this->cells[location.x+i][location.y+j].occupy(faction);
         }
     }
     return SUCCESS;
@@ -82,9 +76,9 @@ size_t Board::get_height() {
     return (size_t) this->dim_y;
 }
 
-void Board::move_unit(Position from, Position to, player_t faction) {
+void Board::move_unit(Position from, Position to, player_t faction, unit_t unit) {
     (this->cells)[from.x][from.y].disoccupy();
-    (this->cells)[to.x][to.y].occupy(faction);
+    (this->cells)[to.x][to.y].occupy(faction,unit);
 }
 
 std::vector<Position> Board::get_traversable_neighbors_of(Position pos, size_t distance) {
@@ -98,6 +92,8 @@ std::vector<Position> Board::get_traversable_neighbors_of(Position pos, size_t d
             Position neighbor(pos.x+i, pos.y+j);
             // check if neighbor is out of bounds
             if (neighbor.x >= this->dim_x || neighbor.y >= this->dim_y)
+                continue;
+            if (neighbor.x < 0 || neighbor.y < 0)
                 continue;
             // check if neighbor is occupied
             if (this->cells[neighbor.x][neighbor.y].isOccupied())
@@ -117,4 +113,13 @@ size_t Board::get_distance_between(Position pos1, Position pos2) {
     size_t y_dist = abs(pos2.y-pos1.y);
 
     return x_dist > y_dist ? x_dist : y_dist;
+}
+
+void Board::addDepositPositions(std::vector<Position> & new_deposit_positions){
+    for (Position pos : new_deposit_positions)
+        this->deposit_positions.push_back(pos);
+}
+
+std::vector<Position> & Board::getDepositPositions(){
+    return this->deposit_positions;
 }

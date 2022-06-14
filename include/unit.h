@@ -17,9 +17,9 @@ class Unit : public Selectable {
  public:
     Unit() = default;
     Unit(player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed);
-    bool place(Board& board, std::vector<Position>& positions, int& spice);
     virtual void react(int x, int y, Board& board);
     virtual void update(State& state, Board& board);
+    virtual bool place(Board& board,std::vector<Position>& positions,int* spice);
     void move(int x, int y, Board& board);
 
 };
@@ -28,20 +28,26 @@ class Unit : public Selectable {
 class Harvester : public Unit {
     int stored_spice;
     int max_spice;
+    int * player_spice;
     bool harvesting;
+    bool depositing;
     Position harvest_position;
+    Position deposit_position;
  public:
     Harvester(player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int max_spice);
     void create();
     virtual void react(int x, int y, Board& board);
     virtual void update(State& state, Board& board);
+    virtual bool place(Board& board,std::vector<Position>& positions,int* spice);
     void harvest(int x, int y, Board& board);
+    void deposit(Board & board);
+    void deposit(int x, int y,Board & board);
+    void occupy(Board & board);
 };
 
 
 class Trike : public Unit {
     std::string name;
-    int spice;
     int speed;
     int attack;
  public:
@@ -49,4 +55,6 @@ class Trike : public Unit {
     void create();
     virtual void react(int x, int y, Board& board);
     virtual void update(State& state, Board& board);
+    virtual bool place(Board& board,std::vector<Position>& positions,int* spice);
+    void occupy(Board & board);
 };

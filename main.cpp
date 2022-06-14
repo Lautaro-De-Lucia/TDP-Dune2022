@@ -36,9 +36,15 @@ std::vector<std::vector<cell_t>> generate_random_map () {
     map_cells[30][31] = PIT;
     map_cells[30][32] = PIT;
 
-    map_cells[40][30] = SAND;
-    map_cells[40][31] = SAND;
-    map_cells[40][32] = SAND;
+    map_cells[20][15] = SAND;
+    map_cells[20][16] = SAND;
+    map_cells[20][17] = SAND;
+    map_cells[21][15] = SAND;
+    map_cells[21][16] = SAND;
+    map_cells[21][17] = SAND;
+    map_cells[22][15] = SAND;
+    map_cells[22][16] = SAND;
+    map_cells[22][17] = SAND;
 
     return map_cells;
     

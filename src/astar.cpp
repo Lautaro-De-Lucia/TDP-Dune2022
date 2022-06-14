@@ -74,6 +74,25 @@ bool aStar::validate_position(Position position,Board& board) {
 
 std::vector<Position> aStar::algorithm(Position start, Position end, Board& board) {
 
+    std::vector<Position> empty_path;
+
+    if (start == end)
+        return empty_path;
+
+    size_t dist_from_start_to_end = board.get_distance_between(start, end);
+    
+    if((dist_from_start_to_end == 1)) {
+
+        std::vector<Position> simple_path;
+
+        if (validate_position(end,board)) {
+            simple_path.push_back(end);
+            simple_path.push_back(start);
+            return simple_path;
+        }
+        return empty_path;        
+    }
+
     size_t board_width = board.get_width();
     size_t board_height = board.get_height();
 
@@ -85,32 +104,26 @@ std::vector<Position> aStar::algorithm(Position start, Position end, Board& boar
         }
     }
 
-    std::vector<Position> empty_path;
-
-    if (!validate_position(end,board)) {
-
-        size_t dist_from_start_to_end = board.get_distance_between(start, end);
+    if (!validate_position(end,board)) {        
 
         size_t dist_from_end_to_new_end = 0;
-        while (1) {
+        std::vector<Position> neighbors;
+        while (neighbors.size() == 0) {
             dist_from_end_to_new_end++;
             if (dist_from_end_to_new_end >= dist_from_start_to_end)
                 return empty_path;
-            std::vector<Position> neighbors = board.get_traversable_neighbors_of(end, dist_from_end_to_new_end);
-            if(neighbors.size() == 0)
-                continue;
-            Position closest_neighbor = neighbors.front();
-            size_t closest_distance = board.get_distance_between(start, closest_neighbor);
-            for (Position neighbor : neighbors) {
-                size_t new_dist = board.get_distance_between(start, neighbor);
-                if (new_dist < closest_distance) {
-                    closest_neighbor = neighbor;
-                    closest_distance = new_dist;
-                }
-            }
-            end = closest_neighbor;
-            break;
+            neighbors = board.get_traversable_neighbors_of(end, dist_from_end_to_new_end);
         }
+        Position closest_neighbor = neighbors.front();
+        size_t closest_distance = board.get_distance_between(start, closest_neighbor);
+        for (Position neighbor : neighbors) {
+            size_t new_dist = board.get_distance_between(start, neighbor);
+            if (new_dist < closest_distance) {
+                closest_neighbor = neighbor;
+                closest_distance = new_dist;
+            }
+        }
+        end = closest_neighbor;
     }
 
     Position none_position(-1, -1);

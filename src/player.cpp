@@ -133,7 +133,7 @@ void Player::createUnit(int type){
     //  Create the unit
     std::unique_ptr<Unit> unit = UnitFactory::create((unit_t) type,this->faction);
     //  Attempt adding it
-    if ((*unit).place(board,positions,this->spice)){
+    if ((*unit).place(board,positions,&(this->spice))){
         (this->elements).insert({ID++, std::move(unit)});
         State state;
         (this->elements)[ID-1]->getState(state);

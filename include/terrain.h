@@ -3,12 +3,8 @@
 
 class Terrain {
  public:
-    bool occupied;
     Terrain();
     virtual ~Terrain(){}
-    void occupy();
-    void free();
-    bool isOccupied();
     virtual bool canTraverse(){return false;}
     virtual bool canExtract(){return false;}
     virtual bool canBuild(){return false;}

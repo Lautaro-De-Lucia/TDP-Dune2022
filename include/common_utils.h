@@ -43,7 +43,7 @@
 #define REFINERY_DIM_Y 3
 #define REFINERY_CAPACITY 5000
 
-#define DEF_SAND_SPICE 200
+#define DEF_SAND_SPICE 1000
 
 #define FONT_IMPACT_PATH "/fonts/impact/impact.ttf"
 

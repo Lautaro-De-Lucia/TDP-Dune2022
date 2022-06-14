@@ -19,7 +19,7 @@ bool Building::place(Board& board, int pos_x, int pos_y, int& spice, int& spice_
         std::cerr << "Not enough Energy!!!" << std::endl;
         return false;
     }
-    if (board.place(Position(pos_x,pos_y),this->getDimX(),this->getDimY(), this->faction) == FAILED_TO_ADD){
+    if (board.canPlace(Position(pos_x,pos_y),this->getDimX(),this->getDimY()) == FAILED_TO_ADD){
         std::cerr << "Can't build in this position!!!" << std::endl;
         return false;
     }
@@ -45,8 +45,16 @@ Building(faction, LP,spice,energy,pos,dim_x,dim_y)
 bool AirTrap::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capacity,int& energy,int& energy_capacity){
     if (!Building::place(board,pos_x,pos_y,spice,spice_capacity,energy,energy_capacity))
         return false;
+    
     spice -= this->spice;
     energy += this->energy;
+
+    for (size_t j = 0 ; j < this->getDimY() ; j++){ 
+        for (size_t i = 0 ; i < this->getDimX() ; i++){
+            board.getCell(this->position.x+i,this->position.y+j).occupy(this->faction,AIR_TRAP);
+        }
+    }
+
     return true;
 }
 
@@ -60,11 +68,16 @@ Building(faction,LP,spice,energy,pos,dim_x,dim_y)
 bool Barrack::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capacity,int& energy,int& energy_capacity){
     if (!Building::place(board,pos_x,pos_y,spice,spice_capacity,energy,energy_capacity))
         return false;
-    std::cout << "Placing a barrack" << std::endl;
-    std::cout << "The original amount of spice was:" << spice << std::endl;
+
     spice -= this->spice;
-    std::cout << "The new amount of spice is" << spice << std::endl;
     energy -= this->energy;
+
+    for (size_t j = 0 ; j < this->getDimY() ; j++){ 
+        for (size_t i = 0 ; i < this->getDimX() ; i++){
+            board.getCell(this->position.x+i,this->position.y+j).occupy(this->faction,BARRACK);
+        }
+    }
+
     return true;
 }
 
@@ -84,6 +97,15 @@ bool Refinery::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capa
     spice -= this->spice;
     energy -= this->energy;
     spice_capacity += this->c_spice; 
+
+    for (size_t j = 0 ; j < this->getDimY() ; j++){ 
+        for (size_t i = 0 ; i < this->getDimX() ; i++){
+            board.getCell(this->position.x+i,this->position.y+j).occupy(this->faction,REFINERY);
+        }
+    }
+    std::vector<Position> deposit_positions = this->getSurroundings();
+    board.addDepositPositions(deposit_positions);
+
     return true;
 }
 
