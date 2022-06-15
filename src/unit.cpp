@@ -58,6 +58,7 @@ bool Trike::place(Board& board,std::vector<Position>& positions,int * spice){
 
 void Unit::react(int x, int y, Board& board){}
 void Unit::update(State& state, Board& board){}
+void Unit::receiveDamage(int damage){}
 
 void Unit::move(int x, int y, Board& board) {
     std::vector<Position> new_path;
@@ -108,6 +109,11 @@ void Harvester::harvest(int x, int y, Board& board){
     this->move(x,y,board);
 }
 
+void Harvester::receiveDamage(int damage){
+    std::cout << "Ouch!" << std::endl;
+    this->LP = this->LP-damage;
+    std::cout << "My life points now are: "<< this->LP << std::endl;
+}
 
 void Harvester::update(State& state, Board& board){
     //  UPDATE MOVEMENT
@@ -247,8 +253,13 @@ void Trike::react(int x, int y, Board& board) {
 }
 
 void Trike::attack(int x, int y, Board& board){
-    std::cout <<"Attacking pew pew" << std::endl;
+    board.dealDamage(x,y,this->attack_points);
 }
+
+void Trike::receiveDamage(int damage){
+    this->LP = this->LP-damage;
+}
+
 
 void Trike::update(State & state, Board& board){
     //  UPDATE MOVEMENT

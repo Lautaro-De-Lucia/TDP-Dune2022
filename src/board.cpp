@@ -55,6 +55,10 @@ bool Board::hasEnemy(int x, int y, player_t player_faction){
     return !(faction == player_faction);
 }
 
+void Board::dealDamage(int x, int y, int damage){
+    this->elements.at(this->cells[x][y].getID())->receiveDamage(damage);
+}
+
 Cell& Board::getCell(int x, int y){
     return this->cells[x][y];
 }

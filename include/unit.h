@@ -19,6 +19,7 @@ class Unit : public Selectable {
     Unit(int ID,player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed);
     virtual void react(int x, int y, Board& board);
     virtual void update(State& state, Board& board);
+    virtual void receiveDamage(int damage);
     virtual bool place(Board& board,std::vector<Position>& positions,int* spice);
     void move(int x, int y, Board& board);
 
@@ -42,6 +43,7 @@ class Harvester : public Unit {
     void create();
     virtual void react(int x, int y, Board& board);
     virtual void update(State& state, Board& board);
+    virtual void receiveDamage(int damage);
     virtual bool place(Board& board,std::vector<Position>& positions,int* spice);
 
 };
@@ -58,5 +60,6 @@ class Trike : public Unit {
     void create();
     virtual void react(int x, int y, Board& board);
     virtual void update(State& state, Board& board);
+    virtual void receiveDamage(int damage);
     virtual bool place(Board& board,std::vector<Position>& positions,int* spice);
 };

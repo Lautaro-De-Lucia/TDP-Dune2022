@@ -18,7 +18,7 @@
 #define TRIKE_LP 800
 #define TRIKE_SPICE_COST 500
 #define TRIKE_SPEED 5
-#define TRIKE_ATTACK 3
+#define TRIKE_ATTACK 30
 #define TRIKE_DIM_X 1
 #define TRIKE_DIM_Y 1
 

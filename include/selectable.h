@@ -32,6 +32,7 @@ class Selectable {
     bool isWithin(const Area& selection);
     virtual void react(int x, int y, Board& board);
     virtual void update(State & state, Board& board);
+    virtual void receiveDamage(int damage);
     player_t getFaction();
     std::string getName();
     std::vector<Position> getPositions();

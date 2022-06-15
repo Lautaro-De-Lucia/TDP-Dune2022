@@ -49,6 +49,10 @@ void Selectable::react(int x, int y, Board& board){
     std::cout << "reacting to cell in location: (" << x << "," << y << ") [selectable]" << std::endl;
 }
 
+void Selectable::receiveDamage(int damage){
+    std::cout << "I really shouldn't be here" << std::endl;
+}
+
 void Selectable::update(State& state, Board& board){
     state.LP = this->LP;
     state.position = this->position;
