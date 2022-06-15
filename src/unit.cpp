@@ -13,16 +13,12 @@ Selectable(ID,faction, LP,pos,dim_x,dim_y,true)
 }
 
 bool Unit::place(Board& board,std::vector<Position>& positions,int * spice){
-    std::cout << "Al menos nunca entro acá" << std::endl;
     return true;
 }
 
 bool Harvester::place(Board& board,std::vector<Position>& positions,int * spice){
-    std::cout << this->spice << std::endl;
-    std::cout << *spice << std::endl;
     if ((*spice - this->spice) < 0){
         //  Refactor: Manejarlo con excepciones
-        std::cout << "Not enough Spice!!!" << std::endl;
         return false;
     }
     for (Position position : positions){
@@ -38,11 +34,8 @@ bool Harvester::place(Board& board,std::vector<Position>& positions,int * spice)
 }
 
 bool Trike::place(Board& board,std::vector<Position>& positions,int * spice){
-    std::cout << this->spice << std::endl;
-    std::cout << spice << std::endl;
     if ((*spice - this->spice) < 0){
         //  Refactor: Manejarlo con excepciones
-        std::cout << "Not enough Spice!!!" << std::endl;
         return false;
     }
     for (Position position : positions){
@@ -66,12 +59,10 @@ void Unit::move(int x, int y, Board& board) {
         this->remaining_path = new_path;
         return;
     }
-    std::cout << "Moving to that position" << std::endl;
     this->moving = true;
     aStar aStar;
     new_path = aStar.algorithm(this->getPosition(),Position(x,y),board);
     this->remaining_path = new_path;
-    std::cout << "The size of the path is " << new_path.size() << std::endl;
     if(new_path.size() == 0)
         this->moving == false;
 }
@@ -111,9 +102,7 @@ void Harvester::harvest(int x, int y, Board& board){
 }
 
 void Harvester::receiveDamage(int damage){
-    std::cout << "Ouch!" << std::endl;
     this->LP = this->LP-damage;
-    std::cout << "My life points now are: "<< this->LP << std::endl;
 }
 
 void Harvester::update(State& state, Board& board){
@@ -218,7 +207,6 @@ void Harvester::deposit(Board & board){
     }
     this->deposit_position = best_position;
     this->depositing = true;
-    std::cout << "Now I'm going to deposit this" << std::endl;
     this->move(this->deposit_position.x,this->deposit_position.y,board);
 }
 
@@ -249,9 +237,7 @@ Unit(ID,faction,LP,spice,pos,dim_x,dim_y,speed)
 }
 
 void Trike::react(int x, int y, Board& board) {
-    std::cout << "Reacting to position: ("<<x<<","<<y<<")"<<std::endl;
     if (board.hasEnemy(x,y,this->faction)){
-        std::cout << "This position should be an enemy position" << std::endl;
         this->attack(x,y,board);
         return;
     }
@@ -285,9 +271,7 @@ void Trike::attack(int x, int y, Board& board){
         if(board.canTraverse(pos.x,pos.y)){
 	        this->moving_position = pos;
             break;
-        }
-    std::cout << "Enemy position: " << this->enemy_position << std::endl;
-    std::cout << "Moving position: " << this->moving_position << std::endl;    
+        }  
     this->move(this->moving_position.x,this->moving_position.y,board);
 }
 

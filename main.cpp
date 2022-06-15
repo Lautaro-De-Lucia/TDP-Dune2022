@@ -12,8 +12,8 @@
 #include <QtConcurrent/QtConcurrent>
 
 
-#define INIT_SPICE 12000
-#define INIT_CSPICE 5000
+#define INIT_SPICE 15000
+#define INIT_CSPICE 20000
 #define INIT_ENERGY 3000
 #define INIT_CENERGY 5000
 

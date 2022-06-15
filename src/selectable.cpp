@@ -51,7 +51,6 @@ void Selectable::react(int x, int y, Board& board){
 
 void Selectable::receiveDamage(int damage){
     this->LP = this->LP-damage;
-    std::cout << "Remaining life points are: " << this->LP <<std::endl;
 }
 
 void Selectable::update(State& state, Board& board){
