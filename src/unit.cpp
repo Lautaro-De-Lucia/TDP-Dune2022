@@ -263,23 +263,32 @@ void Trike::react(int x, int y, Board& board) {
 void Trike::attack(int x, int y, Board& board){
     this->attacking = true;
 	this->enemy_position = Position(x,y);
+    this->moving_position = this->enemy_position;
     //  ATTACKING UNITS
+    /*
     this->move(
         x-(this->position.x-this->enemy_position.x<0?1:-1),
         y-(this->position.y-this->enemy_position.y<0?1:-1),
         board
     );
-    /*  ATTACKING BUILDINGS
+    */
+    /*
+    //  ATTACKING BUILDINGS
     Position moving_position = this->enemy_position;
     while(!board.canTraverse(moving_position.x,moving_position.y)){
         moving_position.x = moving_position.x - (this->position.x-moving_position.x < 0 ? 1 : -1);
         moving_position.y = moving_position.y - (this->position.y-moving_position.y < 0 ? 1 : -1);
     }
-	this->move(
-        moving_position.x,
-        moving_position.y,
-        board);
     */
+    std::vector<Position> attacking_positions = board.getElementAt(x,y)->getSurroundings();
+    for (Position pos : attacking_positions)
+        if(board.canTraverse(pos.x,pos.y)){
+	        this->moving_position = pos;
+            break;
+        }
+    std::cout << "Enemy position: " << this->enemy_position << std::endl;
+    std::cout << "Moving position: " << this->moving_position << std::endl;    
+    this->move(this->moving_position.x,this->moving_position.y,board);
 }
 
 void Trike::receiveDamage(int damage){
@@ -308,6 +317,9 @@ void Trike::update(State & state, Board& board){
     }
     if (this->attacking == true){
         if(board.hasEnemy(this->enemy_position.x,this->enemy_position.y,this->faction)){
+            if(!board.canTraverse(this->moving_position.x,this->moving_position.y))
+                if(this->position.x != this->moving_position.x || this->position.y != this->moving_position.y)
+                    this->attack(this->enemy_position.x,this->enemy_position.y,board);
             if(board.get_distance_between(this->position,this->enemy_position) < this->range){
                 board.dealDamage(this->enemy_position.x,this->enemy_position.y,this->attack_points);
             }

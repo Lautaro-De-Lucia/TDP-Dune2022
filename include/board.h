@@ -29,6 +29,7 @@ class Board{
     int getDimX(){return this-> dim_x;}
     int getDimY(){return this-> dim_y;}
     int getCreator(unit_t type);
+    std::unique_ptr<Selectable> & getElementAt(int x, int y);
     void makeCreator(int ID);
     void print();
     void print(std::vector<Position> path);

@@ -56,6 +56,7 @@ class Trike : public Unit {
     int range;
     bool attacking;
     Position enemy_position;
+    Position moving_position;
     void attack(int x, int y, Board & board);
     void occupy(Board & board);
     bool enemySearch(Board & board);
