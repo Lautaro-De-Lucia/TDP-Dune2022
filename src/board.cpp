@@ -37,6 +37,17 @@ status_t Board::canPlace(const Position& location, int dim_x,int dim_y) {
     return SUCCESS;
 }
 
+bool Board::canDeposit(int x, int y,player_t faction){
+    Position depositing_position(x,y);
+    for (Position pos : this->deposit_positions)
+        if (depositing_position == pos)
+            return true;
+    return false;
+}
+
+bool Board::canHarvest(int x, int y){return cells[x][y].canHarvest();}
+bool Board::canTraverse(int x, int y){return cells[x][y].canTraverse();}
+
 Cell& Board::getCell(int x, int y){
     return this->cells[x][y];
 }
@@ -77,11 +88,6 @@ size_t Board::get_width() {
 }
 size_t Board::get_height() {
     return (size_t) this->dim_y;
-}
-
-void Board::move_unit(Position from, Position to, player_t faction, unit_t unit) {
-    (this->cells)[from.x][from.y].disoccupy();
-    (this->cells)[to.x][to.y].occupy(faction,unit);
 }
 
 std::vector<Position> Board::get_traversable_neighbors_of(Position pos, size_t distance) {

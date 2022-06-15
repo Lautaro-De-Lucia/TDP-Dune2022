@@ -51,7 +51,7 @@ bool AirTrap::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capac
 
     for (size_t j = 0 ; j < this->getDimY() ; j++){ 
         for (size_t i = 0 ; i < this->getDimX() ; i++){
-            board.getCell(this->position.x+i,this->position.y+j).occupy(this->faction,AIR_TRAP);
+            board.getCell(this->position.x+i,this->position.y+j).occupy(this->ID);
         }
     }
 
@@ -74,7 +74,7 @@ bool Barrack::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capac
 
     for (size_t j = 0 ; j < this->getDimY() ; j++){ 
         for (size_t i = 0 ; i < this->getDimX() ; i++){
-            board.getCell(this->position.x+i,this->position.y+j).occupy(this->faction,BARRACK);
+            board.getCell(this->position.x+i,this->position.y+j).occupy(this->ID);
         }
     }
 
@@ -100,7 +100,7 @@ bool Refinery::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capa
 
     for (size_t j = 0 ; j < this->getDimY() ; j++){ 
         for (size_t i = 0 ; i < this->getDimX() ; i++){
-            board.getCell(this->position.x+i,this->position.y+j).occupy(this->faction,REFINERY);
+            board.getCell(this->position.x+i,this->position.y+j).occupy(this->ID);
         }
     }
     std::vector<Position> deposit_positions = this->getSurroundings();

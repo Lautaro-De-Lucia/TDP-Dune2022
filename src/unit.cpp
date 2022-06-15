@@ -28,7 +28,7 @@ bool Harvester::place(Board& board,std::vector<Position>& positions,int * spice)
     for (Position position : positions){
         if (board.canPlace(position,1,1) == SUCCESS){
             this->setPosition(position);
-            board.getCell(position.x,position.y).occupy(this->faction,HARVESTER);
+            board.getCell(position.x,position.y).occupy(this->ID);
             *spice -= this->spice;
             this->player_spice = spice;
             return true;
@@ -48,7 +48,7 @@ bool Trike::place(Board& board,std::vector<Position>& positions,int * spice){
     for (Position position : positions){
         if (board.canPlace(position,1,1) == SUCCESS){
             this->setPosition(position);
-            board.getCell(position.x,position.y).occupy(this->faction,TRIKE);
+            board.getCell(position.x,position.y).occupy(this->ID);
             *spice -= this->spice;
             return true;
         }
@@ -84,17 +84,16 @@ Unit(ID,faction,LP,spice,pos,dim_x,dim_y,speed)
 }
 
 void Harvester::react(int x, int y, Board& board) {
-    Cell& location = board.getCell(x,y);
     
-    if (location.canDeposit(this->faction) && this->stored_spice > 0 ){
+    if (board.canDeposit(x,y,this->faction)){
         this->deposit(x,y,board);
         return;
     }
-    if (location.canHarvest() && this->stored_spice < this->max_spice){     
+    if (board.canHarvest(x,y) && this->stored_spice < this->max_spice){     
         this->harvest(x,y,board);
         return;
     }
-    if (!location.canTraverse())        
+    if (!board.canTraverse(x,y))        
         return;    
 
     this->harvesting = false;
@@ -195,7 +194,7 @@ void Harvester::update(State& state, Board& board){
 }
 
 void Harvester::occupy(Board & board){
-    board.getCell(this->position.x,this->position.y).occupy(this->faction,HARVESTER);
+    board.getCell(this->position.x,this->position.y).occupy(this->ID);
 }
 
 void Harvester::deposit(Board & board){
@@ -282,5 +281,5 @@ void Trike::update(State & state, Board& board){
 }
 
 void Trike::occupy(Board & board){
-    board.getCell(this->position.x,this->position.y).occupy(this->faction,TRIKE);
+    board.getCell(this->position.x,this->position.y).occupy(this->ID);
 }
