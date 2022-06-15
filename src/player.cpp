@@ -132,7 +132,11 @@ void Player::createUnit(int type){
     //  Get possible creating locations
     std::vector<Position> positions = elements.at(creators.at((unit_t) type))->getSurroundings(); //  FAILING HERE
     //  Create the unit
-    std::unique_ptr<Unit> unit = UnitFactory::create((unit_t) type,this->faction,ID);
+    //  ATTACK TEST
+    player_t unit_faction = HARKONNEN;
+    if(type == HARVESTER)
+        unit_faction = ATREIDES;
+    std::unique_ptr<Unit> unit = UnitFactory::create((unit_t) type,unit_faction,ID);
     //  Attempt adding it
     if ((*unit).place(board,positions,&(this->spice))){
         (this->elements).insert({ID, std::move(unit)});

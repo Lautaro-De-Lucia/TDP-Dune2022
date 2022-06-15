@@ -33,6 +33,7 @@ class Board{
     bool canDeposit(int x, int y, player_t faction);
     bool canHarvest(int x, int y);
     bool canTraverse(int x, int y);
+    bool hasEnemy(int x, int y, player_t player_faction);
     size_t get_width();
     size_t get_height();
     //  void move_unit(Position from, Position to,player_t faction,unit_t unit);

@@ -235,18 +235,19 @@ Trike::Trike(int ID,player_t faction, int LP,int spice, Position pos, int dim_x,
 :
 Unit(ID,faction,LP,spice,pos,dim_x,dim_y,speed)
 {
-    this->attack = attack;
+    this->attack_points = attack;
 }
 
 void Trike::react(int x, int y, Board& board) {
-    std::cout << "Trike: reacting " << std::endl;
-
-    Cell& location = board.getCell(x,y);
-
-    if (!location.canTraverse())        
+    if (board.hasEnemy(x,y,this->faction))
+        this->attack(x,y,board);
+    if (!board.canTraverse(x,y))        
         return;    
-    //  FALTA LÓGICA DE ATAQUE
     this->move(x,y,board);
+}
+
+void Trike::attack(int x, int y, Board& board){
+    std::cout <<"Attacking pew pew" << std::endl;
 }
 
 void Trike::update(State & state, Board& board){

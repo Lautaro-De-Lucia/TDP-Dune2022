@@ -17,6 +17,7 @@ class Cell {
     void setPosition(int x, int y);
     void setTerrain(cell_t terrain);
     Position getPosition();
+    int getID();
     void occupy(int ID);
     size_t extractSpice();
     void  disoccupy();

@@ -34,6 +34,11 @@ Position Cell::getPosition(){
     return this->position;
 }
 
+int Cell::getID(){
+    return this->element_ID;
+}
+
+
 void Cell::occupy(int ID){this->element_ID = ID;}
 void Cell::disoccupy(){this->element_ID = -1;}
 

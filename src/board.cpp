@@ -48,6 +48,13 @@ bool Board::canDeposit(int x, int y,player_t faction){
 bool Board::canHarvest(int x, int y){return cells[x][y].canHarvest();}
 bool Board::canTraverse(int x, int y){return cells[x][y].canTraverse();}
 
+bool Board::hasEnemy(int x, int y, player_t player_faction){
+    if(this->cells[x][y].isOccupied() == false)
+        return false;
+    player_t faction = this->elements.at(this->cells[x][y].getID())->getFaction();
+    return !(faction == player_faction);
+}
+
 Cell& Board::getCell(int x, int y){
     return this->cells[x][y];
 }

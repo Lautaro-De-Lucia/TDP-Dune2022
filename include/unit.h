@@ -33,28 +33,30 @@ class Harvester : public Unit {
     bool depositing;
     Position harvest_position;
     Position deposit_position;
+    void harvest(int x, int y, Board& board);
+    void deposit(Board & board);
+    void deposit(int x, int y,Board & board);
+    void occupy(Board & board);
  public:
     Harvester(int ID,player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int max_spice);
     void create();
     virtual void react(int x, int y, Board& board);
     virtual void update(State& state, Board& board);
     virtual bool place(Board& board,std::vector<Position>& positions,int* spice);
-    void harvest(int x, int y, Board& board);
-    void deposit(Board & board);
-    void deposit(int x, int y,Board & board);
-    void occupy(Board & board);
+
 };
 
 
 class Trike : public Unit {
     std::string name;
     int speed;
-    int attack;
+    int attack_points;
+    void attack(int x, int y, Board & board);
+    void occupy(Board & board);
  public:
     Trike(int ID,player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int attack);
     void create();
     virtual void react(int x, int y, Board& board);
     virtual void update(State& state, Board& board);
     virtual bool place(Board& board,std::vector<Position>& positions,int* spice);
-    void occupy(Board & board);
 };
