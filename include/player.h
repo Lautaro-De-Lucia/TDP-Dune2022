@@ -30,7 +30,6 @@ class Player {
     CPlayer& cplayer;
     Board& board;
     std::map<int,std::unique_ptr<Selectable>> elements;
-    std::vector<std::unique_ptr<Unit>> movables;
     std::map<unit_t,int> creators;
     std::queue<std::vector<int>> mouse_events;
     std::vector<State> states;

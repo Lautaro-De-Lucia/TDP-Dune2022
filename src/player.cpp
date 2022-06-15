@@ -53,7 +53,6 @@ const char * cmddict [8] {
 
 void Player::run() {
 
-
     auto base_time_instruction = clock();
     std::vector<int> action;
 
