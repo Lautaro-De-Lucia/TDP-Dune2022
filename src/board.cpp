@@ -118,20 +118,18 @@ size_t Board::get_height() {
 std::vector<Position> Board::get_traversable_neighbors_of(Position pos, size_t distance) {
 
     std::vector<Position> valid_neighbors;
-    for (int i = -distance; i <= distance; i++) {
-        for (int j = -distance; j <= distance; j++) {
+
+    for (int i = pos.x-distance; i <= pos.x+distance; i++) {
+        for (int j = pos.y-distance; j <= pos.y+distance; j++) {            
             // if i == 0 and j == 0, this is "pos"
             if (i == 0 && j == 0)
                 continue;
-            Position neighbor(pos.x+i, pos.y+j);
+            Position neighbor(i, j);
             // check if neighbor is out of bounds
             if (neighbor.x >= this->dim_x || neighbor.y >= this->dim_y)
                 continue;
             if (neighbor.x < 0 || neighbor.y < 0)
-                continue;
-            // check if neighbor is occupied
-            if (this->cells[neighbor.x][neighbor.y].isOccupied())
-                continue;
+                continue;                
             // check if neighbor is not traversable
             if (!(this->cells[neighbor.x][neighbor.y].canTraverse()))
                 continue;

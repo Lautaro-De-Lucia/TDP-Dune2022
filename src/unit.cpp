@@ -71,7 +71,7 @@ void Unit::move(int x, int y, Board& board) {
     aStar aStar;
     new_path = aStar.algorithm(this->getPosition(),Position(x,y),board);
     this->remaining_path = new_path;
-    std::cout << "The size of the path is" << new_path.size() << std::endl;
+    std::cout << "The size of the path is " << new_path.size() << std::endl;
     if(new_path.size() == 0)
         this->moving == false;
 }

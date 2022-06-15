@@ -6,7 +6,7 @@ Selectable(ID,faction,LP,pos,dim_x,dim_y,false)
 {
     this->spice = spice;
     this->energy = energy;
-    std::cout << "New building created of faction: " << faction << this->faction << std::endl;
+    std::cout << "New building created of faction: " << this->faction << std::endl;
 }
 
 bool Building::place(Board& board, int pos_x, int pos_y, int& spice, int& spice_capacity, int& energy, int& energy_capacity){
@@ -107,7 +107,7 @@ bool Refinery::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capa
 
     for (size_t j = 0 ; j < this->getDimY() ; j++){ 
         for (size_t i = 0 ; i < this->getDimX() ; i++){
-            std::cout<< "Markong position(" << this->position.x+i << "," <<this->position.y+j<<") as occupied"<< std::endl;
+            std::cout<< "Marking position (" << this->position.x+i << "," <<this->position.y+j<<") as occupied"<< std::endl;
             board.getCell(this->position.x+i,this->position.y+j).occupy(this->ID);
         }
     }
@@ -116,4 +116,3 @@ bool Refinery::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capa
 
     return true;
 }
-
