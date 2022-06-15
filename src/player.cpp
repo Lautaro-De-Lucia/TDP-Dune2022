@@ -9,10 +9,10 @@ bool game_has_not_started  = true;
 
 std::vector<std::string> file_input;
 
-Player::Player(player_t faction, int spice, int c_spice, int energy, int c_energy,Board& shared_board, CPlayer& client_player) 
+Player::Player(player_t faction, int spice, int c_spice, int energy, int c_energy,std::vector<std::vector<cell_t>> cells, CPlayer& client_player) 
 : 
 cplayer(client_player),
-board(shared_board)
+board(cells,this->elements)
 {
     this->ID = 0;
     this->faction = faction;
@@ -107,13 +107,14 @@ void Player::run() {
 
 void Player::createBuilding(int type, int pos_x, int pos_y) {    
     //  Manufacture the building
-    std::unique_ptr<Building> building = BuildingFactory::manufacture((building_t) type, this->faction);
+    std::unique_ptr<Building> building = BuildingFactory::manufacture((building_t) type, this->faction,ID);
     //  Attempt to add to board
     if ((*building).place(board,pos_x,pos_y,this->spice,this->c_spice,this->energy,this->c_energy)){
-        (this->elements).insert({ID++, std::move(building)});
+        (this->elements).insert({ID, std::move(building)});
         State state;
-        (this->elements)[ID-1]->getState(state);
-        state.ID = ID-1;
+        (this->elements)[ID]->getState(state);
+        state.ID = ID;
+        ID++;
         (this->cplayer).addElement((building_t) type, state);
         this->makeCreator(state.ID);
         this->cplayer.print("Building succesfully created!",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[YELLOW],1000);
@@ -131,13 +132,14 @@ void Player::createUnit(int type){
     //  Get possible creating locations
     std::vector<Position> positions = elements.at(creators.at((unit_t) type))->getSurroundings(); //  FAILING HERE
     //  Create the unit
-    std::unique_ptr<Unit> unit = UnitFactory::create((unit_t) type,this->faction);
+    std::unique_ptr<Unit> unit = UnitFactory::create((unit_t) type,this->faction,ID);
     //  Attempt adding it
     if ((*unit).place(board,positions,&(this->spice))){
-        (this->elements).insert({ID++, std::move(unit)});
+        (this->elements).insert({ID, std::move(unit)});
         State state;
-        (this->elements)[ID-1]->getState(state);
-        state.ID = ID-1;
+        (this->elements)[ID]->getState(state);
+        state.ID = ID;
+        ID++;
         (this->cplayer).addElement((unit_t) type, state);        
         this->cplayer.print("Unit succesfully created",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[YELLOW],1000);
         return;

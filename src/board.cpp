@@ -1,7 +1,10 @@
 #include "board.h"
 
-Board::Board(std::vector<std::vector<cell_t>> cell_types) :
-cells() {
+
+Board::Board(std::vector<std::vector<cell_t>> cell_types,std::map<int,std::unique_ptr<Selectable>> & elements) :
+cells(), 
+elements(elements)
+{
     //  Get board dimentions
     this->dim_x = cell_types.size();
     this->dim_y = cell_types[0].size();

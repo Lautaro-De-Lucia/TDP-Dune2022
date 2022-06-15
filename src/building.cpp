@@ -1,8 +1,8 @@
 #include "building.h"
 
-Building::Building(player_t faction, int LP, int spice, int energy, Position pos, int dim_x, int dim_y)
+Building::Building(int ID,player_t faction, int LP, int spice, int energy, Position pos, int dim_x, int dim_y)
 :
-Selectable(faction,LP,pos,dim_x,dim_y,false)
+Selectable(ID,faction,LP,pos,dim_x,dim_y,false)
 {
     this->spice = spice;
     this->energy = energy;
@@ -34,9 +34,9 @@ int Building::getEnergy(){
     return this->energy;
 }
 
-AirTrap::AirTrap(player_t faction, int LP,int spice,int energy, Position pos, int dim_x,int dim_y, int c_energy)
+AirTrap::AirTrap(int ID,player_t faction, int LP,int spice,int energy, Position pos, int dim_x,int dim_y, int c_energy)
 :
-Building(faction, LP,spice,energy,pos,dim_x,dim_y)
+Building(ID,faction, LP,spice,energy,pos,dim_x,dim_y)
 {
     this->name = "Wind Trap";
     this->c_energy = c_energy;
@@ -58,9 +58,9 @@ bool AirTrap::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capac
     return true;
 }
 
-Barrack::Barrack(player_t faction,int LP,int spice,int energy, Position pos, int dim_x,int dim_y)
+Barrack::Barrack(int ID,player_t faction,int LP,int spice,int energy, Position pos, int dim_x,int dim_y)
 :
-Building(faction,LP,spice,energy,pos,dim_x,dim_y)
+Building(ID,faction,LP,spice,energy,pos,dim_x,dim_y)
 {
     this->name = "Barrack";
 }
@@ -83,9 +83,9 @@ bool Barrack::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capac
 
 
 
-Refinery::Refinery(player_t faction, int LP,int spice,int energy, Position pos, int dim_x,int dim_y, int c_spice)
+Refinery::Refinery(int ID,player_t faction, int LP,int spice,int energy, Position pos, int dim_x,int dim_y, int c_spice)
 :
-Building(faction,LP,spice,energy,pos,dim_x,dim_y)
+Building(ID,faction,LP,spice,energy,pos,dim_x,dim_y)
 {
     this->name = "Refinery";
     this->c_spice= c_spice;

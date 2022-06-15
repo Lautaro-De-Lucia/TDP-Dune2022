@@ -16,7 +16,7 @@ class Unit : public Selectable {
 
  public:
     Unit() = default;
-    Unit(player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed);
+    Unit(int ID,player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed);
     virtual void react(int x, int y, Board& board);
     virtual void update(State& state, Board& board);
     virtual bool place(Board& board,std::vector<Position>& positions,int* spice);
@@ -34,7 +34,7 @@ class Harvester : public Unit {
     Position harvest_position;
     Position deposit_position;
  public:
-    Harvester(player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int max_spice);
+    Harvester(int ID,player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int max_spice);
     void create();
     virtual void react(int x, int y, Board& board);
     virtual void update(State& state, Board& board);
@@ -51,7 +51,7 @@ class Trike : public Unit {
     int speed;
     int attack;
  public:
-    Trike(player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int attack);
+    Trike(int ID,player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int attack);
     void create();
     virtual void react(int x, int y, Board& board);
     virtual void update(State& state, Board& board);

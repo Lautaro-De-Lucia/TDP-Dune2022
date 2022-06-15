@@ -2,10 +2,14 @@
 
 #include <string>
 #include <vector>
+#include <map>
+#include <memory>
 #include <iostream>
 #include <cmath>
 
 #include "cell.h"
+
+class Selectable;
 
 enum status_t {
     SUCCESS = 0,
@@ -17,9 +21,10 @@ class Board{
     int dim_x;
     int dim_y;
     std::vector<std::vector<Cell>> cells;
+    std::map<int,std::unique_ptr<Selectable>> & elements;
     std::vector<Position> deposit_positions;
  public:
-    Board(std::vector<std::vector<cell_t>> cell_types);
+    Board(std::vector<std::vector<cell_t>> cell_types,std::map<int,std::unique_ptr<Selectable>> & server_elements);
     Cell& getCell(int x, int y);
     int getDimX(){return this-> dim_x;}
     int getDimY(){return this-> dim_y;}

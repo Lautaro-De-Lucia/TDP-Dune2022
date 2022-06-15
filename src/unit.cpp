@@ -1,9 +1,9 @@
 #include "unit.h"
 #include "board.h"
 
-Unit::Unit(player_t faction, int LP,int spice, Position pos, int dim_x, int dim_y,int speed) 
+Unit::Unit(int ID,player_t faction, int LP,int spice, Position pos, int dim_x, int dim_y,int speed) 
 :
-Selectable(faction, LP,pos,dim_x,dim_y,true)
+Selectable(ID,faction, LP,pos,dim_x,dim_y,true)
 {
     this->spice = spice;
     this->speed = speed;
@@ -74,9 +74,9 @@ void Unit::move(int x, int y, Board& board) {
         this->moving == false;
 }
 
-Harvester::Harvester(player_t faction,int LP,int spice, Position pos, int dim_x, int dim_y,int speed, int max_spice) 
+Harvester::Harvester(int ID,player_t faction,int LP,int spice, Position pos, int dim_x, int dim_y,int speed, int max_spice) 
 :
-Unit(faction,LP,spice,pos,dim_x,dim_y,speed)
+Unit(ID,faction,LP,spice,pos,dim_x,dim_y,speed)
 {
     this->stored_spice = 0;
     this->max_spice = max_spice;
@@ -232,9 +232,9 @@ void Harvester::deposit(int x, int y,Board & board){
     this->move(this->deposit_position.x,this->deposit_position.y,board);
 }
 
-Trike::Trike(player_t faction, int LP,int spice, Position pos, int dim_x, int dim_y,int speed,int attack)
+Trike::Trike(int ID,player_t faction, int LP,int spice, Position pos, int dim_x, int dim_y,int speed,int attack)
 :
-Unit(faction,LP,spice,pos,dim_x,dim_y,speed)
+Unit(ID,faction,LP,spice,pos,dim_x,dim_y,speed)
 {
     this->attack = attack;
 }
