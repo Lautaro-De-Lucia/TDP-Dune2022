@@ -13,6 +13,7 @@ class Building : public Selectable {
     int getSpice();
     int getEnergy();
     virtual bool place(Board& board, int pos_x, int pos_y, int& spice, int& spice_capacity, int& energy, int& energy_capacity);
+    virtual void react(int x, int y, Board& board);
 };
 class AirTrap : public Building {
     int c_energy;

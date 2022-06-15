@@ -58,6 +58,7 @@ class Trike : public Unit {
     Position enemy_position;
     void attack(int x, int y, Board & board);
     void occupy(Board & board);
+    bool enemySearch(Board & board);
  public:
     Trike(int ID,player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int attack, int range);
     void create();

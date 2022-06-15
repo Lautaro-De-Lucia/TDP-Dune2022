@@ -30,7 +30,6 @@ class Player {
     CPlayer& cplayer;
     std::map<int,std::unique_ptr<Selectable>> elements;
     Board board;
-    std::map<unit_t,int> creators;
     std::queue<std::vector<int>> mouse_events;
     std::vector<State> states;
     bool place(Building& building,Position position);
@@ -38,7 +37,6 @@ class Player {
     bool place(Unit& unit,std::vector<Position> positions);
  public:    
     Player (player_t faction ,int spice, int c_spice, int energy, int c_energy,std::vector<std::vector<cell_t>> cell_types,CPlayer& client_player);
-    void makeCreator(int building_ID);
     void print();
     void run(); // This should receive the socket in the future
     void update();

@@ -81,7 +81,14 @@ bool Barrack::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capac
     return true;
 }
 
-
+void Building::react(int x, int y, Board & board){
+    for (size_t j = 0 ; j < this->getDimY() ; j++)
+        for (size_t i = 0 ; i < this->getDimX() ; i++)
+            if( x == this->position.x+i && y == this->position.y+j){        
+                board.makeCreator(this->ID);
+                return;
+            }
+}
 
 Refinery::Refinery(int ID,player_t faction, int LP,int spice,int energy, Position pos, int dim_x,int dim_y, int c_spice)
 :
@@ -100,6 +107,7 @@ bool Refinery::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capa
 
     for (size_t j = 0 ; j < this->getDimY() ; j++){ 
         for (size_t i = 0 ; i < this->getDimX() ; i++){
+            std::cout<< "Markong position(" << this->position.x+i << "," <<this->position.y+j<<") as occupied"<< std::endl;
             board.getCell(this->position.x+i,this->position.y+j).occupy(this->ID);
         }
     }

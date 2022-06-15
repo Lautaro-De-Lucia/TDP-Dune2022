@@ -14,7 +14,7 @@ lp_texture(renderer,lp_path)
 
 void CSelectable::update(State& new_state, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
     int hsprites = 7;
-    for (size_t state = 1 ; state < hsprites ; state++){
+    for (size_t state = 1 ; state <= hsprites ; state++){
         if (LP > (max_LP -(max_LP / 7)*state) && LP <= (max_LP -(max_LP / hsprites)*(state-1))){
             this->health = (health_t) state;
             break;

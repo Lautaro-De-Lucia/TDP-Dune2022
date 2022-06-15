@@ -34,6 +34,7 @@ class Selectable {
     virtual void update(State & state, Board& board);
     virtual void receiveDamage(int damage);
     player_t getFaction();
+    int getLP();
     std::string getName();
     std::vector<Position> getPositions();
     std::vector<Position> getSurroundings(); 

@@ -21,12 +21,15 @@ class Board{
     int dim_y;
     std::vector<std::vector<Cell>> cells;
     std::map<int,std::unique_ptr<Selectable>> & elements;
+    std::map<unit_t,int> creators;
     std::vector<Position> deposit_positions;
  public:
     Board(std::vector<std::vector<cell_t>> cell_types,std::map<int,std::unique_ptr<Selectable>> & server_elements);
     Cell& getCell(int x, int y);
     int getDimX(){return this-> dim_x;}
     int getDimY(){return this-> dim_y;}
+    int getCreator(unit_t type);
+    void makeCreator(int ID);
     void print();
     void print(std::vector<Position> path);
     status_t canPlace(const Position& location, int dim_x, int dim_y);

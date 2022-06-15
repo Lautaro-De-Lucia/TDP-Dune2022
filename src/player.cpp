@@ -21,8 +21,6 @@ board(cells,this->elements)
     this->energy = energy;
     this->c_energy = c_energy;
     this->efficiency = 1;
-    this->creators.insert({HARVESTER,-1});
-    this->creators.insert({TRIKE,-1});
 }
 
 void Player::print(){
@@ -83,9 +81,6 @@ void Player::run() {
                     case CREATE_BUILDING:
                         createBuilding(new_event[1], new_event[2], new_event[3]);
                         break;
-                    case MAKE_CREATOR:
-                        //makeCreator(action[1]);
-                        break;
                     case MOUSE_LEFT_CLICK:
                         handleLeftClick(new_event[1],new_event[2]);
                         break;
@@ -107,7 +102,10 @@ void Player::run() {
 
 void Player::createBuilding(int type, int pos_x, int pos_y) {    
     //  Manufacture the building
-    std::unique_ptr<Building> building = BuildingFactory::manufacture((building_t) type, this->faction,ID);
+    player_t building_faction = HARKONNEN;
+    if(type == REFINERY)
+        building_faction = ATREIDES;
+    std::unique_ptr<Building> building = BuildingFactory::manufacture((building_t) type, building_faction,ID);
     //  Attempt to add to board
     if ((*building).place(board,pos_x,pos_y,this->spice,this->c_spice,this->energy,this->c_energy)){
         (this->elements).insert({ID, std::move(building)});
@@ -116,7 +114,6 @@ void Player::createBuilding(int type, int pos_x, int pos_y) {
         state.ID = ID;
         ID++;
         (this->cplayer).addElement((building_t) type, state);
-        this->makeCreator(state.ID);
         this->cplayer.print("Building succesfully created!",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[YELLOW],1000);
         return;
     }
@@ -125,18 +122,14 @@ void Player::createBuilding(int type, int pos_x, int pos_y) {
 
 void Player::createUnit(int type){
     //  Check if creator exists
-    if (creators.at((unit_t) type) == -1) {
+    if (this->board.getCreator((unit_t) type) == -1) {
         this->cplayer.print("No creator for this unit right now",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[RED],1000);
         return;
     }
     //  Get possible creating locations
-    std::vector<Position> positions = elements.at(creators.at((unit_t) type))->getSurroundings(); //  FAILING HERE
+    std::vector<Position> positions = elements.at(board.getCreator((unit_t) type))->getSurroundings(); //  FAILING HERE
     //  Create the unit
-    //  ATTACK TEST
-    player_t unit_faction = HARKONNEN;
-    if(type == HARVESTER)
-        unit_faction = ATREIDES;
-    std::unique_ptr<Unit> unit = UnitFactory::create((unit_t) type,unit_faction,ID);
+    std::unique_ptr<Unit> unit = UnitFactory::create((unit_t) type,this->faction,ID);
     //  Attempt adding it
     if ((*unit).place(board,positions,&(this->spice))){
         (this->elements).insert({ID, std::move(unit)});
@@ -201,15 +194,6 @@ void Player::reportStateToClient(){
         states.push_back(state);
     }
     (this->cplayer).update(this->states,this->spice,this->energy);
-}
-
-void Player::makeCreator(int building_ID){
-    if (this->elements.at(building_ID)->getName() == "Refinery")
-        this->creators[HARVESTER] = building_ID; 
-    if (this->elements.at(building_ID)->getName() == "Barrack"){
-        this->creators[TRIKE] = building_ID;     
-    }
-    std::cout << this->elements.at(building_ID)->getName() << " of ID: " << building_ID << " is now a creator" << std::endl;
 }
 
 void Player::update(){

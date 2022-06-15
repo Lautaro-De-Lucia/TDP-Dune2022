@@ -243,10 +243,14 @@ Unit(ID,faction,LP,spice,pos,dim_x,dim_y,speed)
 {
     this->attack_points = attack;
     this->range = range;
+    this->moving = false;
+    this->attacking = false;
 }
 
 void Trike::react(int x, int y, Board& board) {
+    std::cout << "Reacting to position: ("<<x<<","<<y<<")"<<std::endl;
     if (board.hasEnemy(x,y,this->faction)){
+        std::cout << "This position should be an enemy position" << std::endl;
         this->attack(x,y,board);
         return;
     }
@@ -258,28 +262,39 @@ void Trike::react(int x, int y, Board& board) {
 void Trike::attack(int x, int y, Board& board){
     this->attacking = true;
 	this->enemy_position = Position(x,y);
-	this->move(x-1,y-1,board);
+	this->move(
+        x-(this->position.x-this->enemy_position.x < 0 ? 1 : -1),
+        y-(this->position.y-this->enemy_position.y < 0 ? 1 : -1),
+        board);
 }
 
 void Trike::receiveDamage(int damage){
     this->LP = this->LP-damage;
 }
 
+bool Trike::enemySearch(Board & board){
+    for (size_t i = 0 ; i < board.getDimX() ; i++){
+        for (size_t j = 0 ; j < board.getDimY() ; j++){
+            if(board.get_distance_between(Position(i,j),this->position) < this->range){
+                if(board.hasEnemy(i,j,this->faction)){
+                    this->enemy_position = Position(i,j);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
 
 void Trike::update(State & state, Board& board){
-    std::cout << "I'm updating" << std::endl;
     //  UPDATE MOVEMENT
     if(this->moving == false && this->attacking == false){
-		//if (this→enemySearch(board) == true);
-			//this->attack()	
-        return;
+		if (this->enemySearch(board) == true)
+		    this->attack(this->enemy_position.x,this->enemy_position.y,board);
     }
     if (this->attacking == true){
-        std::cout << "I'm in attack mode" << std::endl;
         if(board.hasEnemy(this->enemy_position.x,this->enemy_position.y,this->faction)){
-            std::cout << "This position has an enemy" << std::endl;
             if(board.get_distance_between(this->position,this->enemy_position) < this->range){
-                std::cout << "And he's in range. I'm attacking..." << std::endl;
                 board.dealDamage(this->enemy_position.x,this->enemy_position.y,this->attack_points);
             }
         } else{

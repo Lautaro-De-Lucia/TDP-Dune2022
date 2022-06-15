@@ -126,6 +126,11 @@ player_t Selectable::getFaction(){
     return this->faction;
 }
 
+int Selectable::getLP(){
+    return this->LP;
+}
+
+
 void Selectable::setPosition(Position position){
     this->position = position;
 }

@@ -19,6 +19,8 @@ elements(elements)
             cells[i][j].setTerrain(cell_types[i][j]);
         }
     }
+    this->creators.insert({HARVESTER,-1});
+    this->creators.insert({TRIKE,-1});
 }
 
 status_t Board::canPlace(const Position& location, int dim_x,int dim_y) {
@@ -56,7 +58,12 @@ bool Board::hasEnemy(int x, int y, player_t player_faction){
 }
 
 void Board::dealDamage(int x, int y, int damage){
-    this->elements.at(this->cells[x][y].getID())->receiveDamage(damage);
+    std::unique_ptr<Selectable> & element = this->elements.at(this->cells[x][y].getID());
+    element->receiveDamage(damage);
+    if(element->getLP() <= 0){
+        this->elements.erase(this->cells[x][y].getID());
+        this->cells[x][y].disoccupy();
+    }
 }
 
 Cell& Board::getCell(int x, int y){
@@ -142,4 +149,17 @@ void Board::addDepositPositions(std::vector<Position> & new_deposit_positions){
 
 std::vector<Position> & Board::getDepositPositions(){
     return this->deposit_positions;
+}
+
+int Board::getCreator(unit_t type){
+    return this->creators[type];
+}
+
+void Board::makeCreator(int building_ID){
+    if (this->elements.at(building_ID)->getName() == "Refinery")
+        this->creators[HARVESTER] = building_ID; 
+    if (this->elements.at(building_ID)->getName() == "Barrack"){
+        this->creators[TRIKE] = building_ID;     
+    }
+    std::cout << this->elements.at(building_ID)->getName() << " of ID: " << building_ID << " is now a creator" << std::endl;
 }
