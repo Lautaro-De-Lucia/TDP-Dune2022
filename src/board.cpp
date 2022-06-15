@@ -74,7 +74,8 @@ Cell& Board::getCell(int x, int y){
 }
 
 std::unique_ptr<Selectable> & Board::getElementAt(int x, int y){
-    return this->elements.at(this->cells[x][y].getID());
+    int elementID = this->cells[x][y].getID();
+    return this->elements.at(elementID);
 }
 
 void Board::print() {

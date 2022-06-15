@@ -74,6 +74,7 @@ bool aStar::validate_position(Position position,Board& board) {
 
 std::vector<Position> aStar::algorithm(Position start, Position end, Board& board) {
 
+    std::cout << "Segmentation fault incoming uuughhhhhh" << std::endl;
     std::vector<Position> empty_path;
 
     if (start == end)
