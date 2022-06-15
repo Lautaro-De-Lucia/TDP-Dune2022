@@ -61,8 +61,11 @@ void Board::dealDamage(int x, int y, int damage){
     std::unique_ptr<Selectable> & element = this->elements.at(this->cells[x][y].getID());
     element->receiveDamage(damage);
     if(element->getLP() <= 0){
+        Position element_position = element->getPosition(); 
+        std::vector<Position> positions = element->getPositions();
         this->elements.erase(this->cells[x][y].getID());
-        this->cells[x][y].disoccupy();
+        for (Position pos : positions)
+            this->cells[pos.x][pos.y].disoccupy();
     }
 }
 

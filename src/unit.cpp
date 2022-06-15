@@ -71,6 +71,7 @@ void Unit::move(int x, int y, Board& board) {
     aStar aStar;
     new_path = aStar.algorithm(this->getPosition(),Position(x,y),board);
     this->remaining_path = new_path;
+    std::cout << "The size of the path is" << new_path.size() << std::endl;
     if(new_path.size() == 0)
         this->moving == false;
 }
@@ -262,10 +263,23 @@ void Trike::react(int x, int y, Board& board) {
 void Trike::attack(int x, int y, Board& board){
     this->attacking = true;
 	this->enemy_position = Position(x,y);
+    //  ATTACKING UNITS
+    this->move(
+        x-(this->position.x-this->enemy_position.x<0?1:-1),
+        y-(this->position.y-this->enemy_position.y<0?1:-1),
+        board
+    );
+    /*  ATTACKING BUILDINGS
+    Position moving_position = this->enemy_position;
+    while(!board.canTraverse(moving_position.x,moving_position.y)){
+        moving_position.x = moving_position.x - (this->position.x-moving_position.x < 0 ? 1 : -1);
+        moving_position.y = moving_position.y - (this->position.y-moving_position.y < 0 ? 1 : -1);
+    }
 	this->move(
-        x-(this->position.x-this->enemy_position.x < 0 ? 1 : -1),
-        y-(this->position.y-this->enemy_position.y < 0 ? 1 : -1),
+        moving_position.x,
+        moving_position.y,
         board);
+    */
 }
 
 void Trike::receiveDamage(int damage){

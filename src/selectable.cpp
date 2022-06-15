@@ -50,7 +50,8 @@ void Selectable::react(int x, int y, Board& board){
 }
 
 void Selectable::receiveDamage(int damage){
-    std::cout << "I really shouldn't be here" << std::endl;
+    this->LP = this->LP-damage;
+    std::cout << "Remaining life points are: " << this->LP <<std::endl;
 }
 
 void Selectable::update(State& state, Board& board){
@@ -120,6 +121,14 @@ std::string Selectable::getName(){
 
 Position Selectable::getPosition(){
     return this->position;
+}
+
+std::vector<Position> Selectable::getPositions(){
+    std::vector<Position> positions;
+    for (size_t i = 0; i < this->dim_x ; i++)
+        for(size_t j = 0; j < this->dim_y ; j++)
+            positions.push_back(Position(this->position.x+i,this->position.y+j));
+    return positions;
 }
 
 player_t Selectable::getFaction(){
