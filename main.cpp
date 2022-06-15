@@ -20,6 +20,41 @@
 #define MAP_DIM_X 80
 #define MAP_DIM_Y 45
 
+#define TOTAL_TILE_SPRITES 5
+
+std::vector<std::vector<cell_t>> generate_map (std::string tile_map_file){
+    //  Produce cell matrix
+    std::vector<std::vector<cell_t>> cells;
+    cells.resize(MAP_DIM_X);
+	for ( size_t i = 0; i < MAP_DIM_X; i++ )
+		cells[i].resize(MAP_DIM_Y);
+    //  Load .map
+	std::ifstream map(tile_map_file.c_str());
+	if (map.fail()){
+		std::cout << "Failed to load map" << std::endl; 
+		exit(1);
+	}
+	//	Read & load tiles
+	for(size_t i = 0 ; i < MAP_DIM_X ; i++ ){
+		for (size_t j = 0 ; j < MAP_DIM_Y ; j++){
+			int type;
+			map >> type;
+			if (map.fail()){
+				std::cout << "Unexpected EOF on tile map" << std::endl; 
+				exit(1);
+			}
+			if (type < 0 && type > TOTAL_TILE_SPRITES){
+				std::cout << "This ain't a valid tile number, dumbass" << std::endl; 
+				exit(1);
+			}
+			//	Load cell to board
+			cells[i][j]= (cell_t) type;
+		}
+	}
+	map.close();
+    return cells;
+}
+
 std::vector<std::vector<cell_t>> generate_random_map () {
     //  Create space for the map
     std::vector<std::vector<cell_t>> map_cells(MAP_DIM_X);
