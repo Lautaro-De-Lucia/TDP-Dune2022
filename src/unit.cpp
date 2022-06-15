@@ -237,23 +237,28 @@ void Harvester::deposit(int x, int y,Board & board){
     this->move(this->deposit_position.x,this->deposit_position.y,board);
 }
 
-Trike::Trike(int ID,player_t faction, int LP,int spice, Position pos, int dim_x, int dim_y,int speed,int attack)
+Trike::Trike(int ID,player_t faction, int LP,int spice, Position pos, int dim_x, int dim_y,int speed,int attack,int range)
 :
 Unit(ID,faction,LP,spice,pos,dim_x,dim_y,speed)
 {
     this->attack_points = attack;
+    this->range = range;
 }
 
 void Trike::react(int x, int y, Board& board) {
-    if (board.hasEnemy(x,y,this->faction))
+    if (board.hasEnemy(x,y,this->faction)){
         this->attack(x,y,board);
+        return;
+    }
     if (!board.canTraverse(x,y))        
         return;    
     this->move(x,y,board);
 }
 
 void Trike::attack(int x, int y, Board& board){
-    board.dealDamage(x,y,this->attack_points);
+    this->attacking = true;
+	this->enemy_position = Position(x,y);
+	this->move(x-1,y-1,board);
 }
 
 void Trike::receiveDamage(int damage){
@@ -262,33 +267,52 @@ void Trike::receiveDamage(int damage){
 
 
 void Trike::update(State & state, Board& board){
+    std::cout << "I'm updating" << std::endl;
     //  UPDATE MOVEMENT
-    if(this->moving == false)
+    if(this->moving == false && this->attacking == false){
+		//if (this→enemySearch(board) == true);
+			//this->attack()	
         return;
-    this->current_time++;
-    if (this->remaining_path.size() == 0) {
-        this->moving = false;
-    } else if (this->current_time == this->movement_time) {
-        this->current_time = 0;
-        Position next = this->remaining_path.back();
-        if(!(board.getCell(next.x,next.y).canTraverse())) {
-            if (this->remaining_path.size() <= 1) {
-                std::vector<Position> empty_path;
-                this->remaining_path = empty_path;
-            } else {
-                this->move(this->remaining_path.front().x,this->remaining_path.front().y,board);
+    }
+    if (this->attacking == true){
+        std::cout << "I'm in attack mode" << std::endl;
+        if(board.hasEnemy(this->enemy_position.x,this->enemy_position.y,this->faction)){
+            std::cout << "This position has an enemy" << std::endl;
+            if(board.get_distance_between(this->position,this->enemy_position) < this->range){
+                std::cout << "And he's in range. I'm attacking..." << std::endl;
+                board.dealDamage(this->enemy_position.x,this->enemy_position.y,this->attack_points);
             }
-        }
-        if (this->remaining_path.size() != 0) {
-            board.getCell(this->position.x,this->position.y).disoccupy();
-            this->position = this->remaining_path.back();
-            this->occupy(board);
-            this->remaining_path.pop_back();
+        } else{
+            this->moving = false;
+            this->attacking = false;	
+            return;
         }
     }
-    if(this->remaining_path.size() == 0)
-        this->moving = false;
-    //  UPDATE STATE
+    if(this->moving == true){
+        this->current_time++;
+        if (this->remaining_path.size() == 0) {
+            this->moving = false;
+        } else if (this->current_time == this->movement_time) {
+            this->current_time = 0;
+            Position next = this->remaining_path.back();
+            if(!(board.getCell(next.x,next.y).canTraverse())) {
+                if (this->remaining_path.size() <= 1) {
+                    std::vector<Position> empty_path;
+                    this->remaining_path = empty_path;
+                } else {
+                    this->move(this->remaining_path.front().x,this->remaining_path.front().y,board);
+                }
+            }
+            if (this->remaining_path.size() != 0) {
+                board.getCell(this->position.x,this->position.y).disoccupy();
+                this->position = this->remaining_path.back();
+                this->occupy(board);
+                this->remaining_path.pop_back();
+            }
+        }
+        if(this->remaining_path.size() == 0)
+            this->moving = false;
+    }
     Selectable::update(state,board);
 }
 

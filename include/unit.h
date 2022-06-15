@@ -53,10 +53,13 @@ class Trike : public Unit {
     std::string name;
     int speed;
     int attack_points;
+    int range;
+    bool attacking;
+    Position enemy_position;
     void attack(int x, int y, Board & board);
     void occupy(Board & board);
  public:
-    Trike(int ID,player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int attack);
+    Trike(int ID,player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int attack, int range);
     void create();
     virtual void react(int x, int y, Board& board);
     virtual void update(State& state, Board& board);

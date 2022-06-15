@@ -67,7 +67,7 @@ void Player::run() {
         if(action.size() > 0)
             this->mouse_events.push(action);    
         
-        if(frame_time_instruction > 10000 || game_has_not_started) {
+        if(frame_time_instruction > 100000 || game_has_not_started) {
 
             game_has_not_started = false;
             base_time_instruction = current_time;
