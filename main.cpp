@@ -20,12 +20,12 @@
 
 #define MAP_FILE "/dune.map"
 
-#define MAP_DIM_X 90
-#define MAP_DIM_Y 60
+#define MAP_DIM_X 80
+#define MAP_DIM_Y 45
 
 #define TOTAL_TILE_SPRITES 5
 
-std::vector<std::vector<cell_t>> generate_map (std::string tile_map_file){
+std::vector<std::vector<cell_t>> generate_server_map (std::string tile_map_file){
     //  Produce cell matrix
     std::vector<std::vector<cell_t>> cells;
     cells.resize(MAP_DIM_X);
@@ -40,8 +40,17 @@ std::vector<std::vector<cell_t>> generate_map (std::string tile_map_file){
 	//	Read & load tiles
 	for(size_t j = 0 ; j < MAP_DIM_Y ; j++ ){
 		for (size_t i = 0 ; i < MAP_DIM_X ; i++){
-			int type;
-			map >> type;
+			std::string cell;
+			map >> cell;
+            int type;
+            if (cell[0] == 'r')
+                type = ROCK;
+            if (cell[0] == 's')
+                type = SAND;          
+            if (cell[0] == 'd')
+                type = DUNE;
+            if (cell[0] == 'p')
+                type = PIT;    
 			if (map.fail()){
 				std::cout << "Unexpected EOF on tile map" << std::endl; 
 				exit(1);
@@ -52,6 +61,39 @@ std::vector<std::vector<cell_t>> generate_map (std::string tile_map_file){
 			}
 			//	Load cell to board
 			cells[i][j]= (cell_t) type;
+		}
+	}
+	map.close();
+    return cells;
+}
+
+std::vector<std::vector<std::string>> generate_client_map (std::string tile_map_file){
+    //  Produce cell matrix
+    std::vector<std::vector<std::string>> cells;
+    cells.resize(MAP_DIM_X);
+	for ( size_t i = 0; i < MAP_DIM_X; i++ )
+		cells[i].resize(MAP_DIM_Y);
+    //  Load .map
+	std::ifstream map(tile_map_file.c_str());
+	if (map.fail()){
+		std::cout << "Failed to load map" << std::endl; 
+		exit(1);
+	}
+	//	Read & load tiles
+	for(size_t j = 0 ; j < MAP_DIM_Y ; j++ ){
+		for (size_t i = 0 ; i < MAP_DIM_X ; i++){
+			std::string type;
+			map >> type;
+			if (map.fail()){
+				std::cout << "Unexpected EOF on tile map" << std::endl; 
+				exit(1);
+			}
+			if (std::stoi(type) < 0 && std::stoi(type) > TOTAL_TILE_SPRITES){
+				std::cout << "This ain't a valid tile number, dumbass" << std::endl; 
+				exit(1);
+			}
+			//	Load cell to board
+			cells[i][j]= type;
 		}
 	}
 	map.close();
@@ -107,7 +149,7 @@ void run_sdl() {
     SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,SDL_WINDOW_ALWAYS_ON_TOP);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
 
-    std::vector<std::vector<cell_t>> cells = generate_map(DATA_PATH MAP_FILE);
+    std::vector<std::vector<cell_t>> cells = generate_server_map(DATA_PATH MAP_FILE);
 
     Camera cam(0,0,640,360,1280,720);
     CPlayer client_player(cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cells);
