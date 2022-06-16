@@ -82,18 +82,19 @@ std::vector<std::vector<std::string>> generate_client_map (std::string tile_map_
 	//	Read & load tiles
 	for(size_t j = 0 ; j < MAP_DIM_Y ; j++ ){
 		for (size_t i = 0 ; i < MAP_DIM_X ; i++){
-			std::string type;
+            std::string type;
 			map >> type;
 			if (map.fail()){
-				std::cout << "Unexpected EOF on tile map" << std::endl; 
-				exit(1);
-			}
-			if (std::stoi(type) < 0 && std::stoi(type) > TOTAL_TILE_SPRITES){
-				std::cout << "This ain't a valid tile number, dumbass" << std::endl; 
+            	std::cout << "Unexpected EOF on tile map" << std::endl; 
 				exit(1);
 			}
 			//	Load cell to board
-			cells[i][j]= type;
+            std::string cell_data;
+            cell_data.append(DATA_PATH);
+            cell_data.append("/mapsprites/");
+            cell_data.append(type);
+            cell_data.append(".png");
+			cells[i][j]= cell_data;
 		}
 	}
 	map.close();
@@ -149,12 +150,21 @@ void run_sdl() {
     SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,SDL_WINDOW_ALWAYS_ON_TOP);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
 
+    //std::vector<std::vector<std::string>> cell_paths = generate_client_map(DATA_PATH MAP_FILE);
     std::vector<std::vector<cell_t>> cells = generate_server_map(DATA_PATH MAP_FILE);
-
     Camera cam(0,0,640,360,1280,720);
-    CPlayer client_player(cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cells);
-    Player server(HARKONNEN,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cells,client_player);
-    server.run();
+    
+    while(true){
+    std::vector<State> server_data;
+    std::vector<std::vector<std::string>> cell_paths = generate_client_map(DATA_PATH MAP_FILE);
+    CPlayer client_player(cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cell_paths);
+    client_player.update(server_data,1000,1000);
+    sleep(1);
+    }
+
+    //CPlayer client_player(cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cell_paths);
+    //Player server(HARKONNEN,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cells,client_player);
+    //server.run();
 };
 
 

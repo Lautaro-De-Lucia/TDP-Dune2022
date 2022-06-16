@@ -34,7 +34,7 @@ class CPlayer {
 
 
  public:
-    CPlayer(Camera& cam, SDL2pp::Window& window,SDL2pp::Renderer& renderer, size_t spice, size_t c_spice, int energy, size_t c_energy, std::vector<std::vector<cell_t>>& map_data);
+    CPlayer(Camera& cam, SDL2pp::Window& window,SDL2pp::Renderer& renderer, size_t spice, size_t c_spice, int energy, size_t c_energy, std::vector<std::vector<std::string>>& map_data);
     void renderMap();
     void renderHud();
     void addElement(unit_t type,State& desc);

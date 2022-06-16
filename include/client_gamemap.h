@@ -28,6 +28,6 @@ class GameMap {
  private:
     std::vector<MapCell> map_cells;
  public:
-    GameMap(SDL2pp::Renderer& renderer,std::vector<std::vector<cell_t>>& cells);
+    GameMap(SDL2pp::Renderer& renderer,std::vector<std::vector<std::string>>& cells);
     void render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
 };

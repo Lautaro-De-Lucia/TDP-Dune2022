@@ -2,7 +2,7 @@
 
 extern std::map<color_t,SDL_Color> colors;
 
-CPlayer::CPlayer(Camera& cam, SDL2pp::Window& window,SDL2pp::Renderer& renderer,size_t spice, size_t cspice, int energy, size_t c_energy, std::vector<std::vector<cell_t>>& map_data)
+CPlayer::CPlayer(Camera& cam, SDL2pp::Window& window,SDL2pp::Renderer& renderer,size_t spice, size_t cspice, int energy, size_t c_energy, std::vector<std::vector<std::string>>& map_data)
 :
 camera(cam),
 game_window(window),

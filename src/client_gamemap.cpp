@@ -16,27 +16,12 @@ void MapCell::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
 	);
 }
 
-GameMap::GameMap(SDL2pp::Renderer& renderer,std::vector<std::vector<cell_t>>& cells) {
+GameMap::GameMap(SDL2pp::Renderer& renderer,std::vector<std::vector<std::string>>& cells) {
 	size_t dim_x = cells.size();
 	size_t dim_y = cells[0].size();
     for (size_t j = 0 ; j < dim_y ; j++) {
         for (size_t i = 0 ; i < dim_x ; i++) {
-            switch (cells[i][j]){
-				case ROCK:
-					map_cells.push_back(MapCell(renderer,DATA_PATH ROCK_PATH,i,j));
-					break;
-				case SAND:
-					map_cells.push_back(MapCell(renderer,DATA_PATH SAND_PATH,i,j));	
-					break;
-				case DUNE:
-					map_cells.push_back(MapCell(renderer,DATA_PATH DUNE_PATH,i,j));	
-					break;
-				case PIT:
-					map_cells.push_back(MapCell(renderer,DATA_PATH PIT_PATH,i,j));	
-					break;
-				default:	
-					break;
-			}
+			map_cells.push_back(MapCell(renderer,cells[i][j].c_str(),i,j));	
         }
     }
 }
