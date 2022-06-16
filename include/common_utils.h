@@ -134,6 +134,11 @@ enum hud_button_t {
     UNIT_BTN = 2
 };
 
+// falta agregar una mayor diversidad de errores
+enum response_t {
+    RESPONSE_SUCCESS = 1,
+    RESPONSE_FAILURE = 2
+};
 
 // ================================================
 // ================================================
