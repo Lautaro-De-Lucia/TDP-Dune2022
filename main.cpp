@@ -147,13 +147,14 @@ void run_sdl() {
     //  This is only to initialize TTF
 	SDL2pp::SDLTTF ttf;
 
-    SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,SDL_WINDOW_ALWAYS_ON_TOP);
+    SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,0);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
 
-    //std::vector<std::vector<std::string>> cell_paths = generate_client_map(DATA_PATH MAP_FILE);
+    std::vector<std::vector<std::string>> cell_paths = generate_client_map(DATA_PATH MAP_FILE);
     std::vector<std::vector<cell_t>> cells = generate_server_map(DATA_PATH MAP_FILE);
     Camera cam(0,0,640,360,1280,720);
     
+    /*  EDITOR CRIOLLO
     while(true){
     std::vector<State> server_data;
     std::vector<std::vector<std::string>> cell_paths = generate_client_map(DATA_PATH MAP_FILE);
@@ -161,10 +162,11 @@ void run_sdl() {
     client_player.update(server_data,1000,1000);
     sleep(1);
     }
+    */
 
-    //CPlayer client_player(cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cell_paths);
-    //Player server(HARKONNEN,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cells,client_player);
-    //server.run();
+    CPlayer client_player(cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cell_paths);
+    Player server(HARKONNEN,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cells,client_player);
+    server.run();
 };
 
 
