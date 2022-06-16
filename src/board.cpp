@@ -74,9 +74,7 @@ void Board::dealDamage(int x, int y, int damage){
         if (destroyed_building_id == unit_creator_id)
             this->removeCreator(HARVESTER);
         
-        
         this->elements.erase(this->cells[x][y].getID());
-
 
         for (Position pos : positions)
             this->cells[pos.x][pos.y].disoccupy();

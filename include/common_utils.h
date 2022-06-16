@@ -133,3 +133,114 @@ enum hud_button_t {
     BUILD_BTN = 1,
     UNIT_BTN = 2
 };
+
+
+// ================================================
+// ================================================
+// ================== EXCEPTIONS ==================
+// ================================================
+// ================================================
+
+
+class game_already_exists_exception : public std::exception {
+ public:
+    const char * what() const throw() {
+        return "game_already_exists\n";
+    }
+};
+
+class game_not_found_exception : public std::exception {
+ public:
+    const char * what() const throw() {
+        return "game_not_found\n";
+    }
+};
+
+class game_is_full_exception : public std::exception {
+ public:
+    const char * what() const throw() {
+        return "game_is_full\n";
+    }
+};
+
+class invalid_invocation_exception : public std::exception {
+ public:
+    const char * what() const throw() {
+        return "invalid_invocation\n";
+    }
+};
+
+class invalid_house_exception : public std::exception {
+ public:
+    const char * what() const throw() {
+        return "invalid_house\n";
+    }
+};
+
+class invalid_command_exception : public std::exception {
+ public:
+    const char * what() const throw() {
+        return "invalid_command\n";
+    }
+};
+
+class was_closed_exception : public std::exception {
+ public:
+    const char * what() const throw() {
+        return "was_closed\n";
+    }
+};
+
+class failure_to_send_exception : public std::exception {
+ public:
+    const char * what() const throw() {
+        return "failure_to_send\n";
+    }
+};
+
+class failure_to_receive_exception : public std::exception {
+ public:
+    const char * what() const throw() {
+        return "failure_to_receive\n";
+    }
+};
+
+class failure_to_create_exception : public std::exception {
+ public:
+    const char * what() const throw() {
+        return "failure_to_create\n";
+    }
+};
+
+class failure_to_join_exception : public std::exception {
+ public:
+    const char * what() const throw() {
+        return "failure_to_join\n";
+    }
+};
+
+class getaddrinfo_failed_exception : public std::exception {
+ public:
+    const char * what() const throw() {
+        return "getaddrinfo_failed\n";
+    }
+};
+
+class socket_connection_failed_exception : public std::exception {
+ public:
+    const char * what() const throw() {
+        return "socket_connection_failed\n";
+    }
+};
+
+class accept_failed_exception : public std::exception {
+ public:
+    const char * what() const throw() {
+        return "accept_failed\n";
+    }
+};
+
+// ===============================================
+// ===============================================
+
+
