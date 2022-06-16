@@ -120,6 +120,7 @@ void Player::createBuilding(int type, int pos_x, int pos_y) {
     this->cplayer.print("You can't build here!",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[RED],1000);
 }
 
+// SIGSEGV en algun Map::at() de esta función
 void Player::createUnit(int type){
     //  Check if creator exists
     if (this->board.getCreator((unit_t) type) == -1) {
