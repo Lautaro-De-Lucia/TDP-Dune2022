@@ -29,7 +29,7 @@ class Board{
     int getDimX(){return this-> dim_x;}
     int getDimY(){return this-> dim_y;}
     int getCreator(unit_t type);
-    std::unique_ptr<Selectable> & getElementAt(int x, int y);
+    std::unique_ptr<Selectable>& getElementAt(int x, int y);
     void makeCreator(int ID);
     void print();
     void print(std::vector<Position> path);
@@ -46,4 +46,5 @@ class Board{
     size_t get_distance_between(Position pos1, Position pos2);
     void addDepositPositions(std::vector<Position> & new_deposit_positions);
     std::vector<Position> & getDepositPositions();
+    std::vector<Position> getSurroundings(Position position, int e_dim_x, int e_dim_y);
 };

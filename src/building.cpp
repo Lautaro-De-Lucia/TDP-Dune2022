@@ -111,7 +111,7 @@ bool Refinery::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capa
             board.getCell(this->position.x+i,this->position.y+j).occupy(this->ID);
         }
     }
-    std::vector<Position> deposit_positions = this->getSurroundings();
+    std::vector<Position> deposit_positions = board.getSurroundings(this->position, this->getDimX(), this->getDimY());
     board.addDepositPositions(deposit_positions);
 
     return true;

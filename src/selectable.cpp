@@ -75,44 +75,7 @@ bool Selectable::isWithin(const Area& selection){
     return false;
 }
 
-std::vector<Position> Selectable::getSurroundings(){
-    std::vector <Position> surroundings;
-    for (size_t i = 0 ; i < this->dim_x ; i++) {
-        for (size_t j = 0 ; j < this->dim_y ; j++) {
-            if ( j == 0 ){
-                if (i == 0){        
-                    surroundings.push_back(Position(this->position.x+i-1,this->position.y+j-1));
-                    surroundings.push_back(Position(this->position.x+i-1,this->position.y+j));
-                }
-                if (i < this->dim_x)    
-                    surroundings.push_back(Position(this->position.x+i,this->position.y+j-1));
-                if (i == this->dim_x-1){    
-                    surroundings.push_back(Position(this->position.x+i+1,this->position.y+j-1));
-                    surroundings.push_back(Position(this->position.x+i+1,this->position.y+j));
-                }
-            } 
-            if ( j > 0 && j < this->dim_y-1 ){
-                if ( i == 0)
-                    surroundings.push_back(Position(this->position.x+i-1,this->position.y+j));
-                if ( i == this->dim_x-1 ) 
-                    surroundings.push_back(Position(this->position.x+i+1,this->position.y+j));
-            }
-            if ( j == this->dim_y-1){
-                if (i == 0){        
-                    surroundings.push_back(Position(this->position.x+i-1,this->position.y+j));
-                    surroundings.push_back(Position(this->position.x+i-1,this->position.y+j+1));
-                }
-                if (i < this->dim_x)    
-                    surroundings.push_back(Position(this->position.x+i,this->position.y+j+1));
-                if (i == this->dim_x-1){    
-                    surroundings.push_back(Position(this->position.x+i+1,this->position.y+j+1));
-                    surroundings.push_back(Position(this->position.x+i+1,this->position.y+j));
-                }
-            }    
-        }
-    }
-    return surroundings;
-}
+
 
 std::string Selectable::getName(){
     return this->name;

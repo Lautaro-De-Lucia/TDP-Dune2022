@@ -37,7 +37,6 @@ class Selectable {
     int getLP();
     std::string getName();
     std::vector<Position> getPositions();
-    std::vector<Position> getSurroundings(); 
     void setPosition(Position position);
     Position getPosition();
     int getDimX();

@@ -266,7 +266,12 @@ void Trike::attack(int x, int y, Board& board){
         moving_position.y = moving_position.y - (this->position.y-moving_position.y < 0 ? 1 : -1);
     }
     */
-    std::vector<Position> attacking_positions = board.getElementAt(x,y)->getSurroundings();
+
+    Position selectable_pos = (board.getElementAt(x,y))->getPosition();
+    int selectable_dim_x = (board.getElementAt(x,y))->getDimX();
+    int selectable_dim_y = (board.getElementAt(x,y))->getDimY();
+    std::vector<Position> attacking_positions = board.getSurroundings(selectable_pos, selectable_dim_x, selectable_dim_y); //  FAILING HERE
+
     for (Position pos : attacking_positions)
         if(board.canTraverse(pos.x,pos.y)){
 	        this->moving_position = pos;
@@ -294,6 +299,7 @@ bool Trike::enemySearch(Board & board){
 }
 
 void Trike::update(State & state, Board& board){
+
     //  UPDATE MOVEMENT
     if(this->moving == false && this->attacking == false){
 		if (this->enemySearch(board) == true)

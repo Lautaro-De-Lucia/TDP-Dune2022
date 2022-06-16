@@ -123,7 +123,7 @@ std::vector<Position> Board::get_traversable_neighbors_of(Position pos, size_t d
     for (int i = pos.x-distance; i <= pos.x+distance; i++) {
         for (int j = pos.y-distance; j <= pos.y+distance; j++) {            
             // if i == 0 and j == 0, this is "pos"
-            if (i == 0 && j == 0)
+            if (i == pos.x && j == pos.y)
                 continue;
             Position neighbor(i, j);
             // check if neighbor is out of bounds
@@ -168,4 +168,23 @@ void Board::makeCreator(int building_ID){
         this->creators[TRIKE] = building_ID;     
     }
     std::cout << this->elements.at(building_ID)->getName() << " of ID: " << building_ID << " is now a creator" << std::endl;
+}
+
+std::vector<Position> Board::getSurroundings(Position position, int e_dim_x, int e_dim_y){
+    std::vector <Position> surroundings;
+    for (int i = (position.x - 1); i <= (position.x + e_dim_x); i++) {
+        for (int j = (position.y - 1); j <= (position.y + e_dim_y); j++) {
+            // ignore internal positions
+            if (((i < (position.x + e_dim_x)) && (i >= position.x)) && ((j < (position.y + e_dim_y)) && (j >= position.y)))
+                continue;
+            // check if out of bounds
+            if ((i >= this->dim_x) || (j >= this->dim_y))
+                continue;
+            if ((i < 0) || (j < 0))
+                continue;
+            Position neighbor(i, j);
+            surroundings.push_back(neighbor);
+        }
+    }
+    return surroundings;
 }

@@ -127,7 +127,12 @@ void Player::createUnit(int type){
         return;
     }
     //  Get possible creating locations
-    std::vector<Position> positions = elements.at(board.getCreator((unit_t) type))->getSurroundings(); //  FAILING HERE
+    Position building_pos = (elements.at(board.getCreator((unit_t) type)))->getPosition();
+    int building_dim_x = (elements.at(board.getCreator((unit_t) type)))->getDimX();
+    int building_dim_y = (elements.at(board.getCreator((unit_t) type)))->getDimY();
+
+    std::vector<Position> positions = board.getSurroundings(building_pos, building_dim_x, building_dim_y); //  FAILING HERE
+
     //  Create the unit
     player_t unit_faction = HARKONNEN;
     if(type == HARVESTER)
