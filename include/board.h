@@ -47,4 +47,5 @@ class Board{
     void addDepositPositions(std::vector<Position> & new_deposit_positions);
     std::vector<Position> & getDepositPositions();
     std::vector<Position> getSurroundings(Position position, int e_dim_x, int e_dim_y);
+    void removeCreator(unit_t unit);
 };

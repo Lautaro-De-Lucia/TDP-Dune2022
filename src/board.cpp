@@ -58,12 +58,26 @@ bool Board::hasEnemy(int x, int y, player_t player_faction){
 }
 
 void Board::dealDamage(int x, int y, int damage){
-    std::unique_ptr<Selectable> & element = this->elements.at(this->cells[x][y].getID());
+    std::unique_ptr<Selectable>& element = this->elements.at(this->cells[x][y].getID());
     element->receiveDamage(damage);
     if(element->getLP() <= 0){
         Position element_position = element->getPosition(); 
         std::vector<Position> positions = element->getPositions();
+
+        // TODO: refactor
+        int destroyed_building_id = this->cells[x][y].getID();
+        int unit_creator_id = -1;
+        unit_creator_id = this->getCreator(TRIKE);
+        if (destroyed_building_id == unit_creator_id)
+            this->removeCreator(TRIKE);
+        unit_creator_id = this->getCreator(HARVESTER);
+        if (destroyed_building_id == unit_creator_id)
+            this->removeCreator(HARVESTER);
+        
+        
         this->elements.erase(this->cells[x][y].getID());
+
+
         for (Position pos : positions)
             this->cells[pos.x][pos.y].disoccupy();
     }
@@ -168,6 +182,21 @@ void Board::makeCreator(int building_ID){
         this->creators[TRIKE] = building_ID;     
     }
     std::cout << this->elements.at(building_ID)->getName() << " of ID: " << building_ID << " is now a creator" << std::endl;
+}
+
+void Board::removeCreator(unit_t unit) {
+
+    switch (unit)
+    {
+    case TRIKE:
+        this->creators[TRIKE] = -1;
+        break;
+    case HARVESTER:
+        this->creators[HARVESTER] = -1;
+        break;
+    default:
+        break;
+    }
 }
 
 std::vector<Position> Board::getSurroundings(Position position, int e_dim_x, int e_dim_y){
