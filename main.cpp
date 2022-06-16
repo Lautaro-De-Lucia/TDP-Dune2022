@@ -18,8 +18,10 @@
 #define INIT_ENERGY 3000
 #define INIT_CENERGY 5000
 
-#define MAP_DIM_X 80
-#define MAP_DIM_Y 45
+#define MAP_FILE "/dune.map"
+
+#define MAP_DIM_X 90
+#define MAP_DIM_Y 60
 
 #define TOTAL_TILE_SPRITES 5
 
@@ -36,8 +38,8 @@ std::vector<std::vector<cell_t>> generate_map (std::string tile_map_file){
 		exit(1);
 	}
 	//	Read & load tiles
-	for(size_t i = 0 ; i < MAP_DIM_X ; i++ ){
-		for (size_t j = 0 ; j < MAP_DIM_Y ; j++){
+	for(size_t j = 0 ; j < MAP_DIM_Y ; j++ ){
+		for (size_t i = 0 ; i < MAP_DIM_X ; i++){
 			int type;
 			map >> type;
 			if (map.fail()){
@@ -105,7 +107,7 @@ void run_sdl() {
     SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,SDL_WINDOW_ALWAYS_ON_TOP);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
 
-    std::vector<std::vector<cell_t>> cells = generate_random_map();
+    std::vector<std::vector<cell_t>> cells = generate_map(DATA_PATH MAP_FILE);
 
     Camera cam(0,0,640,360,1280,720);
     CPlayer client_player(cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cells);
