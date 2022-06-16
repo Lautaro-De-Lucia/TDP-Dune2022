@@ -39,6 +39,7 @@ ADD_EXECUTABLE("${PROJECT_NAME}" main.cpp
             src/unitfactory.cpp
             src/socket.cpp
             src/resolver.cpp
+            src/protocol.cpp
             src/client_player.cpp 
             src/client_selectable.cpp
             src/client_printer.cpp
