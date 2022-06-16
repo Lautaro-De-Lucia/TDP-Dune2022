@@ -30,5 +30,10 @@ class Protocol {
     void receive_mouse_left_click(int& pos_x, int& pos_y, Socket& client_socket);
     void receive_mouse_right_click(int& pos_x, int& pos_y, Socket& client_socket);
     void receive_mouse_selection(int& pos_x_min, int& pos_x_max, int& pos_y_min, int& pos_y_max, Socket& client_socket);
-};
 
+    // server to client requests responses
+    void send_command_response(response_t response, Socket& client_socket);
+
+    // client side command status receiver
+    void receive_command_response(response_t& response, Socket& client_socket);
+};

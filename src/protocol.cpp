@@ -178,9 +178,19 @@ void Protocol::send_mouse_selection(int pos_x_min, int pos_x_max, int pos_y_min,
 
 void Protocol::send_idle(Socket& client_socket) {
 
+    command_t idle_command = IDLE;
+
+    uint8_t _idle_command = (uint8_t) idle_command;
+
+    uint8_t idle_command_buffer = (uint8_t) _idle_command - '0';
+
     int sent_size = -1;
     bool was_closed = false;
 
+    sent_size = client_socket.sendall(&idle_command_buffer, sizeof(idle_command_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    return;
 }
 
 void Protocol::receive_command(command_t& command, Socket& client_socket) {
@@ -296,7 +306,6 @@ void Protocol::receive_mouse_right_click(int& pos_x, int& pos_y, Socket& client_
     pos_y = (int) _pos_y;
 
     return;
-
 }
 
 void Protocol::receive_mouse_selection(int& pos_x_min, int& pos_x_max, int& pos_y_min, int& pos_y_max, Socket& client_socket) {
@@ -336,5 +345,34 @@ void Protocol::receive_mouse_selection(int& pos_x_min, int& pos_x_max, int& pos_
     pos_y_max = (int) _pos_y_max;
 
     return;
-    
+}
+
+void Protocol::send_command_response(response_t response, Socket& client_socket) {
+
+    uint8_t _response = (uint8_t) response;
+
+    uint8_t response_buffer = (uint8_t) _response - '0';
+
+    int sent_size = -1;
+    bool was_closed = false;
+
+    sent_size = client_socket.sendall(&response_buffer, sizeof(response_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    return;
+}
+
+void Protocol::receive_command_response(response_t& response, Socket& client_socket) {
+
+    uint8_t new_response_buffer;
+
+    int recv_size = -1;
+    bool was_closed = false;
+
+    recv_size = client_socket.recvall(&new_response_buffer, sizeof(new_response_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+
+    response = (response_t) new_response_buffer;
+
+    return;
 }
