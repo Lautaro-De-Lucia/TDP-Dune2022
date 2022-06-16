@@ -152,9 +152,8 @@ void run_sdl() {
 
     std::vector<std::vector<std::string>> cell_paths = generate_client_map(DATA_PATH MAP_FILE);
     std::vector<std::vector<cell_t>> cells = generate_server_map(DATA_PATH MAP_FILE);
-    Camera cam(0,0,640,360,1280,720);
-    
-    /*  EDITOR CRIOLLO
+    Camera cam(0,200,640,360,1280,720);
+/*    
     while(true){
     std::vector<State> server_data;
     std::vector<std::vector<std::string>> cell_paths = generate_client_map(DATA_PATH MAP_FILE);
@@ -162,11 +161,12 @@ void run_sdl() {
     client_player.update(server_data,1000,1000);
     sleep(1);
     }
-    */
-
+    
+*/
     CPlayer client_player(cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cell_paths);
     Player server(HARKONNEN,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cells,client_player);
     server.run();
+
 };
 
 
