@@ -13,13 +13,18 @@
 
 class Protocol {
  private:
- public:
-    Protocol();
-    ~Protocol();
 
     // exception throwers
     void handle_dispatch(bool was_closed, int sent_size);
     void handle_receive(bool was_closed, int recv_size);
+
+    // generic element receiver
+    void receive_element(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket);
+
+ public:
+
+    Protocol();
+    ~Protocol();
 
     // client to server requests
     void send_create_building_request(int type, int pos_x, int pos_y, Socket& client_socket);
@@ -57,12 +62,9 @@ class Protocol {
     // receive each type of unit & building
     void receive_trike(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, bool& attacking, Socket& client_socket);
     void receive_harvester(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, int& spice, bool& harvesting, Socket& client_socket);
-    void receive_air_trap(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, int& c_energy, int& spice, int& energy, Socket& client_socket);
-    void receive_barrack(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, int& spice, int& energy, Socket& client_socket);
-    void receive_refinery(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, int& c_spice, int& spice, int& energy, Socket& client_socket);
-
-    // generic element receiver
-    void receive_element(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket);
+    void receive_air_trap(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket);
+    void receive_barrack(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket);
+    void receive_refinery(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket);
 
     // communicate selectables collection size
     void send_selectables_size(int size, Socket& client_socket);
