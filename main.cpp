@@ -45,8 +45,16 @@ std::vector<std::vector<cell_t>> generate_server_map (std::string tile_map_file)
             int type;
             if (cell[0] == 'r')
                 type = ROCK;
-            if (cell[0] == 's')
-                type = SAND;          
+            if (cell[0] == 's'){
+                if(cell[1] == '0')
+                    type = SAND_EMPTY; 
+                if(cell[1] == '1')
+                    type = SAND_LITTLE;
+                if(cell[1] == '2')
+                    type = SAND_SOME;
+                if(cell[1] == '3')
+                    type = SAND_FULL;                               
+            }
             if (cell[0] == 'd')
                 type = DUNE;
             if (cell[0] == 'p')
@@ -117,15 +125,9 @@ std::vector<std::vector<cell_t>> generate_random_map () {
     map_cells[30][31] = PIT;
     map_cells[30][32] = PIT;
 
-    map_cells[20][15] = SAND;
-    map_cells[20][16] = SAND;
-    map_cells[20][17] = SAND;
-    map_cells[21][15] = SAND;
-    map_cells[21][16] = SAND;
-    map_cells[21][17] = SAND;
-    map_cells[22][15] = SAND;
-    map_cells[22][16] = SAND;
-    map_cells[22][17] = SAND;
+    map_cells[20][15] = SAND_FULL;
+    map_cells[20][16] = SAND_FULL;
+    map_cells[20][17] = SAND_FULL;
 
     return map_cells;
     
@@ -150,22 +152,37 @@ void run_sdl() {
     SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,0);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
 
-    std::vector<std::vector<std::string>> cell_paths = generate_client_map(DATA_PATH MAP_FILE);
-    std::vector<std::vector<cell_t>> cells = generate_server_map(DATA_PATH MAP_FILE);
+//    std::vector<std::vector<std::string>> cell_paths = generate_client_map(DATA_PATH MAP_FILE);
+//    std::vector<std::vector<cell_t>> cells = generate_server_map(DATA_PATH MAP_FILE);
     Camera cam(0,200,640,360,1280,720);
-/*    
+    
     while(true){
     std::vector<State> server_data;
     std::vector<std::vector<std::string>> cell_paths = generate_client_map(DATA_PATH MAP_FILE);
     CPlayer client_player(cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cell_paths);
     client_player.update(server_data,1000,1000);
+    SDL_Event event;
+    SDL_PollEvent(&event);
+    if( event.type == SDL_QUIT ) {
+        exit(1);
+    }
+    int x, y;
+    SDL_GetMouseState(&x, &y);
+    if (x < 80) 
+        cam.move(-10,0);
+    if (x > 1010 && x < 1090) 
+        cam.move(10,0);
+    if (y < 60) 
+        cam.move(0,-10);
+    if (y > 660) 
+        cam.move(0,10);
     sleep(1);
     }
     
-*/
-    CPlayer client_player(cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cell_paths);
-    Player server(HARKONNEN,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cells,client_player);
-    server.run();
+
+//    CPlayer client_player(cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cell_paths);
+//    Player server(HARKONNEN,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cells,client_player);
+//    server.run();
 
 };
 

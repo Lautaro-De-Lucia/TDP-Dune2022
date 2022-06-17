@@ -12,9 +12,9 @@ class Terrain {
 };
 
 class Sand : public Terrain {
-    size_t spice = DEF_SAND_SPICE;
+    size_t spice;
  public:
-    Sand();
+    Sand(int init_spice);
     virtual bool canTraverse();
     virtual bool canExtract();
     virtual bool canBuild();

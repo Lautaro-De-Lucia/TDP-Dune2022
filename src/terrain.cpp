@@ -2,7 +2,9 @@
 
 Terrain::Terrain(){}
 
-Sand::Sand():Terrain(){} 
+Sand::Sand(int init_spice):Terrain(){
+    this->spice = init_spice;
+} 
 bool Sand::canTraverse(){return true;}
 bool Sand::canExtract(){return this->spice > 0 ? true : false;}
 bool Sand::canBuild(){return false;}
