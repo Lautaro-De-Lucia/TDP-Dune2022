@@ -45,6 +45,8 @@ class Harvester : public Unit {
     virtual void update(State& state, Board& board);
     virtual void receiveDamage(int damage);
     virtual bool place(Board& board,std::vector<Position>& positions,int* spice);
+    int getSpice();
+    bool isHarvesting();
 
 };
 
@@ -67,4 +69,5 @@ class Trike : public Unit {
     virtual void update(State& state, Board& board);
     virtual void receiveDamage(int damage);
     virtual bool place(Board& board,std::vector<Position>& positions,int* spice);
+    bool isAttacking();
 };

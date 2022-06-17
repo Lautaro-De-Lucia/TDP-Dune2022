@@ -72,23 +72,30 @@ enum command_t {
     IDLE = 8,
 };
 
-
-enum unit_t{
-    HARVESTER = 1,
-    TRIKE = 2
-}; 
-
-enum cell_t{
+enum cell_t {
     ROCK = 0,
     SAND = 1,
     DUNE = 2,
     PIT = 3
 };
 
+enum unit_t {
+    HARVESTER = 1,
+    TRIKE = 2
+};
+
 enum building_t {
     AIR_TRAP = 1, 
     BARRACK = 2,
     REFINERY = 3
+};
+
+enum selectable_t {
+    SEL_HARVESTER = 1,
+    SEL_TRIKE = 2,
+    SEL_AIR_TRAP = 3,
+    SEL_BARRACK = 4,
+    SEL_REFINERY = 5
 };
 
 struct Position {
@@ -247,5 +254,3 @@ class accept_failed_exception : public std::exception {
 
 // ===============================================
 // ===============================================
-
-

@@ -20,6 +20,7 @@ class AirTrap : public Building {
  public:
     AirTrap(int ID,player_t faction, int LP, int spice, int energy, Position pos, int dim_x, int dim_y, int c_energy);
     bool place(Board& board, int pos_x, int pos_y, int& spice, int& spice_capacity, int& energy, int& energy_capacity);
+    int getCEnergy();
 };
 
 class Barrack : public Building {
@@ -33,4 +34,5 @@ class Refinery : public Building {
  public:
     Refinery(int ID,player_t faction, int LP, int spice, int energy, Position pos, int dim_x, int dim_y, int c_spice);
     bool place(Board& board, int pos_x, int pos_y, int& spice, int& spice_capacity, int& energy, int& energy_capacity);
+    int getCSpice();
 };
