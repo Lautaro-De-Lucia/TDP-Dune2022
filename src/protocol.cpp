@@ -681,8 +681,137 @@ void Protocol::send_element(Refinery& refinery, int ID, Socket& client_socket) {
     return;
 }
 
+void Protocol::receive_trike(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, bool& attacking, Socket& client_socket) {
 
-void Protocol::receive_element(Socket& client_socket) {
+    this->receive_element(id, lp, pos_x, pos_y, selected, client_socket);
+
+    uint8_t attacking_buffer;
+    uint8_t _attacking;
+
+    int recv_size = -1;
+    bool was_closed = false;
+
+    recv_size = client_socket.recvall(&attacking_buffer, sizeof(attacking_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _attacking = (uint8_t) attacking_buffer;
+    attacking = (bool) _attacking;
+
+    return;
+}
+
+void Protocol::receive_harvester(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, int& spice, bool& harvesting, Socket& client_socket) {
+
+    this->receive_element(id, lp, pos_x, pos_y, selected, client_socket);
+
+    uint8_t harvesting_buffer;
+    uint8_t _harvesting;
+    uint16_t spice_buffer;
+    uint16_t _spice;
+
+    int recv_size = -1;
+    bool was_closed = false;
+
+    recv_size = client_socket.recvall(&harvesting_buffer, sizeof(harvesting_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _harvesting = (uint8_t) harvesting_buffer;
+    recv_size = client_socket.recvall(&spice_buffer, sizeof(spice_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _spice = (uint16_t) ntohs(spice_buffer);
+
+    harvesting = (bool) _harvesting;
+    spice = (int) _spice;
+
+    return;
+}
+
+void Protocol::receive_air_trap(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, int& c_energy, int& spice, int& energy, Socket& client_socket) {
+
+    this->receive_element(id, lp, pos_x, pos_y, selected, client_socket);
+
+    uint16_t c_energy_buffer;
+    uint16_t _c_energy;
+    uint16_t spice_buffer;
+    uint16_t _spice;
+    uint16_t energy_buffer;
+    uint16_t _energy;
+    
+    int recv_size = -1;
+    bool was_closed = false;
+
+    recv_size = client_socket.recvall(&c_energy_buffer, sizeof(c_energy_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _c_energy = ntohs(c_energy_buffer);
+    recv_size = client_socket.recvall(&spice_buffer, sizeof(spice_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _spice = ntohs(spice_buffer);
+    recv_size = client_socket.recvall(&energy_buffer, sizeof(energy_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _energy = ntohs(c_energy_buffer);
+
+    c_energy = (int) _c_energy;
+    spice = (int) _spice;
+    energy = (int) _energy;
+
+    return;
+}
+
+void Protocol::receive_barrack(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, int& spice, int& energy, Socket& client_socket) {
+
+    this->receive_element(id, lp, pos_x, pos_y, selected, client_socket);
+
+    uint16_t spice_buffer;
+    uint16_t _spice;
+    uint16_t energy_buffer;
+    uint16_t _energy;
+
+    int recv_size = -1;
+    bool was_closed = false;
+
+    recv_size = client_socket.recvall(&spice_buffer, sizeof(spice_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _spice = ntohs(spice_buffer);
+    recv_size = client_socket.recvall(&energy_buffer, sizeof(energy_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _energy = ntohs(energy_buffer);
+
+    spice = (int) _spice;
+    energy = (int) _energy;
+
+    return;
+}
+
+void Protocol::receive_refinery(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, int& c_spice, int& spice, int& energy, Socket& client_socket) {
+
+    this->receive_element(id, lp, pos_x, pos_y, selected, client_socket);
+
+    int recv_size = -1;
+    bool was_closed = false;
+
+    uint16_t c_spice_buffer;
+    uint16_t _c_spice;
+    uint16_t spice_buffer;
+    uint16_t _spice;
+    uint16_t energy_buffer;
+    uint16_t _energy;
+
+    recv_size = client_socket.recvall(&c_spice_buffer, sizeof(c_spice_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _c_spice = ntohs(c_spice_buffer);
+    recv_size = client_socket.recvall(&spice_buffer, sizeof(spice_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _spice = ntohs(spice_buffer);
+    recv_size = client_socket.recvall(&energy_buffer, sizeof(energy_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _energy = ntohs(energy_buffer);
+
+    c_spice = (int) _c_spice;
+    spice = (int) _spice;
+    energy = (int) _energy;
+    
+    return;
+}
+
+void Protocol::receive_element(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket) {
 
     uint16_t id_buffer;
     uint16_t lp_buffer;
@@ -699,7 +828,38 @@ void Protocol::receive_element(Socket& client_socket) {
     int recv_size = -1;
     bool was_closed = false;
 
+    recv_size = client_socket.recvall(&id_buffer, sizeof(id_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _id = (uint16_t) ntohs(id_buffer);
 
+    recv_size = client_socket.recvall(&lp_buffer, sizeof(lp_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _lp = (uint16_t) ntohs(lp_buffer);
+
+    recv_size = client_socket.recvall(&pos_x_buffer, sizeof(pos_x_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _pos_x = (uint16_t) ntohs(pos_x_buffer);
+
+    recv_size = client_socket.recvall(&pos_y_buffer, sizeof(pos_y_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _pos_y = (uint16_t) ntohs(pos_y_buffer);
+
+    recv_size = client_socket.recvall(&selected_buffer, sizeof(selected_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _selected = (uint8_t) selected_buffer;
+
+    id = (int) _id;
+    lp = (int) _lp;
+    pos_x = (int) _pos_x;
+    pos_y = (int) _pos_y;
+    selected = (bool) _selected;
+
+    return;
+}
+
+
+
+/*
 
 //  Client::updateBoard(int toread){
 //      int pos_x;
@@ -714,7 +874,7 @@ void Protocol::receive_element(Socket& client_socket) {
 
 
 
-//  Client::updateElements(int toread){  
+//  Client::updateElements(int toread){
     //  C: [0,1,2,3,4,5]
     //  U: [0t,1t,2t,3t,4t,5t]
     //  while(i < this->updates.size()){this->updates[i] == false};  
@@ -747,12 +907,11 @@ void Protocol::receive_element(Socket& client_socket) {
     //              if(this->elements.contains(i))
     //                  this->elements.erase(i);
     //      
-/*
     //  void receive_trike(int & id, int & lp, int & pos_x, int & pos_y, bool selected, bool attacking){
     //      this->receiveUnit(id,lp,pos_x,pos_y,selected);      
     //      // lectura del attacking
     //      attacking <- lectura;
-*/
+
 
 //  Client::destroyElements(){
 //      std::vector<int> todestroy;
@@ -764,16 +923,108 @@ void Protocol::receive_element(Socket& client_socket) {
 //        this->elements.erase(id_to_destroy);
 //  }
 
-    selectable_t type;
-    receive_selectable_type(type, client_socket);
+*/
 
-    recv_size = client_socket.recvall(&id_buffer, sizeof(id_buffer), &was_closed);
-    handle_receive(was_closed, recv_size);
-    _id = (uint16_t) ntohs(id_buffer);
+void Protocol::send_selectables_size(int size, Socket& client_socket) {
 
-    recv_size = client_socket.recvall(&lp_buffer, sizeof(lp_buffer), &was_closed);
+    uint16_t _size = (uint16_t) size;
+    uint16_t size_buffer = (uint16_t) htons(_size);
+
+    int sent_size = -1;
+    bool was_closed = false;
+
+    sent_size = client_socket.sendall(&size_buffer, sizeof(size_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    return;
+}
+
+void Protocol::receive_selectables_size(int& size, Socket& client_socket) {
+
+    uint16_t size_buffer;
+    uint16_t _size;
+
+    int recv_size = -1;
+    bool was_closed = false;
+
+    recv_size = client_socket.recvall(&size_buffer, sizeof(size_buffer), &was_closed);
     handle_receive(was_closed, recv_size);
-    _lp = (uint16_t) ntohs(lp_buffer);
+    _size = (uint16_t) ntohs(size_buffer);
+
+    size = (int) _size;
+
+    return;
+}
+
+
+void Protocol::send_sand_cells_size(int size, Socket& client_socket) {
+
+    uint16_t _size = (uint16_t) size;
+    uint16_t size_buffer = (uint16_t) htons(_size);
+
+    int sent_size = -1;
+    bool was_closed = false;
+
+    sent_size = client_socket.sendall(&size_buffer, sizeof(size_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    return;
+}
+
+void Protocol::receive_sand_cells_size(int& size, Socket& client_socket) {
+
+    uint16_t size_buffer;
+    uint16_t _size;
+
+    int recv_size = -1;
+    bool was_closed = false;
+
+    recv_size = client_socket.recvall(&size_buffer, sizeof(size_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _size = (uint16_t) ntohs(size_buffer);
+
+    size = (int) _size;
+
+    return;
+}
+
+void Protocol::send_sand_cell(int pos_x, int pos_y, int spice, Socket& client_socket) {
+
+    uint16_t _pos_x = (uint16_t) pos_x;
+    uint16_t _pos_y = (uint16_t) pos_y;
+    uint16_t _spice = (uint16_t) spice;
+
+    uint16_t pos_x_buffer = (uint16_t) htons(_pos_x);
+    uint16_t pos_y_buffer = (uint16_t) htons(_pos_y);
+    uint16_t spice_buffer = (uint16_t) htons(_spice);
+
+    int sent_size = -1;
+    bool was_closed = false;
+
+    sent_size = client_socket.sendall(&pos_x_buffer, sizeof(pos_x_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&pos_y_buffer, sizeof(pos_y_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&spice_buffer, sizeof(spice_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    return;
+}
+
+void Protocol::receive_sand_cell(int& pos_x, int& pos_y, int& spice, Socket& client_socket) {
+
+    uint16_t pos_x_buffer;
+    uint16_t pos_y_buffer;
+    uint16_t spice_buffer;
+
+    uint16_t _pos_x;
+    uint16_t _pos_y;
+    uint16_t _spice;
+
+    int recv_size = -1;
+    bool was_closed = false;
 
     recv_size = client_socket.recvall(&pos_x_buffer, sizeof(pos_x_buffer), &was_closed);
     handle_receive(was_closed, recv_size);
@@ -783,113 +1034,13 @@ void Protocol::receive_element(Socket& client_socket) {
     handle_receive(was_closed, recv_size);
     _pos_y = (uint16_t) ntohs(pos_y_buffer);
 
-    recv_size = client_socket.recvall(&selected_buffer, sizeof(selected_buffer), &was_closed);
+    recv_size = client_socket.recvall(&spice_buffer, sizeof(spice_buffer), &was_closed);
     handle_receive(was_closed, recv_size);
-    _selected = (uint8_t) selected_buffer;
+    _spice = (uint16_t) ntohs(spice_buffer);
 
-    int id = (int) _id;
-    int lp = (int) _lp;
-    int pos_x = (int) _pos_x;
-    int pos_y = (int) _pos_y;
-    bool selected = (bool) _selected;
-
-    switch (type)
-    {
-    case SEL_TRIKE: {
-
-        uint8_t attacking_buffer;
-        uint8_t _attacking;
-        recv_size = client_socket.recvall(&attacking_buffer, sizeof(attacking_buffer), &was_closed);
-        handle_receive(was_closed, recv_size);
-        _attacking = (uint8_t) attacking_buffer;
-        bool attacking = (bool) _attacking;
-        // do something with this...
-        break; 
-    }
-    
-    case SEL_HARVESTER: {
-        uint8_t harvesting_buffer;
-        uint8_t _harvesting;
-        uint16_t spice_buffer;
-        uint16_t _spice;
-        recv_size = client_socket.recvall(&harvesting_buffer, sizeof(harvesting_buffer), &was_closed);
-        handle_receive(was_closed, recv_size);
-        _harvesting = (uint8_t) harvesting_buffer;
-        recv_size = client_socket.recvall(&spice_buffer, sizeof(spice_buffer), &was_closed);
-        handle_receive(was_closed, recv_size);
-        _spice = (uint16_t) ntohs(spice_buffer);
-        bool harvesting = (bool) _harvesting;
-        int spice = (int) _spice;
-        // do something with this...
-        break;  
-    }
-      
-    case SEL_AIR_TRAP: {
-        uint16_t c_energy_buffer;
-        uint16_t _c_energy;
-        uint16_t spice_buffer;
-        uint16_t _spice;
-        uint16_t energy_buffer;
-        uint16_t _energy;
-        recv_size = client_socket.recvall(&c_energy_buffer, sizeof(c_energy_buffer), &was_closed);
-        handle_receive(was_closed, recv_size);
-        _c_energy = ntohs(c_energy_buffer);
-        recv_size = client_socket.recvall(&spice_buffer, sizeof(spice_buffer), &was_closed);
-        handle_receive(was_closed, recv_size);
-        _spice = ntohs(spice_buffer);
-        recv_size = client_socket.recvall(&energy_buffer, sizeof(energy_buffer), &was_closed);
-        handle_receive(was_closed, recv_size);
-        _energy = ntohs(c_energy_buffer);
-        int c_energy = (int) _c_energy;
-        int spice = (int) _spice;
-        int energy = (int) _energy;
-        // do something with this...
-        break;
-    }
-
-    case SEL_BARRACK: {
-        uint16_t spice_buffer;
-        uint16_t _spice;
-        uint16_t energy_buffer;
-        uint16_t _energy;
-        recv_size = client_socket.recvall(&spice_buffer, sizeof(spice_buffer), &was_closed);
-        handle_receive(was_closed, recv_size);
-        _spice = ntohs(spice_buffer);
-        recv_size = client_socket.recvall(&energy_buffer, sizeof(energy_buffer), &was_closed);
-        handle_receive(was_closed, recv_size);
-        _energy = ntohs(energy_buffer);
-        int spice = (int) _spice;
-        int energy = (int) _energy;
-        // do something with this...
-        break;
-    }
-
-    case SEL_REFINERY: {
-        uint16_t c_spice_buffer;
-        uint16_t _c_spice;
-        uint16_t spice_buffer;
-        uint16_t _spice;
-        uint16_t energy_buffer;
-        uint16_t _energy;
-        recv_size = client_socket.recvall(&c_spice_buffer, sizeof(c_spice_buffer), &was_closed);
-        handle_receive(was_closed, recv_size);
-        _c_spice = ntohs(c_spice_buffer);
-        recv_size = client_socket.recvall(&spice_buffer, sizeof(spice_buffer), &was_closed);
-        handle_receive(was_closed, recv_size);
-        _spice = ntohs(spice_buffer);
-        recv_size = client_socket.recvall(&energy_buffer, sizeof(energy_buffer), &was_closed);
-        handle_receive(was_closed, recv_size);
-        _energy = ntohs(energy_buffer);
-        int c_spice = (int) _c_spice;
-        int spice = (int) _spice;
-        int energy = (int) _energy;
-        // do something with this...
-        break;
-    }
-    
-    default:
-        break;
-    }
+    pos_x = (int) _pos_x;
+    pos_y = (int) _pos_y;
+    spice = (int) _spice;
 
     return;
 }

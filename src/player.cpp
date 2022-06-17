@@ -188,7 +188,7 @@ void Player::handleRightClick(int x, int y){
     //  Traverse elements and make each selected unit handle the cell
     for (auto& e : this->elements){
         if (e.second->isSelected()){
-            std::cout << e.first << ": ";
+            //std::cout << e.first << ": ";
             e.second->react(pos_x,pos_y,board);
         }
     }
@@ -200,7 +200,7 @@ void Player::reportStateToClient(){
     this->states.clear();
     for (auto& e : this->elements){
         state.ID = e.first;
-        std::cout << state.ID << std::endl;
+        //std::cout << state.ID << std::endl;
         e.second->getState(state);
         states.push_back(state);
     }
