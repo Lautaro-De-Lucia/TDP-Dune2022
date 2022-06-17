@@ -521,28 +521,18 @@ void Protocol::send_element(AirTrap& air_trap, int ID, Socket& client_socket) {
     int pos_x = air_trap.getPosition().x;
     int pos_y = air_trap.getPosition().y;
     bool selected = air_trap.isSelected();
-    int c_energy = air_trap.getCEnergy();
-    int spice = air_trap.getSpice();
-    int energy = air_trap.getEnergy();
 
     uint16_t _id = (uint16_t) id;
     uint16_t _lp = (uint16_t) lp;
     uint16_t _pos_x = (uint16_t) pos_x;
     uint16_t _pos_y = (uint16_t) pos_y;
     uint8_t _selected = (uint8_t) selected;
-    uint16_t _c_energy = (uint16_t) c_energy;
-    uint16_t _spice = (uint16_t) spice;
-    uint16_t _energy = (uint16_t) energy;
 
     uint16_t id_buffer = (uint16_t) htons(_id);
     uint16_t lp_buffer = (uint16_t) htons(_lp);
     uint16_t pos_x_buffer = (uint16_t) htons(_pos_x);
     uint16_t pos_y_buffer = (uint16_t) htons(_pos_y);
     uint8_t selected_buffer = (uint8_t) _selected - '0';
-    uint16_t c_energy_buffer = (uint16_t) htons(_c_energy);
-    uint16_t spice_buffer = (uint16_t) htons(_spice);
-    uint16_t energy_buffer = (uint16_t) htons(_energy);
-
 
     int sent_size = -1;
     bool was_closed = false;
@@ -560,12 +550,6 @@ void Protocol::send_element(AirTrap& air_trap, int ID, Socket& client_socket) {
     handle_dispatch(was_closed, sent_size);
 
     sent_size = client_socket.sendall(&selected_buffer, sizeof(selected_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
-
-    sent_size = client_socket.sendall(&c_energy_buffer, sizeof(c_energy_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
-
-    sent_size = client_socket.sendall(&energy_buffer, sizeof(energy_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
 
     return;
@@ -580,24 +564,18 @@ void Protocol::send_element(Barrack& barrack, int ID, Socket& client_socket) {
     int pos_x = barrack.getPosition().x;
     int pos_y = barrack.getPosition().y;
     bool selected = barrack.isSelected();
-    int spice = barrack.getSpice();
-    int energy = barrack.getEnergy();
 
     uint16_t _id = (uint16_t) id;
     uint16_t _lp = (uint16_t) lp;
     uint16_t _pos_x = (uint16_t) pos_x;
     uint16_t _pos_y = (uint16_t) pos_y;
     uint8_t _selected = (uint8_t) selected;
-    uint16_t _spice = (uint16_t) spice;
-    uint16_t _energy = (uint16_t) energy;
 
     uint16_t id_buffer = (uint16_t) htons(_id);
     uint16_t lp_buffer = (uint16_t) htons(_lp);
     uint16_t pos_x_buffer = (uint16_t) htons(_pos_x);
     uint16_t pos_y_buffer = (uint16_t) htons(_pos_y);
     uint8_t selected_buffer = (uint8_t) _selected - '0';
-    uint16_t spice_buffer = (uint16_t) htons(_spice);
-    uint16_t energy_buffer = (uint16_t) htons(_energy);
 
     int sent_size = -1;
     bool was_closed = false;
@@ -615,9 +593,6 @@ void Protocol::send_element(Barrack& barrack, int ID, Socket& client_socket) {
     handle_dispatch(was_closed, sent_size);
 
     sent_size = client_socket.sendall(&selected_buffer, sizeof(selected_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
-
-    sent_size = client_socket.sendall(&energy_buffer, sizeof(energy_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
 
     return;
@@ -632,27 +607,18 @@ void Protocol::send_element(Refinery& refinery, int ID, Socket& client_socket) {
     int pos_x = refinery.getPosition().x;
     int pos_y = refinery.getPosition().y;
     bool selected = refinery.isSelected();
-    int c_spice = refinery.getCSpice();
-    int spice = refinery.getSpice();
-    int energy = refinery.getEnergy();
 
     uint16_t _id = (uint16_t) id;
     uint16_t _lp = (uint16_t) lp;
     uint16_t _pos_x = (uint16_t) pos_x;
     uint16_t _pos_y = (uint16_t) pos_y;
     uint8_t _selected = (uint8_t) selected;
-    uint16_t _c_spice = (uint16_t) c_spice;
-    uint16_t _spice = (uint16_t) spice;
-    uint16_t _energy = (uint16_t) energy;
 
     uint16_t id_buffer = (uint16_t) htons(_id);
     uint16_t lp_buffer = (uint16_t) htons(_lp);
     uint16_t pos_x_buffer = (uint16_t) htons(_pos_x);
     uint16_t pos_y_buffer = (uint16_t) htons(_pos_y);
     uint8_t selected_buffer = (uint8_t) _selected - '0';
-    uint16_t c_spice_buffer = (uint16_t) htons(_c_spice);
-    uint16_t spice_buffer = (uint16_t) htons(_spice);
-    uint16_t energy_buffer = (uint16_t) htons(_energy);
 
     int sent_size = -1;
     bool was_closed = false;
@@ -670,12 +636,6 @@ void Protocol::send_element(Refinery& refinery, int ID, Socket& client_socket) {
     handle_dispatch(was_closed, sent_size);
 
     sent_size = client_socket.sendall(&selected_buffer, sizeof(selected_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
-
-    sent_size = client_socket.sendall(&c_spice_buffer, sizeof(c_spice_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
-
-    sent_size = client_socket.sendall(&energy_buffer, sizeof(energy_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
 
     return;
@@ -724,90 +684,23 @@ void Protocol::receive_harvester(int& id, int& lp, int& pos_x, int& pos_y, bool&
     return;
 }
 
-void Protocol::receive_air_trap(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, int& c_energy, int& spice, int& energy, Socket& client_socket) {
+void Protocol::receive_air_trap(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket) {
 
     this->receive_element(id, lp, pos_x, pos_y, selected, client_socket);
-
-    uint16_t c_energy_buffer;
-    uint16_t _c_energy;
-    uint16_t spice_buffer;
-    uint16_t _spice;
-    uint16_t energy_buffer;
-    uint16_t _energy;
-    
-    int recv_size = -1;
-    bool was_closed = false;
-
-    recv_size = client_socket.recvall(&c_energy_buffer, sizeof(c_energy_buffer), &was_closed);
-    handle_receive(was_closed, recv_size);
-    _c_energy = ntohs(c_energy_buffer);
-    recv_size = client_socket.recvall(&spice_buffer, sizeof(spice_buffer), &was_closed);
-    handle_receive(was_closed, recv_size);
-    _spice = ntohs(spice_buffer);
-    recv_size = client_socket.recvall(&energy_buffer, sizeof(energy_buffer), &was_closed);
-    handle_receive(was_closed, recv_size);
-    _energy = ntohs(c_energy_buffer);
-
-    c_energy = (int) _c_energy;
-    spice = (int) _spice;
-    energy = (int) _energy;
 
     return;
 }
 
-void Protocol::receive_barrack(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, int& spice, int& energy, Socket& client_socket) {
+void Protocol::receive_barrack(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket) {
 
     this->receive_element(id, lp, pos_x, pos_y, selected, client_socket);
-
-    uint16_t spice_buffer;
-    uint16_t _spice;
-    uint16_t energy_buffer;
-    uint16_t _energy;
-
-    int recv_size = -1;
-    bool was_closed = false;
-
-    recv_size = client_socket.recvall(&spice_buffer, sizeof(spice_buffer), &was_closed);
-    handle_receive(was_closed, recv_size);
-    _spice = ntohs(spice_buffer);
-    recv_size = client_socket.recvall(&energy_buffer, sizeof(energy_buffer), &was_closed);
-    handle_receive(was_closed, recv_size);
-    _energy = ntohs(energy_buffer);
-
-    spice = (int) _spice;
-    energy = (int) _energy;
 
     return;
 }
 
-void Protocol::receive_refinery(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, int& c_spice, int& spice, int& energy, Socket& client_socket) {
+void Protocol::receive_refinery(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket) {
 
-    this->receive_element(id, lp, pos_x, pos_y, selected, client_socket);
-
-    int recv_size = -1;
-    bool was_closed = false;
-
-    uint16_t c_spice_buffer;
-    uint16_t _c_spice;
-    uint16_t spice_buffer;
-    uint16_t _spice;
-    uint16_t energy_buffer;
-    uint16_t _energy;
-
-    recv_size = client_socket.recvall(&c_spice_buffer, sizeof(c_spice_buffer), &was_closed);
-    handle_receive(was_closed, recv_size);
-    _c_spice = ntohs(c_spice_buffer);
-    recv_size = client_socket.recvall(&spice_buffer, sizeof(spice_buffer), &was_closed);
-    handle_receive(was_closed, recv_size);
-    _spice = ntohs(spice_buffer);
-    recv_size = client_socket.recvall(&energy_buffer, sizeof(energy_buffer), &was_closed);
-    handle_receive(was_closed, recv_size);
-    _energy = ntohs(energy_buffer);
-
-    c_spice = (int) _c_spice;
-    spice = (int) _spice;
-    energy = (int) _energy;
-    
+    this->receive_element(id, lp, pos_x, pos_y, selected, client_socket);    
     return;
 }
 
@@ -857,74 +750,6 @@ void Protocol::receive_element(int& id, int& lp, int& pos_x, int& pos_y, bool& s
     return;
 }
 
-
-
-/*
-
-//  Client::updateBoard(int toread){
-//      int pos_x;
-//      int pos_y;
-//      int type;
-//      for (size_t i = 0; i < toread; i++){    
-//          this->protocol.receiveCell(pos_x,pos_y,type);
-//          this->map_cells[pos_x][pos_y].setType(type);
-//      }
-//  }
-
-
-
-
-//  Client::updateElements(int toread){
-    //  C: [0,1,2,3,4,5]
-    //  U: [0t,1t,2t,3t,4t,5t]
-    //  while(i < this->updates.size()){this->updates[i] == false};  
-    //  U: [0f,1f,2f,3f,4f,5f]
-    //  while(i < toread){
-    //  S: [0,1,2,4,5,6,7,8]
-    //  this->protocol.receive_selectable_type(type,this->socket)  
-    //  switch(type)
-    //      case TRIKE: 
-    //          this->protocol.receive_trike(id,lp,pos_x,pos_y,selected,attacking);
-    //          if(this->contains(id))
-    //              this->elements.at(id).update(lp,pos_x,pos_y,selected,attacking);
-    //              this->updates[id] == true;
-    //          else   
-    //              this->elements.add({id,new Trike(TRIKE,lp,pos_x,pos_y,selected,attacking)})
-    //              this->updates.push_back(true);
-    //           // (ATTR: std::vector<bool> updates)
-    //      ...
-    //      case REFINERY:
-    //          this->protocol.receive_refinery(id,lp,selected);
-    //          this->elements.at(id).update(lp,selected);
-    //      
-    //      }
-    //      i++
-    //      [0t,1t,2t,3f,4t,5t,6t,7t,8t]
-    //  }
-    //      //  Destroy elements
-    //      for (size_t i = 0 ; i < this->updates.size() ; i++)
-    //          if(this->updates[i] == false)
-    //              if(this->elements.contains(i))
-    //                  this->elements.erase(i);
-    //      
-    //  void receive_trike(int & id, int & lp, int & pos_x, int & pos_y, bool selected, bool attacking){
-    //      this->receiveUnit(id,lp,pos_x,pos_y,selected);      
-    //      // lectura del attacking
-    //      attacking <- lectura;
-
-
-//  Client::destroyElements(){
-//      std::vector<int> todestroy;
-//      for (size_t i = 0 ; i < this->updates.size() ; i++){
-//          if(this->contains(i) && this->updates[i] == false)
-//              todestroy.push_back(i);
-//      }
-//      for(int id_to_destroy : this->todestroy)
-//        this->elements.erase(id_to_destroy);
-//  }
-
-*/
-
 void Protocol::send_selectables_size(int size, Socket& client_socket) {
 
     uint16_t _size = (uint16_t) size;
@@ -955,7 +780,6 @@ void Protocol::receive_selectables_size(int& size, Socket& client_socket) {
 
     return;
 }
-
 
 void Protocol::send_sand_cells_size(int size, Socket& client_socket) {
 
@@ -1044,3 +868,69 @@ void Protocol::receive_sand_cell(int& pos_x, int& pos_y, int& spice, Socket& cli
 
     return;
 }
+
+/*
+
+//  Client::updateBoard(int toread){
+//      int pos_x;
+//      int pos_y;
+//      int type;
+//      for (size_t i = 0; i < toread; i++){    
+//          this->protocol.receiveCell(pos_x,pos_y,type);
+//          this->map_cells[pos_x][pos_y].setType(type);
+//      }
+//  }
+
+
+
+
+//  Client::updateElements(int toread){
+    //  C: [0,1,2,3,4,5]
+    //  U: [0t,1t,2t,3t,4t,5t]
+    //  while(i < this->updates.size()){this->updates[i] == false};  
+    //  U: [0f,1f,2f,3f,4f,5f]
+    //  while(i < toread){
+    //  S: [0,1,2,4,5,6,7,8]
+    //  this->protocol.receive_selectable_type(type,this->socket)  
+    //  switch(type)
+    //      case TRIKE: 
+    //          this->protocol.receive_trike(id,lp,pos_x,pos_y,selected,attacking);
+    //          if(this->contains(id))
+    //              this->elements.at(id).update(lp,pos_x,pos_y,selected,attacking);
+    //              this->updates[id] == true;
+    //          else   
+    //              this->elements.add({id,new Trike(TRIKE,lp,pos_x,pos_y,selected,attacking)})
+    //              this->updates.push_back(true);
+    //           // (ATTR: std::vector<bool> updates)
+    //      ...
+    //      case REFINERY:
+    //          this->protocol.receive_refinery(id,lp,selected);
+    //          this->elements.at(id).update(lp,selected);
+    //      
+    //      }
+    //      i++
+    //      [0t,1t,2t,3f,4t,5t,6t,7t,8t]
+    //  }
+    //      //  Destroy elements
+    //      for (size_t i = 0 ; i < this->updates.size() ; i++)
+    //          if(this->updates[i] == false)
+    //              if(this->elements.contains(i))
+    //                  this->elements.erase(i);
+    //      
+    //  void receive_trike(int & id, int & lp, int & pos_x, int & pos_y, bool selected, bool attacking){
+    //      this->receiveUnit(id,lp,pos_x,pos_y,selected);      
+    //      // lectura del attacking
+    //      attacking <- lectura;
+
+
+//  Client::destroyElements(){
+//      std::vector<int> todestroy;
+//      for (size_t i = 0 ; i < this->updates.size() ; i++){
+//          if(this->contains(i) && this->updates[i] == false)
+//              todestroy.push_back(i);
+//      }
+//      for(int id_to_destroy : this->todestroy)
+//        this->elements.erase(id_to_destroy);
+//  }
+
+*/
