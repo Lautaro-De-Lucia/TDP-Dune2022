@@ -145,15 +145,15 @@ void Protocol::send_mouse_selection(int pos_x_min, int pos_x_max, int pos_y_min,
 
     uint8_t _selection_command = (uint8_t) selection_command;
     uint16_t _pos_x_min = (uint16_t) pos_x_min;
-    uint16_t _pos_x_max= (uint16_t) pos_x_max;
+    uint16_t _pos_x_max = (uint16_t) pos_x_max;
     uint16_t _pos_y_min = (uint16_t) pos_y_min;
-    uint16_t _pos_y_max= (uint16_t) pos_y_max;
+    uint16_t _pos_y_max = (uint16_t) pos_y_max;
 
-    uint8_t selection_command_buffer = (uint8_t) selection_command - '0';
-    uint16_t pos_x_min_buffer = (uint16_t) htons(pos_x_min);
-    uint16_t pos_x_max_buffer = (uint16_t) htons(pos_x_max);
-    uint16_t pos_y_min_buffer = (uint16_t) htons(pos_y_min);
-    uint16_t pos_y_max_buffer = (uint16_t) htons(pos_y_max);
+    uint8_t selection_command_buffer = (uint8_t) _selection_command - '0';
+    uint16_t pos_x_min_buffer = (uint16_t) htons(_pos_x_min);
+    uint16_t pos_x_max_buffer = (uint16_t) htons(_pos_x_max);
+    uint16_t pos_y_min_buffer = (uint16_t) htons(_pos_y_min);
+    uint16_t pos_y_max_buffer = (uint16_t) htons(_pos_y_max);
 
     int sent_size = -1;
     bool was_closed = false;
@@ -698,6 +698,12 @@ void Protocol::receive_element(Socket& client_socket) {
 
     int recv_size = -1;
     bool was_closed = false;
+
+//
+//
+//
+
+
 
     selectable_t type;
     receive_selectable_type(type, client_socket);
