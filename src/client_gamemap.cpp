@@ -16,17 +16,34 @@ void MapCell::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
 	);
 }
 
-GameMap::GameMap(SDL2pp::Renderer& renderer,std::vector<std::vector<std::string>>& cells) {
-	size_t dim_x = cells.size();
-	size_t dim_y = cells[0].size();
-    for (size_t j = 0 ; j < dim_y ; j++) {
-        for (size_t i = 0 ; i < dim_x ; i++) {
-			map_cells.push_back(MapCell(renderer,cells[i][j].c_str(),i,j));	
+GameMap::GameMap(SDL2pp::Renderer& renderer,std::vector<std::vector<std::string>>& cell_paths) {
+	this->dim_x = cell_paths.size();
+	this->dim_y = cell_paths[0].size();
+	this->map_cells.resize(dim_x);
+	for ( size_t i = 0; i < dim_x; ++i )
+		map_cells[i].resize(dim_y);
+    for (size_t j = 0 ; j < this->dim_y ; j++) {
+        for (size_t i = 0 ; i < this->dim_x ; i++) {	
+			map_cells[i][j] = std::make_unique<MapCell>(renderer,cell_paths[i][j].c_str(),i,j);
         }
     }
 }
 
 void GameMap::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
-	for (size_t i = 0 ; i < this->map_cells.size() ; i++)
-		this->map_cells[i].render(renderer, cam_pos_x, cam_pos_y);
+    for (size_t j = 0 ; j < this->dim_y ; j++) 
+        for (size_t i = 0 ; i < this->dim_x ; i++)
+			this->map_cells[i][j]->render(renderer, cam_pos_x, cam_pos_y);
+}
+
+void GameMap::updateCells(SDL2pp::Renderer& renderer,std::vector<Position> sand_positions,std::vector<int> spice) {
+	for(size_t i = 0; i < spice.size(); i++){
+		if (spice[i] == 0)
+			map_cells[sand_positions[i].x][sand_positions[i].y] = std::make_unique<MapCell>(renderer,"/home/lautaro/Documents/FACULTAD/TDP/Clonado2/TDP-Dune2022/data/mapsprites/s0",sand_positions[i].x,sand_positions[i].y);
+		if (spice[i] < 0 && spice[i] < 200)
+			map_cells[sand_positions[i].x][sand_positions[i].y] = std::make_unique<MapCell>(renderer,"/home/lautaro/Documents/FACULTAD/TDP/Clonado2/TDP-Dune2022/data/mapsprites/s1",sand_positions[i].x,sand_positions[i].y);
+		if (spice[i] < 200 && spice[i] < 500)
+			map_cells[sand_positions[i].x][sand_positions[i].y] = std::make_unique<MapCell>(renderer,"/home/lautaro/Documents/FACULTAD/TDP/Clonado2/TDP-Dune2022/data/mapsprites/s2",sand_positions[i].x,sand_positions[i].y);
+		if (spice[i] < 500 && spice[i] < 1000)
+			map_cells[sand_positions[i].x][sand_positions[i].y] = std::make_unique<MapCell>(renderer,"/home/lautaro/Documents/FACULTAD/TDP/Clonado2/TDP-Dune2022/data/mapsprites/s3",sand_positions[i].x,sand_positions[i].y);
+	}
 }

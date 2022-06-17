@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <memory>
 #include <unistd.h>
 #include <SDL2pp/SDL2pp.hh>
 
@@ -26,8 +27,12 @@ class MapCell{
 };
 class GameMap {
  private:
-    std::vector<MapCell> map_cells;
+    int dim_x;
+    int dim_y;
+    std::vector<std::vector<std::unique_ptr<MapCell>>> map_cells;
+    std::vector<Position> destroyed_positions;
  public:
     GameMap(SDL2pp::Renderer& renderer,std::vector<std::vector<std::string>>& cells);
+    void updateCells(SDL2pp::Renderer& renderer,std::vector<Position> sand_positions,std::vector<int> spice);
     void render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
 };
