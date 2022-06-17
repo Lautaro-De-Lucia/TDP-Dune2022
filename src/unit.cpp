@@ -210,7 +210,7 @@ void Harvester::deposit(Board & board){
     this->move(this->deposit_position.x,this->deposit_position.y,board);
 }
 
-void Harvester::deposit(int x, int y,Board & board){
+void Harvester::deposit(int x, int y,Board & board) {
     size_t best_distance = 1000;
     Position refinery_position(x,y);
     Position best_position;
@@ -224,6 +224,14 @@ void Harvester::deposit(int x, int y,Board & board){
     this->deposit_position = best_position;
     this->depositing = true;
     this->move(this->deposit_position.x,this->deposit_position.y,board);
+}
+
+int Harvester::getSpice() {
+    return this->stored_spice;
+}
+
+bool Harvester::isHarvesting() {
+    return this->harvesting;
 }
 
 Trike::Trike(int ID,player_t faction, int LP,int spice, Position pos, int dim_x, int dim_y,int speed,int attack,int range)
@@ -349,4 +357,8 @@ void Trike::update(State & state, Board& board){
 
 void Trike::occupy(Board & board){
     board.getCell(this->position.x,this->position.y).occupy(this->ID);
+}
+
+bool Trike::isAttacking() {
+    return this->attacking;
 }

@@ -6,7 +6,10 @@
 #include "socket.h"
 #include "common_utils.h"
 #include "selectable.h"
+#include "unit.h"
+#include "building.h"
 #include "client_selectable.h"
+#include "client_gamemap.h"
 
 class Protocol {
  private:
@@ -14,6 +17,7 @@ class Protocol {
     Protocol();
     ~Protocol();
 
+    // exception throwers
     void handle_dispatch(bool was_closed, int sent_size);
     void handle_receive(bool was_closed, int recv_size);
 
@@ -39,9 +43,18 @@ class Protocol {
     // client side command status receiver
     void receive_command_response(response_t& response, Socket& client_socket);
 
-    // server to client game state report
-    void send_game_state(const std::map<int, std::unique_ptr<Selectable>>& elements, Socket& client_socket);
+    // single send/receive type of selectable
+    void send_selectable_type(selectable_t type, Socket& client_socket);
+    void receive_selectable_type(selectable_t& type, Socket& client_socket);
 
-    // client side game state receiver
-    void receive_game_state(std::map<int, std::unique_ptr<CSelectable>>& elements, Socket& client_socket);
+    // send each type of unit & building
+    void send_element(Trike& trike, int ID, Socket& client_socket);
+    void send_element(Harvester& harvester, int ID, Socket& client_socket);
+    void send_element(AirTrap& air_trap, int ID, Socket& client_socket);
+    void send_element(Barrack& barrack, int ID, Socket& client_socket);
+    void send_element(Refinery& air_trap, int ID, Socket& client_socket);
+
+    // TODO: do something with the received data
+    // receive any element
+    void receive_element(Socket& client_socket);
 };

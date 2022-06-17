@@ -58,6 +58,10 @@ bool AirTrap::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capac
     return true;
 }
 
+int AirTrap::getCEnergy() {
+    return this->c_energy;
+}
+
 Barrack::Barrack(int ID,player_t faction,int LP,int spice,int energy, Position pos, int dim_x,int dim_y)
 :
 Building(ID,faction,LP,spice,energy,pos,dim_x,dim_y)
@@ -115,4 +119,8 @@ bool Refinery::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capa
     board.addDepositPositions(deposit_positions);
 
     return true;
+}
+
+int Refinery::getCSpice() {
+    return this->c_spice;
 }
