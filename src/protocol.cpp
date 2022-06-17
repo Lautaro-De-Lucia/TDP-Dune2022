@@ -750,10 +750,6 @@ void Protocol::receive_element(int& id, int& lp, int& pos_x, int& pos_y, bool& s
     return;
 }
 
-
-
-
-
 void Protocol::send_selectables_size(int size, Socket& client_socket) {
 
     uint16_t _size = (uint16_t) size;
