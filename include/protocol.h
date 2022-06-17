@@ -54,4 +54,7 @@ class Protocol {
     void send_element(Barrack& barrack, int ID, Socket& client_socket);
     void send_element(Refinery& air_trap, int ID, Socket& client_socket);
 
+    // TODO: do something with the received data
+    // receive any element
+    void receive_element(Socket& client_socket);
 };
