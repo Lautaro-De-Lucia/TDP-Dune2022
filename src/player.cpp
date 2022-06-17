@@ -195,16 +195,23 @@ void Player::handleRightClick(int x, int y){
 }
 
 void Player::reportStateToClient(){
+    //  Selectables state
     State state;
     this->states.clear();
     for (auto& e : this->elements){
         state.ID = e.first;
+        std::cout << state.ID << std::endl;
         e.second->getState(state);
         states.push_back(state);
     }
     (this->cplayer).update(this->states,this->spice,this->energy);
+    //  Board state
+        //  Enviar posiciones con arena y su cantidad de spice
+        //  Enviar posiciones destruidas
+        //  Limpiar posiciones destruidas
 }
 
+//  void Player::reportBoardState()
 void Player::update(){
     State state;
     std::vector<State> states;

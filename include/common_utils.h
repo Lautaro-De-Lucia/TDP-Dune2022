@@ -74,12 +74,14 @@ enum command_t {
 
 enum cell_t {
     ROCK = 0,
-    SAND_EMPTY = 1,
+    SAND = 1,
     DUNE = 2,
     PIT = 3,
-    SAND_FULL = 4,
-    SAND_SOME = 5,
-    SAND_LITTLE = 6
+    SAND_EMPTY = 4,
+    SAND_FULL = 5,
+    SAND_SOME = 6,
+    SAND_LITTLE = 7,
+    DEBRIS = 8
 };
 
 enum unit_t {

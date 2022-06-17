@@ -23,6 +23,8 @@ class Board{
     std::map<int,std::unique_ptr<Selectable>> & elements;
     std::map<unit_t,int> creators;
     std::vector<Position> deposit_positions;
+    std::vector<Position> sand_positions;
+    std::vector<Position> destroyed_positions;
  public:
     Board(std::vector<std::vector<cell_t>> cell_types,std::map<int,std::unique_ptr<Selectable>> & server_elements);
     Cell& getCell(int x, int y);

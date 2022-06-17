@@ -17,6 +17,8 @@ elements(elements)
         for (size_t i = 0 ; i < dim_x ; i++) {
             cells[i][j].setPosition(i,j);
             cells[i][j].setTerrain(cell_types[i][j]);
+            if(cell_types[i][j] == SAND)
+                this->sand_positions.push_back(Position(i,j));
         }
     }
     this->creators.insert({HARVESTER,-1});
