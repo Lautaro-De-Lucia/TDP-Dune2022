@@ -1,7 +1,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
-#include "player.h"
+#include "server.h"
 #include "client_player.h"
 #include "common_utils.h"
 #include "client_camera.h"
@@ -158,8 +158,8 @@ void run_sdl() {
     Camera cam(500,500,640,360,1280,720);
 
     CPlayer client_player(cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cell_paths);
-    Player server(HARKONNEN,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cells,client_player);
-    server.run();    
+    Server server(cells);
+    server.run(HARKONNEN,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY, client_player);
 /*
     while(true){
     std::vector<State> server_data;

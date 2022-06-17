@@ -1,7 +1,7 @@
 #include "selectable.h"
 
-Selectable::Selectable(int ID,player_t faction,int LP, Position position, int dim_x, int dim_y, bool moves){
-    this->ID = ID;
+Selectable::Selectable(int id,player_t faction,int LP, Position position, int dim_x, int dim_y, bool moves){
+    this->ID = id;
     this->faction = faction;
     this->LP = LP;
     this->position = position;

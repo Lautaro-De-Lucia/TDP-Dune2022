@@ -53,11 +53,11 @@ class Protocol {
     void receive_selectable_type(selectable_t& type, Socket& client_socket);
 
     // send each type of unit & building
-    void send_element(Trike& trike, int ID, Socket& client_socket);
-    void send_element(Harvester& harvester, int ID, Socket& client_socket);
-    void send_element(AirTrap& air_trap, int ID, Socket& client_socket);
-    void send_element(Barrack& barrack, int ID, Socket& client_socket);
-    void send_element(Refinery& refinery, int ID, Socket& client_socket);
+    void send_element(Trike& trike, int __id, Socket& client_socket);
+    void send_element(Harvester& harvester, int __id, Socket& client_socket);
+    void send_element(AirTrap& air_trap, int __id, Socket& client_socket);
+    void send_element(Barrack& barrack, int __id, Socket& client_socket);
+    void send_element(Refinery& refinery, int __id, Socket& client_socket);
 
     // receive each type of unit & building
     void receive_trike(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, bool& attacking, Socket& client_socket);

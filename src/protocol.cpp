@@ -407,11 +407,11 @@ void Protocol::receive_selectable_type(selectable_t& type, Socket& client_socket
     return;
 }
 
-void Protocol::send_element(Trike& trike, int ID, Socket& client_socket) {
+void Protocol::send_element(Trike& trike, int __id, Socket& client_socket) {
 
     this->send_selectable_type(SEL_TRIKE, client_socket);
 
-    int id = ID;
+    int id = __id;
     int lp = trike.getLP();
     int pos_x = trike.getPosition().x;
     int pos_y = trike.getPosition().y;
@@ -456,11 +456,11 @@ void Protocol::send_element(Trike& trike, int ID, Socket& client_socket) {
     return;
 }
 
-void Protocol::send_element(Harvester& harvester, int ID, Socket& client_socket) {
+void Protocol::send_element(Harvester& harvester, int __id, Socket& client_socket) {
 
     this->send_selectable_type(SEL_HARVESTER, client_socket);
 
-    int id = ID;
+    int id = __id;
     int lp = harvester.getLP();
     int pos_x = harvester.getPosition().x;
     int pos_y = harvester.getPosition().y;
@@ -512,11 +512,11 @@ void Protocol::send_element(Harvester& harvester, int ID, Socket& client_socket)
 
 }
 
-void Protocol::send_element(AirTrap& air_trap, int ID, Socket& client_socket) {
+void Protocol::send_element(AirTrap& air_trap, int __id, Socket& client_socket) {
 
     this->send_selectable_type(SEL_AIR_TRAP, client_socket);
 
-    int id = ID;
+    int id = __id;
     int lp = air_trap.getLP();
     int pos_x = air_trap.getPosition().x;
     int pos_y = air_trap.getPosition().y;
@@ -555,11 +555,11 @@ void Protocol::send_element(AirTrap& air_trap, int ID, Socket& client_socket) {
     return;
 }
 
-void Protocol::send_element(Barrack& barrack, int ID, Socket& client_socket) {
+void Protocol::send_element(Barrack& barrack, int __id, Socket& client_socket) {
 
     this->send_selectable_type(SEL_BARRACK, client_socket);
 
-    int id = ID;
+    int id = __id;
     int lp = barrack.getLP();
     int pos_x = barrack.getPosition().x;
     int pos_y = barrack.getPosition().y;
@@ -598,11 +598,11 @@ void Protocol::send_element(Barrack& barrack, int ID, Socket& client_socket) {
     return;
 }
 
-void Protocol::send_element(Refinery& refinery, int ID, Socket& client_socket) {
+void Protocol::send_element(Refinery& refinery, int __id, Socket& client_socket) {
 
     this->send_selectable_type(SEL_REFINERY, client_socket);
 
-    int id = ID;
+    int id = __id;
     int lp = refinery.getLP();
     int pos_x = refinery.getPosition().x;
     int pos_y = refinery.getPosition().y;

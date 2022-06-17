@@ -31,7 +31,7 @@ ADD_EXECUTABLE("${PROJECT_NAME}" main.cpp
             src/building.cpp
             src/buildingfactory.cpp
             src/cell.cpp
-            src/player.cpp
+            src/server.cpp
             src/selectable.cpp
             src/terrain.cpp
             src/textfilehandler.cpp

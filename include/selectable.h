@@ -22,7 +22,7 @@ class Selectable {
     std::vector<Position> remaining_path;
 
  public:
-    Selectable(int ID,player_t faction, int LP, Position position, int dim_x, int dim_y, bool moves);
+    Selectable(int id, player_t faction, int LP, Position position, int dim_x, int dim_y, bool moves);
     void selection(Area& mouse_area);
     bool isSelected();
     bool moves();
