@@ -11,8 +11,11 @@ bool game_has_not_started  = true;
 
 std::vector<std::string> file_input;
 
-Server::Server(std::vector<std::vector<cell_t>> cells) 
-: 
+//  @TODO: Meter en un bloque try{} en el main
+Server::Server(const char* service_name, std::vector<std::vector<cell_t>> cells) 
+:
+socket(service_name),
+client_socket(socket.accept()),
 board(cells,this->elements)
 {
 
@@ -47,8 +50,8 @@ const char * cmddict [8] {
 };
 
 
-// Player::Player(player_t faction, int spice, int c_spice, int energy, int c_energy,std::vector<std::vector<cell_t>> cells, CPlayer& client_player) 
-void Server::run(player_t _faction, int _spice, int _c_spice, int _energy, int _c_energy, CPlayer& _client_player) {
+// Player::Player(player_t faction, int spice, int c_spice, int energy, int c_energy,std::vector<std::vector<cell_t>> cells) 
+void Server::run(player_t _faction, int _spice, int _c_spice, int _energy, int _c_energy) {
 
     player_t faction = _faction;
     int spice = _spice;
@@ -57,71 +60,72 @@ void Server::run(player_t _faction, int _spice, int _c_spice, int _energy, int _
     int c_energy = _c_energy;
     int efficiency = 1;
 
-    CPlayer& client_player = _client_player;
-
     auto base_time_instruction = clock();
-    std::vector<int> action;
 
     while (true) {
 
         auto current_time = clock();
 		auto frame_time_instruction = current_time - base_time_instruction;
 
-        //  Load instructions from client  
-        action.clear();  
-        client_player.clientUpdate(action);
-        if(action.size() > 0)
-            this->mouse_events.push(action);    
-        
         if(frame_time_instruction > 10000 || game_has_not_started) {
 
             game_has_not_started = false;
             base_time_instruction = current_time;
+}
+            this->protocol.receive_command(command, this->client_socket);
 
-            if (this->mouse_events.size() > 0) {
-                std::vector<int> new_event = this->mouse_events.front();
-                this->mouse_events.pop();
-                
-                // this->protocol.receive_command(command, client_socket);
+            command_t command = (command_t)(new_event[0]);
 
-                command_t command = (command_t)(new_event[0]);
+            response_t res;
 
-                switch (command){
-                    case CREATE_UNIT:
-                        // this->protocol.receive_create_unit_request(type, client_socket);
-                        createUnit(new_event[1], spice, client_player);
-                        break;
-                    case CREATE_BUILDING:
-                        // this->protocol.receive_create_building_request(type, pos_x, pos_y, client_socket);
-                        createBuilding(new_event[1], new_event[2], new_event[3], spice, c_spice, energy, c_energy, client_player);
-                        break;
-                    case MOUSE_LEFT_CLICK:
-                        // this->protocol.receive_mouse_left_click(pos_x, pos_y, client_socket);
-                        handleLeftClick(new_event[1],new_event[2], client_player);
-                        break;
-                    case MOUSE_RIGHT_CLICK:
-                        // this->protocol.receive_mouse_right_click(pos_x, pos_y, client_socket);
-                        handleRightClick(new_event[1],new_event[2], client_player);
-                        break;
-                    case MOUSE_SELECTION:
-                        // this->protocol.receive_mouse_selection(pos_x_min, pos_x_max, pos_y_min, pos_y_max, client_socket);
-                        handleSelection(new_event[1],new_event[2],new_event[3],new_event[4], client_player);
-                        break;
-                    case IDLE:
-                        break;
-                    default:
-                        break;
-                }
-                //response_t res = RESPONSE_SUCCESS;
-                //this->protocol.send_command_response(res, this->socket);
+            switch (command){
+                case CREATE_UNIT:
+                    int type;
+                    this->protocol.receive_create_unit_request(type, this->client_socket);
+                    res = createUnit(type, spice);
+                    break;
+                case CREATE_BUILDING:
+                    int type;
+                    int pos_x;
+                    int pos_y;
+                    this->protocol.receive_create_building_request(type, pos_x, pos_y, this->client_socket);
+                    res = createBuilding(type, pos_x, pos_y, spice, c_spice, energy, c_energy);
+                    break;
+                case MOUSE_LEFT_CLICK:
+                    int pos_x;
+                    int pos_y;
+                    this->protocol.receive_mouse_left_click(pos_x, pos_y, this->client_socket);
+                    res = handleLeftClick(pos_x, pos_y);
+                    break;
+                case MOUSE_RIGHT_CLICK:
+                    int pos_x;
+                    int pos_y;
+                    this->protocol.receive_mouse_right_click(pos_x, pos_y, this->client_socket);
+                    res = handleRightClick(pos_x, pos_y);
+                    break;
+                case MOUSE_SELECTION:
+                    int pos_x_min;
+                    int pos_x_max;
+                    int pos_y_min;
+                    int pos_y_max;
+                    this->protocol.receive_mouse_selection(pos_x_min, pos_x_max, pos_y_min, pos_y_max, this->client_socket);
+                    res = handleSelection(pos_x_min, pos_x_max, pos_y_min);
+                    break;
+                case IDLE:
+                    res = RES_SUCCESS;
+                    break;
+                default:
+                    res = RES_SUCCESS;
+                    break;
             }
+            this->protocol.send_command_response(res, this->client_socket);
             update();
         }
-        reportStateToClient(client_player, spice, energy);
+        //reportStateToClient(spice, energy);
     }
 }
 
-void Server::createBuilding(int type, int pos_x, int pos_y, int& spice, int& c_spice, int& energy, int& c_energy, CPlayer& client_player) {    
+response_t Server::createBuilding(int type, int pos_x, int pos_y, int& spice, int& c_spice, int& energy, int& c_energy) {    
     //  Manufacture the building
     player_t building_faction = HARKONNEN;
     if(type == REFINERY)
@@ -142,7 +146,7 @@ void Server::createBuilding(int type, int pos_x, int pos_y, int& spice, int& c_s
 }
 
 // SIGSEGV en algun Map::at() de esta función
-void Server::createUnit(int type, int& spice, CPlayer& client_player){
+response_t Server::createUnit(int type, int& spice){
     //  Check if creator exists
     if (this->board.getCreator((unit_t) type) == -1) {
         client_player.print("No creator for this unit right now",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[RED],1000);
@@ -174,7 +178,7 @@ void Server::createUnit(int type, int& spice, CPlayer& client_player){
     client_player.print("There's no space to build this unit!",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[RED],1000);
 }
 
-void Server::handleLeftClick(int x, int y, CPlayer& client_player){
+response_t Server::handleLeftClick(int x, int y){
     //  Get positions
     int pos_x = x;
     int pos_y = y;
@@ -187,7 +191,7 @@ void Server::handleLeftClick(int x, int y, CPlayer& client_player){
     }
 }
 
-void Server::handleSelection(int xmin, int xmax, int ymin, int ymax, CPlayer& client_player){
+response_t Server::handleSelection(int xmin, int xmax, int ymin, int ymax){
     //  Get selection limits
     int Xmin = xmin;
     int Xmax = xmax;
@@ -202,7 +206,7 @@ void Server::handleSelection(int xmin, int xmax, int ymin, int ymax, CPlayer& cl
     }
 }
 
-void Server::handleRightClick(int x, int y, CPlayer& client_player){
+response_t Server::handleRightClick(int x, int y){
     //  Get positions
     int pos_x = x;
     int pos_y = y;
@@ -242,3 +246,10 @@ void Server::update(){
         states.push_back(state);
     }
 }
+
+
+
+
+
+
+
