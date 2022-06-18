@@ -2,7 +2,9 @@
 
 #include <exception>
 #include <memory>
-#include "building.h"
+
+#include "server_building.h"
+
 #include "common_utils.h"
 
 class BuildingFactory{

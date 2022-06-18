@@ -5,7 +5,7 @@
 #include <chrono>
 #include <thread>
 
-#include "protocol.h"
+#include "common_protocol.h"
 
 Protocol::Protocol() {
 }
@@ -31,25 +31,33 @@ void Protocol::handle_receive(bool was_closed, int recv_size) {
 
 // forcing endianness (Big Endian)
 
+void Protocol::send_command(command_t command, Socket& client_socket) {
+
+    uint8_t _command = (uint8_t) command;
+
+    uint8_t command_buffer = (uint8_t) _command;
+
+    int sent_size = -1;
+    bool was_closed = false;
+
+    sent_size = client_socket.sendall(&command_buffer, sizeof(command_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    return;
+}
+
 void Protocol::send_create_building_request(int type, int pos_x, int pos_y, Socket& client_socket) {
 
-    command_t building_command = CREATE_BUILDING;
-
-    uint8_t _building_command = (uint8_t) building_command;
     uint8_t _type = (uint8_t) type;
     uint16_t _pos_x = (uint16_t) pos_x;
     uint16_t _pos_y = (uint16_t) pos_y;
 
-    uint8_t building_command_buffer = (uint8_t) _building_command - '0';
-    uint8_t type_buffer = (uint8_t) _type - '0';
+    uint8_t type_buffer = (uint8_t) _type;
     uint16_t pos_x_buffer = (uint16_t) htons(_pos_x);
     uint16_t pos_y_buffer = (uint16_t) htons(_pos_y);
 
     int sent_size = -1;
     bool was_closed = false;
-
-    sent_size = client_socket.sendall(&building_command_buffer, sizeof(building_command_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
     
     sent_size = client_socket.sendall(&type_buffer, sizeof(type_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
@@ -65,19 +73,12 @@ void Protocol::send_create_building_request(int type, int pos_x, int pos_y, Sock
 
 void Protocol::send_create_unit_request(int type, Socket& client_socket) {
 
-    command_t unit_command = CREATE_UNIT;
-
-    uint8_t _unit_command = (uint8_t) unit_command;
     uint8_t _type = (uint8_t) type;
 
-    uint8_t unit_command_buffer = (uint8_t) _unit_command - '0';
-    uint8_t type_buffer = (uint8_t) _type - '0';
+    uint8_t type_buffer = (uint8_t) _type;
 
     int sent_size = -1;
     bool was_closed = false;
-
-    sent_size = client_socket.sendall(&unit_command_buffer, sizeof(unit_command_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
     
     sent_size = client_socket.sendall(&type_buffer, sizeof(type_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
@@ -87,21 +88,18 @@ void Protocol::send_create_unit_request(int type, Socket& client_socket) {
 
 void Protocol::send_mouse_left_click(int pos_x, int pos_y, Socket& client_socket) {
 
-    command_t left_click_command = MOUSE_LEFT_CLICK;
-
-    uint8_t _left_click_command = (uint8_t) left_click_command;
     uint16_t _pos_x = (uint16_t) pos_x;
     uint16_t _pos_y = (uint16_t) pos_y;
 
-    uint8_t left_click_command_buffer = (uint8_t) _left_click_command - '0';
+    //std::cout << "En el protocolo del cliente se envían las posiciones: " << std::endl;
+    //std::cout << "pos_x: " << pos_x << std::endl;
+    //std::cout << "pos_y: " << pos_y << std::endl;
+
     uint16_t pos_x_buffer = (uint16_t) htons(_pos_x);
     uint16_t pos_y_buffer = (uint16_t) htons(_pos_y);
 
     int sent_size = -1;
     bool was_closed = false;
-
-    sent_size = client_socket.sendall(&left_click_command_buffer, sizeof(left_click_command_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
 
     sent_size = client_socket.sendall(&pos_x_buffer, sizeof(pos_x_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
@@ -114,21 +112,14 @@ void Protocol::send_mouse_left_click(int pos_x, int pos_y, Socket& client_socket
 
 void Protocol::send_mouse_right_click(int pos_x, int pos_y, Socket& client_socket) {
 
-    command_t right_click_command = MOUSE_RIGHT_CLICK;
-
-    uint8_t _right_click_command = (uint8_t) right_click_command;
     uint16_t _pos_x = (uint16_t) pos_x;
     uint16_t _pos_y = (uint16_t) pos_y;
 
-    uint8_t right_click_command_buffer = (uint8_t) _right_click_command - '0';
     uint16_t pos_x_buffer = (uint16_t) htons(_pos_x);
     uint16_t pos_y_buffer = (uint16_t) htons(_pos_y);
 
     int sent_size = -1;
     bool was_closed = false;
-
-    sent_size = client_socket.sendall(&right_click_command_buffer, sizeof(right_click_command_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
 
     sent_size = client_socket.sendall(&pos_x_buffer, sizeof(pos_x_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
@@ -141,15 +132,11 @@ void Protocol::send_mouse_right_click(int pos_x, int pos_y, Socket& client_socke
 
 void Protocol::send_mouse_selection(int pos_x_min, int pos_x_max, int pos_y_min, int pos_y_max, Socket& client_socket) {
 
-    command_t selection_command = MOUSE_SELECTION;
-
-    uint8_t _selection_command = (uint8_t) selection_command;
     uint16_t _pos_x_min = (uint16_t) pos_x_min;
     uint16_t _pos_x_max = (uint16_t) pos_x_max;
     uint16_t _pos_y_min = (uint16_t) pos_y_min;
     uint16_t _pos_y_max = (uint16_t) pos_y_max;
 
-    uint8_t selection_command_buffer = (uint8_t) _selection_command - '0';
     uint16_t pos_x_min_buffer = (uint16_t) htons(_pos_x_min);
     uint16_t pos_x_max_buffer = (uint16_t) htons(_pos_x_max);
     uint16_t pos_y_min_buffer = (uint16_t) htons(_pos_y_min);
@@ -157,9 +144,6 @@ void Protocol::send_mouse_selection(int pos_x_min, int pos_x_max, int pos_y_min,
 
     int sent_size = -1;
     bool was_closed = false;
-
-    sent_size = client_socket.sendall(&selection_command_buffer, sizeof(selection_command_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
 
     sent_size = client_socket.sendall(&pos_x_min_buffer, sizeof(pos_x_min_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
@@ -171,23 +155,6 @@ void Protocol::send_mouse_selection(int pos_x_min, int pos_x_max, int pos_y_min,
     handle_dispatch(was_closed, sent_size);
 
     sent_size = client_socket.sendall(&pos_y_max_buffer, sizeof(pos_y_max_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
-
-    return;
-}
-
-void Protocol::send_idle(Socket& client_socket) {
-
-    command_t idle_command = IDLE;
-
-    uint8_t _idle_command = (uint8_t) idle_command;
-
-    uint8_t idle_command_buffer = (uint8_t) _idle_command - '0';
-
-    int sent_size = -1;
-    bool was_closed = false;
-
-    sent_size = client_socket.sendall(&idle_command_buffer, sizeof(idle_command_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
 
     return;
@@ -280,6 +247,10 @@ void Protocol::receive_mouse_left_click(int& pos_x, int& pos_y, Socket& client_s
     pos_x = (int) _pos_x;
     pos_y = (int) _pos_y;
 
+    //std::cout << "En el protocolo del servidor se reciben las posiciones: " << std::endl;
+    //std::cout << "pos_x: " << pos_x << std::endl;
+    //std::cout << "pos_y: " << pos_y << std::endl;
+
     return;
 }
 
@@ -349,9 +320,7 @@ void Protocol::receive_mouse_selection(int& pos_x_min, int& pos_x_max, int& pos_
 
 void Protocol::send_command_response(response_t response, Socket& client_socket) {
 
-    uint8_t _response = (uint8_t) response;
-
-    uint8_t response_buffer = (uint8_t) _response - '0';
+    uint8_t response_buffer = (uint8_t) response;
 
     int sent_size = -1;
     bool was_closed = false;
@@ -381,7 +350,7 @@ void Protocol::send_selectable_type(selectable_t type, Socket& client_socket) {
 
     uint8_t _type = (uint8_t) type;
 
-    uint8_t type_buffer = (uint8_t) _type - '0';
+    uint8_t type_buffer = (uint8_t) _type;
 
     int sent_size = -1;
     bool was_closed = false;
@@ -407,16 +376,9 @@ void Protocol::receive_selectable_type(selectable_t& type, Socket& client_socket
     return;
 }
 
-void Protocol::send_element(Trike& trike, int __id, Socket& client_socket) {
+void Protocol::send_trike(int id, int lp, int pos_x, int pos_y, bool selected, bool attacking, Socket& client_socket) {
 
     this->send_selectable_type(SEL_TRIKE, client_socket);
-
-    int id = __id;
-    int lp = trike.getLP();
-    int pos_x = trike.getPosition().x;
-    int pos_y = trike.getPosition().y;
-    bool selected = trike.isSelected();
-    bool attacking = trike.isAttacking();
 
     uint16_t _id = (uint16_t) id;
     uint16_t _lp = (uint16_t) lp;
@@ -429,8 +391,8 @@ void Protocol::send_element(Trike& trike, int __id, Socket& client_socket) {
     uint16_t lp_buffer = (uint16_t) htons(_lp);
     uint16_t pos_x_buffer = (uint16_t) htons(_pos_x);
     uint16_t pos_y_buffer = (uint16_t) htons(_pos_y);
-    uint8_t selected_buffer = (uint8_t) _selected - '0';
-    uint8_t attacking_buffer = (uint8_t) _attacking - '0';
+    uint8_t selected_buffer = (uint8_t) _selected;
+    uint8_t attacking_buffer = (uint8_t) _attacking;
 
     int sent_size = -1;
     bool was_closed = false;
@@ -456,17 +418,9 @@ void Protocol::send_element(Trike& trike, int __id, Socket& client_socket) {
     return;
 }
 
-void Protocol::send_element(Harvester& harvester, int __id, Socket& client_socket) {
+void Protocol::send_harvester(int id, int lp, int pos_x, int pos_y, bool selected, int spice, bool harvesting, Socket& client_socket) {
 
     this->send_selectable_type(SEL_HARVESTER, client_socket);
-
-    int id = __id;
-    int lp = harvester.getLP();
-    int pos_x = harvester.getPosition().x;
-    int pos_y = harvester.getPosition().y;
-    bool selected = harvester.isSelected();
-    int spice = harvester.getSpice();
-    bool harvesting = harvester.isHarvesting();
 
     uint16_t _id = (uint16_t) id;
     uint16_t _lp = (uint16_t) lp;
@@ -480,9 +434,9 @@ void Protocol::send_element(Harvester& harvester, int __id, Socket& client_socke
     uint16_t lp_buffer = (uint16_t) htons(_lp);
     uint16_t pos_x_buffer = (uint16_t) htons(_pos_x);
     uint16_t pos_y_buffer = (uint16_t) htons(_pos_y);
-    uint8_t selected_buffer = (uint8_t) _selected - '0';
+    uint8_t selected_buffer = (uint8_t) _selected;
     uint16_t spice_buffer = (uint16_t) htons(_spice);
-    uint8_t harvesting_buffer = (uint8_t) _harvesting - '0';
+    uint8_t harvesting_buffer = (uint8_t) _harvesting;
 
     int sent_size = -1;
     bool was_closed = false;
@@ -512,16 +466,10 @@ void Protocol::send_element(Harvester& harvester, int __id, Socket& client_socke
 
 }
 
-void Protocol::send_element(AirTrap& air_trap, int __id, Socket& client_socket) {
+void Protocol::send_air_trap(int id, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket) {
 
     this->send_selectable_type(SEL_AIR_TRAP, client_socket);
 
-    int id = __id;
-    int lp = air_trap.getLP();
-    int pos_x = air_trap.getPosition().x;
-    int pos_y = air_trap.getPosition().y;
-    bool selected = air_trap.isSelected();
-
     uint16_t _id = (uint16_t) id;
     uint16_t _lp = (uint16_t) lp;
     uint16_t _pos_x = (uint16_t) pos_x;
@@ -532,7 +480,7 @@ void Protocol::send_element(AirTrap& air_trap, int __id, Socket& client_socket) 
     uint16_t lp_buffer = (uint16_t) htons(_lp);
     uint16_t pos_x_buffer = (uint16_t) htons(_pos_x);
     uint16_t pos_y_buffer = (uint16_t) htons(_pos_y);
-    uint8_t selected_buffer = (uint8_t) _selected - '0';
+    uint8_t selected_buffer = (uint8_t) _selected;
 
     int sent_size = -1;
     bool was_closed = false;
@@ -555,16 +503,10 @@ void Protocol::send_element(AirTrap& air_trap, int __id, Socket& client_socket) 
     return;
 }
 
-void Protocol::send_element(Barrack& barrack, int __id, Socket& client_socket) {
+void Protocol::send_barrack(int id, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket) {
 
     this->send_selectable_type(SEL_BARRACK, client_socket);
 
-    int id = __id;
-    int lp = barrack.getLP();
-    int pos_x = barrack.getPosition().x;
-    int pos_y = barrack.getPosition().y;
-    bool selected = barrack.isSelected();
-
     uint16_t _id = (uint16_t) id;
     uint16_t _lp = (uint16_t) lp;
     uint16_t _pos_x = (uint16_t) pos_x;
@@ -575,7 +517,7 @@ void Protocol::send_element(Barrack& barrack, int __id, Socket& client_socket) {
     uint16_t lp_buffer = (uint16_t) htons(_lp);
     uint16_t pos_x_buffer = (uint16_t) htons(_pos_x);
     uint16_t pos_y_buffer = (uint16_t) htons(_pos_y);
-    uint8_t selected_buffer = (uint8_t) _selected - '0';
+    uint8_t selected_buffer = (uint8_t) _selected;
 
     int sent_size = -1;
     bool was_closed = false;
@@ -598,15 +540,9 @@ void Protocol::send_element(Barrack& barrack, int __id, Socket& client_socket) {
     return;
 }
 
-void Protocol::send_element(Refinery& refinery, int __id, Socket& client_socket) {
+void Protocol::send_refinery(int id, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket) {
 
     this->send_selectable_type(SEL_REFINERY, client_socket);
-
-    int id = __id;
-    int lp = refinery.getLP();
-    int pos_x = refinery.getPosition().x;
-    int pos_y = refinery.getPosition().y;
-    bool selected = refinery.isSelected();
 
     uint16_t _id = (uint16_t) id;
     uint16_t _lp = (uint16_t) lp;
@@ -618,7 +554,7 @@ void Protocol::send_element(Refinery& refinery, int __id, Socket& client_socket)
     uint16_t lp_buffer = (uint16_t) htons(_lp);
     uint16_t pos_x_buffer = (uint16_t) htons(_pos_x);
     uint16_t pos_y_buffer = (uint16_t) htons(_pos_y);
-    uint8_t selected_buffer = (uint8_t) _selected - '0';
+    uint8_t selected_buffer = (uint8_t) _selected;
 
     int sent_size = -1;
     bool was_closed = false;

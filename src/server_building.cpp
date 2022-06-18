@@ -1,4 +1,4 @@
-#include "building.h"
+#include "server_building.h"
 
 Building::Building(int ID,player_t faction, int LP, int spice, int energy, Position pos, int dim_x, int dim_y)
 :

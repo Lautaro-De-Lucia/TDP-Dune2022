@@ -1,7 +1,8 @@
 #pragma once
 
-#include "board.h"
-#include "selectable.h"
+#include "server_board.h"
+#include "server_selectable.h"
+
 #include "common_utils.h"
 
 class Building : public Selectable {

@@ -4,7 +4,6 @@
 #include <vector>
 #include <SDL2pp/SDL2pp.hh>
 
-
 class CPrinter{
     private:
     size_t init_time;

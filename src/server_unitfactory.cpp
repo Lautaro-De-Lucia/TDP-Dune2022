@@ -1,4 +1,4 @@
-#include "unitfactory.h"
+#include "server_unitfactory.h"
 
 std::unique_ptr<Unit> UnitFactory::create(unit_t unit, player_t faction, int ID) {
     switch (unit) {

@@ -1,9 +1,9 @@
 #pragma once 
 
-#include "selectable.h"
-#include "common_utils.h"
+#include "server_selectable.h"
+#include "server_astar.h"
 
-#include "astar.h"
+#include "common_utils.h"
 
 class Unit : public Selectable {
  protected:
@@ -24,7 +24,6 @@ class Unit : public Selectable {
     void move(int x, int y, Board& board);
 
 };
-
 
 class Harvester : public Unit {
     int stored_spice;

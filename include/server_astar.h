@@ -5,9 +5,9 @@
 #include <iostream>
 #include <unordered_map>
 
-#include "cell.h"
-#include "astar.h"
-#include "board.h"
+#include "server_cell.h"
+#include "server_astar.h"
+#include "server_board.h"
 
 class HashFn {
  public:

@@ -1,10 +1,11 @@
 #pragma once
 
 #include <string>
-#include "board.h"
-#include "common_utils.h"
+
 #include "client_camera.h"
 #include "client_renderhandler.h"
+
+#include "common_utils.h"
 
 extern Camera cam;
 

@@ -11,8 +11,8 @@
 #include <netdb.h>
 #include <unistd.h>
 
-#include "socket.h"
-#include "resolver.h"
+#include "common_socket.h"
+#include "common_resolver.h"
 #include "common_utils.h"
 
 Socket::Socket(const char *hostname, const char *servicename) {

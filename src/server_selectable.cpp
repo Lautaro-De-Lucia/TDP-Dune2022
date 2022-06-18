@@ -1,4 +1,4 @@
-#include "selectable.h"
+#include "server_selectable.h"
 
 Selectable::Selectable(int id,player_t faction,int LP, Position position, int dim_x, int dim_y, bool moves){
     this->ID = id;

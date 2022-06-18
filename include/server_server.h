@@ -8,13 +8,14 @@
 #include <unistd.h>
 #include <memory>
 
-#include "textfilehandler.h"
-#include "selectable.h"
-#include "buildingfactory.h"
-#include "unitfactory.h"
-#include "unit.h"
-#include "client_player.h"
+#include "server_selectable.h"
+#include "server_buildingfactory.h"
+#include "server_unitfactory.h"
+#include "server_unit.h"
+
 #include "common_utils.h"
+#include "common_socket.h"
+#include "common_protocol.h"
 
 #define INSTRUCTIONS_FILE "/instr.txt"
 
@@ -41,5 +42,10 @@ class Server {
    response_t handleLeftClick(int x, int y);
    response_t handleRightClick(int x, int y);
    response_t handleSelection(int xmin, int xmax, int ymin, int ymax);
-   void reportStateToClient(CPlayer& client_player, int spice, int energy);
+   void send_element(Trike& trike, int __id);
+   void send_element(Harvester& harvester, int __id);
+   void send_element(AirTrap& air_trap, int __id);
+   void send_element(Barrack& barrack, int __id);
+   void send_element(Refinery& refinery, int __id);
+   //void reportStateToClient(CPlayer& client_player, int spice, int energy);
 };

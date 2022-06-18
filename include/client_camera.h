@@ -3,8 +3,6 @@
 #include <iostream>
 #include <SDL2pp/SDL2pp.hh>
 
-
-
 struct Camera {
 
     int pos_x;

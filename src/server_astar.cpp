@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <iostream>
 
-#include "astar.h"
+#include "server_astar.h"
 
 #define INF 999999
 

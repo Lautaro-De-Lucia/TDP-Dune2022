@@ -1,4 +1,4 @@
-#include "board.h"
+#include "server_board.h"
 
 
 Board::Board(std::vector<std::vector<cell_t>> cell_types,std::map<int,std::unique_ptr<Selectable>> & elements) :

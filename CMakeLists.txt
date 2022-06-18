@@ -25,23 +25,27 @@ find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Multimedia REQUIRED)
 
-ADD_EXECUTABLE("${PROJECT_NAME}" main.cpp
-            client_main.cpp
-            src/astar.cpp
-            src/board.cpp
-            src/building.cpp
-            src/buildingfactory.cpp
-            src/cell.cpp
-            src/server.cpp
-            src/selectable.cpp
-            src/terrain.cpp
-            src/textfilehandler.cpp
-            src/unit.cpp
-            src/unitfactory.cpp
-            src/socket.cpp
-            src/resolver.cpp
-            src/protocol.cpp
-            src/player.cpp
+ADD_EXECUTABLE("server" server_main.cpp
+            src/common_protocol.cpp
+            src/common_resolver.cpp
+            src/common_socket.cpp
+            src/common_utils.cpp
+            src/server_astar.cpp
+            src/server_board.cpp
+            src/server_building.cpp
+            src/server_buildingfactory.cpp
+            src/server_cell.cpp
+            src/server_selectable.cpp
+            src/server_server.cpp
+            src/server_terrain.cpp
+            src/server_unit.cpp
+            src/server_unitfactory.cpp)
+
+ADD_EXECUTABLE("client" client_main.cpp
+            src/common_protocol.cpp
+            src/common_socket.cpp
+            src/common_resolver.cpp
+            src/common_utils.cpp
             src/client_player.cpp
             src/client_selectable.cpp
             src/client_printer.cpp
@@ -49,10 +53,8 @@ ADD_EXECUTABLE("${PROJECT_NAME}" main.cpp
             src/client_renderhandler.cpp
             src/client_gamehud.cpp
             src/client_gamehud_button.cpp
-            src/common_utils.cpp
-            src/common_maphandler.cpp
             src/client_camera.cpp
-            src/mouse.cpp
+            src/client_mouse.cpp
             src/ui/vistas.h
             src/ui/mainwindow.cpp
             src/ui/mainwindow.ui
@@ -60,7 +62,10 @@ ADD_EXECUTABLE("${PROJECT_NAME}" main.cpp
             src/ui/lobbywindow.ui
             src/ui/resources.qrc)
 
-target_include_directories("${PROJECT_NAME}" PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)            
+target_include_directories("server" PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)  
+target_include_directories("client" PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)            
 
-TARGET_LINK_LIBRARIES("${PROJECT_NAME}" "${SDL2PP_LIBRARIES}" Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Multimedia yaml-cpp)
+
+TARGET_LINK_LIBRARIES("server" "${SDL2PP_LIBRARIES}" Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Multimedia yaml-cpp)
+TARGET_LINK_LIBRARIES("client" "${SDL2PP_LIBRARIES}" Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Multimedia yaml-cpp)
 

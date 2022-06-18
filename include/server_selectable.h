@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "common_utils.h"
+
 class Board;
 
 class Selectable {

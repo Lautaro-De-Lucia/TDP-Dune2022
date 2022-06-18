@@ -7,8 +7,8 @@
 #include <iostream>
 #include <cmath>
 
-#include "cell.h"
-#include "selectable.h"
+#include "server_cell.h"
+#include "server_selectable.h"
 
 enum status_t {
     SUCCESS = 0,

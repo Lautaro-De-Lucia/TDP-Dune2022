@@ -11,7 +11,7 @@
 #include <netdb.h>
 #include <unistd.h>
 
-#include "resolver.h"
+#include "common_resolver.h"
 #include "common_utils.h"
 
 Resolver::Resolver(

@@ -1,4 +1,4 @@
-#include "terrain.h"
+#include "server_terrain.h"
 
 Terrain::Terrain(){}
 

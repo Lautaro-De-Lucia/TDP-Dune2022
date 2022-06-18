@@ -1,4 +1,4 @@
-#include "cell.h"
+#include "server_cell.h"
 
 Cell::Cell(){
     this->position.x = 0;

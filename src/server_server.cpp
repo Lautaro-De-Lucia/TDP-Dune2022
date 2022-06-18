@@ -1,6 +1,6 @@
-#include "server.h"
+#include "server_server.h"
 
-#include "astar.h"
+#include "server_astar.h"
 #include <unistd.h>
 
 extern std::map<color_t,SDL_Color> colors;
@@ -18,7 +18,7 @@ socket(service_name),
 client_socket(socket.accept()),
 board(cells,this->elements)
 {
-
+    std::cout << "All good!" << std::endl;
 }
 
 void Server::print(){
@@ -71,45 +71,42 @@ void Server::run(player_t _faction, int _spice, int _c_spice, int _energy, int _
 
             game_has_not_started = false;
             base_time_instruction = current_time;
-}
+
+            command_t command;
+            std::cout << "Waiting for the command " << std::endl;
             this->protocol.receive_command(command, this->client_socket);
-
-            command_t command = (command_t)(new_event[0]);
-
+            std::cout << "Just got the command: " << command << std::endl;
             response_t res;
 
+            int type;
+            int pos_x;
+            int pos_y;
+            int pos_x_min;
+            int pos_x_max;
+            int pos_y_min;
+            int pos_y_max;
+
             switch (command){
+                
                 case CREATE_UNIT:
-                    int type;
                     this->protocol.receive_create_unit_request(type, this->client_socket);
                     res = createUnit(type, spice);
                     break;
                 case CREATE_BUILDING:
-                    int type;
-                    int pos_x;
-                    int pos_y;
                     this->protocol.receive_create_building_request(type, pos_x, pos_y, this->client_socket);
                     res = createBuilding(type, pos_x, pos_y, spice, c_spice, energy, c_energy);
                     break;
                 case MOUSE_LEFT_CLICK:
-                    int pos_x;
-                    int pos_y;
                     this->protocol.receive_mouse_left_click(pos_x, pos_y, this->client_socket);
                     res = handleLeftClick(pos_x, pos_y);
                     break;
                 case MOUSE_RIGHT_CLICK:
-                    int pos_x;
-                    int pos_y;
                     this->protocol.receive_mouse_right_click(pos_x, pos_y, this->client_socket);
                     res = handleRightClick(pos_x, pos_y);
                     break;
                 case MOUSE_SELECTION:
-                    int pos_x_min;
-                    int pos_x_max;
-                    int pos_y_min;
-                    int pos_y_max;
                     this->protocol.receive_mouse_selection(pos_x_min, pos_x_max, pos_y_min, pos_y_max, this->client_socket);
-                    res = handleSelection(pos_x_min, pos_x_max, pos_y_min);
+                    res = handleSelection(pos_x_min, pos_x_max, pos_y_min, pos_y_max);
                     break;
                 case IDLE:
                     res = RES_SUCCESS;
@@ -119,13 +116,23 @@ void Server::run(player_t _faction, int _spice, int _c_spice, int _energy, int _
                     break;
             }
             this->protocol.send_command_response(res, this->client_socket);
-            update();
+            //update();
         }
         //reportStateToClient(spice, energy);
     }
 }
 
 response_t Server::createBuilding(int type, int pos_x, int pos_y, int& spice, int& c_spice, int& energy, int& c_energy) {    
+    std::cout << "************************" << std::endl;
+    std::cout << "Creating a new Building" << std::endl;
+    std::cout << "type: " << type << std::endl;
+    std::cout << "pos_x: " << pos_x << std::endl;
+    std::cout << "pos_y: " << pos_y << std::endl;
+    std::cout << "spice: " << spice << std::endl;
+    std::cout << "c_spice: " << c_spice << std::endl;
+    std::cout << "energy: " << energy << std::endl;
+    std::cout << "c_energy: " << c_energy << std::endl;
+
     //  Manufacture the building
     player_t building_faction = HARKONNEN;
     if(type == REFINERY)
@@ -138,18 +145,23 @@ response_t Server::createBuilding(int type, int pos_x, int pos_y, int& spice, in
         (this->elements)[ID]->getState(state);
         state.ID = ID;
         ID++;
-        client_player.addElement((building_t) type, state);
-        client_player.print("Building succesfully created!",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[YELLOW],1000);
+        //client_player.addElement((building_t) type, state);
+        //client_player.print("Building succesfully created!",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[YELLOW],1000);
         return;
     }
-    client_player.print("You can't build here!",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[RED],1000);
+    //client_player.print("You can't build here!",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[RED],1000);
+    return RES_SUCCESS;
 }
 
 // SIGSEGV en algun Map::at() de esta función
-response_t Server::createUnit(int type, int& spice){
+response_t Server::createUnit(int type, int& spice) {
+    std::cout << "Creating a new Unit" << std::endl;
+    std::cout << "type: " << type << std::endl;
+    std::cout << "spice: " << spice << std::endl;
+/*
     //  Check if creator exists
     if (this->board.getCreator((unit_t) type) == -1) {
-        client_player.print("No creator for this unit right now",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[RED],1000);
+        //client_player.print("No creator for this unit right now",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[RED],1000);
         return;
     }
     //  Get possible creating locations
@@ -171,14 +183,24 @@ response_t Server::createUnit(int type, int& spice){
         (this->elements)[ID]->getState(state);
         state.ID = ID;
         ID++;
-        client_player.addElement((unit_t) type, state);        
-        client_player.print("Unit succesfully created",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[YELLOW],1000);
+        //client_player.addElement((unit_t) type, state);        
+        //client_player.print("Unit succesfully created",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[YELLOW],1000);
         return;
     }
-    client_player.print("There's no space to build this unit!",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[RED],1000);
+    //client_player.print("There's no space to build this unit!",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[RED],1000);
+*/
+    return RES_CREATE_UNIT_FAILURE_CREATOR;
+
 }
 
-response_t Server::handleLeftClick(int x, int y){
+response_t Server::handleLeftClick(int x, int y) {
+
+    std::cout << "************************" << std::endl;
+    std::cout << "Handling left click" << std::endl;
+    std::cout << "position: (" << x << ", " << y << ")" << std::endl;
+    
+    
+/*
     //  Get positions
     int pos_x = x;
     int pos_y = y;
@@ -189,9 +211,20 @@ response_t Server::handleLeftClick(int x, int y){
         else
             e.second->unselect();
     }
+*/
+    return RES_SUCCESS;
+
 }
 
-response_t Server::handleSelection(int xmin, int xmax, int ymin, int ymax){
+
+response_t Server::handleSelection(int xmin, int xmax, int ymin, int ymax) {
+
+    std::cout << "************************" << std::endl;
+    std::cout << "Handling left click" << std::endl;
+    std::cout << "min position: (" << xmin << ", " << ymin << ")" << std::endl;
+    std::cout << "max position: (" << xmax << ", " << ymax << ")" << std::endl;
+
+/*
     //  Get selection limits
     int Xmin = xmin;
     int Xmax = xmax;
@@ -204,9 +237,19 @@ response_t Server::handleSelection(int xmin, int xmax, int ymin, int ymax){
         if (e.second->isWithin(selection))
             e.second->select();
     }
+*/
+    return RES_SUCCESS;
 }
 
-response_t Server::handleRightClick(int x, int y){
+response_t Server::handleRightClick(int x, int y) {
+
+    std::cout << "************************" << std::endl;
+    std::cout << "Handling right click" << std::endl;
+    std::cout << "position: (" << x << ", " << y << ")" << std::endl;
+
+
+    
+/*    
     //  Get positions
     int pos_x = x;
     int pos_y = y;
@@ -217,8 +260,11 @@ response_t Server::handleRightClick(int x, int y){
             e.second->react(pos_x,pos_y,board);
         }
     }
+    
+*/
+return RES_SUCCESS;
 }
-
+/*
 void Server::reportStateToClient(CPlayer& client_player, int spice, int energy){
     //  Selectables state
     State state;
@@ -235,8 +281,9 @@ void Server::reportStateToClient(CPlayer& client_player, int spice, int energy){
         //  Enviar posiciones destruidas
         //  Limpiar posiciones destruidas
 }
-
+*/
 //  void Server::reportBoardState()
+/*
 void Server::update(){
     State state;
     std::vector<State> states;
@@ -246,6 +293,7 @@ void Server::update(){
         states.push_back(state);
     }
 }
+*/
 
 
 

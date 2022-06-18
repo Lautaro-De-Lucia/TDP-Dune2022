@@ -3,8 +3,9 @@
 #include <iostream>
 #include <memory>
 
+#include "server_terrain.h"
+
 #include "common_utils.h"
-#include "terrain.h"
 
 class Cell {
  private:
