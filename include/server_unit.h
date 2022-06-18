@@ -20,7 +20,7 @@ class Unit : public Selectable {
     virtual void react(int x, int y, Board& board);
     virtual void update(State& state, Board& board);
     virtual void receiveDamage(int damage);
-    virtual bool place(Board& board,std::vector<Position>& positions,int* spice);
+    virtual response_t place(Board& board,std::vector<Position>& positions,int* spice);
     void move(int x, int y, Board& board);
 
 };
@@ -43,7 +43,7 @@ class Harvester : public Unit {
     virtual void react(int x, int y, Board& board);
     virtual void update(State& state, Board& board);
     virtual void receiveDamage(int damage);
-    virtual bool place(Board& board,std::vector<Position>& positions,int* spice);
+    virtual response_t place(Board& board,std::vector<Position>& positions,int* spice);
     int getSpice();
     bool isHarvesting();
 
@@ -67,6 +67,6 @@ class Trike : public Unit {
     virtual void react(int x, int y, Board& board);
     virtual void update(State& state, Board& board);
     virtual void receiveDamage(int damage);
-    virtual bool place(Board& board,std::vector<Position>& positions,int* spice);
+    virtual response_t place(Board& board,std::vector<Position>& positions,int* spice);
     bool isAttacking();
 };

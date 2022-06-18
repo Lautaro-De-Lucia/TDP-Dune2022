@@ -12,14 +12,13 @@ Selectable(ID,faction, LP,pos,dim_x,dim_y,true)
     this->movement_time = std::round(20/speed);
 }
 
-bool Unit::place(Board& board,std::vector<Position>& positions,int * spice){
-    return true;
+response_t Unit::place(Board& board,std::vector<Position>& positions,int * spice){
+    return RES_SUCCESS;
 }
 
-bool Harvester::place(Board& board,std::vector<Position>& positions,int * spice){
+response_t Harvester::place(Board& board,std::vector<Position>& positions,int * spice){
     if ((*spice - this->spice) < 0){
-        //  Refactor: Manejarlo con excepciones
-        return false;
+        return RES_CREATE_UNIT_FAILURE_SPICE;
     }
     for (Position position : positions){
         if (board.canPlace(position,1,1) == SUCCESS){
@@ -27,26 +26,25 @@ bool Harvester::place(Board& board,std::vector<Position>& positions,int * spice)
             board.getCell(position.x,position.y).occupy(this->ID);
             *spice -= this->spice;
             this->player_spice = spice;
-            return true;
+            return RES_CREATE_UNIT_SUCCESS;
         }
     }
-    return false;
+    return RES_CREATE_UNIT_FAILURE_SPACE;
 }
 
-bool Trike::place(Board& board,std::vector<Position>& positions,int * spice){
+response_t Trike::place(Board& board,std::vector<Position>& positions,int * spice){
     if ((*spice - this->spice) < 0){
-        //  Refactor: Manejarlo con excepciones
-        return false;
+        return RES_CREATE_UNIT_FAILURE_SPICE;
     }
     for (Position position : positions){
         if (board.canPlace(position,1,1) == SUCCESS){
             this->setPosition(position);
             board.getCell(position.x,position.y).occupy(this->ID);
             *spice -= this->spice;
-            return true;
+            return RES_CREATE_UNIT_SUCCESS;
         }
     }
-    return false;
+    return RES_CREATE_UNIT_FAILURE_SPACE;
 }
 
 void Unit::react(int x, int y, Board& board){}

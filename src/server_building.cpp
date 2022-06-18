@@ -9,22 +9,22 @@ Selectable(ID,faction,LP,pos,dim_x,dim_y,false)
     std::cout << "New building created of faction: " << this->faction << std::endl;
 }
 
-bool Building::place(Board& board, int pos_x, int pos_y, int& spice, int& spice_capacity, int& energy, int& energy_capacity){
+response_t Building::place(Board& board, int pos_x, int pos_y, int& spice, int& spice_capacity, int& energy, int& energy_capacity){
     
     if ((spice - this->getSpice()) < 0){
         std::cerr << "Not enough Spice!!!" << std::endl;
-        return false;
+        return RES_CREATE_BUILDING_FAILURE_SPICE;
     }
     if ((energy - this->getEnergy()) < 0){
         std::cerr << "Not enough Energy!!!" << std::endl;
-        return false;
+        return RES_CREATE_BUILDING_FAILURE_ENERGY;
     }
     if (board.canPlace(Position(pos_x,pos_y),this->getDimX(),this->getDimY()) == FAILED_TO_ADD){
         std::cerr << "Can't build in this position!!!" << std::endl;
-        return false;
+        return RES_CREATE_BUILDING_FAILURE_TERRAIN;
     }
     this->setPosition(Position(pos_x,pos_y));
-    return true;
+    return RES_CREATE_BUILDING_SUCCESS;
 }
 
 int Building::getSpice(){
@@ -42,9 +42,11 @@ Building(ID,faction, LP,spice,energy,pos,dim_x,dim_y)
     this->c_energy = c_energy;
 }
 
-bool AirTrap::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capacity,int& energy,int& energy_capacity){
-    if (!Building::place(board,pos_x,pos_y,spice,spice_capacity,energy,energy_capacity))
-        return false;
+response_t AirTrap::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capacity,int& energy,int& energy_capacity){
+    response_t res;
+    res = Building::place(board,pos_x,pos_y,spice,spice_capacity,energy,energy_capacity);
+    if(res != RES_CREATE_BUILDING_SUCCESS)
+        return res;
     
     spice -= this->spice;
     energy += this->energy;
@@ -55,7 +57,7 @@ bool AirTrap::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capac
         }
     }
 
-    return true;
+    return RES_CREATE_BUILDING_SUCCESS;
 }
 
 int AirTrap::getCEnergy() {
@@ -69,9 +71,11 @@ Building(ID,faction,LP,spice,energy,pos,dim_x,dim_y)
     this->name = "Barrack";
 }
 
-bool Barrack::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capacity,int& energy,int& energy_capacity){
-    if (!Building::place(board,pos_x,pos_y,spice,spice_capacity,energy,energy_capacity))
-        return false;
+response_t Barrack::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capacity,int& energy,int& energy_capacity){
+    response_t res;
+    res = Building::place(board,pos_x,pos_y,spice,spice_capacity,energy,energy_capacity);
+    if(res != RES_CREATE_BUILDING_SUCCESS)
+        return res;
 
     spice -= this->spice;
     energy -= this->energy;
@@ -82,7 +86,7 @@ bool Barrack::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capac
         }
     }
 
-    return true;
+    return RES_CREATE_BUILDING_SUCCESS;
 }
 
 void Building::react(int x, int y, Board & board){
@@ -102,9 +106,11 @@ Building(ID,faction,LP,spice,energy,pos,dim_x,dim_y)
     this->c_spice= c_spice;
 }
 
-bool Refinery::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capacity,int& energy,int& energy_capacity){
-    if (!Building::place(board,pos_x,pos_y,spice,spice_capacity,energy,energy_capacity))
-        return false;
+response_t Refinery::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capacity,int& energy,int& energy_capacity){
+    response_t res;
+    res = Building::place(board,pos_x,pos_y,spice,spice_capacity,energy,energy_capacity);
+    if(res != RES_CREATE_BUILDING_SUCCESS)
+        return res;
     spice -= this->spice;
     energy -= this->energy;
     spice_capacity += this->c_spice; 
@@ -118,7 +124,7 @@ bool Refinery::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capa
     std::vector<Position> deposit_positions = board.getSurroundings(this->position, this->getDimX(), this->getDimY());
     board.addDepositPositions(deposit_positions);
 
-    return true;
+    return RES_CREATE_BUILDING_SUCCESS;
 }
 
 int Refinery::getCSpice() {

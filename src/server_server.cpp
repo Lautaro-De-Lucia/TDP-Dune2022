@@ -123,23 +123,15 @@ void Server::run(player_t _faction, int _spice, int _c_spice, int _energy, int _
 }
 
 response_t Server::createBuilding(int type, int pos_x, int pos_y, int& spice, int& c_spice, int& energy, int& c_energy) {    
-    std::cout << "************************" << std::endl;
-    std::cout << "Creating a new Building" << std::endl;
-    std::cout << "type: " << type << std::endl;
-    std::cout << "pos_x: " << pos_x << std::endl;
-    std::cout << "pos_y: " << pos_y << std::endl;
-    std::cout << "spice: " << spice << std::endl;
-    std::cout << "c_spice: " << c_spice << std::endl;
-    std::cout << "energy: " << energy << std::endl;
-    std::cout << "c_energy: " << c_energy << std::endl;
-
     //  Manufacture the building
     player_t building_faction = HARKONNEN;
     if(type == REFINERY)
         building_faction = ATREIDES;
     std::unique_ptr<Building> building = BuildingFactory::manufacture((building_t) type, building_faction,ID);
     //  Attempt to add to board
-    if ((*building).place(board,pos_x,pos_y,spice,c_spice,energy,c_energy)){
+    response_t res;
+    res = (*building).place(board,pos_x,pos_y,spice,c_spice,energy,c_energy);
+    if (res == RES_CREATE_BUILDING_SUCCESS){
         (this->elements).insert({ID, std::move(building)});
         State state;
         (this->elements)[ID]->getState(state);
@@ -147,10 +139,10 @@ response_t Server::createBuilding(int type, int pos_x, int pos_y, int& spice, in
         ID++;
         //client_player.addElement((building_t) type, state);
         //client_player.print("Building succesfully created!",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[YELLOW],1000);
-        return;
+        return res;
     }
     //client_player.print("You can't build here!",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[RED],1000);
-    return RES_SUCCESS;
+    return res;
 }
 
 // SIGSEGV en algun Map::at() de esta función
@@ -158,11 +150,9 @@ response_t Server::createUnit(int type, int& spice) {
     std::cout << "Creating a new Unit" << std::endl;
     std::cout << "type: " << type << std::endl;
     std::cout << "spice: " << spice << std::endl;
-/*
     //  Check if creator exists
     if (this->board.getCreator((unit_t) type) == -1) {
-        //client_player.print("No creator for this unit right now",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[RED],1000);
-        return;
+        return RES_CREATE_UNIT_FAILURE_CREATOR;
     }
     //  Get possible creating locations
     Position building_pos = (elements.at(board.getCreator((unit_t) type)))->getPosition();
@@ -177,7 +167,8 @@ response_t Server::createUnit(int type, int& spice) {
         unit_faction = ATREIDES;
     std::unique_ptr<Unit> unit = UnitFactory::create((unit_t) type,unit_faction,ID);
     //  Attempt adding it
-    if ((*unit).place(board,positions,&spice)){
+    response_t res = (*unit).place(board,positions,&spice);
+    if( res == RES_CREATE_UNIT_SUCCESS ){
         (this->elements).insert({ID, std::move(unit)});
         State state;
         (this->elements)[ID]->getState(state);
@@ -185,12 +176,9 @@ response_t Server::createUnit(int type, int& spice) {
         ID++;
         //client_player.addElement((unit_t) type, state);        
         //client_player.print("Unit succesfully created",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[YELLOW],1000);
-        return;
+        return res;
     }
-    //client_player.print("There's no space to build this unit!",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[RED],1000);
-*/
-    return RES_CREATE_UNIT_FAILURE_CREATOR;
-
+    return res;
 }
 
 response_t Server::handleLeftClick(int x, int y) {
@@ -198,7 +186,6 @@ response_t Server::handleLeftClick(int x, int y) {
     std::cout << "************************" << std::endl;
     std::cout << "Handling left click" << std::endl;
     std::cout << "position: (" << x << ", " << y << ")" << std::endl;
-    
     
 /*
     //  Get positions
