@@ -26,6 +26,7 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Multimedia REQUIRED)
 
 ADD_EXECUTABLE("${PROJECT_NAME}" main.cpp
+            client_main.cpp
             src/astar.cpp
             src/board.cpp
             src/building.cpp
@@ -40,7 +41,8 @@ ADD_EXECUTABLE("${PROJECT_NAME}" main.cpp
             src/socket.cpp
             src/resolver.cpp
             src/protocol.cpp
-            src/client_player.cpp 
+            src/player.cpp
+            src/client_player.cpp
             src/client_selectable.cpp
             src/client_printer.cpp
             src/client_gamemap.cpp

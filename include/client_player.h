@@ -23,7 +23,6 @@ class CPlayer {
     size_t c_energy;
     int energy;
     double efficiency;
-    std::unique_ptr<SDL2pp::Texture> user_message;
     std::map<int, std::unique_ptr<CSelectable>> elements;
     MouseHandler mouse;
     CPrinter printer;

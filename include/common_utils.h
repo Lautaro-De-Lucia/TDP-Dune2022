@@ -148,8 +148,18 @@ enum hud_button_t {
 
 // falta agregar una mayor diversidad de errores
 enum response_t {
-    RESPONSE_SUCCESS = 1,
-    RESPONSE_FAILURE = 2
+
+    RES_SUCCESS = 0,
+
+    RES_CREATE_UNIT_SUCCESS = 1,
+    RES_CREATE_UNIT_FAILURE_SPICE = -2,
+    RES_CREATE_UNIT_FAILURE_CREATOR = -3,
+    RES_CREATE_UNIT_FAILURE_SPACE = -4,
+
+    RES_CREATE_BUILDING_SUCCESS = 5,
+    RES_CREATE_BUILDING_FAILURE_SPICE = -6,
+    RES_CREATE_BUILDING_FAILURE_ENERGY = -7,
+    RES_CREATE_BUILDING_FAILURE_TERRAIN = -8
 };
 
 // ================================================

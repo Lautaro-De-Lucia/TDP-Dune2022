@@ -81,26 +81,39 @@ void Server::run(player_t _faction, int _spice, int _c_spice, int _energy, int _
             if (this->mouse_events.size() > 0) {
                 std::vector<int> new_event = this->mouse_events.front();
                 this->mouse_events.pop();
+                
+                // this->protocol.receive_command(command, client_socket);
+
                 command_t command = (command_t)(new_event[0]);
+
                 switch (command){
                     case CREATE_UNIT:
+                        // this->protocol.receive_create_unit_request(type, client_socket);
                         createUnit(new_event[1], spice, client_player);
                         break;
                     case CREATE_BUILDING:
+                        // this->protocol.receive_create_building_request(type, pos_x, pos_y, client_socket);
                         createBuilding(new_event[1], new_event[2], new_event[3], spice, c_spice, energy, c_energy, client_player);
                         break;
                     case MOUSE_LEFT_CLICK:
+                        // this->protocol.receive_mouse_left_click(pos_x, pos_y, client_socket);
                         handleLeftClick(new_event[1],new_event[2], client_player);
                         break;
                     case MOUSE_RIGHT_CLICK:
+                        // this->protocol.receive_mouse_right_click(pos_x, pos_y, client_socket);
                         handleRightClick(new_event[1],new_event[2], client_player);
                         break;
                     case MOUSE_SELECTION:
+                        // this->protocol.receive_mouse_selection(pos_x_min, pos_x_max, pos_y_min, pos_y_max, client_socket);
                         handleSelection(new_event[1],new_event[2],new_event[3],new_event[4], client_player);
+                        break;
+                    case IDLE:
                         break;
                     default:
                         break;
                 }
+                //response_t res = RESPONSE_SUCCESS;
+                //this->protocol.send_command_response(res, this->socket);
             }
             update();
         }

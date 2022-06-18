@@ -1,8 +1,8 @@
 #include <iostream>
 #include <stdlib.h>
+#include <fstream>
 #include <time.h>
-#include "server.h"
-#include "client_player.h"
+#include "player.h"
 #include "common_utils.h"
 #include "client_camera.h"
 #include <SDL2pp/SDL2pp.hh>
@@ -25,7 +25,10 @@
 
 #define TOTAL_TILE_SPRITES 5
 
-std::vector<std::vector<cell_t>> cgenerate_server_map (std::string tile_map_file){
+#define HOST_ADDRESS "localhost"
+#define SERVICE "http-alt"
+
+std::vector<std::vector<cell_t>> generate_server_map (std::string tile_map_file){
     //  Produce cell matrix
     std::vector<std::vector<cell_t>> cells;
     cells.resize(MAP_DIM_X);
@@ -75,7 +78,7 @@ std::vector<std::vector<cell_t>> cgenerate_server_map (std::string tile_map_file
     return cells;
 }
 
-std::vector<std::vector<std::string>> cgenerate_client_map (std::string tile_map_file){
+std::vector<std::vector<std::string>> generate_client_map (std::string tile_map_file){
     //  Produce cell matrix
     std::vector<std::vector<std::string>> cells;
     cells.resize(MAP_DIM_X);
@@ -109,31 +112,7 @@ std::vector<std::vector<std::string>> cgenerate_client_map (std::string tile_map
     return cells;
 }
 
-std::vector<std::vector<cell_t>> cgenerate_random_map () {
-    //  Create space for the map
-    std::vector<std::vector<cell_t>> map_cells(MAP_DIM_X);
-    for (size_t i = 0 ; i < MAP_DIM_X ; i++) {
-        map_cells[i].resize(MAP_DIM_Y);
-    }
-    for (size_t j = 0 ; j < MAP_DIM_Y ; j++) {
-        for (size_t i = 0 ; i < MAP_DIM_X ; i++) {
-                map_cells[i][j] = ROCK;
-        }
-    }
-
-    map_cells[30][30] = PIT;
-    map_cells[30][31] = PIT;
-    map_cells[30][32] = PIT;
-
-    map_cells[20][15] = SAND_FULL;
-    map_cells[20][16] = SAND_FULL;
-    map_cells[20][17] = SAND_FULL;
-
-    return map_cells;
-    
-}
-
-void cgreet(SDL2pp::Renderer& game_renderer) {
+void greet(SDL2pp::Renderer& game_renderer) {
     std::string text = "Loading map... please wait";
     SDL2pp::SDLTTF ttf;
     SDL2pp::Font font("../src/ui/resources/fonts/beyond-mars.ttf", 64);
@@ -144,7 +123,7 @@ void cgreet(SDL2pp::Renderer& game_renderer) {
 }
 
 
-void crun_sdl() {
+void run_sdl() {
 
     //  This is only to initialize TTF
 	SDL2pp::SDLTTF ttf;
@@ -152,14 +131,12 @@ void crun_sdl() {
     SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,0);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
 
-    std::vector<std::vector<std::string>> cell_paths = cgenerate_client_map(DATA_PATH MAP_FILE);
-    std::vector<std::vector<cell_t>> cells = cgenerate_server_map(DATA_PATH MAP_FILE);
-    
-    Camera cam(500,500,640,360,1280,720);
+    std::vector<std::vector<std::string>> cell_paths = generate_client_map(DATA_PATH MAP_FILE);    
+    Camera cam(CAMERA_INITIAL_POS_X,CAMERA_INITIAL_POS_Y,CAMERA_WIDTH,CAMERA_HEIGHT,SCREEN_WIDTH,SCREEN_HEIGHT);
+    Player client_player(HOST_ADDRESS,SERVICE,cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cell_paths);
 
-    CPlayer client_player(cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cell_paths);
-    Server server(cells);
-    server.run(HARKONNEN,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY, client_player);
+    client_player.play();
+
 /*
     while(true){
     std::vector<State> server_data;
@@ -187,7 +164,7 @@ void crun_sdl() {
 };
 
 
-int main(int argc, char *argv[]) {
+int cmain(int argc, char *argv[]) {
     /*
     QApplication a(argc, argv);
     a.setWindowIcon(QIcon("./src/resources/img/icon.png"));
@@ -201,6 +178,6 @@ int main(int argc, char *argv[]) {
 
     return a.exec();
     */
-    crun_sdl();
+    run_sdl();
     return 0;
 }
