@@ -67,6 +67,7 @@ enum player_t {
 };
 
 enum command_t {
+    CLOSE = 0,
     CREATE_BUILDING = 1,
     CREATE_UNIT = 2, 
     MAKE_CREATOR = 3,

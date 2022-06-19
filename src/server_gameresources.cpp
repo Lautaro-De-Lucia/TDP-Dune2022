@@ -1,5 +1,7 @@
 #include "server_gameresources.h"
 
+extern int ID;
+
 GameResources::GameResources(std::vector<std::vector<cell_t>> cells) 
 : 
 board(cells,this->elements) 
@@ -14,11 +16,6 @@ void GameResources::addSandPosition(int x, int y){
     std::lock_guard<std::mutex> locker(this->lock);
     this->board.addSandPosition(x,y);
 }
-void GameResources::clearSandPositions(){
-    std::lock_guard<std::mutex> locker(this->lock);
-    this->board.clearSandPositions();
-}
-
 status_t GameResources::canPlace(const Position& location, int dim_x,int dim_y) {
     std::lock_guard<std::mutex> locker(this->lock);
     return this->board.canPlace(location,dim_x,dim_y);
@@ -29,8 +26,8 @@ bool GameResources::canDeposit(int x, int y,player_t faction){
     return this->board.canDeposit(x,y,faction);
 }
 
-bool GameResources::canHarvest(int x, int y){return this->board.canHarvest();}
-bool GameResources::canTraverse(int x, int y){return this->board.canTraverse();}
+bool GameResources::canHarvest(int x, int y){return this->board.canHarvest(x,y);}
+bool GameResources::canTraverse(int x, int y){return this->board.canTraverse(x,y);}
 
 bool GameResources::hasEnemy(int x, int y, player_t player_faction){
     std::lock_guard<std::mutex> locker(this->lock);
@@ -47,10 +44,10 @@ std::unique_ptr<Selectable> & GameResources::getElementAt(int x, int y){
     return this->board.getElementAt(x,y);
 }
 
-size_t GameResources::getBoardWidth() {
+int GameResources::getBoardWidth() {
     return this->board.get_width();  
 }
-size_t GameResources::getHeight() {
+int GameResources::getBoardHeight() {
     return this->board.get_height();
 }
 
@@ -88,12 +85,12 @@ std::vector<Position> GameResources::getSurroundings(Position position, int e_di
 
 response_t GameResources::createUnit(player_t faction,unit_t type,int & spice){    
     std::lock_guard<std::mutex> locker(this->lock);
-    if (this->board.getCreator((type) == -1)
+    if (this->board.getCreator(type) == -1)
         return RES_CREATE_UNIT_FAILURE_CREATOR;
 
     Position building_pos = (elements.at(board.getCreator(type)))->getPosition();
-    int building_dim_x = (elements.at(board.getCreator((type)))->getDimX();
-    int building_dim_y = (elements.at(board.getCreator((type)))->getDimY();
+    int building_dim_x = (elements.at(board.getCreator((type))))->getDimX();
+    int building_dim_y = (elements.at(board.getCreator((type))))->getDimY();
 
     std::vector<Position> positions = board.getSurroundings(building_pos, building_dim_x, building_dim_y); //  FAILING HERE
 
@@ -109,9 +106,9 @@ response_t GameResources::createUnit(player_t faction,unit_t type,int & spice){
 
 response_t GameResources::createBuilding(player_t faction,building_t type,int pos_x,int pos_y,int spice,int c_spice,int energy,int c_energy){
     std::lock_guard<std::mutex> locker(this->lock);
-    std::unique_ptr<Building> building = BuildingFactory::manufacture((building_t) type, building_faction,ID);
+    std::unique_ptr<Building> building = BuildingFactory::manufacture(type,faction,ID);
     //  Attempt to add to board
-    response_t = (*building).place(board,pos_x,pos_y,spice,c_spice,energy,c_energy);
+    response_t res = (*building).place(board,pos_x,pos_y,spice,c_spice,energy,c_energy);
     if (res == RES_CREATE_BUILDING_SUCCESS){
         (this->elements).insert({ID, std::move(building)});
         ID++;
@@ -162,9 +159,12 @@ void GameResources::sendElements(Protocol & protocol, Socket & client_socket){
         e.second->sendState(protocol,client_socket);
 }
 
-void GameResources::getTotalChangedCells(){
-    this->board.getChangedSandPositions().size();
+int GameResources::getTotalChangedCells(){
+    return this->board.getChangedSandPositions().size();
 }
 void GameResources::clearChangedCells(){
     this->board.clearSandPositions();
+}
+std::vector<Position> GameResources::getChangedCells(){
+    return this->board.getChangedSandPositions();
 }

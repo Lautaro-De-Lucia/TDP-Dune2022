@@ -30,6 +30,8 @@ ADD_EXECUTABLE("server" server_main.cpp
             src/common_resolver.cpp
             src/common_socket.cpp
             src/common_utils.cpp
+            src/server_clienthandler.cpp
+            src/server_gameresources.cpp
             src/server_astar.cpp
             src/server_board.cpp
             src/server_building.cpp

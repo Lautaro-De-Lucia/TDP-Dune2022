@@ -74,5 +74,4 @@ class Player {
     hud_button_t checkBtn(int& x, int& y);
 
     bool event_is_not_redundant(std::vector<int>& e);
-
 };

@@ -56,7 +56,10 @@ void Player::play(){
         SDL_PollEvent(&event);
 
         if( event.type == SDL_QUIT ) {
-            exit(1);
+            new_mouse_event.clear();
+            new_mouse_event.push_back(CLOSE);
+            this->mouse_events.push(new_mouse_event);
+            break;
         }
         
         int x, y;

@@ -25,8 +25,6 @@ class GameResources {
 public:    
     GameResources(std::vector<std::vector<cell_t>> cells);
     Cell& getCell(int x, int y);
-    int getDimX(){return this-> dim_x;}
-    int getDimY(){return this-> dim_y;}
     int getCreator(unit_t type);
     std::unique_ptr<Selectable>& getElementAt(int x, int y);
     void makeCreator(int ID);
@@ -36,13 +34,12 @@ public:
     bool canTraverse(int x, int y);
     bool hasEnemy(int x, int y, player_t player_faction);
     void dealDamage(int x, int y, int damage);
-    size_t get_width();
-    size_t get_height();
-    std::vector<Position> getChangedSandPositions(){return this->changed_sand_positions;}
-    void clearSandPositions();
+    int getTotalChangedCells();
+    void clearChangedCells();
+    std::vector<Position> getChangedCells();
     void addSandPosition(int x, int y);
-    std::vector<Position> get_traversable_neighbors_of(Position pos, size_t distance);
-    size_t get_distance_between(Position pos1, Position pos2);
+    std::vector<Position> getTraversableNeighborsOf(Position pos,size_t distance);
+    size_t getDistanceBetween(Position pos1, Position pos2);
     std::vector<Position> getCreatingPositions(unit_t type);
     void addDepositPositions(std::vector<Position> & new_deposit_positions);
     std::vector<Position> & getDepositPositions();
@@ -55,6 +52,7 @@ public:
     void reactToPosition(player_t faction, int pos_x, int pos_y);
     int totalElements();
     void sendElements(Protocol & protocol, Socket & client_socket);
-    void getTotalChangedCells();
-    void clearChangedCells();
-}
+    int getBoardHeight();
+    int getBoardWidth();
+
+};

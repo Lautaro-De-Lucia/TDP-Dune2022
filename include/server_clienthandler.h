@@ -23,9 +23,9 @@ class ClientHandler {
  private:
    player_t faction;
    int spice;
-   int max_spice;
+   int c_spice;
    int energy;
-   int max_energy;
+   int c_energy;
    int efficiency;
    Protocol protocol;
    GameResources * game;
@@ -34,11 +34,13 @@ class ClientHandler {
 
  public:    
    ClientHandler (player_t faction,int init_energy, int init_spice ,Socket & client_socket,GameResources * game);
-   void run(player_t _faction, int _spice, int _c_spice, int _energy, int _c_energy); // This should receive the socket in the future
+   void run(Socket && client_socket); // This should receive the socket in the future
    response_t createBuilding(int type, int pos_x, int pos_y, int& spice, int& c_spice, int& energy, int& c_energy);
    response_t createUnit(int type, int& spice);
-   response_t handleLeftClick(int x, int y);
-   response_t handleRightClick(int x, int y);
-   response_t handleSelection(int xmin, int xmax, int ymin, int ymax);
-   void reportState();
+   void handleLeftClick(int x, int y);
+   void handleRightClick(int x, int y);
+   void handleSelection(int xmin, int xmax, int ymin, int ymax);
+   void reportState(Socket& client_socket);
+   bool isDone();
+   void close();
 };

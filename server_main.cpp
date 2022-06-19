@@ -1,14 +1,7 @@
 #include <iostream>
-#include <stdlib.h>
-#include <time.h>
 #include <fstream>
-#include "server_server.h"
-#include "common_utils.h"
 
-#define INIT_SPICE 15000
-#define INIT_CSPICE 20000
-#define INIT_ENERGY 3000
-#define INIT_CENERGY 5000
+#include "server_server.h"
 
 #define MAP_FILE "/dune.map"
 
@@ -17,10 +10,9 @@
 
 #define TOTAL_TILE_SPRITES 8
 
-#define SERVICE "http-alt"
+#define SERVICE_NAME "http-alt"
 
-
-std::vector<std::vector<cell_t>> generate_server_map (std::string tile_map_file){
+std::vector<std::vector<cell_t>> generate_server_map (std::string tile_map_file) {
     //  Produce cell matrix
     std::vector<std::vector<cell_t>> cells;
     cells.resize(MAP_DIM_X);
@@ -70,8 +62,12 @@ std::vector<std::vector<cell_t>> generate_server_map (std::string tile_map_file)
     return cells;
 }
 
-int main(int argc, char *argv[]) {
+int main() {
+
     std::vector<std::vector<cell_t>> cells = generate_server_map(DATA_PATH MAP_FILE);
-    Server server(SERVICE,cells);
-    server.run(HARKONNEN,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY);
+    Server server(SERVICE_NAME,cells);
+    std::thread server_thread(&Server::run, &server);
+    //readInput();    //  Hold for input
+    server.stop();
+    server_thread.join();
 }
