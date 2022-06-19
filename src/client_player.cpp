@@ -150,7 +150,8 @@ void Player::play(){
                     new_mouse_event.push_back(selection.Xmax);
                     new_mouse_event.push_back(selection.Ymin);
                     new_mouse_event.push_back(selection.Ymax);
-                    this->mouse_events.push(new_mouse_event);
+                    if(this->mouse_events.back() != new_mouse_event)
+                        this->mouse_events.push(new_mouse_event);
                     last_command_was_create_building = false;
                 }
                 break;
