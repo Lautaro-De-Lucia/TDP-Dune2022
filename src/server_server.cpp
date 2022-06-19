@@ -129,7 +129,6 @@ response_t Server::createBuilding(int type, int pos_x, int pos_y, int& spice, in
         ID++;
         //client_player.addElement((building_t) type, state);
         //client_player.print("Building succesfully created!",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[YELLOW],1000);
-        return res;
     }
     //client_player.print("You can't build here!",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[RED],1000);
     return res;
@@ -141,9 +140,9 @@ response_t Server::createUnit(int type, int& spice) {
     std::cout << "type: " << type << std::endl;
     std::cout << "spice: " << spice << std::endl;
     //  Check if creator exists
-    if (this->board.getCreator((unit_t) type) == -1) {
+    if (this->board.getCreator((unit_t) type) == -1)
         return RES_CREATE_UNIT_FAILURE_CREATOR;
-    }
+
     //  Get possible creating locations
     Position building_pos = (elements.at(board.getCreator((unit_t) type)))->getPosition();
     int building_dim_x = (elements.at(board.getCreator((unit_t) type)))->getDimX();
@@ -166,7 +165,6 @@ response_t Server::createUnit(int type, int& spice) {
         ID++;
         //client_player.addElement((unit_t) type, state);        
         //client_player.print("Unit succesfully created",DATA_PATH FONT_IMPACT_PATH,200,300,10,colors[YELLOW],1000);
-        return res;
     }
     return res;
 }
@@ -176,8 +174,7 @@ response_t Server::handleLeftClick(int x, int y) {
     std::cout << "************************" << std::endl;
     std::cout << "Handling left click" << std::endl;
     std::cout << "position: (" << x << ", " << y << ")" << std::endl;
-    
-/*
+
     //  Get positions
     int pos_x = x;
     int pos_y = y;
@@ -188,9 +185,7 @@ response_t Server::handleLeftClick(int x, int y) {
         else
             e.second->unselect();
     }
-*/
     return RES_SUCCESS;
-
 }
 
 
@@ -201,7 +196,6 @@ response_t Server::handleSelection(int xmin, int xmax, int ymin, int ymax) {
     std::cout << "min position: (" << xmin << ", " << ymin << ")" << std::endl;
     std::cout << "max position: (" << xmax << ", " << ymax << ")" << std::endl;
 
-/*
     //  Get selection limits
     int Xmin = xmin;
     int Xmax = xmax;
@@ -214,7 +208,7 @@ response_t Server::handleSelection(int xmin, int xmax, int ymin, int ymax) {
         if (e.second->isWithin(selection))
             e.second->select();
     }
-*/
+
     return RES_SUCCESS;
 }
 
@@ -224,9 +218,6 @@ response_t Server::handleRightClick(int x, int y) {
     std::cout << "Handling right click" << std::endl;
     std::cout << "position: (" << x << ", " << y << ")" << std::endl;
 
-
-    
-/*    
     //  Get positions
     int pos_x = x;
     int pos_y = y;
@@ -237,9 +228,11 @@ response_t Server::handleRightClick(int x, int y) {
             e.second->react(pos_x,pos_y,board);
         }
     }
-    
-*/
-return RES_SUCCESS;
+
+    // @TODO: buscar una forma de devolver más información,
+    //        como RES_SELECTED_BUILDING_IS_NOW_CREATOR
+
+    return RES_SUCCESS;
 }
 /*
 void Server::reportStateToClient(CPlayer& client_player, int spice, int energy){

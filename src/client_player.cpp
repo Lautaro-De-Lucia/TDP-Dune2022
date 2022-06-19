@@ -11,7 +11,8 @@ std::map<response_t, std::string> usr_msg = {
         {RES_CREATE_BUILDING_SUCCESS, "Building successfully created!"},
         {RES_CREATE_BUILDING_FAILURE_SPICE, "Not enough spice"},
         {RES_CREATE_BUILDING_FAILURE_ENERGY, "Not enough energy"},
-        {RES_CREATE_BUILDING_FAILURE_TERRAIN, "You can't build here, dumbass"}
+        {RES_CREATE_BUILDING_FAILURE_TERRAIN, "You can't build here, dumbass"},
+        {RES_SELECTED_BUILDING_IS_NOW_CREATOR, "The selected building is now a creator!"},
 };
 
 //  @TODO: Meter en un bloque try{} en el main
@@ -94,7 +95,8 @@ void Player::play(){
                             new_mouse_event.push_back(current_pos.x);
                             new_mouse_event.push_back(current_pos.y);
                             this->is_holding_building = false;
-                            this->mouse_events.push(new_mouse_event);
+                            if(this->mouse_events.back() != new_mouse_event)
+                                this->mouse_events.push(new_mouse_event);
                             break;
                         default:
                             this->is_holding_building = false;
@@ -108,14 +110,16 @@ void Player::play(){
                         new_mouse_event.push_back(current_pos.y);
                         this->is_holding_building = false;
                         this->building_held = -1;
-                        this->mouse_events.push(new_mouse_event);
+                        if(this->mouse_events.back() != new_mouse_event)
+                            this->mouse_events.push(new_mouse_event);
                     } else {
                         new_mouse_event.push_back(MOUSE_LEFT_CLICK);
                         new_mouse_event.push_back(current_pos.x);
                         new_mouse_event.push_back(current_pos.y);
                         this->is_holding_building = false;
                         //this->building_held = -1;
-                        this->mouse_events.push(new_mouse_event);
+                        if(this->mouse_events.back() != new_mouse_event)
+                            this->mouse_events.push(new_mouse_event);
                     }
                 }
                 if (mouse.rightClick()){
@@ -125,7 +129,8 @@ void Player::play(){
                         new_mouse_event.push_back(MOUSE_RIGHT_CLICK);
                         new_mouse_event.push_back(current_pos.x);
                         new_mouse_event.push_back(current_pos.y);
-                        this->mouse_events.push(new_mouse_event);
+                        if(this->mouse_events.back() != new_mouse_event)
+                            this->mouse_events.push(new_mouse_event);
                     }
                 }
                 break;
@@ -140,7 +145,8 @@ void Player::play(){
                     new_mouse_event.push_back(selection.Xmax);
                     new_mouse_event.push_back(selection.Ymin);
                     new_mouse_event.push_back(selection.Ymax);
-                    this->mouse_events.push(new_mouse_event);
+                    if(this->mouse_events.back() != new_mouse_event)
+                        this->mouse_events.push(new_mouse_event);
                 }
                 break;
             default:
@@ -152,7 +158,7 @@ void Player::play(){
         auto current_time = clock();
 	    auto frame_time_instruction = current_time - base_time_instruction;
 
-        if (frame_time_instruction < 200000 && game_has_started)
+        if (frame_time_instruction < GAME_SPEED && game_has_started)
             continue;
 
         std::cout << "inside the loop" << std::endl;
@@ -185,9 +191,6 @@ void Player::play(){
                 this->protocol.send_create_building_request(mouse_event[1], mouse_event[2],mouse_event[3],this->socket);
                 break;
             case MOUSE_LEFT_CLICK:
-                //std::cout << "El cual representa un click izquierdo, y se envían las posiciones: " << std::endl;
-                //std::cout << "pos_x: " << mouse_event[1] << std::endl;
-                //std::cout << "pos_y: " << mouse_event[2] << std::endl;
                 this->protocol.send_mouse_left_click(mouse_event[1], mouse_event[2], this->socket);
                 break;
             case MOUSE_RIGHT_CLICK:
