@@ -1,18 +1,17 @@
 #include "client_selectable.h"
 
-CSelectable::CSelectable(State& state, SDL2pp::Renderer& renderer, const std::string& lp_path)
+CSelectable::CSelectable(int id,int lp,int pos_x,int pos_y, SDL2pp::Renderer& renderer, const std::string& lp_path)
 :
 lp_texture(renderer,lp_path)
 {
-    this->ID = state.ID;
-    this->name = name;
-    this->LP = state.LP;
-    this->max_LP = state.LP;
-    this->position = state.position;
+    this->ID = id;
+    this->LP = lp;
+    this->max_LP = lp;
+    this->position = Position(pos_x,pos_y);
     this->selected = false;
 }
 
-void CSelectable::update(State& new_state, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
+void CSelectable::update(int lp,int pos_x,int pos_y,bool selected,bool special,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
     int hsprites = 7;
     for (size_t state = 1 ; state <= hsprites ; state++){
         if (LP > (max_LP -(max_LP / 7)*state) && LP <= (max_LP -(max_LP / hsprites)*(state-1))){
@@ -20,36 +19,37 @@ void CSelectable::update(State& new_state, SDL2pp::Renderer& renderer, int cam_p
             break;
         }
     }
-    this->LP = new_state.LP;
-    this->position = new_state.position;
-    this->selected = new_state.selected;
+    this->LP = lp;
+    this->position.x = pos_x;
+    this->position.y = pos_y;
+    this->selected = selected;
 }
 
-void CStatic::update(State& new_state, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
-    CSelectable::update(new_state,renderer,cam_pos_x,cam_pos_y);
+void CStatic::update(int lp,bool selected,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
+    CSelectable::update(lp,this->position.x,this->position.y,selected,false,renderer,cam_pos_x,cam_pos_y);
     this->render(renderer, cam_pos_x, cam_pos_y);
 }
 
-void CMovable::update(State& new_state, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
+void CMovable::update(int lp,int pos_x,int pos_y,bool selected,bool attacking,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
     
-    if (new_state.position.x == this->position.x && new_state.position.y > this->position.y)
+    if (pos_x == this->position.x && pos_y > this->position.y)
         this->dir = BOTTOM;
-    if (new_state.position.x > this->position.x && new_state.position.y > this->position.y)
+    if (pos_x > this->position.x && pos_y > this->position.y)
         this->dir = BOTTOM_RIGHT;    
-    if (new_state.position.x > this->position.x && new_state.position.y == this->position.y)
+    if (pos_x > this->position.x && pos_y == this->position.y)
         this->dir = RIGHT;
-    if (new_state.position.x > this->position.x && new_state.position.y < this->position.y)
+    if (pos_x > this->position.x && pos_y < this->position.y)
         this->dir = TOP_RIGHT;
-    if (new_state.position.x == this->position.x && new_state.position.y < this->position.y)
+    if (pos_x == this->position.x && pos_y < this->position.y)
         this->dir = TOP;
-    if (new_state.position.x < this->position.x && new_state.position.y < this->position.y)
+    if (pos_x < this->position.x && pos_y < this->position.y)
         this->dir = TOP_LEFT; 
-    if (new_state.position.x < this->position.x && new_state.position.y == this->position.y)
+    if (pos_x < this->position.x && pos_y == this->position.y)
         this->dir = LEFT;
-    if (new_state.position.x < this->position.x && new_state.position.y > this->position.y)
+    if (pos_x < this->position.x && pos_y > this->position.y)
         this->dir = BOTTOM_LEFT;                    
         
-    CSelectable::update(new_state,renderer,cam_pos_x,cam_pos_y);
+    CSelectable::update(lp,pos_x,pos_y,selected,attacking,renderer,cam_pos_x,cam_pos_y);
     this->render(renderer, cam_pos_x, cam_pos_y);
 }
 
@@ -63,30 +63,22 @@ void CSelectable::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_
         );
 }
 
-int CSelectable::get_life_points() {
+int CSelectable::get_life_points() {    return this->LP;}
+int CSelectable::getID() {return this->ID;}
 
-    return this->LP;
-}
-
-int CSelectable::getID() {
-
-    return this->ID;
-}
-
-
-
-CMovable::CMovable(unit_t type, State& state, SDL2pp::Renderer& renderer, const std::string& lp_path , const std::string& path)
+CMovable::CMovable(unit_t type,int id,int lp,int pos_x,int pos_y, SDL2pp::Renderer& renderer, const std::string& lp_path , const std::string& path)
 :
-CSelectable(state,renderer,lp_path),
+CSelectable(id,lp,pos_x,pos_y,renderer,lp_path),
 texture(renderer,path)
 {
     this->dir = BOTTOM;
-    this->type = type;     
+    this->type = type; 
+    this->special = special;    
 }
 
-CStatic::CStatic(building_t type, State& state, SDL2pp::Renderer& renderer, const std::string& lp_path, const std::string& path) 
+CStatic::CStatic(building_t type, int id,int lp,int pos_x,int pos_y,SDL2pp::Renderer& renderer, const std::string& lp_path, const std::string& path) 
 :
-CSelectable(state,renderer,lp_path),
+CSelectable(id,lp,pos_x,pos_y,renderer,lp_path),
 texture(renderer,path)
 {
     this->type = type;     

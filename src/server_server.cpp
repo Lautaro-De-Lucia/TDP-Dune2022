@@ -63,18 +63,10 @@ void Server::run(player_t _faction, int _spice, int _c_spice, int _energy, int _
     while (true) {
 
         command_t command;
-        std::cout << "Waiting for the command " << std::endl;
         this->protocol.receive_command(command, this->client_socket);
-        std::cout << "Just got the command: " << command << std::endl;
         response_t res;
 
-        int type;
-        int pos_x;
-        int pos_y;
-        int pos_x_min;
-        int pos_x_max;
-        int pos_y_min;
-        int pos_y_max;
+        int type, pos_x, pos_y, pos_x_min,pos_x_max,pos_y_min,pos_y_max;
 
         switch (command){
             
@@ -106,10 +98,9 @@ void Server::run(player_t _faction, int _spice, int _c_spice, int _energy, int _
                 break;
         }
         this->protocol.send_command_response(res, this->client_socket);
-        //update();
+        update();
+        reportStateToClient(spice, energy);
     }
-    //reportStateToClient(spice, energy);
-
 }
 
 response_t Server::createBuilding(int type, int pos_x, int pos_y, int& spice, int& c_spice, int& energy, int& c_energy) {    
@@ -234,26 +225,22 @@ response_t Server::handleRightClick(int x, int y) {
 
     return RES_SUCCESS;
 }
-/*
-void Server::reportStateToClient(CPlayer& client_player, int spice, int energy){
-    //  Selectables state
-    State state;
-    this->states.clear();
-    for (auto& e : this->elements){
-        state.ID = e.first;
-        //std::cout << state.ID << std::endl;
-        e.second->getState(state);
-        states.push_back(state);
-    }
-    client_player.update(this->states,spice,energy);
-    //  Board state
-        //  Enviar posiciones con arena y su cantidad de spice
-        //  Enviar posiciones destruidas
-        //  Limpiar posiciones destruidas
+
+void Server::reportStateToClient(int spice, int energy){
+    //  Sending spice & energy state
+    this->protocol.send_player_state(spice,energy,this->client_socket);
+    //  Sending board state
+    this->protocol.send_sand_cells_size(this->board.getChangedSandPositions().size(),this->client_socket);
+    for(Position pos : this->board.getChangedSandPositions()){
+        this->protocol.send_sand_cell(pos.x,pos.y,this->board.getCell(pos.x,pos.y).getSpice(),this->client_socket);
+    }    
+    this->board.clearSandPositions();
+    //  Sending elements states
+    this->protocol.send_selectables_to_read(this->elements.size(),this->client_socket);
+    for (auto& e : this->elements){e.second->sendState(this->protocol,this->client_socket);}
 }
-*/
 //  void Server::reportBoardState()
-/*
+
 void Server::update(){
     State state;
     std::vector<State> states;
@@ -263,7 +250,7 @@ void Server::update(){
         states.push_back(state);
     }
 }
-*/
+
 
 
 

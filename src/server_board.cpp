@@ -17,12 +17,17 @@ elements(elements)
         for (size_t i = 0 ; i < dim_x ; i++) {
             cells[i][j].setPosition(i,j);
             cells[i][j].setTerrain(cell_types[i][j]);
-            if(cell_types[i][j] == SAND)
-                this->sand_positions.push_back(Position(i,j));
         }
     }
     this->creators.insert({HARVESTER,-1});
     this->creators.insert({TRIKE,-1});
+}
+
+void Board::addSandPosition(int x, int y){
+    this->changed_sand_positions.push_back(Position(x,y));
+}
+void Board::clearSandPositions(){
+    this->changed_sand_positions.clear();
 }
 
 status_t Board::canPlace(const Position& location, int dim_x,int dim_y) {

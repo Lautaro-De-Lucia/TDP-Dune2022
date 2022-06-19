@@ -5,6 +5,8 @@
 #include <vector>
 
 #include "common_utils.h"
+#include "common_protocol.h"
+#include "common_socket.h"
 
 class Board;
 
@@ -34,6 +36,8 @@ class Selectable {
     virtual void react(int x, int y, Board& board);
     virtual void update(State & state, Board& board);
     virtual void receiveDamage(int damage);
+    virtual void getState(State& state);
+    virtual void sendState(Protocol & protocol,Socket & client_socket);
     player_t getFaction();
     int getLP();
     std::string getName();
@@ -42,7 +46,6 @@ class Selectable {
     Position getPosition();
     int getDimX();
     int getDimY();
-    void getState(State& state);
     std::vector<Position>& get_remaining_path();
     virtual ~Selectable(){}
 };

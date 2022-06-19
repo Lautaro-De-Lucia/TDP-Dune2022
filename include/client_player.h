@@ -1,7 +1,7 @@
 #pragma once
 
 #include <queue>
-
+// ASD
 #include "client_selectable.h"
 #include "client_gamemap.h"
 #include "client_gamehud.h"
@@ -21,7 +21,7 @@ const int CAMERA_HEIGHT = 360;
 const int CAMERA_INITIAL_POS_X = 0;
 const int CAMERA_INITIAL_POS_Y = 0;
 
-const int GAME_SPEED = 200000;
+const int GAME_SPEED = 20000;
 
 class Player {
 
@@ -45,6 +45,7 @@ class Player {
     bool is_holding_building;
     int building_held;
     std::queue<std::vector<int>> mouse_events;
+    std::vector<bool> updates;
 
     Player(const char* host_name, const char* service_name,Camera & cam, SDL2pp::Window& window,SDL2pp::Renderer& renderer, size_t spice, size_t c_spice, int energy, size_t c_energy, std::vector<std::vector<std::string>>& map_data);
 
@@ -53,7 +54,10 @@ class Player {
     void renderHud();
     void addElement(unit_t type,State& desc);
     void addElement(building_t type,State& desc);
+    void render();
     void update();
+    bool contains(int ID);
+
     //   Socket/Protocol methods
 
     void print(std::string toprint, std::string fontpath, int x, int y, int size ,SDL_Color color,size_t time);

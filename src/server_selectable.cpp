@@ -117,8 +117,16 @@ std::vector<Position>& Selectable::get_remaining_path() {
 }
 
 void Selectable::getState(State& state){
+    state.ID = this->ID;
     state.LP = this->LP;
     state.position = this->position;
     state.selected = this->selected;
+    state.special = false;
 }
+
+void Selectable::sendState(Protocol & protocol,Socket & client_socket){
+    std::cout << "I really shouldn't be here" << std::endl;
+}
+
+
 

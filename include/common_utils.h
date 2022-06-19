@@ -44,7 +44,10 @@
 #define REFINERY_DIM_Y 3
 #define REFINERY_CAPACITY 5000
 
-#define DEF_SAND_SPICE 1000
+#define SAND_SPICE_FULL 1000
+#define SAND_SPICE_SOME 500
+#define SAND_SPICE_LITTLE 200
+#define SAND_SPICE_EMPTY 0
 
 #define RESPONSE_FAILURE_OFFSET 20
 
@@ -80,9 +83,9 @@ enum cell_t {
     DUNE = 2,
     PIT = 3,
     SAND_EMPTY = 4,
-    SAND_FULL = 5,
+    SAND_LITTLE = 5,
     SAND_SOME = 6,
-    SAND_LITTLE = 7,
+    SAND_FULL = 7,
     DEBRIS = 8
 };
 
@@ -125,6 +128,7 @@ struct State {
     int LP;
     Position position;
     bool selected;
+    bool special;
 };
 
 struct Area {

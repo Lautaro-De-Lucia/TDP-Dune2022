@@ -34,6 +34,19 @@ int Building::getEnergy(){
     return this->energy;
 }
 
+void Building::sendState(Protocol & protocol,Socket & client_socket){
+    std::cout << "I shouldn't be here either" << std::endl;
+}
+
+void Building::react(int x, int y, Board & board){
+    for (size_t j = 0 ; j < this->getDimY() ; j++)
+        for (size_t i = 0 ; i < this->getDimX() ; i++)
+            if( x == this->position.x+i && y == this->position.y+j){        
+                board.makeCreator(this->ID);
+                return;
+            }
+}
+
 AirTrap::AirTrap(int ID,player_t faction, int LP,int spice,int energy, Position pos, int dim_x,int dim_y, int c_energy)
 :
 Building(ID,faction, LP,spice,energy,pos,dim_x,dim_y)
@@ -64,6 +77,17 @@ int AirTrap::getCEnergy() {
     return this->c_energy;
 }
 
+void AirTrap::sendState(Protocol & protocol,Socket & client_socket){
+    protocol.send_air_trap(
+        this->ID,
+        this->LP,
+        this->position.x,
+        this->position.y,
+        this->selected,
+        client_socket
+    );
+}
+
 Barrack::Barrack(int ID,player_t faction,int LP,int spice,int energy, Position pos, int dim_x,int dim_y)
 :
 Building(ID,faction,LP,spice,energy,pos,dim_x,dim_y)
@@ -89,13 +113,15 @@ response_t Barrack::place(Board& board,int pos_x,int pos_y,int& spice,int& spice
     return RES_CREATE_BUILDING_SUCCESS;
 }
 
-void Building::react(int x, int y, Board & board){
-    for (size_t j = 0 ; j < this->getDimY() ; j++)
-        for (size_t i = 0 ; i < this->getDimX() ; i++)
-            if( x == this->position.x+i && y == this->position.y+j){        
-                board.makeCreator(this->ID);
-                return;
-            }
+void Barrack::sendState(Protocol & protocol,Socket & client_socket){
+    protocol.send_barrack(
+        this->ID,
+        this->LP,
+        this->position.x,
+        this->position.y,
+        this->selected,
+        client_socket
+    );
 }
 
 Refinery::Refinery(int ID,player_t faction, int LP,int spice,int energy, Position pos, int dim_x,int dim_y, int c_spice)
@@ -129,4 +155,15 @@ response_t Refinery::place(Board& board,int pos_x,int pos_y,int& spice,int& spic
 
 int Refinery::getCSpice() {
     return this->c_spice;
+}
+
+void Refinery::sendState(Protocol & protocol,Socket & client_socket){
+    protocol.send_refinery(
+        this->ID,
+        this->LP,
+        this->position.x,
+        this->position.y,
+        this->selected,
+        client_socket
+    );
 }

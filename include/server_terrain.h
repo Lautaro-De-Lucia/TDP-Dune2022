@@ -10,6 +10,7 @@ class Terrain {
     virtual bool canExtract(){return false;}
     virtual bool canBuild(){return false;}
     virtual size_t extractSpice(){return 0;}
+    virtual int getSpice(){return 0;}
 };
 
 class Sand : public Terrain {
@@ -20,6 +21,7 @@ class Sand : public Terrain {
     virtual bool canExtract();
     virtual bool canBuild();
     virtual size_t extractSpice();
+    virtual int getSpice();
 };
 
 class Rock : public Terrain {
@@ -28,6 +30,7 @@ class Rock : public Terrain {
     virtual bool canTraverse();
     virtual bool canExtract();
     virtual bool canBuild();
+    virtual int getSpice();
 };
 
 class Pit : public Terrain {
@@ -36,6 +39,7 @@ class Pit : public Terrain {
     virtual bool canTraverse();
     virtual bool canExtract();
     virtual bool canBuild();
+    virtual int getSpice();
 };
 
 class Dune : public Terrain {
@@ -44,4 +48,5 @@ class Dune : public Terrain {
     virtual bool canTraverse();
     virtual bool canExtract();
     virtual bool canBuild();
+    virtual int getSpice();
 };

@@ -46,5 +46,5 @@ class Server {
    void send_element(AirTrap& air_trap, int __id);
    void send_element(Barrack& barrack, int __id);
    void send_element(Refinery& refinery, int __id);
-   //void reportStateToClient(CPlayer& client_player, int spice, int energy);
+   void reportStateToClient(int spice, int energy);
 };

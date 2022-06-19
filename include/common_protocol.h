@@ -3,10 +3,6 @@
 #include <vector>
 #include <string>
 
-#include "server_selectable.h"
-#include "server_unit.h"
-#include "server_building.h"
-
 #include "common_utils.h"
 #include "common_socket.h"
 
@@ -66,12 +62,16 @@ class Protocol {
     void receive_refinery(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket);
 
     // communicate selectables collection size
-    void send_selectables_size(int size, Socket& client_socket);
-    void receive_selectables_size(int& size, Socket& client_socket);
+    void send_selectables_to_read(int size, Socket& client_socket);
+    void receive_selectables_to_read(int& size, Socket& client_socket);
 
     // sand cells communication
     void send_sand_cells_size(int size, Socket& client_socket);
     void receive_sand_cells_size(int& size, Socket& client_socket);
     void send_sand_cell(int pos_x, int pos_y, int spice, Socket& client_socket);
     void receive_sand_cell(int& pos_x, int& pos_y, int& spice, Socket& client_socket);
+
+    // player state send/receive
+    void send_player_state(int spice, int energy, Socket& client_socket);
+    void receive_player_state(int& spice, int& energy, Socket& client_socket);
 };

@@ -23,7 +23,7 @@ class Board{
     std::map<int,std::unique_ptr<Selectable>> & elements;
     std::map<unit_t,int> creators;
     std::vector<Position> deposit_positions;
-    std::vector<Position> sand_positions;
+    std::vector<Position> changed_sand_positions;
     std::vector<Position> destroyed_positions;
  public:
     Board(std::vector<std::vector<cell_t>> cell_types,std::map<int,std::unique_ptr<Selectable>> & server_elements);
@@ -43,6 +43,9 @@ class Board{
     void dealDamage(int x, int y, int damage);
     size_t get_width();
     size_t get_height();
+    std::vector<Position> getChangedSandPositions(){return this->changed_sand_positions;}
+    void clearSandPositions();
+    void addSandPosition(int x, int y);
     //  void move_unit(Position from, Position to,player_t faction,unit_t unit);
     std::vector<Position> get_traversable_neighbors_of(Position pos, size_t distance);
     size_t get_distance_between(Position pos1, Position pos2);

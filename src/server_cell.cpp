@@ -47,6 +47,9 @@ int Cell::getID(){
     return this->element_ID;
 }
 
+int Cell::getSpice(){
+    return this->terrain->getSpice();
+}
 
 void Cell::occupy(int ID){this->element_ID = ID;}
 void Cell::disoccupy(){this->element_ID = -1;}

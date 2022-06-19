@@ -36,8 +36,6 @@ mouse(TILE_DIM,cam)
     this->building_held = -1;
 }
 
-
-
 void Player::play(){
 
     bool game_has_started = false;
@@ -69,7 +67,7 @@ void Player::play(){
         if (y > 660) 
             this->camera.move(0,1);
 
-        this->update();
+        this->render();
             
         //  Obtenemos la instrucción del mouse
         mouse.getEvent(&event);
@@ -98,7 +96,8 @@ void Player::play(){
                             new_mouse_event.push_back(current_pos.y);
                             this->is_holding_building = false;
                             this->building_held = -1;
-                            this->mouse_events.push(new_mouse_event);
+                            if(this->mouse_events.back() != new_mouse_event)
+                                this->mouse_events.push(new_mouse_event);
                             last_command_was_create_building = false;
                             break;
                         default:
@@ -117,15 +116,13 @@ void Player::play(){
                         this->mouse_events.push(new_mouse_event);
                         last_command_was_create_building = true;
                     } else {
-                        if (!last_command_was_create_building) {
-                            new_mouse_event.push_back(MOUSE_LEFT_CLICK);
-                            new_mouse_event.push_back(current_pos.x);
-                            new_mouse_event.push_back(current_pos.y);
-                            if(this->mouse_events.back() != new_mouse_event)
-                                this->mouse_events.push(new_mouse_event);
-                        }
+                        new_mouse_event.push_back(MOUSE_LEFT_CLICK);
+                        new_mouse_event.push_back(current_pos.x);
+                        new_mouse_event.push_back(current_pos.y);
+                        if(this->mouse_events.back() != new_mouse_event)
+                            this->mouse_events.push(new_mouse_event);
                     }
-                }
+            }
                 if (mouse.rightClick()){
                     mouse.unclick();
                     if(checkHud(x,y)) {
@@ -201,8 +198,6 @@ void Player::play(){
             }
         }
         */
-
-        std::cout << "Enviando el comando: " << command << std::endl;
         //  La pasamos por socket
         this->protocol.send_command(command, this->socket);
 
@@ -231,9 +226,116 @@ void Player::play(){
         this->protocol.receive_command_response(res,this->socket);
         if (res != RES_SUCCESS)
             this->print(usr_msg[res], DATA_PATH FONT_IMPACT_PATH, 200, 300, 10, res >= RESPONSE_FAILURE_OFFSET ? colors[GREEN] : colors[RED], 1000);
+        this->update();
     }
 }
 
+bool Player::contains(int ID){
+    for (auto& e : this->elements){
+        if (e.first == ID)
+            return true;
+    }
+    return false;
+}
+
+void Player::update() {
+    //  Setup Variables
+    int id,lp,pos_x,pos_y,energy,spice; //  Values
+    bool selected,harvesting,attacking; //  State flags
+    int  toread,c;                      //  Helper variables
+    //  Update values for player
+    this->protocol.receive_player_state(spice,energy,this->socket);
+    this->spice = spice;
+    this->energy = energy;
+    
+    //  Update the board
+    //  Get values in sand positions
+    this->protocol.receive_sand_cells_size(toread,this->socket);
+    for (c = 0 ; c < toread; c++){
+        this->protocol.receive_sand_cell(pos_x,pos_y,spice,this->socket);
+        this->map.updateCell(this->game_renderer,pos_x,pos_y,spice);
+    }
+    //  Render debris
+        // int pos_x;
+        // int pos_y;
+        // int type;
+        // for (size_t i = 0; i < toread; i++){ 
+        // this->protocol.receive_sand_cell(pos_x,pos_y,spice,this->socket);
+        // this->map_cells[pos_x][pos_y].setType(type);
+        // }
+    //  Receive elements
+    //  Set updates to false
+    for (size_t i = 0 ; i < this->updates.size(); i++)
+        this->updates[i] = false;
+    //  Get reads from server
+    this->protocol.receive_selectables_to_read(toread, this->socket);
+    std::cout << "Selectables to read: " << toread << std::endl;
+    //  Read each element
+    for (size_t i = 0 ; i < toread ; i++){
+        selectable_t type;
+        this->protocol.receive_selectable_type(type,this->socket);
+        switch(type){
+            case SEL_TRIKE:
+                this->protocol.receive_trike(id,lp,pos_x,pos_y,selected,attacking,this->socket);
+                if (this->contains(id)){
+                    this->elements.at(id)->update(lp,pos_x,pos_y,selected,attacking,this->game_renderer,camera.pos_x,camera.pos_y);
+                    this->updates[id] = true;
+                } else {
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(TRIKE,id,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH TRIKE_PATH))});
+                    this->updates.push_back(true);  
+                }
+                break;
+            case SEL_HARVESTER:
+                this->protocol.receive_harvester(id,lp,pos_x,pos_y,selected,spice,harvesting,this->socket);
+                if (this->contains(id)){
+                    this->elements.at(id)->update(lp,pos_x,pos_y,selected,harvesting,this->game_renderer,camera.pos_x,camera.pos_y);
+                    this->updates[id] = true;
+                } else {
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(HARVESTER,id,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH HARVESTER_PATH))});
+                    this->updates.push_back(true);  
+                }
+                break;
+            case SEL_AIR_TRAP:
+                this->protocol.receive_air_trap(id,lp,pos_x,pos_y,selected,this->socket);
+                if (this->contains(id)){
+                    this->elements.at(id)->update(lp,pos_x,pos_y,selected,false,this->game_renderer,camera.pos_x,camera.pos_y);
+                    this->updates[id] = true;
+                } else {
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(AIR_TRAP,id,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH WIND_TRAP_PATH))});
+                    this->updates.push_back(true);  
+                }     
+                break;
+            case SEL_REFINERY:
+                std::cout << "Received a refinery" << std::endl;
+                this->protocol.receive_refinery(id,lp,pos_x,pos_y,selected,this->socket);
+                if (this->contains(id)){
+                    this->elements.at(id)->update(lp,pos_x,pos_y,selected,false,this->game_renderer,camera.pos_x,camera.pos_y);
+                    this->updates[id] = true;
+                } else {
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(REFINERY,id,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH REFINERY_PATH))});
+                    this->updates.push_back(true);  
+                } 
+                break;
+            case SEL_BARRACK:
+                this->protocol.receive_barrack(id,lp,pos_x,pos_y,selected,this->socket);
+                if (this->contains(id)){
+                    this->elements.at(id)->update(lp,pos_x,pos_y,selected,false,this->game_renderer,camera.pos_x,camera.pos_y);
+                    this->updates[id] = true;
+                } else {
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(BARRACK,id,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH BARRACK_PATH))});
+                    this->updates.push_back(true);  
+                }  
+                break;     
+        }
+    }
+    //  Destroy non-updated elements
+    for (size_t i = 0 ; i < this->updates.size() ; i++)
+        if(this->updates[i] == false)
+            if(this->contains(i))
+                this->elements.erase(i);     
+}
+
+/*
 void Player::addElement(unit_t type,State& desc) {
     //  Ahora estamos hablando de SPRITES
     //  Va a ser una imágen con la unidad en muchas posiciones
@@ -261,14 +363,14 @@ void Player::addElement(building_t type, State& desc){
             break;       
     }
 }
-
-void Player::update(){
+*/
+void Player::render(){
     this->game_renderer.Clear();
     this->renderMap();
     this->printer.render(this->game_renderer);
-    //for (State data : server_data)
-    //    (*(this->elements.at(data.ID))).update(data,this->game_renderer, this->camera.pos_x, this->camera.pos_y);
-    this->hud.update(1000,1000);
+    for (auto& e : this->elements)
+        e.second->render(this->game_renderer,this->camera.pos_x,this->camera.pos_y);
+    this->hud.update(this->spice,this->energy);
     this->renderHud();
     this->game_renderer.Present();
 }

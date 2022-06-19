@@ -24,7 +24,7 @@ GameMap::GameMap(SDL2pp::Renderer& renderer,std::vector<std::vector<std::string>
 		map_cells[i].resize(dim_y);
     for (size_t j = 0 ; j < this->dim_y ; j++) {
         for (size_t i = 0 ; i < this->dim_x ; i++) {	
-			map_cells[i][j] = std::make_unique<MapCell>(renderer,cell_paths[i][j].c_str(),i,j);
+			map_cells[i][j] = std::unique_ptr<MapCell>(new MapCell(renderer,cell_paths[i][j].c_str(),i,j));
         }
     }
 }
@@ -35,15 +35,13 @@ void GameMap::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
 			this->map_cells[i][j]->render(renderer, cam_pos_x, cam_pos_y);
 }
 
-void GameMap::updateCells(SDL2pp::Renderer& renderer,std::vector<Position> sand_positions,std::vector<int> spice) {
-	for(size_t i = 0; i < spice.size(); i++){
-		if (spice[i] == 0)
-			map_cells[sand_positions[i].x][sand_positions[i].y] = std::make_unique<MapCell>(renderer,"/home/lautaro/Documents/FACULTAD/TDP/Clonado2/TDP-Dune2022/data/mapsprites/s0",sand_positions[i].x,sand_positions[i].y);
-		if (spice[i] < 0 && spice[i] < 200)
-			map_cells[sand_positions[i].x][sand_positions[i].y] = std::make_unique<MapCell>(renderer,"/home/lautaro/Documents/FACULTAD/TDP/Clonado2/TDP-Dune2022/data/mapsprites/s1",sand_positions[i].x,sand_positions[i].y);
-		if (spice[i] < 200 && spice[i] < 500)
-			map_cells[sand_positions[i].x][sand_positions[i].y] = std::make_unique<MapCell>(renderer,"/home/lautaro/Documents/FACULTAD/TDP/Clonado2/TDP-Dune2022/data/mapsprites/s2",sand_positions[i].x,sand_positions[i].y);
-		if (spice[i] < 500 && spice[i] < 1000)
-			map_cells[sand_positions[i].x][sand_positions[i].y] = std::make_unique<MapCell>(renderer,"/home/lautaro/Documents/FACULTAD/TDP/Clonado2/TDP-Dune2022/data/mapsprites/s3",sand_positions[i].x,sand_positions[i].y);
-	}
+void GameMap::updateCell(SDL2pp::Renderer& renderer,int pos_x, int pos_y,int spice) {
+	if (spice == 0)
+		map_cells[pos_x][pos_y] = std::unique_ptr<MapCell>(new MapCell(renderer,DATA_PATH SAND_PATH_EMPTY,pos_x,pos_y));	
+	if (spice > 0 && spice < 200)
+		map_cells[pos_x][pos_y] = std::unique_ptr<MapCell>(new MapCell(renderer,DATA_PATH SAND_PATH_LITTLE,pos_x,pos_y));
+	if (spice > 200 && spice < 500)
+		map_cells[pos_x][pos_y] = std::unique_ptr<MapCell>(new MapCell(renderer,DATA_PATH SAND_PATH_SOME,pos_x,pos_y));
+	if (spice > 500 && spice < 1000)
+		map_cells[pos_x][pos_y] = std::unique_ptr<MapCell>(new MapCell(renderer,DATA_PATH SAND_PATH_FULL,pos_x,pos_y));
 }

@@ -44,8 +44,8 @@ class CSelectable {
     bool selected;
     health_t health;
  public:
-    CSelectable(State& initial_state,SDL2pp::Renderer& renderer, const std::string& lp_path);
-    virtual void update(State& new_state,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
+    CSelectable(int id,int lp,int pos_x,int pos_y,SDL2pp::Renderer& renderer, const std::string& lp_path);
+    virtual void update(int lp,int pos_x,int pos_y,bool selected,bool special,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
     virtual void render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
     int get_life_points();
     int getID();
@@ -62,11 +62,11 @@ class CMovable : public CSelectable {
     SDL2pp::Texture texture;  
     move_direction dir;
     unit_t type;
-    std::vector<bool> updates;
+    bool special;
  public:
-    CMovable(unit_t type,State& state,SDL2pp::Renderer& renderer, const std::string& lp_path , const std::string& path);
+    CMovable(unit_t type,int id,int lp,int pos_x,int pos_y,SDL2pp::Renderer& renderer, const std::string& lp_path , const std::string& path);
     void render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
-    void update(State& new_state,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
+    void update(int lp,int pos_x,int pos_y,bool selected,bool special,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
 }; 
 
 class CStatic : public CSelectable {
@@ -74,9 +74,9 @@ class CStatic : public CSelectable {
     SDL2pp::Texture texture;  
     building_t type;
  public:
-    CStatic(building_t type,State& state,SDL2pp::Renderer& renderer, const std::string& lp_path ,const std::string& path);
+    CStatic(building_t type,int id,int lp,int pos_x,int pos_y,SDL2pp::Renderer& renderer, const std::string& lp_path ,const std::string& path);
     void render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
-    void update(State& new_state,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
+    void update(int lp,bool selected,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
 };
 
 

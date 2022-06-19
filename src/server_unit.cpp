@@ -16,6 +16,11 @@ response_t Unit::place(Board& board,std::vector<Position>& positions,int * spice
     return RES_SUCCESS;
 }
 
+void Unit::sendState(Protocol & protocol, Socket & client_socket){
+    std::cout << "I really shouldn't be here" << std::endl;
+}
+
+
 response_t Harvester::place(Board& board,std::vector<Position>& positions,int * spice){
     if ((*spice - this->spice) < 0){
         return RES_CREATE_UNIT_FAILURE_SPICE;
@@ -32,6 +37,19 @@ response_t Harvester::place(Board& board,std::vector<Position>& positions,int * 
     return RES_CREATE_UNIT_FAILURE_SPACE;
 }
 
+void Harvester::sendState(Protocol & protocol, Socket & client_socket){
+    protocol.send_harvester(
+        this->ID,
+        this->LP,
+        this->position.x,
+        this->position.y,
+        this->selected,
+        this->spice,
+        this->harvesting,
+        client_socket); 
+}
+
+
 response_t Trike::place(Board& board,std::vector<Position>& positions,int * spice){
     if ((*spice - this->spice) < 0){
         return RES_CREATE_UNIT_FAILURE_SPICE;
@@ -47,11 +65,27 @@ response_t Trike::place(Board& board,std::vector<Position>& positions,int * spic
     return RES_CREATE_UNIT_FAILURE_SPACE;
 }
 
+
+void Trike::sendState(Protocol & protocol, Socket & client_socket){
+    protocol.send_trike(
+        this->ID,
+        this->LP,
+        this->position.x,
+        this->position.y,
+        this->selected,
+        this->attacking,
+        client_socket); 
+}
+
+
 void Unit::react(int x, int y, Board& board){}
 void Unit::update(State& state, Board& board){}
 void Unit::receiveDamage(int damage){}
+void Unit::getState(State& state){}
+
 
 void Unit::move(int x, int y, Board& board) {
+    std::cout << "Moving" << std::endl;
     std::vector<Position> new_path;
     if (Position(x,y) == this->getPosition()) {
         this->remaining_path = new_path;
@@ -121,6 +155,7 @@ void Harvester::update(State& state, Board& board){
             if(this->position == this->harvest_position){
                 Cell& harvestcell = board.getCell(harvest_position.x,harvest_position.y);
                 int spice = harvestcell.extractSpice();
+                board.addSandPosition(harvest_position.x,harvest_position.y);
                 if(spice == 0){
                     this->harvesting = false;
                     if(this->stored_spice > 0)
@@ -230,6 +265,14 @@ int Harvester::getSpice() {
 
 bool Harvester::isHarvesting() {
     return this->harvesting;
+}
+
+void Harvester::getState(State& state){
+    state.ID = this->ID;
+    state.LP = this->LP;
+    state.position = this->position;
+    state.selected = this->selected;
+    state.special = this->harvesting;
 }
 
 Trike::Trike(int ID,player_t faction, int LP,int spice, Position pos, int dim_x, int dim_y,int speed,int attack,int range)
@@ -359,4 +402,12 @@ void Trike::occupy(Board & board){
 
 bool Trike::isAttacking() {
     return this->attacking;
+}
+
+void Trike::getState(State& state){
+    state.ID = this->ID;
+    state.LP = this->LP;
+    state.position = this->position;
+    state.selected = this->selected;
+    state.special = this->attacking;
 }

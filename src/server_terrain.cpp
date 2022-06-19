@@ -15,19 +15,24 @@ size_t Sand::extractSpice(){
     }
     return 0;
 }
+int Sand::getSpice(){return this->spice;}
+
 
 
 Rock::Rock():Terrain(){} 
 bool Rock::canTraverse(){return true;}
 bool Rock::canExtract(){return false;}
 bool Rock::canBuild(){return true;}
+int Rock::getSpice(){return 0;}
 
 Dune::Dune():Terrain(){} 
 bool Dune::canTraverse(){return true;}
 bool Dune::canExtract(){return false;}
 bool Dune::canBuild(){return false;}
+int Dune::getSpice(){return 0;}
 
 Pit::Pit():Terrain(){}
 bool Pit::canTraverse(){return false;}
 bool Pit::canExtract(){return false;}
 bool Pit::canBuild(){return false;}
+int Pit::getSpice(){return 0;}

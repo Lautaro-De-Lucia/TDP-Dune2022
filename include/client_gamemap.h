@@ -18,6 +18,11 @@ extern Camera cam;
 #define DUNE_PATH "/mapsprites/dune_1.png"
 #define PIT_PATH "/mapsprites/pit_1.png"
 
+#define SAND_PATH_EMPTY "/mapsprites/s0.png"
+#define SAND_PATH_LITTLE "/mapsprites/s1.png"
+#define SAND_PATH_SOME "/mapsprites/s2.png"
+#define SAND_PATH_FULL "/mapsprites/s3.png"
+
 class MapCell{
  private:    
     Position position;
@@ -34,6 +39,6 @@ class GameMap {
     std::vector<Position> destroyed_positions;
  public:
     GameMap(SDL2pp::Renderer& renderer,std::vector<std::vector<std::string>>& cells);
-    void updateCells(SDL2pp::Renderer& renderer,std::vector<Position> sand_positions,std::vector<int> spice);
+    void updateCell(SDL2pp::Renderer& renderer,int pos_x, int pos_y,int spice);
     void render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
 };
