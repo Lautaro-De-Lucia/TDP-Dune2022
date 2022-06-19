@@ -27,7 +27,6 @@ class Server {
    double efficiency;
    std::map<int,std::unique_ptr<Selectable>> elements;
    Board board;
-   std::queue<std::vector<int>> mouse_events;
    std::vector<State> states;
    bool place(Building& building,Position position);
    bool place(Refinery& refinery,Position& position);

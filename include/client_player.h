@@ -1,5 +1,7 @@
 #pragma once
 
+#include <queue>
+
 #include "client_selectable.h"
 #include "client_gamemap.h"
 #include "client_gamehud.h"
@@ -40,6 +42,7 @@ class Player {
     Camera & camera;
     bool is_holding_building;
     int building_held;
+    std::queue<std::vector<int>> mouse_events;
 
     Player(const char* host_name, const char* service_name,Camera & cam, SDL2pp::Window& window,SDL2pp::Renderer& renderer, size_t spice, size_t c_spice, int energy, size_t c_energy, std::vector<std::vector<std::string>>& map_data);
 

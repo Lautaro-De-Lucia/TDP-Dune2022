@@ -38,109 +38,143 @@ mouse(TILE_DIM,cam)
 
 
 void Player::play(){
-    
-    std::vector<int> mouse_event;
+
+    bool game_has_started = false;
+    auto base_time_instruction = clock();
+    std::vector<int> new_mouse_event;
+
     while (true) {
-    
-    mouse_event.clear();
-    //  loopeamos infinitamente
-    //  Actualizamos la cámara
+
+        //  loopeamos infinitamente
+        //  Actualizamos la cámara
+            
+        SDL_Event event;
+        SDL_PollEvent(&event);
+
+        if( event.type == SDL_QUIT ) {
+            exit(1);
+        }
         
-    SDL_Event event;
-    SDL_PollEvent(&event);
+        int x, y;
+        SDL_GetMouseState(&x, &y);
 
-    if( event.type == SDL_QUIT ) {
-        exit(1);
-    }
-    
-    int x, y;
-    SDL_GetMouseState(&x, &y);
+        if (x < 80) 
+            this->camera.move(-1,0);
+        if (x > 1010 && x < 1090) 
+            this->camera.move(1,0);
+        if (y < 60) 
+            this->camera.move(0,-1);
+        if (y > 660) 
+            this->camera.move(0,1);
 
-    if (x < 80) 
-        this->camera.move(-1,0);
-    if (x > 1010 && x < 1090) 
-        this->camera.move(1,0);
-    if (y < 60) 
-        this->camera.move(0,-1);
-    if (y > 660) 
-        this->camera.move(0,1);
-        
-    //  Obtenemos la instrucción del mouse
-    mouse.getEvent(&event);
-    Position current_pos = mouse.currentPosition();
+        this->update();
+            
+        //  Obtenemos la instrucción del mouse
+        mouse.getEvent(&event);
+        Position current_pos = mouse.currentPosition();
 
-    switch(event.type){
-        case SDL_MOUSEBUTTONDOWN:
-            if (mouse.leftClick()){
-                mouse.click();
-                SDL_GetMouseState(&x, &y);
-                if (checkHud(x,y)) {
-                    mouse.unclick();
-                    switch (checkBtn(x, y))
-                    {
-                    case BUILD_BTN:
-                        this->print("Place building on screen", DATA_PATH FONT_IMPACT_PATH, 200, 300, 10, colors[YELLOW], 1000);
-                        this->is_holding_building = true;
-                        this->building_held = checkBuild(x, y);
-                        break;
-                    case UNIT_BTN:
-                        std::cout << "CREATING UNIT_BTN" << std::endl;
-                        mouse_event.push_back(CREATE_UNIT);
-                        mouse_event.push_back(checkUnit(x,y));
-                        mouse_event.push_back(current_pos.x);
-                        mouse_event.push_back(current_pos.y);
-                        this->is_holding_building = false;
-                        break;
-                    default:
+        switch(event.type) {
+            case SDL_MOUSEBUTTONDOWN:
+                if (mouse.leftClick()){
+                    mouse.click();
+                    SDL_GetMouseState(&x, &y);
+                    if (checkHud(x,y)) {
+                        mouse.unclick();
+                        switch (checkBtn(x, y))
+                        {
+                        case BUILD_BTN:
+                            this->print("Place building on screen", DATA_PATH FONT_IMPACT_PATH, 200, 300, 10, colors[YELLOW], 1000);
+                            this->is_holding_building = true;
+                            this->building_held = checkBuild(x, y);
+                            break;
+                        case UNIT_BTN:
+                            std::cout << "CREATING UNIT_BTN" << std::endl;
+                            new_mouse_event.push_back(CREATE_UNIT);
+                            new_mouse_event.push_back(checkUnit(x,y));
+                            new_mouse_event.push_back(current_pos.x);
+                            new_mouse_event.push_back(current_pos.y);
+                            this->is_holding_building = false;
+                            this->mouse_events.push(new_mouse_event);
+                            break;
+                        default:
+                            this->is_holding_building = false;
+                            this->building_held = -1;
+                            break;
+                        }
+                    } else if (this->is_holding_building) {
+                        new_mouse_event.push_back(CREATE_BUILDING);
+                        new_mouse_event.push_back(this->building_held);
+                        new_mouse_event.push_back(current_pos.x);
+                        new_mouse_event.push_back(current_pos.y);
                         this->is_holding_building = false;
                         this->building_held = -1;
-                        break;
+                        this->mouse_events.push(new_mouse_event);
+                    } else {
+                        new_mouse_event.push_back(MOUSE_LEFT_CLICK);
+                        new_mouse_event.push_back(current_pos.x);
+                        new_mouse_event.push_back(current_pos.y);
+                        this->is_holding_building = false;
+                        //this->building_held = -1;
+                        this->mouse_events.push(new_mouse_event);
                     }
-                } else if (this->is_holding_building) {
-                    mouse_event.push_back(CREATE_BUILDING);
-                    mouse_event.push_back(this->building_held);
-                    mouse_event.push_back(current_pos.x);
-                    mouse_event.push_back(current_pos.y);
-                    this->is_holding_building = false;
-                    this->building_held = -1;
-                } else {
-                    mouse_event.push_back(MOUSE_LEFT_CLICK);
-                    mouse_event.push_back(current_pos.x);
-                    mouse_event.push_back(current_pos.y);
-                    this->is_holding_building = false;
-                    //this->building_held = -1;
                 }
-            }
-            if (mouse.rightClick()){
-                mouse.unclick();
+                if (mouse.rightClick()){
+                    mouse.unclick();
+                    if(checkHud(x,y)) {
+                    } else {
+                        new_mouse_event.push_back(MOUSE_RIGHT_CLICK);
+                        new_mouse_event.push_back(current_pos.x);
+                        new_mouse_event.push_back(current_pos.y);
+                        this->mouse_events.push(new_mouse_event);
+                    }
+                }
+                break;
+            case SDL_MOUSEBUTTONUP:
                 if(checkHud(x,y)) {
-                } else {
-                    mouse_event.push_back(MOUSE_RIGHT_CLICK);
-                    mouse_event.push_back(current_pos.x);
-                    mouse_event.push_back(current_pos.y);
+                        break;
                 }
-            }
-            break;
-        case SDL_MOUSEBUTTONUP:
-            if(checkHud(x,y)) {
-                    break;
-            }
-            if (!(mouse.clickedPosition() == mouse.currentPosition())){
-                Area selection = mouse.getSelection(mouse.clickedPosition(),mouse.currentPosition());
-                mouse_event.push_back(MOUSE_SELECTION);
-                mouse_event.push_back(selection.Xmin);
-                mouse_event.push_back(selection.Xmax);
-                mouse_event.push_back(selection.Ymin);
-                mouse_event.push_back(selection.Ymax);
-            }
-            break;
-        default:
-            mouse_event.push_back(IDLE);
-            break;
+                if (!(mouse.clickedPosition() == mouse.currentPosition())){
+                    Area selection = mouse.getSelection(mouse.clickedPosition(),mouse.currentPosition());
+                    new_mouse_event.push_back(MOUSE_SELECTION);
+                    new_mouse_event.push_back(selection.Xmin);
+                    new_mouse_event.push_back(selection.Xmax);
+                    new_mouse_event.push_back(selection.Ymin);
+                    new_mouse_event.push_back(selection.Ymax);
+                    this->mouse_events.push(new_mouse_event);
+                }
+                break;
+            default:
+                break;
         }
-        //  La pasamos por socket
-        command_t command = (command_t)(mouse_event[0]);
+
+        new_mouse_event.clear();
+
+        auto current_time = clock();
+	    auto frame_time_instruction = current_time - base_time_instruction;
+
+        if (frame_time_instruction < 200000 && game_has_started)
+            continue;
+
+        std::cout << "inside the loop" << std::endl;
+
+        game_has_started = true;
+
+        base_time_instruction = current_time;
+
+        std::vector<int> mouse_event;
+
+        command_t command;
+
+        if (this->mouse_events.size() != 0) {
+            mouse_event = this->mouse_events.front();
+            this->mouse_events.pop();
+            command = (command_t)(mouse_event[0]);
+        } else {
+            command = IDLE;  
+        }
+
         std::cout << "Enviando el comando: " << command << std::endl;
+        //  La pasamos por socket
         this->protocol.send_command(command, this->socket);
 
         switch (command){
@@ -171,7 +205,6 @@ void Player::play(){
         this->protocol.receive_command_response(res,this->socket);
         if (res != RES_SUCCESS)
             this->print(usr_msg[res], DATA_PATH FONT_IMPACT_PATH, 200, 300, 10, res >= RESPONSE_FAILURE_OFFSET ? colors[GREEN] : colors[RED], 1000);
-        this->update();
     }
 }
 
