@@ -139,7 +139,7 @@ response_t Server::createUnit(int type, int& spice) {
     std::cout << "type: " << type << std::endl;
     std::cout << "spice: " << spice << std::endl;
     //  Check if creator exists
-    if (this->board.getCreator((unit_t) type) == -1)
+    if (this->game->getCreator((unit_t) type) == -1)
         return RES_CREATE_UNIT_FAILURE_CREATOR;
 
     //  Get possible creating locations
