@@ -46,6 +46,10 @@ class Player {
     int building_held;
     std::queue<std::vector<int>> mouse_events;
     std::vector<bool> updates;
+    bool left_click;
+    bool right_click;
+    bool selection;
+    bool new_unit_available;
 
     Player(const char* host_name, const char* service_name,Camera & cam, SDL2pp::Window& window,SDL2pp::Renderer& renderer, size_t spice, size_t c_spice, int energy, size_t c_energy, std::vector<std::vector<std::string>>& map_data);
 
@@ -68,5 +72,7 @@ class Player {
     int checkUnit(int& x, int& );
     bool checkHud(int& x, int& y);
     hud_button_t checkBtn(int& x, int& y);
+
+    bool event_is_not_redundant(std::vector<int>& e);
 
 };

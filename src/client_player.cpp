@@ -34,14 +34,18 @@ mouse(TILE_DIM,cam)
     this->efficiency = efficiency;
     this->is_holding_building = false;
     this->building_held = -1;
+    this->left_click = false;
+    this->right_click = false;
+    this->selection = false;
+    this->new_unit_available = true;
 }
 
 void Player::play(){
 
     bool game_has_started = false;
     auto base_time_instruction = clock();
+    auto base_time_update = clock();
     std::vector<int> new_mouse_event;
-    bool last_command_was_create_building = false;
 
     while (true) {
 
@@ -73,6 +77,8 @@ void Player::play(){
         mouse.getEvent(&event);
         Position current_pos = mouse.currentPosition();
 
+        new_mouse_event.clear();
+
         switch(event.type) {
             case SDL_MOUSEBUTTONDOWN:
                 if (mouse.leftClick()){
@@ -86,24 +92,25 @@ void Player::play(){
                             this->print("Place building on screen", DATA_PATH FONT_IMPACT_PATH, 200, 300, 10, colors[YELLOW], 1000);
                             this->is_holding_building = true;
                             this->building_held = checkBuild(x, y);
-                            last_command_was_create_building = false;
                             break;
                         case UNIT_BTN:
-                            std::cout << "CREATING UNIT_BTN" << std::endl;
-                            new_mouse_event.push_back(CREATE_UNIT);
-                            new_mouse_event.push_back(checkUnit(x,y));
-                            new_mouse_event.push_back(current_pos.x);
-                            new_mouse_event.push_back(current_pos.y);
-                            this->is_holding_building = false;
-                            this->building_held = -1;
-                            if(this->mouse_events.back() != new_mouse_event)
+
+                            if (this->new_unit_available) {
+                                new_mouse_event.push_back(CREATE_UNIT);
+                                new_mouse_event.push_back(checkUnit(x,y));
+                                new_mouse_event.push_back(current_pos.x);
+                                new_mouse_event.push_back(current_pos.y);
+                                this->is_holding_building = false;
+                                this->building_held = -1;
                                 this->mouse_events.push(new_mouse_event);
-                            last_command_was_create_building = false;
+                                std::cout << "Queueing: " << "CREATE_UNIT" << std::endl;
+                                this->new_unit_available = false;
+                            }
+
                             break;
                         default:
                             this->is_holding_building = false;
                             this->building_held = -1;
-                            last_command_was_create_building = false;
                             break;
                         }
                     } else if (this->is_holding_building) {
@@ -114,49 +121,63 @@ void Player::play(){
                         this->is_holding_building = false;
                         this->building_held = -1;
                         this->mouse_events.push(new_mouse_event);
-                        last_command_was_create_building = true;
+                        std::cout << "Queueing: " << "CREATE_BUILDING" << std::endl;
                     } else {
                         new_mouse_event.push_back(MOUSE_LEFT_CLICK);
                         new_mouse_event.push_back(current_pos.x);
                         new_mouse_event.push_back(current_pos.y);
-                        if(this->mouse_events.back() != new_mouse_event)
+                        if (!this->left_click) {
                             this->mouse_events.push(new_mouse_event);
+                            std::cout << "Queueing: " << "MOUSE_LEFT_CLICK" << std::endl;
+                            this->left_click = true;
+                            this->selection = false;
+                        }
                     }
             }
                 if (mouse.rightClick()){
                     mouse.unclick();
                     if(checkHud(x,y)) {
                     } else {
-                        new_mouse_event.push_back(MOUSE_RIGHT_CLICK);
-                        new_mouse_event.push_back(current_pos.x);
-                        new_mouse_event.push_back(current_pos.y);
-                        if(this->mouse_events.back() != new_mouse_event)
+                        if (!this->right_click) {
+                            new_mouse_event.push_back(MOUSE_RIGHT_CLICK);
+                            new_mouse_event.push_back(current_pos.x);
+                            new_mouse_event.push_back(current_pos.y);
                             this->mouse_events.push(new_mouse_event);
-                        last_command_was_create_building = false;
+                            std::cout << "Queueing: " << "MOUSE_RIGHT_CLICK" << std::endl;
+                            this->right_click = true;
+                            this->selection = false;
+                        }
                     }
                 }
                 break;
             case SDL_MOUSEBUTTONUP:
                 if(checkHud(x,y)) {
+                        this->new_unit_available = true;
                         break;
                 }
                 if (!(mouse.clickedPosition() == mouse.currentPosition())){
-                    Area selection = mouse.getSelection(mouse.clickedPosition(),mouse.currentPosition());
-                    new_mouse_event.push_back(MOUSE_SELECTION);
-                    new_mouse_event.push_back(selection.Xmin);
-                    new_mouse_event.push_back(selection.Xmax);
-                    new_mouse_event.push_back(selection.Ymin);
-                    new_mouse_event.push_back(selection.Ymax);
-                    if(this->mouse_events.back() != new_mouse_event)
+                    if(!this->selection) {
+                        Area selection = mouse.getSelection(mouse.clickedPosition(),mouse.currentPosition());
+                        new_mouse_event.push_back(MOUSE_SELECTION);
+                        new_mouse_event.push_back(selection.Xmin);
+                        new_mouse_event.push_back(selection.Xmax);
+                        new_mouse_event.push_back(selection.Ymin);
+                        new_mouse_event.push_back(selection.Ymax);
                         this->mouse_events.push(new_mouse_event);
-                    last_command_was_create_building = false;
+                        std::cout << "Queueing: " << "MOUSE_SELECTION" << std::endl;
+                        this->selection = true;
+                    }
+
+                    this->left_click = false;
+                    this->right_click = false;
+
                 }
                 break;
             default:
+                this->left_click = false;
+                this->right_click = false;
                 break;
         }
-
-        new_mouse_event.clear();
 
         auto current_time = clock();
 	    auto frame_time_instruction = current_time - base_time_instruction;
@@ -177,27 +198,9 @@ void Player::play(){
             this->mouse_events.pop();
             command = (command_t)(mouse_event[0]);
         } else {
-            command = IDLE;  
+            command = IDLE;
         }
 
-        /*
-        // extra logic to prevent false left clicks from being read
-        if (command == CREATE_BUILDING) {
-            Position build_pos(mouse_event[2],mouse_event[3]);
-            while (true) {
-                if (this->mouse_events.front()[0] == MOUSE_LEFT_CLICK) {
-                    int next_event_x = this->mouse_events.front()[1];
-                    int next_event_y = this->mouse_events.front()[2];
-                    Position left_click_on_queue(next_event_x, next_event_y);
-                    if (build_pos == left_click_on_queue) {
-                        this->mouse_events.pop();
-                    } else {
-                        break;
-                    }
-                }
-            }
-        }
-        */
         //  La pasamos por socket
         this->protocol.send_command(command, this->socket);
 
@@ -226,6 +229,13 @@ void Player::play(){
         this->protocol.receive_command_response(res,this->socket);
         if (res != RES_SUCCESS)
             this->print(usr_msg[res], DATA_PATH FONT_IMPACT_PATH, 200, 300, 10, res >= RESPONSE_FAILURE_OFFSET ? colors[GREEN] : colors[RED], 1000);
+        
+        current_time = clock();
+        auto frame_time_update = current_time - base_time_update;
+        if (frame_time_update < 100 && game_has_started)
+            continue;
+        base_time_update = current_time;
+        
         this->update();
     }
 }
@@ -269,7 +279,6 @@ void Player::update() {
         this->updates[i] = false;
     //  Get reads from server
     this->protocol.receive_selectables_to_read(toread, this->socket);
-    std::cout << "Selectables to read: " << toread << std::endl;
     //  Read each element
     for (size_t i = 0 ; i < toread ; i++){
         selectable_t type;
@@ -420,4 +429,27 @@ hud_button_t Player::checkBtn(int& x, int& y) {
     return UNKNOWN_BTN;
 }
 
+bool Player::event_is_not_redundant(std::vector<int>& e) {
 
+    if (e[0] == (int) MOUSE_SELECTION) {
+        std::cout << "is mouse selection redundant?" << std::endl;
+    }
+
+    if (this->mouse_events.empty())
+        return true;
+
+    std::vector<int> last_event = this->mouse_events.back();
+
+    if (e.size() != last_event.size())
+        return true;
+
+    size_t event_size = e.size();
+
+    for (size_t i = 0; i < event_size; i++) {
+        if (e[i] != last_event[i]) {
+            return true;
+        }
+    }
+
+    return false;
+}

@@ -91,6 +91,8 @@ void Server::run(player_t _faction, int _spice, int _c_spice, int _energy, int _
                 res = handleSelection(pos_x_min, pos_x_max, pos_y_min, pos_y_max);
                 break;
             case IDLE:
+                std::cout << "************************" << std::endl;
+                std::cout << "Handling idle" << std::endl;
                 res = RES_SUCCESS;
                 break;
             default:
@@ -103,7 +105,12 @@ void Server::run(player_t _faction, int _spice, int _c_spice, int _energy, int _
     }
 }
 
-response_t Server::createBuilding(int type, int pos_x, int pos_y, int& spice, int& c_spice, int& energy, int& c_energy) {    
+response_t Server::createBuilding(int type, int pos_x, int pos_y, int& spice, int& c_spice, int& energy, int& c_energy) {
+    std::cout << "************************" << std::endl;
+    std::cout << "Creating a new Building" << std::endl;
+    std::cout << "type: " << type << std::endl;
+    std::cout << "position: (" << pos_x << ", " << pos_y << ")" << std::endl;
+    std::cout << "spice: " << spice << std::endl;   
     //  Manufacture the building
     player_t building_faction = HARKONNEN;
     if(type == REFINERY)
@@ -127,6 +134,7 @@ response_t Server::createBuilding(int type, int pos_x, int pos_y, int& spice, in
 
 // SIGSEGV en algun Map::at() de esta función
 response_t Server::createUnit(int type, int& spice) {
+    std::cout << "************************" << std::endl;
     std::cout << "Creating a new Unit" << std::endl;
     std::cout << "type: " << type << std::endl;
     std::cout << "spice: " << spice << std::endl;
@@ -183,7 +191,7 @@ response_t Server::handleLeftClick(int x, int y) {
 response_t Server::handleSelection(int xmin, int xmax, int ymin, int ymax) {
 
     std::cout << "************************" << std::endl;
-    std::cout << "Handling left click" << std::endl;
+    std::cout << "Handling selection" << std::endl;
     std::cout << "min position: (" << xmin << ", " << ymin << ")" << std::endl;
     std::cout << "max position: (" << xmax << ", " << ymax << ")" << std::endl;
 

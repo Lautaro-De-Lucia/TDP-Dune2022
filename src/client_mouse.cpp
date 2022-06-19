@@ -87,4 +87,3 @@ Area MouseHandler::getSelection(Position init_pos, Position final_pos){
     );
     return selection;
 }
-
