@@ -43,6 +43,7 @@ void Player::play(){
     bool game_has_started = false;
     auto base_time_instruction = clock();
     std::vector<int> new_mouse_event;
+    bool last_command_was_create_building = false;
 
     while (true) {
 
@@ -87,6 +88,7 @@ void Player::play(){
                             this->print("Place building on screen", DATA_PATH FONT_IMPACT_PATH, 200, 300, 10, colors[YELLOW], 1000);
                             this->is_holding_building = true;
                             this->building_held = checkBuild(x, y);
+                            last_command_was_create_building = false;
                             break;
                         case UNIT_BTN:
                             std::cout << "CREATING UNIT_BTN" << std::endl;
@@ -95,12 +97,14 @@ void Player::play(){
                             new_mouse_event.push_back(current_pos.x);
                             new_mouse_event.push_back(current_pos.y);
                             this->is_holding_building = false;
-                            if(this->mouse_events.back() != new_mouse_event)
-                                this->mouse_events.push(new_mouse_event);
+                            this->building_held = -1;
+                            this->mouse_events.push(new_mouse_event);
+                            last_command_was_create_building = false;
                             break;
                         default:
                             this->is_holding_building = false;
                             this->building_held = -1;
+                            last_command_was_create_building = false;
                             break;
                         }
                     } else if (this->is_holding_building) {
@@ -110,16 +114,16 @@ void Player::play(){
                         new_mouse_event.push_back(current_pos.y);
                         this->is_holding_building = false;
                         this->building_held = -1;
-                        if(this->mouse_events.back() != new_mouse_event)
-                            this->mouse_events.push(new_mouse_event);
+                        this->mouse_events.push(new_mouse_event);
+                        last_command_was_create_building = true;
                     } else {
-                        new_mouse_event.push_back(MOUSE_LEFT_CLICK);
-                        new_mouse_event.push_back(current_pos.x);
-                        new_mouse_event.push_back(current_pos.y);
-                        this->is_holding_building = false;
-                        //this->building_held = -1;
-                        if(this->mouse_events.back() != new_mouse_event)
-                            this->mouse_events.push(new_mouse_event);
+                        if (!last_command_was_create_building) {
+                            new_mouse_event.push_back(MOUSE_LEFT_CLICK);
+                            new_mouse_event.push_back(current_pos.x);
+                            new_mouse_event.push_back(current_pos.y);
+                            if(this->mouse_events.back() != new_mouse_event)
+                                this->mouse_events.push(new_mouse_event);
+                        }
                     }
                 }
                 if (mouse.rightClick()){
@@ -131,6 +135,7 @@ void Player::play(){
                         new_mouse_event.push_back(current_pos.y);
                         if(this->mouse_events.back() != new_mouse_event)
                             this->mouse_events.push(new_mouse_event);
+                        last_command_was_create_building = false;
                     }
                 }
                 break;
@@ -145,8 +150,8 @@ void Player::play(){
                     new_mouse_event.push_back(selection.Xmax);
                     new_mouse_event.push_back(selection.Ymin);
                     new_mouse_event.push_back(selection.Ymax);
-                    if(this->mouse_events.back() != new_mouse_event)
-                        this->mouse_events.push(new_mouse_event);
+                    this->mouse_events.push(new_mouse_event);
+                    last_command_was_create_building = false;
                 }
                 break;
             default:
@@ -161,8 +166,6 @@ void Player::play(){
         if (frame_time_instruction < GAME_SPEED && game_has_started)
             continue;
 
-        std::cout << "inside the loop" << std::endl;
-
         game_has_started = true;
 
         base_time_instruction = current_time;
@@ -171,13 +174,32 @@ void Player::play(){
 
         command_t command;
 
-        if (this->mouse_events.size() != 0) {
+        if (this->mouse_events.size() > 0) {
             mouse_event = this->mouse_events.front();
             this->mouse_events.pop();
             command = (command_t)(mouse_event[0]);
         } else {
             command = IDLE;  
         }
+
+        /*
+        // extra logic to prevent false left clicks from being read
+        if (command == CREATE_BUILDING) {
+            Position build_pos(mouse_event[2],mouse_event[3]);
+            while (true) {
+                if (this->mouse_events.front()[0] == MOUSE_LEFT_CLICK) {
+                    int next_event_x = this->mouse_events.front()[1];
+                    int next_event_y = this->mouse_events.front()[2];
+                    Position left_click_on_queue(next_event_x, next_event_y);
+                    if (build_pos == left_click_on_queue) {
+                        this->mouse_events.pop();
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+        */
 
         std::cout << "Enviando el comando: " << command << std::endl;
         //  La pasamos por socket
@@ -261,7 +283,6 @@ void Player::renderHud(){
 }
 
 void Player::print(std::string toprint, std::string fontpath, int x, int y, int size ,SDL_Color color,size_t time){
-    std::cout << "String to print: " << toprint << std::endl;
     SDL2pp::Font font(fontpath,size*10);
     SDL2pp::Surface surface = font.RenderText_Solid(toprint,color);
     std::unique_ptr texture = std::make_unique<SDL2pp::Texture>(SDL2pp::Texture(this->game_renderer,surface));
