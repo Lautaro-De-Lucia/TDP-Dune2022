@@ -8,6 +8,7 @@ QT_BEGIN_NAMESPACE
 namespace Ui {
     class MainWindow;
     class LobbyWindow;
+    class FactionWindow;
 }
 QT_END_NAMESPACE
 
@@ -54,6 +55,30 @@ private slots:
 
 private:
     Ui::LobbyWindow *ui;
+    QButtonGroup *buttongroup;
+    QMediaPlayer *mMediaPlayer;
+};
+
+class FactionWindow : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    FactionWindow(QWidget *parent = nullptr, int* faction = nullptr);
+    ~FactionWindow();
+    int* faction;
+
+signals:
+    void jugar();
+
+private slots:
+
+    void handleHarkonnen();
+    void handleOrdos();
+    void handleAtreides();
+
+private:
+    Ui::FactionWindow *ui;
     QButtonGroup *buttongroup;
     QMediaPlayer *mMediaPlayer;
 };

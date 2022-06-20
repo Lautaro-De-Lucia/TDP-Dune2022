@@ -11,6 +11,7 @@
 #include <QApplication>
 #include <QtConcurrent/QtConcurrent>
 
+#include <functional>
 
 #define INIT_SPICE 100000
 //#define INIT_SPICE 15000
@@ -73,15 +74,17 @@ void greet(SDL2pp::Renderer& game_renderer) {
 }
 
 
-void run_sdl() {
+void run_sdl(const int* _faction) {
 
     //  This is only to initialize TTF
 	SDL2pp::SDLTTF ttf;
 
-    player_t faction = (player_t) ORDOS; //Esto debe poder definirse desde el menú de Qt
+    player_t faction = (player_t) *(_faction); //Esto debe poder definirse desde el menú de Qt
 
     SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,0);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
+
+    std::cout << "faction is: " << faction << std::endl;
 
     std::vector<std::vector<std::string>> cell_paths = generate_client_map(DATA_PATH MAP_FILE);    
     Camera cam(CAMERA_INITIAL_POS_X*(faction-1),CAMERA_INITIAL_POS_Y*(faction-1),CAMERA_WIDTH,CAMERA_HEIGHT,SCREEN_WIDTH,SCREEN_HEIGHT);
@@ -92,21 +95,34 @@ void run_sdl() {
 
 
 int main(int argc, char *argv[]) {
-    /*
+
     QApplication a(argc, argv);
     a.setWindowIcon(QIcon("./src/resources/img/icon.png"));
     MainWindow w;
     w.show();
+
+    int __faction = -1;
+    int* _faction = &__faction;
+
     LobbyWindow l;
+    FactionWindow f(nullptr,_faction);
 
     QObject::connect(&w, &MainWindow::jugar, &w, &QMainWindow::close);
-    QObject::connect(&w, &MainWindow::jugar, &l, &QMainWindow::show);
-    QObject::connect(&l, &LobbyWindow::jugar, &l, [=]() {QtConcurrent::run(run_sdl);});
+    //QObject::connect(&w, &MainWindow::jugar, &l, &QMainWindow::show);
+    QObject::connect(&w, &MainWindow::jugar, &f, &QMainWindow::show);
+
+    //QObject::connect(&l, &LobbyWindow::jugar, &l, [=]() {QtConcurrent::run(run_sdl);});
+    QObject::connect(&f, &FactionWindow::jugar, &f, &QMainWindow::close);
+
+
+
+    QObject::connect(&f, &FactionWindow::jugar, &f, [=]() {QtConcurrent::run(run_sdl, std::ref(_faction));});
 
     return a.exec();
-    */
 
+    /*
     run_sdl();
 
     return 0;
+    */
 }

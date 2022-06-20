@@ -57,7 +57,7 @@ GameHud::GameHud(player_t faction, SDL2pp::Renderer& renderer) : texture(rendere
 	unit_paths[DEVASTATOR].append(faction_path.c_str()).append("/devastator.jpg");
 
 
-	std::cout << building_paths[LIGHT_FACTORY].c_str() << std::endl;
+	//std::cout << building_paths[LIGHT_FACTORY].c_str() << std::endl;
 
 	addBuildButton(renderer, building_paths[BARRACK].c_str(), SCREEN_WIDTH - 155, SCREEN_HEIGHT - 495, BARRACK);
 	addBuildButton(renderer, building_paths[REFINERY].c_str(), SCREEN_WIDTH - 155, SCREEN_HEIGHT - 435, REFINERY);

@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>resources/img/dune.png</file>
+        <file>resources/img/factions.png</file>
         <file>resources/img/icon.png</file>
         <file>resources/img/lobby.png</file>
         <file>resources/music/lobby.mp3</file>

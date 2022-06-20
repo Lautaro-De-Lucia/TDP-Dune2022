@@ -62,6 +62,8 @@ ADD_EXECUTABLE("client" client_main.cpp
             src/ui/mainwindow.ui
             src/ui/lobbywindow.cpp
             src/ui/lobbywindow.ui
+            src/ui/factionwindow.cpp
+            src/ui/factionwindow.ui
             src/ui/resources.qrc)
 
 target_include_directories("server" PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)  

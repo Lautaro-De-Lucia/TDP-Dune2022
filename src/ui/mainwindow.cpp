@@ -21,10 +21,16 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(ui->botonJugar, &QPushButton::released, this, &MainWindow::jugar); // handlers
     QObject::connect(ui->botonCreditos, &QPushButton::released, this, &MainWindow::handleCreditos);
     QObject::connect(ui->botonSalir, &QPushButton::released, this, &QCoreApplication::quit);
+
 }
 
 void MainWindow::handleCreditos(){
+    qDebug() << "========================";
     qDebug() << "Creditos";
+    qDebug() << "========================";
+    qDebug() << "Manuel Collazo";
+    qDebug() << "Lautaro De Lucía";
+    qDebug() << "========================";
 }
 
 MainWindow::~MainWindow()
