@@ -78,7 +78,7 @@ void run_sdl() {
     //  This is only to initialize TTF
 	SDL2pp::SDLTTF ttf;
 
-    player_t faction = ORDOS; //Esto debe poder definirse desde el menú de Qt
+    player_t faction = (player_t) ORDOS; //Esto debe poder definirse desde el menú de Qt
 
     SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,0);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);

@@ -12,7 +12,7 @@ lp_texture(renderer,lp_path)
     this->selected = false;
 }
 
-void CSelectable::update(int lp,int pos_x,int pos_y,bool selected,bool special,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
+void CSelectable::update(player_t player_faction,int lp,int pos_x,int pos_y,bool selected,bool special,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
     int hsprites = 7;
     for (size_t state = 1 ; state <= hsprites ; state++){
         if (LP > (max_LP -(max_LP / 7)*state) && LP <= (max_LP -(max_LP / hsprites)*(state-1))){
@@ -27,12 +27,17 @@ void CSelectable::update(int lp,int pos_x,int pos_y,bool selected,bool special,S
 }
 
 void CStatic::update(player_t player_faction, int lp,bool selected,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
-    CSelectable::update(lp,this->position.x,this->position.y,selected,false,renderer,cam_pos_x,cam_pos_y);
+    CSelectable::update(player_faction,lp,this->position.x,this->position.y,selected,false,renderer,cam_pos_x,cam_pos_y);
     this->render(player_faction, renderer, cam_pos_x, cam_pos_y);
 }
 
 void CMovable::update(player_t player_faction, int lp,int pos_x,int pos_y,bool selected,bool attacking,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
     
+    std::cout << "Updating unit of type: " << this->type;
+    std::cout << "The unit's new position is: " << pos_x << "," << pos_y << std::endl;
+    std::cout << "The unit's previous position was: " << this->position.x << "," <<  this->position.y << std::endl;
+
+
     if (pos_x == this->position.x && pos_y > this->position.y)
         this->dir = BOTTOM;
     if (pos_x > this->position.x && pos_y > this->position.y)
@@ -50,7 +55,7 @@ void CMovable::update(player_t player_faction, int lp,int pos_x,int pos_y,bool s
     if (pos_x < this->position.x && pos_y > this->position.y)
         this->dir = BOTTOM_LEFT;                    
         
-    CSelectable::update(lp,pos_x,pos_y,selected,attacking,renderer,cam_pos_x,cam_pos_y);
+    CSelectable::update(player_faction,lp,pos_x,pos_y,selected,attacking,renderer,cam_pos_x,cam_pos_y);
     this->render(player_faction, renderer, cam_pos_x, cam_pos_y);
 }
 

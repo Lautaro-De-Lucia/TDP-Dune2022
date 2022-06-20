@@ -503,7 +503,7 @@ void Protocol::send_barrack(int id, int faction, int lp, int pos_x, int pos_y, b
 
 void Protocol::send_refinery(int id, int faction, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket) {
 
-    this->send_selectable_type(SEL_BARRACK, client_socket);
+    this->send_selectable_type(SEL_REFINERY, client_socket);
     this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 }
 
