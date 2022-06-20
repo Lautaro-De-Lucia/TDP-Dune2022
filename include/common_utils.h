@@ -92,13 +92,22 @@ enum cell_t {
 
 enum unit_t {
     HARVESTER = 1,
-    TRIKE = 2
+    TRIKE = 2,
+    FREMEN = 3,
+    LIGHT_INFANTRY = 4,
+    SARDAUKAR = 5,
+    TANK = 6,
+    DEVASTATOR = 7
 };
 
 enum building_t {
     AIR_TRAP = 1, 
     BARRACK = 2,
-    REFINERY = 3
+    REFINERY = 3,
+    LIGHT_FACTORY = 4,
+    HEAVY_FACTORY = 5,
+    SILO = 6,
+    PALACE = 7
 };
 
 enum selectable_t {

@@ -18,8 +18,8 @@
 const int CAMERA_WIDTH = 640;
 const int CAMERA_HEIGHT = 360;
 
-const int CAMERA_INITIAL_POS_X = 620;
-const int CAMERA_INITIAL_POS_Y = 360;
+const int CAMERA_INITIAL_POS_X = 400;
+const int CAMERA_INITIAL_POS_Y = 200;
 
 const int GAME_SPEED = 20000;
 

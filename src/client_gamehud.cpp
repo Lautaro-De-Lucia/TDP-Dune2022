@@ -11,8 +11,8 @@
 #define TRIKE_PATH "../src/ui/resources/img/trike.bmp"
 #define HARVESTER_PATH "../src/ui/resources/img/harvester.bmp"
 
-#define TOTAL_BUILDING_IMGS 7
-#define TOTAL_UNIT_IMGS 7
+#define TOTAL_BUILDING_IMGS 8
+#define TOTAL_UNIT_IMGS 8
 
 GameHud::GameHud(player_t faction, SDL2pp::Renderer& renderer) : texture(renderer, HUD_IMG_MENU_PATH) {
 	int w = texture.GetWidth();
@@ -35,23 +35,46 @@ GameHud::GameHud(player_t faction, SDL2pp::Renderer& renderer) : texture(rendere
 	
 	std::vector<std::string> building_paths;
 	std::vector<std::string> unit_paths;
-	for(size_t i = 0 ; i < TOTAL_BUILDING_IMGS ; i++){
+	for(size_t i = 0 ; i < TOTAL_BUILDING_IMGS ; i++)
 		building_paths.push_back(HUD_IMG_PATH);
+	for(size_t i = 0 ; i < TOTAL_UNIT_IMGS ; i++)
 		unit_paths.push_back(HUD_IMG_PATH);
-	}
+
 	building_paths[BARRACK].append(faction_path.c_str()).append("/barrack.bmp");
 	building_paths[REFINERY].append(faction_path.c_str()).append("/refinery.bmp");
 	building_paths[AIR_TRAP].append(faction_path.c_str()).append("/wind-trap.bmp");
+	building_paths[LIGHT_FACTORY].append(faction_path.c_str()).append("/light-factory.bmp");
+	building_paths[HEAVY_FACTORY].append(faction_path.c_str()).append("/heavy-factory.bmp");
+	building_paths[SILO].append(faction_path.c_str()).append("/silo.bmp");
+	building_paths[PALACE].append(faction_path.c_str()).append("/palace.bmp");
 
 	unit_paths[TRIKE].append(faction_path.c_str()).append("/trike.jpg");
 	unit_paths[HARVESTER].append(faction_path.c_str()).append("/harvester.jpg");
+	unit_paths[FREMEN].append(faction_path.c_str()).append("/fremen.bmp");
+	unit_paths[LIGHT_INFANTRY].append(faction_path.c_str()).append("/light-infantry.bmp");
+	unit_paths[SARDAUKAR].append(faction_path.c_str()).append("/sardaukar.bmp");
+	unit_paths[TANK].append(faction_path.c_str()).append("/combat-tank.jpg");
+	unit_paths[DEVASTATOR].append(faction_path.c_str()).append("/devastator.jpg");
 
+
+	std::cout << building_paths[LIGHT_FACTORY].c_str() << std::endl;
 
 	addBuildButton(renderer, building_paths[BARRACK].c_str(), SCREEN_WIDTH - 155, SCREEN_HEIGHT - 495, BARRACK);
 	addBuildButton(renderer, building_paths[REFINERY].c_str(), SCREEN_WIDTH - 155, SCREEN_HEIGHT - 435, REFINERY);
 	addBuildButton(renderer, building_paths[AIR_TRAP].c_str(), SCREEN_WIDTH - 155, SCREEN_HEIGHT - 375, AIR_TRAP);
+	addBuildButton(renderer, building_paths[LIGHT_FACTORY].c_str(), SCREEN_WIDTH - 155, SCREEN_HEIGHT - 315, LIGHT_FACTORY);
+	addBuildButton(renderer, building_paths[HEAVY_FACTORY].c_str(), SCREEN_WIDTH - 155, SCREEN_HEIGHT - 255, HEAVY_FACTORY);
+	addBuildButton(renderer, building_paths[SILO].c_str(), SCREEN_WIDTH - 155, SCREEN_HEIGHT - 195, SILO);
+	addBuildButton(renderer, building_paths[PALACE].c_str(), SCREEN_WIDTH - 155, SCREEN_HEIGHT - 135, PALACE);
+
 	addUnitButton(renderer, unit_paths[TRIKE].c_str(), SCREEN_WIDTH - 80, SCREEN_HEIGHT - 495, TRIKE);
 	addUnitButton(renderer, unit_paths[HARVESTER].c_str(), SCREEN_WIDTH - 80, SCREEN_HEIGHT - 435, HARVESTER);
+	addBuildButton(renderer, unit_paths[FREMEN].c_str(), SCREEN_WIDTH - 80, SCREEN_HEIGHT - 375, FREMEN);
+	addUnitButton(renderer, unit_paths[LIGHT_INFANTRY].c_str(), SCREEN_WIDTH - 80, SCREEN_HEIGHT - 315, LIGHT_INFANTRY);
+	addUnitButton(renderer, unit_paths[SARDAUKAR].c_str(), SCREEN_WIDTH - 80, SCREEN_HEIGHT - 255, SARDAUKAR);
+	addUnitButton(renderer, unit_paths[TANK].c_str(), SCREEN_WIDTH - 80, SCREEN_HEIGHT - 195, TANK);
+	addUnitButton(renderer, unit_paths[DEVASTATOR].c_str(), SCREEN_WIDTH - 80, SCREEN_HEIGHT - 135, DEVASTATOR);
+
 }
 
 void GameHud::render(SDL2pp::Renderer& renderer){
@@ -80,15 +103,6 @@ void GameHud::render(SDL2pp::Renderer& renderer){
 	renderer.Copy(energy_texture,SDL2pp::NullOpt,SDL2pp::Rect(1098,678-this->energy/20,7,6+this->energy/20));
 
 }
-
-void GameHud::renderSpice(){
-
-}
-
-void GameHud::renderEnergy(){
-
-}
-	
 
 void GameHud::addUnitButton(SDL2pp::Renderer& renderer, std::string IMG_PATH, int x, int y, int id) {
 	this->unit_buttons.emplace_back(renderer, IMG_PATH, x, y, id);

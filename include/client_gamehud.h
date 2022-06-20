@@ -20,8 +20,6 @@ class GameHud {
    CPrinter energy_printer;
    int spice; 
    int energy;
-   void renderSpice();
-   void renderEnergy();
  public:
    GameHud(player_t faction, SDL2pp::Renderer& renderer);
    void render(SDL2pp::Renderer& renderer);
