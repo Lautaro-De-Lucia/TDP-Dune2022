@@ -41,3 +41,31 @@ class Refinery : public Building {
     int getCSpice();
     virtual void sendState(Protocol & protocol,Socket & client_socket);
 };
+
+class LightFactory : public Building {
+ public:
+    LightFactory(int ID,player_t faction, int LP, int spice, int energy, Position pos, int dim_x, int dim_y);
+    response_t place(Board& board, int pos_x, int pos_y, int& spice, int& spice_capacity, int& energy, int& energy_capacity);
+    virtual void sendState(Protocol & protocol,Socket & client_socket);
+};
+
+class HeavyFactory : public Building {
+ public:
+    HeavyFactory(int ID,player_t faction, int LP, int spice, int energy, Position pos, int dim_x, int dim_y);
+    response_t place(Board& board, int pos_x, int pos_y, int& spice, int& spice_capacity, int& energy, int& energy_capacity);
+    virtual void sendState(Protocol & protocol,Socket & client_socket);
+};
+
+class Silo : public Building {
+ public:
+    Silo(int ID,player_t faction, int LP, int spice, int energy, Position pos, int dim_x, int dim_y);
+    response_t place(Board& board, int pos_x, int pos_y, int& spice, int& spice_capacity, int& energy, int& energy_capacity);
+    virtual void sendState(Protocol & protocol,Socket & client_socket);
+};
+
+class Palace : public Building {
+ public:
+    Palace(int ID,player_t faction, int LP, int spice, int energy, Position pos, int dim_x, int dim_y);
+    response_t place(Board& board, int pos_x, int pos_y, int& spice, int& spice_capacity, int& energy, int& energy_capacity);
+    virtual void sendState(Protocol & protocol,Socket & client_socket);
+};

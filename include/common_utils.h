@@ -8,20 +8,46 @@
 #define TILE_SIZE 16
 
 //  These would be lifted from a file
-#define HARVESTER_LP 500
-#define HARVESTER_SPICE_COST 500
+#define HARVESTER_LP 600
+#define HARVESTER_SPICE_COST 300
 #define HARVESTER_SPICE_CAPACITY 50
-#define HARVESTER_SPEED 2
-#define HARVESTER_DIM_X 1
-#define HARVESTER_DIM_Y 1
+#define HARVESTER_SPEED 12
 
-#define TRIKE_LP 800
-#define TRIKE_SPICE_COST 500
-#define TRIKE_SPEED 5
-#define TRIKE_ATTACK 3
+#define TRIKE_LP 80
+#define TRIKE_SPICE_COST 100
+#define TRIKE_SPEED 64
+#define TRIKE_ATTACK 2
 #define TRIKE_RANGE 4
-#define TRIKE_DIM_X 1
-#define TRIKE_DIM_Y 1
+
+#define FREMEN_LP 50
+#define FREMEN_SPICE_COST 100
+#define FREMEN_SPEED 20
+#define FREMEN_ATTACK 8
+#define FREMEN_RANGE 3
+
+#define INFANTRY_LP 50
+#define INFANTRY_SPICE_COST 50
+#define INFANTRY_SPEED 16
+#define INFANTRY_ATTACK 2
+#define INFANTRY_RANGE 3
+
+#define SARDAUKAR_LP 80
+#define SARDAUKAR_SPICE_COST 100
+#define SARDAUKAR_SPEED 12
+#define SARDAUKAR_ATTACK 10
+#define SARDAUKAR_RANGE 3
+
+#define TANK_LP 30
+#define TANK_SPICE_COST 300
+#define TANK_SPEED 40
+#define TANK_ATTACK 7
+#define TANK_RANGE 3
+
+#define DEVASTATOR_LP 400
+#define DEVASTATOR_SPICE_COST 400
+#define DEVASTATOR_SPEED 12
+#define DEVASTATOR_ATTACK 8
+#define DEVASTATOR_RANGE 4
 
 //  These would be lifted from a file
 #define AIR_TRAP_LP 500
@@ -43,6 +69,31 @@
 #define REFINERY_DIM_X 3
 #define REFINERY_DIM_Y 3
 #define REFINERY_CAPACITY 5000
+
+#define LIGHT_FACTORY_LP 500
+#define LIGHT_FACTORY_ENERGY 500
+#define LIGHT_FACTORY_SPICE 800
+#define LIGHT_FACTORY_DIM_X 3
+#define LIGHT_FACTORY_DIM_Y 3
+
+#define HEAVY_FACTORY_LP 1500
+#define HEAVY_FACTORY_ENERGY 800
+#define HEAVY_FACTORY_SPICE 1500
+#define HEAVY_FACTORY_DIM_X 4
+#define HEAVY_FACTORY_DIM_Y 4
+
+#define SILO_LP 200
+#define SILO_ENERGY 100
+#define SILO_SPICE 200
+#define SILO_SPICE_CAPACITY 1000
+#define SILO_DIM_X 1
+#define SILO_DIM_Y 1
+
+#define PALACE_LP 1000
+#define PALACE_ENERGY 800
+#define PALACE_SPICE 2000
+#define PALACE_DIM_X 3
+#define PALACE_DIM_Y 3
 
 #define SAND_SPICE_FULL 1000
 #define SAND_SPICE_SOME 500
@@ -94,7 +145,7 @@ enum unit_t {
     HARVESTER = 1,
     TRIKE = 2,
     FREMEN = 3,
-    LIGHT_INFANTRY = 4,
+    INFANTRY = 4,
     SARDAUKAR = 5,
     TANK = 6,
     DEVASTATOR = 7
@@ -113,9 +164,18 @@ enum building_t {
 enum selectable_t {
     SEL_HARVESTER = 1,
     SEL_TRIKE = 2,
-    SEL_AIR_TRAP = 3,
-    SEL_BARRACK = 4,
-    SEL_REFINERY = 5
+    SEL_FREMEN = 3,
+    SEL_INFANTRY = 4,
+    SEL_SARDAUKAR = 5,
+    SEL_TANK = 6,
+    SEL_DEVASTATOR = 7,
+    SEL_AIR_TRAP = 8,
+    SEL_BARRACK = 9,
+    SEL_REFINERY = 10,
+    SEL_LIGHT_FACTORY = 11,
+    SEL_HEAVY_FACTORY = 12,
+    SEL_SILO = 13,
+    SEL_PALACE = 14
 };
 
 struct Position {

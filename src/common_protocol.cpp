@@ -458,6 +458,102 @@ void Protocol::send_trike(int id, int faction, int lp, int pos_x, int pos_y, boo
     return;
 }
 
+void Protocol::send_fremen(int id, int faction, int lp, int pos_x, int pos_y, bool selected, bool attacking, Socket& client_socket) {
+
+    this->send_selectable_type(SEL_FREMEN, client_socket);
+
+    this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    uint8_t _attacking = (uint8_t) attacking;
+
+    uint8_t attacking_buffer = (uint8_t) _attacking;
+
+    int sent_size = -1;
+    bool was_closed = false;
+
+    sent_size = client_socket.sendall(&attacking_buffer, sizeof(attacking_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    return;
+}
+
+void Protocol::send_infantry(int id, int faction, int lp, int pos_x, int pos_y, bool selected, bool attacking, Socket& client_socket) {
+
+    this->send_selectable_type(SEL_INFANTRY, client_socket);
+
+    this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    uint8_t _attacking = (uint8_t) attacking;
+
+    uint8_t attacking_buffer = (uint8_t) _attacking;
+
+    int sent_size = -1;
+    bool was_closed = false;
+
+    sent_size = client_socket.sendall(&attacking_buffer, sizeof(attacking_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    return;
+}
+
+
+void Protocol::send_sardaukar(int id, int faction, int lp, int pos_x, int pos_y, bool selected, bool attacking, Socket& client_socket) {
+
+    this->send_selectable_type(SEL_SARDAUKAR, client_socket);
+
+    this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    uint8_t _attacking = (uint8_t) attacking;
+
+    uint8_t attacking_buffer = (uint8_t) _attacking;
+
+    int sent_size = -1;
+    bool was_closed = false;
+
+    sent_size = client_socket.sendall(&attacking_buffer, sizeof(attacking_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    return;
+}
+
+void Protocol::send_tank(int id, int faction, int lp, int pos_x, int pos_y, bool selected, bool attacking, Socket& client_socket) {
+
+    this->send_selectable_type(SEL_TANK, client_socket);
+
+    this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    uint8_t _attacking = (uint8_t) attacking;
+
+    uint8_t attacking_buffer = (uint8_t) _attacking;
+
+    int sent_size = -1;
+    bool was_closed = false;
+
+    sent_size = client_socket.sendall(&attacking_buffer, sizeof(attacking_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    return;
+}
+
+void Protocol::send_devastator(int id, int faction, int lp, int pos_x, int pos_y, bool selected, bool attacking, Socket& client_socket) {
+
+    this->send_selectable_type(SEL_DEVASTATOR, client_socket);
+
+    this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    uint8_t _attacking = (uint8_t) attacking;
+
+    uint8_t attacking_buffer = (uint8_t) _attacking;
+
+    int sent_size = -1;
+    bool was_closed = false;
+
+    sent_size = client_socket.sendall(&attacking_buffer, sizeof(attacking_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    return;
+}
+
 void Protocol::send_harvester(int id, int faction, int lp, int pos_x, int pos_y, bool selected, int spice, bool harvesting, Socket& client_socket) {
 
     this->send_selectable_type(SEL_HARVESTER, client_socket);
@@ -501,6 +597,42 @@ void Protocol::send_barrack(int id, int faction, int lp, int pos_x, int pos_y, b
     return;
 }
 
+void Protocol::send_light_factory(int id, int faction, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket) {
+
+    this->send_selectable_type(SEL_LIGHT_FACTORY, client_socket);
+
+    this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    return;
+}
+
+void Protocol::send_heavy_factory(int id, int faction, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket) {
+
+    this->send_selectable_type(SEL_HEAVY_FACTORY, client_socket);
+
+    this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    return;
+}
+
+void Protocol::send_silo(int id, int faction, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket) {
+
+    this->send_selectable_type(SEL_SILO, client_socket);
+
+    this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    return;
+}
+
+void Protocol::send_palace(int id, int faction, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket) {
+
+    this->send_selectable_type(SEL_PALACE, client_socket);
+
+    this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    return;
+}
+
 void Protocol::send_refinery(int id, int faction, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket) {
 
     this->send_selectable_type(SEL_REFINERY, client_socket);
@@ -508,6 +640,96 @@ void Protocol::send_refinery(int id, int faction, int lp, int pos_x, int pos_y, 
 }
 
 void Protocol::receive_trike(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, bool& attacking, Socket& client_socket) {
+
+    this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    uint8_t attacking_buffer;
+    uint8_t _attacking;
+
+    int recv_size = -1;
+    bool was_closed = false;
+
+    recv_size = client_socket.recvall(&attacking_buffer, sizeof(attacking_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _attacking = (uint8_t) attacking_buffer;
+    attacking = (bool) _attacking;
+
+    return;
+}
+
+void Protocol::receive_fremen(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, bool& attacking, Socket& client_socket) {
+
+    this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    uint8_t attacking_buffer;
+    uint8_t _attacking;
+
+    int recv_size = -1;
+    bool was_closed = false;
+
+    recv_size = client_socket.recvall(&attacking_buffer, sizeof(attacking_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _attacking = (uint8_t) attacking_buffer;
+    attacking = (bool) _attacking;
+
+    return;
+}
+
+void Protocol::receive_infantry(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, bool& attacking, Socket& client_socket) {
+
+    this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    uint8_t attacking_buffer;
+    uint8_t _attacking;
+
+    int recv_size = -1;
+    bool was_closed = false;
+
+    recv_size = client_socket.recvall(&attacking_buffer, sizeof(attacking_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _attacking = (uint8_t) attacking_buffer;
+    attacking = (bool) _attacking;
+
+    return;
+}
+
+void Protocol::receive_sardaukar(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, bool& attacking, Socket& client_socket) {
+
+    this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    uint8_t attacking_buffer;
+    uint8_t _attacking;
+
+    int recv_size = -1;
+    bool was_closed = false;
+
+    recv_size = client_socket.recvall(&attacking_buffer, sizeof(attacking_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _attacking = (uint8_t) attacking_buffer;
+    attacking = (bool) _attacking;
+
+    return;
+}
+
+void Protocol::receive_tank(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, bool& attacking, Socket& client_socket) {
+
+    this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    uint8_t attacking_buffer;
+    uint8_t _attacking;
+
+    int recv_size = -1;
+    bool was_closed = false;
+
+    recv_size = client_socket.recvall(&attacking_buffer, sizeof(attacking_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _attacking = (uint8_t) attacking_buffer;
+    attacking = (bool) _attacking;
+
+    return;
+}
+
+void Protocol::receive_devastator(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, bool& attacking, Socket& client_socket) {
 
     this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 
@@ -558,6 +780,34 @@ void Protocol::receive_air_trap(int& id, int& faction, int& lp, int& pos_x, int&
 }
 
 void Protocol::receive_barrack(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket) {
+
+    this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    return;
+}
+
+void Protocol::receive_light_factory(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket) {
+
+    this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    return;
+}
+
+void Protocol::receive_heavy_factory(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket) {
+
+    this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    return;
+}
+
+void Protocol::receive_silo(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket) {
+
+    this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    return;
+}
+
+void Protocol::receive_palace(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket) {
 
     this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 

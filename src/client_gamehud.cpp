@@ -51,7 +51,7 @@ GameHud::GameHud(player_t faction, SDL2pp::Renderer& renderer) : texture(rendere
 	unit_paths[TRIKE].append(faction_path.c_str()).append("/trike.jpg");
 	unit_paths[HARVESTER].append(faction_path.c_str()).append("/harvester.jpg");
 	unit_paths[FREMEN].append(faction_path.c_str()).append("/fremen.bmp");
-	unit_paths[LIGHT_INFANTRY].append(faction_path.c_str()).append("/light-infantry.bmp");
+	unit_paths[INFANTRY].append(faction_path.c_str()).append("/light-infantry.bmp");
 	unit_paths[SARDAUKAR].append(faction_path.c_str()).append("/sardaukar.bmp");
 	unit_paths[TANK].append(faction_path.c_str()).append("/combat-tank.jpg");
 	unit_paths[DEVASTATOR].append(faction_path.c_str()).append("/devastator.jpg");
@@ -70,7 +70,7 @@ GameHud::GameHud(player_t faction, SDL2pp::Renderer& renderer) : texture(rendere
 	addUnitButton(renderer, unit_paths[TRIKE].c_str(), SCREEN_WIDTH - 80, SCREEN_HEIGHT - 495, TRIKE);
 	addUnitButton(renderer, unit_paths[HARVESTER].c_str(), SCREEN_WIDTH - 80, SCREEN_HEIGHT - 435, HARVESTER);
 	addBuildButton(renderer, unit_paths[FREMEN].c_str(), SCREEN_WIDTH - 80, SCREEN_HEIGHT - 375, FREMEN);
-	addUnitButton(renderer, unit_paths[LIGHT_INFANTRY].c_str(), SCREEN_WIDTH - 80, SCREEN_HEIGHT - 315, LIGHT_INFANTRY);
+	addUnitButton(renderer, unit_paths[INFANTRY].c_str(), SCREEN_WIDTH - 80, SCREEN_HEIGHT - 315, INFANTRY);
 	addUnitButton(renderer, unit_paths[SARDAUKAR].c_str(), SCREEN_WIDTH - 80, SCREEN_HEIGHT - 255, SARDAUKAR);
 	addUnitButton(renderer, unit_paths[TANK].c_str(), SCREEN_WIDTH - 80, SCREEN_HEIGHT - 195, TANK);
 	addUnitButton(renderer, unit_paths[DEVASTATOR].c_str(), SCREEN_WIDTH - 80, SCREEN_HEIGHT - 135, DEVASTATOR);

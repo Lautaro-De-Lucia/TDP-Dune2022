@@ -77,6 +77,17 @@ CMovable::CMovable(unit_t type,int id,int faction,int lp,int pos_x,int pos_y, SD
 CSelectable(id,faction,lp,pos_x,pos_y,renderer,lp_path),
 texture(renderer,path)
 {
+    switch(faction){
+        case ATREIDES:
+            this->texture.SetColorMod(200,200,255);
+            break;
+        case HARKONNEN:
+            this->texture.SetColorMod(255,200,200);
+            break;
+        case ORDOS:
+            this->texture.SetColorMod(200,255,200);
+            break;
+    }
     this->dir = BOTTOM;
     this->type = type; 
     this->special = special;    
@@ -87,19 +98,37 @@ CStatic::CStatic(building_t type, int id,int faction,int lp,int pos_x,int pos_y,
 CSelectable(id,faction,lp,pos_x,pos_y,renderer,lp_path),
 texture(renderer,path)
 {
+    switch(faction){
+        case ATREIDES:
+            this->texture.SetColorMod(200,200,255);
+            break;
+        case HARKONNEN:
+            this->texture.SetColorMod(255,200,200);
+            break;
+        case ORDOS:
+            this->texture.SetColorMod(200,255,200);
+            break;
+    }
     this->type = type;     
 }
 
 void CMovable::render(player_t player_faction, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
 
-    this->render_handler.renderMovable(this->texture,renderer,this->type,this->dir,this->position.x,this->position.y,cam_pos_x,cam_pos_y,TILE_SIZE);          
-    
+    //  this->render_handler.renderMovable(this->texture,renderer,this->type,this->dir,this->position.x,this->position.y,cam_pos_x,cam_pos_y,TILE_SIZE);          
+        this->texture.Update(SDL2pp::NullOpt,SDL2pp::Surface("/home/lautaro/Documents/FACULTAD/TDP/culonon/TDP-Dune2022/data/unitsprites/sardaukar/sardaukar.png"));
+        renderer.Copy(
+            texture,						//	The sprite
+                    //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
+            SDL2pp::NullOpt,		//	'cut' from the sprite (NullOpt for no cut)
+            SDL2pp::Rect(this->position.x*TILE_SIZE-cam_pos_x,this->position.y*TILE_SIZE-cam_pos_y,TILE_SIZE,TILE_SIZE)				//	set to this part of the window		
+        );
     if (this->selected == true && this->faction == player_faction)
         renderer.Copy(
             lp_texture,
             SDL2pp::Rect(30,20*(this->health-1),100,20),
             SDL2pp::Rect((this->position.x-0.5)*TILE_SIZE-cam_pos_x,(this->position.y-0.5)*TILE_SIZE-cam_pos_y,30,5) 		
     );
+
 }
 
 void CStatic::render(player_t player_faction, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
@@ -113,12 +142,30 @@ void CStatic::render(player_t player_faction, SDL2pp::Renderer& renderer, int ca
 	    );
     }
     if (this->type == BARRACK){
-        renderer.Copy(
-		    texture,						//	The sprite
-		    //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
-		    SDL2pp::Rect(0,0,75,80),		//	'cut' from the sprite (NullOpt for no cut)
-		    SDL2pp::Rect(this->position.x*TILE_SIZE-cam_pos_x,this->position.y*TILE_SIZE-cam_pos_y,BARRACK_DIM_X*TILE_SIZE,BARRACK_DIM_Y*TILE_SIZE)				//	set to this part of the window		
-	    );
+        if(this->faction == ATREIDES){
+            renderer.Copy(
+                texture,						//	The sprite
+                //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
+                SDL2pp::Rect(0,0,75,80),		//	'cut' from the sprite (NullOpt for no cut)
+                SDL2pp::Rect(this->position.x*TILE_SIZE-cam_pos_x,this->position.y*TILE_SIZE-cam_pos_y,BARRACK_DIM_X*TILE_SIZE,BARRACK_DIM_Y*TILE_SIZE)				//	set to this part of the window		
+            );
+        }
+        if(this->faction == HARKONNEN){
+            renderer.Copy(
+                texture,						//	The sprite
+                //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
+                SDL2pp::Rect(0,75,65,80),		//	'cut' from the sprite (NullOpt for no cut)
+                SDL2pp::Rect(this->position.x*TILE_SIZE-cam_pos_x,this->position.y*TILE_SIZE-cam_pos_y,BARRACK_DIM_X*TILE_SIZE,BARRACK_DIM_Y*TILE_SIZE)				//	set to this part of the window		
+            );
+        }
+        if(this->faction == ORDOS){
+            renderer.Copy(
+                texture,						//	The sprite
+                //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
+                SDL2pp::Rect(0,150,65,80),		//	'cut' from the sprite (NullOpt for no cut)
+                SDL2pp::Rect(this->position.x*TILE_SIZE-cam_pos_x,this->position.y*TILE_SIZE-cam_pos_y,BARRACK_DIM_X*TILE_SIZE,BARRACK_DIM_Y*TILE_SIZE)				//	set to this part of the window		
+            );
+        }
     }
     if (this->type == REFINERY){
         renderer.Copy(
@@ -133,6 +180,81 @@ void CStatic::render(player_t player_faction, SDL2pp::Renderer& renderer, int ca
 		    SDL2pp::Rect(100,12,110,82),		//	'cut' from the sprite (NullOpt for no cut)
 		    SDL2pp::Rect(this->position.x*TILE_SIZE-cam_pos_x,this->position.y*TILE_SIZE-cam_pos_y,REFINERY_DIM_X*TILE_SIZE,REFINERY_DIM_Y*TILE_SIZE)				//	set to this part of the window		
 	    );
+    }
+    if (this->type == LIGHT_FACTORY){
+        renderer.Copy(
+		    texture,						//	The sprite
+		    //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
+		    SDL2pp::Rect(0,0,95,65),		//	'cut' from the sprite (NullOpt for no cut)
+		    SDL2pp::Rect(this->position.x*TILE_SIZE-cam_pos_x,this->position.y*TILE_SIZE-cam_pos_y,LIGHT_FACTORY_DIM_X*TILE_SIZE,LIGHT_FACTORY_DIM_Y*TILE_SIZE)				//	set to this part of the window		
+	    );
+        renderer.Copy(
+		    texture,						//	The sprite
+		    //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
+		    SDL2pp::Rect(95,0,95,65),		//	'cut' from the sprite (NullOpt for no cut)
+		    SDL2pp::Rect(this->position.x*TILE_SIZE-cam_pos_x-2,this->position.y*TILE_SIZE-cam_pos_y,LIGHT_FACTORY_DIM_X*TILE_SIZE,LIGHT_FACTORY_DIM_Y*TILE_SIZE)				//	set to this part of the window		
+	    );
+    }
+    if (this->type == HEAVY_FACTORY){
+        renderer.Copy(
+		    texture,						//	The sprite
+		    //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
+		    SDL2pp::Rect(0,0,95,90),		//	'cut' from the sprite (NullOpt for no cut)
+		    SDL2pp::Rect(this->position.x*TILE_SIZE-cam_pos_x-11,this->position.y*TILE_SIZE-cam_pos_y+4,HEAVY_FACTORY_DIM_X*TILE_SIZE,HEAVY_FACTORY_DIM_Y*TILE_SIZE)				//	set to this part of the window		
+	    );
+        renderer.Copy(
+		    texture,						//	The sprite
+		    //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
+		    SDL2pp::Rect(95,0,95,90),		//	'cut' from the sprite (NullOpt for no cut)
+		    SDL2pp::Rect(this->position.x*TILE_SIZE-cam_pos_x,this->position.y*TILE_SIZE-cam_pos_y,HEAVY_FACTORY_DIM_X*TILE_SIZE,HEAVY_FACTORY_DIM_Y*TILE_SIZE)				//	set to this part of the window		
+	    );
+    }
+    if (this->type == SILO){
+        if(this->faction == ATREIDES)
+            renderer.Copy(
+                texture,						//	The sprite
+                //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
+                SDL2pp::Rect(0,0,35,30),		//	'cut' from the sprite (NullOpt for no cut)
+                SDL2pp::Rect(this->position.x*TILE_SIZE-cam_pos_x,this->position.y*TILE_SIZE-cam_pos_y,SILO_DIM_X*TILE_SIZE,SILO_DIM_Y*TILE_SIZE)				//	set to this part of the window		
+            );
+        if(this->faction == ATREIDES)
+            renderer.Copy(
+                texture,						//	The sprite
+                //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
+                SDL2pp::Rect(0,30,35,30),		//	'cut' from the sprite (NullOpt for no cut)
+                SDL2pp::Rect(this->position.x*TILE_SIZE-cam_pos_x,this->position.y*TILE_SIZE-cam_pos_y,SILO_DIM_X*TILE_SIZE,SILO_DIM_Y*TILE_SIZE)				//	set to this part of the window		
+            );
+        if(this->faction == ORDOS)
+            renderer.Copy(
+                texture,						//	The sprite
+                //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
+                SDL2pp::Rect(0,60,35,30),		//	'cut' from the sprite (NullOpt for no cut)
+                SDL2pp::Rect(this->position.x*TILE_SIZE-cam_pos_x,this->position.y*TILE_SIZE-cam_pos_y,SILO_DIM_X*TILE_SIZE,SILO_DIM_Y*TILE_SIZE)				//	set to this part of the window		
+            );
+
+    }
+    if (this->type == PALACE){
+        if(this->faction == ATREIDES)
+            renderer.Copy(
+                texture,						//	The sprite
+                //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
+                SDL2pp::Rect(0,0,98,110),		//	'cut' from the sprite (NullOpt for no cut)
+                SDL2pp::Rect(this->position.x*TILE_SIZE-cam_pos_x,this->position.y*TILE_SIZE-cam_pos_y,PALACE_DIM_X*TILE_SIZE,PALACE_DIM_Y*TILE_SIZE)				//	set to this part of the window		
+            );
+        if(this->faction == HARKONNEN)
+            renderer.Copy(
+                texture,						//	The sprite
+                //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
+                SDL2pp::Rect(0,115,98,110),		//	'cut' from the sprite (NullOpt for no cut)
+                SDL2pp::Rect(this->position.x*TILE_SIZE-cam_pos_x,this->position.y*TILE_SIZE-cam_pos_y,PALACE_DIM_X*TILE_SIZE,PALACE_DIM_Y*TILE_SIZE)				//	set to this part of the window		
+            );
+        if(this->faction == ORDOS)
+            renderer.Copy(
+                texture,						//	The sprite
+                //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
+                SDL2pp::Rect(0,225,98,110),		//	'cut' from the sprite (NullOpt for no cut)
+                SDL2pp::Rect(this->position.x*TILE_SIZE-cam_pos_x,this->position.y*TILE_SIZE-cam_pos_y,PALACE_DIM_X*TILE_SIZE,PALACE_DIM_Y*TILE_SIZE)				//	set to this part of the window		
+            );
     }
     if (this->selected == true  && this->faction == player_faction)
         renderer.Copy(
