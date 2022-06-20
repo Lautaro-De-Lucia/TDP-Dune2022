@@ -88,31 +88,6 @@ void run_sdl() {
     Player client_player(faction,HOST_ADDRESS,SERVICE,cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cell_paths);
 
     client_player.play();
-
-/*
-    while(true){
-    std::vector<State> server_data;
-    std::vector<std::vector<std::string>> cell_paths = generate_client_map(DATA_PATH MAP_FILE);
-    CPlayer client_player(cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cell_paths);
-    client_player.update(server_data,1000,1000);
-    SDL_Event event;
-    SDL_PollEvent(&event);
-    if( event.type == SDL_QUIT ) {
-        exit(1);
-    }
-    int x, y;
-    SDL_GetMouseState(&x, &y);
-    if (x < 80) 
-        cam.move(-10,0);
-    if (x > 1010 && x < 1090) 
-        cam.move(10,0);
-    if (y < 60) 
-        cam.move(0,-10);
-    if (y > 660) 
-        cam.move(0,10);
-    sleep(1);
-    }
-*/
 };
 
 

@@ -22,35 +22,12 @@ void ClientHandler::close(){
 
 void ClientHandler::run(Socket && client_socket) {
 
+    // faction setting
+    int _faction = -1;
+    this->protocol.receive_faction_request(_faction, client_socket);
+    this->faction = (player_t) _faction;
+
     auto base_time_instruction = clock();
-
-    bool success = false;
-
-    while (1) {
-
-        int _faction = -1;
-
-        this->protocol.receive_faction_request(_faction, client_socket);
-
-        // HARKONNEN: 1, ATREIDES: 2, ORDOS: 3
-        if (_faction < 1 || _faction > 3) {
-            success = false;
-        } else {
-            if (this->game->faction_is_available((player_t) _faction))
-                success = true;
-        }
-
-        this->protocol.send_faction_request_response(success, client_socket);
-
-        if (success) {
-            this->game->add_faction((player_t) _faction);
-            this->faction = (player_t) _faction;
-            break;
-        } else {
-            continue;
-        }
-    }
-    
 
     while (true) {
         command_t command;

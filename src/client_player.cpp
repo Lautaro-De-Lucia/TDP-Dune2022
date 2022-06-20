@@ -43,7 +43,7 @@ mouse(TILE_DIM,cam)
 
 void Player::play(){
 
-    this->handle_faction();
+    this->protocol.send_faction_request(this->faction, this->socket);
 
     bool game_has_started = false;
     auto base_time_instruction = clock();
@@ -98,9 +98,9 @@ void Player::play(){
                             this->print("Place building on screen", DATA_PATH FONT_IMPACT_PATH, 200, 300, 10, colors[YELLOW], 1000);
                             this->is_holding_building = true;
                             this->building_held = checkBuild(x, y);
+                            std::cout << "Currently holding the building: " << building_held << std::endl;
                             break;
                         case UNIT_BTN:
-
                             if (this->new_unit_available) {
                                 new_mouse_event.push_back(CREATE_UNIT);
                                 new_mouse_event.push_back(checkUnit(x,y));
@@ -286,9 +286,7 @@ void Player::update() {
     //  Get reads from server
     this->protocol.receive_selectables_to_read(toread, this->socket);
     //  Read each element
-    std::cout << "Toread: " << toread << std::endl;
     for (size_t i = 0 ; i < toread ; i++){
-        std::cout << "Asd: " << toread << std::endl;
         selectable_t type;
         this->protocol.receive_selectable_type(type,this->socket);
         switch(type){
@@ -459,41 +457,4 @@ bool Player::event_is_not_redundant(std::vector<int>& e) {
     }
 
     return false;
-}
-
-bool Player::handle_faction() {
-
-    int _faction = 1;
-    bool success = false;
-
-    while (1) {
-        //std::cout << "faction: "; // no flush needed
-        //std::cin >> _faction;
-
-        // HARKONNEN: 1, ATREIDES: 2, ORDOS: 3
-        if (_faction < 1 || _faction > 3) {
-            std::cout << "invalid faction, try again" << std::endl;
-            continue;
-        }
-
-        this->protocol.send_faction_request((player_t) _faction, this->socket);
-        this->protocol.receive_faction_request_response(success, this->socket);
-
-        if (success) {
-            break;
-        }
-        
-        std::cout << "faction already in use, try again" << std::endl;
-
-        _faction++;
-
-        if (_faction > 3) {
-            std::cout << "no factions available" << std::endl;
-            return false;
-        }
-    }
-
-    this->faction = (player_t) _faction;
-
-    return true;
 }
