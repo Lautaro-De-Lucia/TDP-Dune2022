@@ -23,7 +23,7 @@ class GameHud {
    void renderSpice();
    void renderEnergy();
  public:
-   GameHud(SDL2pp::Renderer& renderer);
+   GameHud(player_t faction, SDL2pp::Renderer& renderer);
    void render(SDL2pp::Renderer& renderer);
    void update(int spice, int energy);
    void addUnitButton(SDL2pp::Renderer& renderer, std::string IMG_PATH, int x, int y, int id);

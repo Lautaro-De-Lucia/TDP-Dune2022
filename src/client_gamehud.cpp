@@ -2,7 +2,8 @@
 #include <iostream>
 #include <string>
 
-#define HUD_IMG_PATH "../src/ui/resources/img/newmenu.png"
+#define HUD_IMG_PATH "../src/ui/resources/img/"
+#define HUD_IMG_MENU_PATH "../src/ui/resources/img/newmenu.png"
 #define BARRACK_PATH "../src/ui/resources/img/barrack.bmp"
 #define REFINERY_PATH "../src/ui/resources/img/refinery.bmp"
 #define ENERGY_PATH "../src/ui/resources/img/energy.jpg"
@@ -10,18 +11,47 @@
 #define TRIKE_PATH "../src/ui/resources/img/trike.bmp"
 #define HARVESTER_PATH "../src/ui/resources/img/harvester.bmp"
 
+#define TOTAL_BUILDING_IMGS 7
+#define TOTAL_UNIT_IMGS 7
 
-GameHud::GameHud(SDL2pp::Renderer& renderer) : texture(renderer, HUD_IMG_PATH) {
+GameHud::GameHud(player_t faction, SDL2pp::Renderer& renderer) : texture(renderer, HUD_IMG_MENU_PATH) {
 	int w = texture.GetWidth();
 	int h = texture.GetHeight();
 	int x = SCREEN_WIDTH - w;
 	int y = SCREEN_HEIGHT - h;
 	dRect = {x, y, w, h};
-	addBuildButton(renderer, BARRACK_PATH, SCREEN_WIDTH - 155, SCREEN_HEIGHT - 495, BARRACK);
-	addBuildButton(renderer, REFINERY_PATH, SCREEN_WIDTH - 155, SCREEN_HEIGHT - 435, REFINERY);
-	addBuildButton(renderer, AIR_TRAP_PATH, SCREEN_WIDTH - 155, SCREEN_HEIGHT - 375, AIR_TRAP);
-	addUnitButton(renderer, TRIKE_PATH, SCREEN_WIDTH - 80, SCREEN_HEIGHT - 495, TRIKE);
-	addUnitButton(renderer, HARVESTER_PATH, SCREEN_WIDTH - 80, SCREEN_HEIGHT - 435, HARVESTER);
+	std::string faction_path;
+	switch(faction){
+		case HARKONNEN:
+			faction_path.append("Harkonnen");
+			break;
+		case ATREIDES:
+			faction_path.append("Atreides");
+			break;	
+		case ORDOS:
+			faction_path.append("Ordos");
+			break;	
+	}
+	
+	std::vector<std::string> building_paths;
+	std::vector<std::string> unit_paths;
+	for(size_t i = 0 ; i < TOTAL_BUILDING_IMGS ; i++){
+		building_paths.push_back(HUD_IMG_PATH);
+		unit_paths.push_back(HUD_IMG_PATH);
+	}
+	building_paths[BARRACK].append(faction_path.c_str()).append("/barrack.bmp");
+	building_paths[REFINERY].append(faction_path.c_str()).append("/refinery.bmp");
+	building_paths[AIR_TRAP].append(faction_path.c_str()).append("/wind-trap.bmp");
+
+	unit_paths[TRIKE].append(faction_path.c_str()).append("/trike.jpg");
+	unit_paths[HARVESTER].append(faction_path.c_str()).append("/harvester.jpg");
+
+
+	addBuildButton(renderer, building_paths[BARRACK].c_str(), SCREEN_WIDTH - 155, SCREEN_HEIGHT - 495, BARRACK);
+	addBuildButton(renderer, building_paths[REFINERY].c_str(), SCREEN_WIDTH - 155, SCREEN_HEIGHT - 435, REFINERY);
+	addBuildButton(renderer, building_paths[AIR_TRAP].c_str(), SCREEN_WIDTH - 155, SCREEN_HEIGHT - 375, AIR_TRAP);
+	addUnitButton(renderer, unit_paths[TRIKE].c_str(), SCREEN_WIDTH - 80, SCREEN_HEIGHT - 495, TRIKE);
+	addUnitButton(renderer, unit_paths[HARVESTER].c_str(), SCREEN_WIDTH - 80, SCREEN_HEIGHT - 435, HARVESTER);
 }
 
 void GameHud::render(SDL2pp::Renderer& renderer){

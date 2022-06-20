@@ -18,8 +18,8 @@
 const int CAMERA_WIDTH = 640;
 const int CAMERA_HEIGHT = 360;
 
-const int CAMERA_INITIAL_POS_X = 0;
-const int CAMERA_INITIAL_POS_Y = 0;
+const int CAMERA_INITIAL_POS_X = 620;
+const int CAMERA_INITIAL_POS_Y = 360;
 
 const int GAME_SPEED = 20000;
 
@@ -52,7 +52,7 @@ class Player {
     bool new_unit_available;
     player_t faction;
 
-    Player(const char* host_name, const char* service_name,Camera & cam, SDL2pp::Window& window,SDL2pp::Renderer& renderer, size_t spice, size_t c_spice, int energy, size_t c_energy, std::vector<std::vector<std::string>>& map_data);
+    Player(player_t faction, const char* host_name, const char* service_name,Camera & cam, SDL2pp::Window& window,SDL2pp::Renderer& renderer, size_t spice, size_t c_spice, int energy, size_t c_energy, std::vector<std::vector<std::string>>& map_data);
 
     void play();
     void renderMap();

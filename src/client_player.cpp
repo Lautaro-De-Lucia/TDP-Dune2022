@@ -16,14 +16,14 @@ std::map<response_t, std::string> usr_msg = {
 };
 
 //  @TODO: Meter en un bloque try{} en el main
-Player::Player(const char* host_name, const char* service_name,Camera & cam ,SDL2pp::Window& window,SDL2pp::Renderer& renderer,size_t spice, size_t cspice, int energy, size_t c_energy, std::vector<std::vector<std::string>>& map_data)
+Player::Player(player_t faction, const char* host_name, const char* service_name,Camera & cam ,SDL2pp::Window& window,SDL2pp::Renderer& renderer,size_t spice, size_t cspice, int energy, size_t c_energy, std::vector<std::vector<std::string>>& map_data)
 :
 socket(host_name, service_name),
 camera(cam),
 game_window(window),
 game_renderer(renderer),
 map(renderer,map_data),
-hud(renderer),
+hud(faction,renderer),
 mouse(TILE_DIM,cam)
 
 {

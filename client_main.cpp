@@ -78,12 +78,14 @@ void run_sdl() {
     //  This is only to initialize TTF
 	SDL2pp::SDLTTF ttf;
 
+    player_t faction = ATREIDES; //Esto debe poder definirse desde el menú de Qt
+
     SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,0);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
 
     std::vector<std::vector<std::string>> cell_paths = generate_client_map(DATA_PATH MAP_FILE);    
-    Camera cam(CAMERA_INITIAL_POS_X,CAMERA_INITIAL_POS_Y,CAMERA_WIDTH,CAMERA_HEIGHT,SCREEN_WIDTH,SCREEN_HEIGHT);
-    Player client_player(HOST_ADDRESS,SERVICE,cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cell_paths);
+    Camera cam(CAMERA_INITIAL_POS_X*(faction-1),CAMERA_INITIAL_POS_Y*(faction-1),CAMERA_WIDTH,CAMERA_HEIGHT,SCREEN_WIDTH,SCREEN_HEIGHT);
+    Player client_player(faction,HOST_ADDRESS,SERVICE,cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cell_paths);
 
     client_player.play();
 
