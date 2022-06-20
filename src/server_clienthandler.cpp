@@ -1,15 +1,16 @@
 
 #include "server_clienthandler.h"
 
-ClientHandler::ClientHandler(player_t faction,int init_energy, int init_spice ,Socket && client_socket,GameResources * game)
+ClientHandler::ClientHandler(int init_energy, int init_spice ,Socket && client_socket,GameResources * game)
     :
-    faction(faction),
     spice(init_spice),
     energy(init_energy),
     finished(false),
     game{game},
     thread(&ClientHandler::run,this,std::move(client_socket))
-{}
+{
+    this->faction = (player_t) -1;
+}
 
 bool ClientHandler::isDone(){
     return this->finished;
@@ -23,8 +24,33 @@ void ClientHandler::run(Socket && client_socket) {
 
     auto base_time_instruction = clock();
 
-    std::cout << "This is the new player of faction: " << this->faction << std::endl;
-    std::cout << "This is my memory address: " << this << std::endl;
+    bool success = false;
+
+    while (1) {
+
+        int _faction = -1;
+
+        this->protocol.receive_faction_request(_faction, client_socket);
+
+        // HARKONNEN: 1, ATREIDES: 2, ORDOS: 3
+        if (_faction < 1 || _faction > 3) {
+            success = false;
+        } else {
+            if (this->game->faction_is_available((player_t) _faction))
+                success = true;
+        }
+
+        this->protocol.send_faction_request_response(success, client_socket);
+
+        if (success) {
+            this->game->add_faction((player_t) _faction);
+            this->faction = (player_t) _faction;
+            break;
+        } else {
+            continue;
+        }
+    }
+    
 
     while (true) {
         command_t command;

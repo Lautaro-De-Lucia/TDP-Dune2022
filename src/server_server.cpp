@@ -17,7 +17,7 @@ void Server::run() {
     size_t i = 1;
     while (running == true){
         Socket client_socket = (this->socket.accept());
-        this->players.push_back(std::unique_ptr<ClientHandler>(new ClientHandler((player_t) i++,INIT_ENERGY,INIT_SPICE,std::move(client_socket),&(this->game))));
+        this->players.push_back(std::unique_ptr<ClientHandler>(new ClientHandler(INIT_ENERGY,INIT_SPICE,std::move(client_socket),&(this->game))));
         checkForFinishedClients();
     }
     closeAllClients();

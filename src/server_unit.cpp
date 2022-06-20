@@ -40,6 +40,7 @@ response_t Harvester::place(Board& board,std::vector<Position>& positions,int * 
 void Harvester::sendState(Protocol & protocol, Socket & client_socket){
     protocol.send_harvester(
         this->ID,
+        this->faction,
         this->LP,
         this->position.x,
         this->position.y,
@@ -69,6 +70,7 @@ response_t Trike::place(Board& board,std::vector<Position>& positions,int * spic
 void Trike::sendState(Protocol & protocol, Socket & client_socket){
     protocol.send_trike(
         this->ID,
+        this->faction,
         this->LP,
         this->position.x,
         this->position.y,
@@ -85,7 +87,6 @@ void Unit::getState(State& state){}
 
 
 void Unit::move(int x, int y, Board& board) {
-    std::cout << "Moving" << std::endl;
     std::vector<Position> new_path;
     if (Position(x,y) == this->getPosition()) {
         this->remaining_path = new_path;

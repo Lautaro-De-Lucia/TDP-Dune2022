@@ -1,10 +1,11 @@
 #include "client_selectable.h"
 
-CSelectable::CSelectable(int id,int lp,int pos_x,int pos_y, SDL2pp::Renderer& renderer, const std::string& lp_path)
+CSelectable::CSelectable(int id,int faction,int lp,int pos_x,int pos_y, SDL2pp::Renderer& renderer, const std::string& lp_path)
 :
 lp_texture(renderer,lp_path)
 {
     this->ID = id;
+    this->faction = faction;
     this->LP = lp;
     this->max_LP = lp;
     this->position = Position(pos_x,pos_y);
@@ -25,12 +26,12 @@ void CSelectable::update(int lp,int pos_x,int pos_y,bool selected,bool special,S
     this->selected = selected;
 }
 
-void CStatic::update(int lp,bool selected,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
+void CStatic::update(player_t player_faction, int lp,bool selected,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
     CSelectable::update(lp,this->position.x,this->position.y,selected,false,renderer,cam_pos_x,cam_pos_y);
-    this->render(renderer, cam_pos_x, cam_pos_y);
+    this->render(player_faction, renderer, cam_pos_x, cam_pos_y);
 }
 
-void CMovable::update(int lp,int pos_x,int pos_y,bool selected,bool attacking,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
+void CMovable::update(player_t player_faction, int lp,int pos_x,int pos_y,bool selected,bool attacking,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
     
     if (pos_x == this->position.x && pos_y > this->position.y)
         this->dir = BOTTOM;
@@ -50,12 +51,12 @@ void CMovable::update(int lp,int pos_x,int pos_y,bool selected,bool attacking,SD
         this->dir = BOTTOM_LEFT;                    
         
     CSelectable::update(lp,pos_x,pos_y,selected,attacking,renderer,cam_pos_x,cam_pos_y);
-    this->render(renderer, cam_pos_x, cam_pos_y);
+    this->render(player_faction, renderer, cam_pos_x, cam_pos_y);
 }
 
-void CSelectable::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
+void CSelectable::render(player_t player_faction, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
     //  Render Health
-    if (this->selected == true)
+    if (this->selected == true && this->faction == player_faction)
         renderer.Copy(
             lp_texture,
             SDL2pp::Rect(30,20*(this->health-1),100,20),
@@ -66,9 +67,9 @@ void CSelectable::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_
 int CSelectable::get_life_points() {    return this->LP;}
 int CSelectable::getID() {return this->ID;}
 
-CMovable::CMovable(unit_t type,int id,int lp,int pos_x,int pos_y, SDL2pp::Renderer& renderer, const std::string& lp_path , const std::string& path)
+CMovable::CMovable(unit_t type,int id,int faction,int lp,int pos_x,int pos_y, SDL2pp::Renderer& renderer, const std::string& lp_path , const std::string& path)
 :
-CSelectable(id,lp,pos_x,pos_y,renderer,lp_path),
+CSelectable(id,faction,lp,pos_x,pos_y,renderer,lp_path),
 texture(renderer,path)
 {
     this->dir = BOTTOM;
@@ -76,19 +77,19 @@ texture(renderer,path)
     this->special = special;    
 }
 
-CStatic::CStatic(building_t type, int id,int lp,int pos_x,int pos_y,SDL2pp::Renderer& renderer, const std::string& lp_path, const std::string& path) 
+CStatic::CStatic(building_t type, int id,int faction,int lp,int pos_x,int pos_y,SDL2pp::Renderer& renderer, const std::string& lp_path, const std::string& path) 
 :
-CSelectable(id,lp,pos_x,pos_y,renderer,lp_path),
+CSelectable(id,faction,lp,pos_x,pos_y,renderer,lp_path),
 texture(renderer,path)
 {
     this->type = type;     
 }
 
-void CMovable::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
+void CMovable::render(player_t player_faction, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
 
     this->render_handler.renderMovable(this->texture,renderer,this->type,this->dir,this->position.x,this->position.y,cam_pos_x,cam_pos_y,TILE_SIZE);          
     
-    if (this->selected == true)
+    if (this->selected == true && this->faction == player_faction)
         renderer.Copy(
             lp_texture,
             SDL2pp::Rect(30,20*(this->health-1),100,20),
@@ -96,8 +97,8 @@ void CMovable::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
     );
 }
 
-void CStatic::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
-    CSelectable::render(renderer, cam_pos_x, cam_pos_y);
+void CStatic::render(player_t player_faction, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
+    CSelectable::render(player_faction, renderer, cam_pos_x, cam_pos_y);
     if (this->type == AIR_TRAP){
         renderer.Copy(
 		    texture,						//	The sprite
@@ -128,7 +129,7 @@ void CStatic::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
 		    SDL2pp::Rect(this->position.x*TILE_SIZE-cam_pos_x,this->position.y*TILE_SIZE-cam_pos_y,REFINERY_DIM_X*TILE_SIZE,REFINERY_DIM_Y*TILE_SIZE)				//	set to this part of the window		
 	    );
     }
-    if (this->selected == true)
+    if (this->selected == true  && this->faction == player_faction)
         renderer.Copy(
             lp_texture,
             SDL2pp::Rect(30,20*(this->health-1),100,20),

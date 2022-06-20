@@ -80,6 +80,7 @@ int AirTrap::getCEnergy() {
 void AirTrap::sendState(Protocol & protocol,Socket & client_socket){
     protocol.send_air_trap(
         this->ID,
+        this->faction,
         this->LP,
         this->position.x,
         this->position.y,
@@ -116,6 +117,7 @@ response_t Barrack::place(Board& board,int pos_x,int pos_y,int& spice,int& spice
 void Barrack::sendState(Protocol & protocol,Socket & client_socket){
     protocol.send_barrack(
         this->ID,
+        this->faction,
         this->LP,
         this->position.x,
         this->position.y,
@@ -160,6 +162,7 @@ int Refinery::getCSpice() {
 void Refinery::sendState(Protocol & protocol,Socket & client_socket){
     protocol.send_refinery(
         this->ID,
+        this->faction,
         this->LP,
         this->position.x,
         this->position.y,

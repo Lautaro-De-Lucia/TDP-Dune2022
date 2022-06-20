@@ -179,3 +179,16 @@ void GameResources::update(){
         states.push_back(state);
     }
 }
+
+bool GameResources::faction_is_available(player_t faction) {
+
+    return !(this->factions[(int) faction - 1]);
+}
+
+void GameResources::add_faction(player_t faction) {
+    this->factions[(int) faction - 1] = true;
+}
+
+void GameResources::remove_faction(player_t faction) {
+    this->factions[(int) faction - 1] = false;
+}

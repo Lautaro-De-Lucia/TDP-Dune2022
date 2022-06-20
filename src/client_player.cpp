@@ -38,9 +38,12 @@ mouse(TILE_DIM,cam)
     this->right_click = false;
     this->selection = false;
     this->new_unit_available = true;
+    this->faction = (player_t) -1;
 }
 
 void Player::play(){
+
+    this->handle_faction();
 
     bool game_has_started = false;
     auto base_time_instruction = clock();
@@ -243,7 +246,7 @@ void Player::play(){
     }
 }
 
-bool Player::contains(int ID){
+bool Player::contains(int ID) {
     for (auto& e : this->elements){
         if (e.first == ID)
             return true;
@@ -253,7 +256,7 @@ bool Player::contains(int ID){
 
 void Player::update() {
     //  Setup Variables
-    int id,lp,pos_x,pos_y,energy,spice; //  Values
+    int id,faction,lp,pos_x,pos_y,energy,spice; //  Values
     bool selected,harvesting,attacking; //  State flags
     int  toread,c;                      //  Helper variables
     //  Update values for player
@@ -288,53 +291,53 @@ void Player::update() {
         this->protocol.receive_selectable_type(type,this->socket);
         switch(type){
             case SEL_TRIKE:
-                this->protocol.receive_trike(id,lp,pos_x,pos_y,selected,attacking,this->socket);
+                this->protocol.receive_trike(id,faction,lp,pos_x,pos_y,selected,attacking,this->socket);
                 if (this->contains(id)){
                     this->elements.at(id)->update(lp,pos_x,pos_y,selected,attacking,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
                 } else {
-                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(TRIKE,id,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH TRIKE_PATH))});
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(TRIKE,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH TRIKE_PATH))});
                     this->updates.push_back(true);  
                 }
                 break;
             case SEL_HARVESTER:
-                this->protocol.receive_harvester(id,lp,pos_x,pos_y,selected,spice,harvesting,this->socket);
+                this->protocol.receive_harvester(id,faction,lp,pos_x,pos_y,selected,spice,harvesting,this->socket);
                 if (this->contains(id)){
                     this->elements.at(id)->update(lp,pos_x,pos_y,selected,harvesting,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
                 } else {
-                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(HARVESTER,id,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH HARVESTER_PATH))});
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(HARVESTER,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH HARVESTER_PATH))});
                     this->updates.push_back(true);  
                 }
                 break;
             case SEL_AIR_TRAP:
-                this->protocol.receive_air_trap(id,lp,pos_x,pos_y,selected,this->socket);
+                this->protocol.receive_air_trap(id,faction,lp,pos_x,pos_y,selected,this->socket);
                 if (this->contains(id)){
                     this->elements.at(id)->update(lp,pos_x,pos_y,selected,false,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
                 } else {
-                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(AIR_TRAP,id,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH WIND_TRAP_PATH))});
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(AIR_TRAP,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH WIND_TRAP_PATH))});
                     this->updates.push_back(true);  
                 }     
                 break;
             case SEL_REFINERY:
                 std::cout << "Received a refinery" << std::endl;
-                this->protocol.receive_refinery(id,lp,pos_x,pos_y,selected,this->socket);
+                this->protocol.receive_refinery(id,faction,lp,pos_x,pos_y,selected,this->socket);
                 if (this->contains(id)){
                     this->elements.at(id)->update(lp,pos_x,pos_y,selected,false,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
                 } else {
-                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(REFINERY,id,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH REFINERY_PATH))});
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(REFINERY,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH REFINERY_PATH))});
                     this->updates.push_back(true);  
                 } 
                 break;
             case SEL_BARRACK:
-                this->protocol.receive_barrack(id,lp,pos_x,pos_y,selected,this->socket);
+                this->protocol.receive_barrack(id,faction,lp,pos_x,pos_y,selected,this->socket);
                 if (this->contains(id)){
                     this->elements.at(id)->update(lp,pos_x,pos_y,selected,false,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
                 } else {
-                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(BARRACK,id,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH BARRACK_PATH))});
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(BARRACK,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH BARRACK_PATH))});
                     this->updates.push_back(true);  
                 }  
                 break;     
@@ -381,7 +384,7 @@ void Player::render(){
     this->renderMap();
     this->printer.render(this->game_renderer);
     for (auto& e : this->elements)
-        e.second->render(this->game_renderer,this->camera.pos_x,this->camera.pos_y);
+        e.second->render(this->faction,this->game_renderer,this->camera.pos_x,this->camera.pos_y);
     this->hud.update(this->spice,this->energy);
     this->renderHud();
     this->game_renderer.Present();
@@ -455,4 +458,41 @@ bool Player::event_is_not_redundant(std::vector<int>& e) {
     }
 
     return false;
+}
+
+bool Player::handle_faction() {
+
+    int _faction = 1;
+    bool success = false;
+
+    while (1) {
+        //std::cout << "faction: "; // no flush needed
+        //std::cin >> _faction;
+
+        // HARKONNEN: 1, ATREIDES: 2, ORDOS: 3
+        if (_faction < 1 || _faction > 3) {
+            std::cout << "invalid faction, try again" << std::endl;
+            continue;
+        }
+
+        this->protocol.send_faction_request((player_t) _faction, this->socket);
+        this->protocol.receive_faction_request_response(success, this->socket);
+
+        if (success) {
+            break;
+        }
+        
+        std::cout << "faction already in use, try again" << std::endl;
+
+        _faction++;
+
+        if (_faction > 3) {
+            std::cout << "no factions available" << std::endl;
+            return false;
+        }
+    }
+
+    this->faction = (player_t) _faction;
+
+    return true;
 }

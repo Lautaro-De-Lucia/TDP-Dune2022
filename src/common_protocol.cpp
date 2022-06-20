@@ -31,6 +31,69 @@ void Protocol::handle_receive(bool was_closed, int recv_size) {
 
 // forcing endianness (Big Endian)
 
+void Protocol::send_faction_request(int faction, Socket& client_socket) {
+
+    uint8_t _faction = (uint8_t) faction;
+
+    uint8_t faction_buffer = (uint8_t) _faction;
+
+    int sent_size = -1;
+    bool was_closed = false;
+
+    sent_size = client_socket.sendall(&faction_buffer, sizeof(faction_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    return;
+
+}
+
+void Protocol::receive_faction_request(int& faction, Socket& client_socket) {
+
+    uint8_t faction_buffer;
+
+    int recv_size = -1;
+    bool was_closed = false;
+
+    recv_size = client_socket.recvall(&faction_buffer, sizeof(faction_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+
+    faction = (command_t) faction_buffer;
+
+    return;
+}
+
+void Protocol::send_faction_request_response(bool success, Socket& client_socket) {
+
+    uint8_t _success = (uint8_t) success;
+
+    uint8_t success_buffer = (uint8_t) _success;
+
+    int sent_size = -1;
+    bool was_closed = false;
+
+    sent_size = client_socket.sendall(&success_buffer, sizeof(success_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    return;
+}
+
+void Protocol::receive_faction_request_response(bool& success, Socket& client_socket) {
+
+    uint8_t success_buffer;
+
+    int recv_size = -1;
+    bool was_closed = false;
+
+    recv_size = client_socket.recvall(&success_buffer, sizeof(success_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+
+    success = (bool) success_buffer;
+
+    return;
+
+}
+
+
 void Protocol::send_command(command_t command, Socket& client_socket) {
 
     uint8_t _command = (uint8_t) command;
@@ -376,41 +439,18 @@ void Protocol::receive_selectable_type(selectable_t& type, Socket& client_socket
     return;
 }
 
-void Protocol::send_trike(int id, int lp, int pos_x, int pos_y, bool selected, bool attacking, Socket& client_socket) {
+void Protocol::send_trike(int id, int faction, int lp, int pos_x, int pos_y, bool selected, bool attacking, Socket& client_socket) {
 
     this->send_selectable_type(SEL_TRIKE, client_socket);
 
-    uint16_t _id = (uint16_t) id;
-    uint16_t _lp = (uint16_t) lp;
-    uint16_t _pos_x = (uint16_t) pos_x;
-    uint16_t _pos_y = (uint16_t) pos_y;
-    uint8_t _selected = (uint8_t) selected;
+    this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
     uint8_t _attacking = (uint8_t) attacking;
 
-    uint16_t id_buffer = (uint16_t) htons(_id);
-    uint16_t lp_buffer = (uint16_t) htons(_lp);
-    uint16_t pos_x_buffer = (uint16_t) htons(_pos_x);
-    uint16_t pos_y_buffer = (uint16_t) htons(_pos_y);
-    uint8_t selected_buffer = (uint8_t) _selected;
     uint8_t attacking_buffer = (uint8_t) _attacking;
 
     int sent_size = -1;
     bool was_closed = false;
-
-    sent_size = client_socket.sendall(&id_buffer, sizeof(id_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
-
-    sent_size = client_socket.sendall(&lp_buffer, sizeof(lp_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
-
-    sent_size = client_socket.sendall(&pos_x_buffer, sizeof(pos_x_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
-
-    sent_size = client_socket.sendall(&pos_y_buffer, sizeof(pos_y_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
-
-    sent_size = client_socket.sendall(&selected_buffer, sizeof(selected_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
 
     sent_size = client_socket.sendall(&attacking_buffer, sizeof(attacking_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
@@ -418,43 +458,20 @@ void Protocol::send_trike(int id, int lp, int pos_x, int pos_y, bool selected, b
     return;
 }
 
-void Protocol::send_harvester(int id, int lp, int pos_x, int pos_y, bool selected, int spice, bool harvesting, Socket& client_socket) {
+void Protocol::send_harvester(int id, int faction, int lp, int pos_x, int pos_y, bool selected, int spice, bool harvesting, Socket& client_socket) {
 
     this->send_selectable_type(SEL_HARVESTER, client_socket);
 
-    uint16_t _id = (uint16_t) id;
-    uint16_t _lp = (uint16_t) lp;
-    uint16_t _pos_x = (uint16_t) pos_x;
-    uint16_t _pos_y = (uint16_t) pos_y;
-    uint8_t _selected = (uint8_t) selected;
+    this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
     uint16_t _spice = (uint16_t) spice;
     uint8_t _harvesting = (uint8_t) harvesting;
 
-    uint16_t id_buffer = (uint16_t) htons(_id);
-    uint16_t lp_buffer = (uint16_t) htons(_lp);
-    uint16_t pos_x_buffer = (uint16_t) htons(_pos_x);
-    uint16_t pos_y_buffer = (uint16_t) htons(_pos_y);
-    uint8_t selected_buffer = (uint8_t) _selected;
     uint16_t spice_buffer = (uint16_t) htons(_spice);
     uint8_t harvesting_buffer = (uint8_t) _harvesting;
 
     int sent_size = -1;
     bool was_closed = false;
-
-    sent_size = client_socket.sendall(&id_buffer, sizeof(id_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
-
-    sent_size = client_socket.sendall(&lp_buffer, sizeof(lp_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
-
-    sent_size = client_socket.sendall(&pos_x_buffer, sizeof(pos_x_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
-
-    sent_size = client_socket.sendall(&pos_y_buffer, sizeof(pos_y_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
-
-    sent_size = client_socket.sendall(&selected_buffer, sizeof(selected_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
 
     sent_size = client_socket.sendall(&spice_buffer, sizeof(spice_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
@@ -466,120 +483,33 @@ void Protocol::send_harvester(int id, int lp, int pos_x, int pos_y, bool selecte
 
 }
 
-void Protocol::send_air_trap(int id, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket) {
+void Protocol::send_air_trap(int id, int faction, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket) {
 
     this->send_selectable_type(SEL_AIR_TRAP, client_socket);
 
-    uint16_t _id = (uint16_t) id;
-    uint16_t _lp = (uint16_t) lp;
-    uint16_t _pos_x = (uint16_t) pos_x;
-    uint16_t _pos_y = (uint16_t) pos_y;
-    uint8_t _selected = (uint8_t) selected;
-
-    uint16_t id_buffer = (uint16_t) htons(_id);
-    uint16_t lp_buffer = (uint16_t) htons(_lp);
-    uint16_t pos_x_buffer = (uint16_t) htons(_pos_x);
-    uint16_t pos_y_buffer = (uint16_t) htons(_pos_y);
-    uint8_t selected_buffer = (uint8_t) _selected;
-
-    int sent_size = -1;
-    bool was_closed = false;
-
-    sent_size = client_socket.sendall(&id_buffer, sizeof(id_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
-
-    sent_size = client_socket.sendall(&lp_buffer, sizeof(lp_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
-
-    sent_size = client_socket.sendall(&pos_x_buffer, sizeof(pos_x_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
-
-    sent_size = client_socket.sendall(&pos_y_buffer, sizeof(pos_y_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
-
-    sent_size = client_socket.sendall(&selected_buffer, sizeof(selected_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
+    this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 
     return;
 }
 
-void Protocol::send_barrack(int id, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket) {
+void Protocol::send_barrack(int id, int faction, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket) {
 
     this->send_selectable_type(SEL_BARRACK, client_socket);
 
-    uint16_t _id = (uint16_t) id;
-    uint16_t _lp = (uint16_t) lp;
-    uint16_t _pos_x = (uint16_t) pos_x;
-    uint16_t _pos_y = (uint16_t) pos_y;
-    uint8_t _selected = (uint8_t) selected;
-
-    uint16_t id_buffer = (uint16_t) htons(_id);
-    uint16_t lp_buffer = (uint16_t) htons(_lp);
-    uint16_t pos_x_buffer = (uint16_t) htons(_pos_x);
-    uint16_t pos_y_buffer = (uint16_t) htons(_pos_y);
-    uint8_t selected_buffer = (uint8_t) _selected;
-
-    int sent_size = -1;
-    bool was_closed = false;
-
-    sent_size = client_socket.sendall(&id_buffer, sizeof(id_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
-
-    sent_size = client_socket.sendall(&lp_buffer, sizeof(lp_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
-
-    sent_size = client_socket.sendall(&pos_x_buffer, sizeof(pos_x_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
-
-    sent_size = client_socket.sendall(&pos_y_buffer, sizeof(pos_y_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
-
-    sent_size = client_socket.sendall(&selected_buffer, sizeof(selected_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
+    this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 
     return;
 }
 
-void Protocol::send_refinery(int id, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket) {
+void Protocol::send_refinery(int id, int faction, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket) {
 
-    this->send_selectable_type(SEL_REFINERY, client_socket);
-
-    uint16_t _id = (uint16_t) id;
-    uint16_t _lp = (uint16_t) lp;
-    uint16_t _pos_x = (uint16_t) pos_x;
-    uint16_t _pos_y = (uint16_t) pos_y;
-    uint8_t _selected = (uint8_t) selected;
-
-    uint16_t id_buffer = (uint16_t) htons(_id);
-    uint16_t lp_buffer = (uint16_t) htons(_lp);
-    uint16_t pos_x_buffer = (uint16_t) htons(_pos_x);
-    uint16_t pos_y_buffer = (uint16_t) htons(_pos_y);
-    uint8_t selected_buffer = (uint8_t) _selected;
-
-    int sent_size = -1;
-    bool was_closed = false;
-
-    sent_size = client_socket.sendall(&id_buffer, sizeof(id_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
-
-    sent_size = client_socket.sendall(&lp_buffer, sizeof(lp_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
-
-    sent_size = client_socket.sendall(&pos_x_buffer, sizeof(pos_x_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
-
-    sent_size = client_socket.sendall(&pos_y_buffer, sizeof(pos_y_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
-
-    sent_size = client_socket.sendall(&selected_buffer, sizeof(selected_buffer), &was_closed);
-    handle_dispatch(was_closed, sent_size);
-
-    return;
+    this->send_selectable_type(SEL_BARRACK, client_socket);
+    this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 }
 
-void Protocol::receive_trike(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, bool& attacking, Socket& client_socket) {
+void Protocol::receive_trike(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, bool& attacking, Socket& client_socket) {
 
-    this->receive_element(id, lp, pos_x, pos_y, selected, client_socket);
+    this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 
     uint8_t attacking_buffer;
     uint8_t _attacking;
@@ -595,9 +525,9 @@ void Protocol::receive_trike(int& id, int& lp, int& pos_x, int& pos_y, bool& sel
     return;
 }
 
-void Protocol::receive_harvester(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, int& spice, bool& harvesting, Socket& client_socket) {
+void Protocol::receive_harvester(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, int& spice, bool& harvesting, Socket& client_socket) {
 
-    this->receive_element(id, lp, pos_x, pos_y, selected, client_socket);
+    this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 
     uint8_t harvesting_buffer;
     uint8_t _harvesting;
@@ -620,35 +550,78 @@ void Protocol::receive_harvester(int& id, int& lp, int& pos_x, int& pos_y, bool&
     return;
 }
 
-void Protocol::receive_air_trap(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket) {
+void Protocol::receive_air_trap(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket) {
 
-    this->receive_element(id, lp, pos_x, pos_y, selected, client_socket);
-
-    return;
-}
-
-void Protocol::receive_barrack(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket) {
-
-    this->receive_element(id, lp, pos_x, pos_y, selected, client_socket);
+    this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 
     return;
 }
 
-void Protocol::receive_refinery(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket) {
+void Protocol::receive_barrack(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket) {
 
-    this->receive_element(id, lp, pos_x, pos_y, selected, client_socket);    
+    this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
     return;
 }
 
-void Protocol::receive_element(int& id, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket) {
+void Protocol::receive_refinery(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket) {
+
+    this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);    
+    return;
+}
+
+void Protocol::send_element(int id, int faction, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket) {
+
+    uint16_t _id = (uint16_t) id;
+    uint8_t _faction = (uint8_t) faction;
+    uint16_t _lp = (uint16_t) lp;
+    uint16_t _pos_x = (uint16_t) pos_x;
+    uint16_t _pos_y = (uint16_t) pos_y;
+    uint8_t _selected = (uint8_t) selected;
+
+    uint16_t id_buffer = (uint16_t) htons(_id);
+    uint8_t faction_buffer = (uint8_t) _faction;
+    uint16_t lp_buffer = (uint16_t) htons(_lp);
+    uint16_t pos_x_buffer = (uint16_t) htons(_pos_x);
+    uint16_t pos_y_buffer = (uint16_t) htons(_pos_y);
+    uint8_t selected_buffer = (uint8_t) _selected;
+
+    int sent_size = -1;
+    bool was_closed = false;
+
+    sent_size = client_socket.sendall(&id_buffer, sizeof(id_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&faction_buffer, sizeof(faction_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&lp_buffer, sizeof(lp_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&pos_x_buffer, sizeof(pos_x_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&pos_y_buffer, sizeof(pos_y_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&selected_buffer, sizeof(selected_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    return;    
+
+}
+
+void Protocol::receive_element(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket) {
 
     uint16_t id_buffer;
+    uint8_t faction_buffer;
     uint16_t lp_buffer;
     uint16_t pos_x_buffer;
     uint16_t pos_y_buffer;
     uint8_t selected_buffer;
 
     uint16_t _id;
+    uint8_t _faction;
     uint16_t _lp;
     uint16_t _pos_x;
     uint16_t _pos_y;
@@ -660,6 +633,10 @@ void Protocol::receive_element(int& id, int& lp, int& pos_x, int& pos_y, bool& s
     recv_size = client_socket.recvall(&id_buffer, sizeof(id_buffer), &was_closed);
     handle_receive(was_closed, recv_size);
     _id = (uint16_t) ntohs(id_buffer);
+
+    recv_size = client_socket.recvall(&faction_buffer, sizeof(faction_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _faction = (uint8_t) faction_buffer;
 
     recv_size = client_socket.recvall(&lp_buffer, sizeof(lp_buffer), &was_closed);
     handle_receive(was_closed, recv_size);
@@ -678,6 +655,7 @@ void Protocol::receive_element(int& id, int& lp, int& pos_x, int& pos_y, bool& s
     _selected = (uint8_t) selected_buffer;
 
     id = (int) _id;
+    faction = (int) _faction;
     lp = (int) _lp;
     pos_x = (int) _pos_x;
     pos_y = (int) _pos_y;

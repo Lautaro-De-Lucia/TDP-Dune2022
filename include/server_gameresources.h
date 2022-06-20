@@ -22,6 +22,7 @@ class GameResources {
     std::map<int,std::unique_ptr<Selectable>> elements;
     Board board;
     std::mutex lock;
+    bool factions[3] = {false, false, false};
 public:    
     GameResources(std::vector<std::vector<cell_t>> cells);
     Cell& getCell(int x, int y);
@@ -55,4 +56,7 @@ public:
     int getBoardHeight();
     int getBoardWidth();
     void update();
+    bool faction_is_available(player_t faction);
+    void add_faction(player_t faction);
+    void remove_faction(player_t faction);
 };

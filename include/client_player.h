@@ -50,6 +50,7 @@ class Player {
     bool right_click;
     bool selection;
     bool new_unit_available;
+    player_t faction;
 
     Player(const char* host_name, const char* service_name,Camera & cam, SDL2pp::Window& window,SDL2pp::Renderer& renderer, size_t spice, size_t c_spice, int energy, size_t c_energy, std::vector<std::vector<std::string>>& map_data);
 
@@ -74,4 +75,6 @@ class Player {
     hud_button_t checkBtn(int& x, int& y);
 
     bool event_is_not_redundant(std::vector<int>& e);
+
+    bool handle_faction();
 };

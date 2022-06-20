@@ -16,7 +16,6 @@ enum move_direction {
     TOP_LEFT = 7
 };
 
-
 class RenderHandler {
     private:
     public:
