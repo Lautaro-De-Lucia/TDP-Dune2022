@@ -56,6 +56,12 @@ class Protocol {
 
     // send each type of unit & building
     void send_trike(int id, int faction, int lp, int pos_x, int pos_y, bool selected, bool attacking, Socket& client_socket);
+    void send_fremen(int id, int faction, int lp, int pos_x, int pos_y, bool selected, bool attacking, Socket& client_socket);
+    void send_infantry(int id, int faction, int lp, int pos_x, int pos_y, bool selected, bool attacking, Socket& client_socket);
+    void send_sardaukar(int id, int faction, int lp, int pos_x, int pos_y, bool selected, bool attacking, Socket& client_socket);
+    void send_tank(int id, int faction, int lp, int pos_x, int pos_y, bool selected, bool attacking, Socket& client_socket);
+    void send_devastator(int id, int faction, int lp, int pos_x, int pos_y, bool selected, bool attacking, Socket& client_socket);
+
     void send_harvester(int id, int faction, int lp, int pos_x, int pos_y, bool selected, int spice, bool harvesting, Socket& client_socket);
     void send_air_trap(int id, int faction, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket);
     void send_barrack(int id, int faction, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket);
@@ -67,6 +73,12 @@ class Protocol {
  
     // receive each type of unit & building
     void receive_trike(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, bool& attacking, Socket& client_socket);
+    void receive_fremen(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, bool& attacking, Socket& client_socket);
+    void receive_infantry(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, bool& attacking, Socket& client_socket);
+    void receive_sardaukar(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, bool& attacking, Socket& client_socket);
+    void receive_tank(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, bool& attacking, Socket& client_socket);
+    void receive_devastator(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, bool& attacking, Socket& client_socket);
+
     void receive_harvester(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, int& spice, bool& harvesting, Socket& client_socket);
     void receive_air_trap(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket);
     void receive_barrack(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket);

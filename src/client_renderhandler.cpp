@@ -20,6 +20,31 @@ void RenderHandler::renderMovable(
             sprite_cut_y =30;
             size =32;
             break;
+        case FREMEN:
+            sprite_cut_x =33;
+            sprite_cut_y =30;
+            size =32;
+            break;
+        case INFANTRY:
+            sprite_cut_x = 45;
+            sprite_cut_y = 45;
+            size =32;
+            break;  
+        case SARDAUKAR:
+            sprite_cut_x =33;
+            sprite_cut_y =30;
+            size =32;
+            break;  
+        case TANK:
+            sprite_cut_x =33;
+            sprite_cut_y =30;
+            size =32;
+            break;    
+        case DEVASTATOR:
+            sprite_cut_x =33;
+            sprite_cut_y =30;
+            size =32;
+            break;
         case HARVESTER:
             sprite_cut_x =52;
             sprite_cut_y =48;

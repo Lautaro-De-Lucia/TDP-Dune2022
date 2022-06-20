@@ -310,6 +310,56 @@ void Player::update() {
                     this->updates.push_back(true);  
                 }
                 break;
+            case SEL_FREMEN:
+                this->protocol.receive_fremen(id,faction,lp,pos_x,pos_y,selected,attacking,this->socket);
+                if (this->contains(id)){
+                    this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,selected,attacking,this->game_renderer,camera.pos_x,camera.pos_y);
+                    this->updates[id] = true;
+                } else {
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(FREMEN,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH FREMEN_PATH))});
+                    this->updates.push_back(true);  
+                }
+                break;
+            case SEL_INFANTRY:
+                this->protocol.receive_infantry(id,faction,lp,pos_x,pos_y,selected,attacking,this->socket);
+                if (this->contains(id)){
+                    this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,selected,attacking,this->game_renderer,camera.pos_x,camera.pos_y);
+                    this->updates[id] = true;
+                } else {
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(INFANTRY,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH INFANTRY_PATH))});
+                    this->updates.push_back(true);  
+                }
+                break;    
+            case SEL_SARDAUKAR:
+                this->protocol.receive_sardaukar(id,faction,lp,pos_x,pos_y,selected,attacking,this->socket);
+                if (this->contains(id)){
+                    this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,selected,attacking,this->game_renderer,camera.pos_x,camera.pos_y);
+                    this->updates[id] = true;
+                } else {
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(SARDAUKAR,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH SARDAUKAR_PATH))});
+                    this->updates.push_back(true);  
+                }
+                break;    
+            case SEL_TANK:
+                this->protocol.receive_tank(id,faction,lp,pos_x,pos_y,selected,attacking,this->socket);
+                if (this->contains(id)){
+                    this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,selected,attacking,this->game_renderer,camera.pos_x,camera.pos_y);
+                    this->updates[id] = true;
+                } else {
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(TANK,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH TANK_PATH))});
+                    this->updates.push_back(true);  
+                }
+                break;    
+            case SEL_DEVASTATOR:
+                this->protocol.receive_devastator(id,faction,lp,pos_x,pos_y,selected,attacking,this->socket);
+                if (this->contains(id)){
+                    this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,selected,attacking,this->game_renderer,camera.pos_x,camera.pos_y);
+                    this->updates[id] = true;
+                } else {
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(DEVASTATOR,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH DEVASTATOR_PATH))});
+                    this->updates.push_back(true);  
+                }
+                break;    
             case SEL_AIR_TRAP:
                 this->protocol.receive_air_trap(id,faction,lp,pos_x,pos_y,selected,this->socket);
                 if (this->contains(id)){

@@ -12,6 +12,11 @@ extern Camera cam;
 #include <SDL2pp/SDL2pp.hh>
 
 #define TRIKE_PATH "/unitsprites/trike/trike.png"
+#define FREMEN_PATH "/unitsprites/fremen/fremen.png"
+#define INFANTRY_PATH "/unitsprites/infantry/infantry.png"
+#define SARDAUKAR_PATH "/unitsprites/sardaukar/sardaukar.png"
+#define TANK_PATH "/unitsprites/tank/combat-tank-atreides.png"
+#define DEVASTATOR_PATH "/unitsprites/devastator/devastator.png"
 #define HARVESTER_PATH "/unitsprites/harvester/harvester.png"
 
 #define WIND_TRAP_PATH "/buildingsprites/windtrap/windtrap.png"

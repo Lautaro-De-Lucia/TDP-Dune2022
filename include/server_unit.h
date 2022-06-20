@@ -76,3 +76,118 @@ class Trike : public Unit {
     virtual response_t place(Board& board,std::vector<Position>& positions,int* spice);
     bool isAttacking();
 };
+
+class Fremen : public Unit {
+    std::string name;
+    int speed;
+    int attack_points;
+    int range;
+    bool attacking;
+    Position enemy_position;
+    Position moving_position;
+    void attack(int x, int y, Board & board);
+    void occupy(Board & board);
+    bool enemySearch(Board & board);
+ public:
+    Fremen(int ID,player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int attack, int range);
+    void create();
+    virtual void react(int x, int y, Board& board);
+    virtual void update(State& state, Board& board);
+    virtual void receiveDamage(int damage);
+    virtual void getState(State& state);
+    virtual void sendState(Protocol & protocol, Socket & client_socket);
+    virtual response_t place(Board& board,std::vector<Position>& positions,int* spice);
+    bool isAttacking();
+};
+
+class Infantry : public Unit {
+    std::string name;
+    int speed;
+    int attack_points;
+    int range;
+    bool attacking;
+    Position enemy_position;
+    Position moving_position;
+    void attack(int x, int y, Board & board);
+    void occupy(Board & board);
+    bool enemySearch(Board & board);
+ public:
+    Infantry(int ID,player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int attack, int range);
+    void create();
+    virtual void react(int x, int y, Board& board);
+    virtual void update(State& state, Board& board);
+    virtual void receiveDamage(int damage);
+    virtual void getState(State& state);
+    virtual void sendState(Protocol & protocol, Socket & client_socket);
+    virtual response_t place(Board& board,std::vector<Position>& positions,int* spice);
+    bool isAttacking();
+};
+
+class Sardaukar : public Unit {
+    std::string name;
+    int speed;
+    int attack_points;
+    int range;
+    bool attacking;
+    Position enemy_position;
+    Position moving_position;
+    void attack(int x, int y, Board & board);
+    void occupy(Board & board);
+    bool enemySearch(Board & board);
+ public:
+    Sardaukar(int ID,player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int attack, int range);
+    void create();
+    virtual void react(int x, int y, Board& board);
+    virtual void update(State& state, Board& board);
+    virtual void receiveDamage(int damage);
+    virtual void getState(State& state);
+    virtual void sendState(Protocol & protocol, Socket & client_socket);
+    virtual response_t place(Board& board,std::vector<Position>& positions,int* spice);
+    bool isAttacking();
+};
+
+class Tank : public Unit {
+    std::string name;
+    int speed;
+    int attack_points;
+    int range;
+    bool attacking;
+    Position enemy_position;
+    Position moving_position;
+    void attack(int x, int y, Board & board);
+    void occupy(Board & board);
+    bool enemySearch(Board & board);
+ public:
+    Tank(int ID,player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int attack, int range);
+    void create();
+    virtual void react(int x, int y, Board& board);
+    virtual void update(State& state, Board& board);
+    virtual void receiveDamage(int damage);
+    virtual void getState(State& state);
+    virtual void sendState(Protocol & protocol, Socket & client_socket);
+    virtual response_t place(Board& board,std::vector<Position>& positions,int* spice);
+    bool isAttacking();
+};
+
+class Devastator : public Unit {
+    std::string name;
+    int speed;
+    int attack_points;
+    int range;
+    bool attacking;
+    Position enemy_position;
+    Position moving_position;
+    void attack(int x, int y, Board & board);
+    void occupy(Board & board);
+    bool enemySearch(Board & board);
+ public:
+    Devastator(int ID,player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int attack, int range);
+    void create();
+    virtual void react(int x, int y, Board& board);
+    virtual void update(State& state, Board& board);
+    virtual void receiveDamage(int damage);
+    virtual void getState(State& state);
+    virtual void sendState(Protocol & protocol, Socket & client_socket);
+    virtual response_t place(Board& board,std::vector<Position>& positions,int* spice);
+    bool isAttacking();
+};
