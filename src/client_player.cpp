@@ -339,7 +339,47 @@ void Player::update() {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(BARRACK,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH BARRACK_PATH))});
                     this->updates.push_back(true);  
                 }  
-                break;     
+                break;   
+            case SEL_LIGHT_FACTORY:
+                this->protocol.receive_light_factory(id,faction,lp,pos_x,pos_y,selected,this->socket);
+                if (this->contains(id)){
+                    this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,selected,false,this->game_renderer,camera.pos_x,camera.pos_y);
+                    this->updates[id] = true;
+                } else {
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(LIGHT_FACTORY,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH LIGHT_FACTORY_PATH))});
+                    this->updates.push_back(true);  
+                }  
+                break;  
+            case SEL_HEAVY_FACTORY:
+                this->protocol.receive_heavy_factory(id,faction,lp,pos_x,pos_y,selected,this->socket);
+                if (this->contains(id)){
+                    this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,selected,false,this->game_renderer,camera.pos_x,camera.pos_y);
+                    this->updates[id] = true;
+                } else {
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(HEAVY_FACTORY,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH HEAVY_FACTORY_PATH))});
+                    this->updates.push_back(true);  
+                }  
+                break;      
+            case SEL_SILO:
+                this->protocol.receive_silo(id,faction,lp,pos_x,pos_y,selected,this->socket);
+                if (this->contains(id)){
+                    this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,selected,false,this->game_renderer,camera.pos_x,camera.pos_y);
+                    this->updates[id] = true;
+                } else {
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(SILO,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH SILO_PATH))});
+                    this->updates.push_back(true);  
+                }  
+                break;    
+            case SEL_PALACE:
+                this->protocol.receive_palace(id,faction,lp,pos_x,pos_y,selected,this->socket);
+                if (this->contains(id)){
+                    this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,selected,false,this->game_renderer,camera.pos_x,camera.pos_y);
+                    this->updates[id] = true;
+                } else {
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(PALACE,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH PALACE_PATH))});
+                    this->updates.push_back(true);  
+                }  
+                break;                      
         }
     }
     //  Destroy non-updated elements

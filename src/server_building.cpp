@@ -170,3 +170,152 @@ void Refinery::sendState(Protocol & protocol,Socket & client_socket){
         client_socket
     );
 }
+
+LightFactory::LightFactory(int ID,player_t faction,int LP,int spice,int energy, Position pos, int dim_x,int dim_y)
+:
+Building(ID,faction,LP,spice,energy,pos,dim_x,dim_y)
+{
+    this->name = "Light Factory";
+}
+
+response_t LightFactory::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capacity,int& energy,int& energy_capacity){
+    response_t res;
+    res = Building::place(board,pos_x,pos_y,spice,spice_capacity,energy,energy_capacity);
+    if(res != RES_CREATE_BUILDING_SUCCESS)
+        return res;
+
+    spice -= this->spice;
+    energy -= this->energy;
+
+    for (size_t j = 0 ; j < this->getDimY() ; j++){ 
+        for (size_t i = 0 ; i < this->getDimX() ; i++){
+            board.getCell(this->position.x+i,this->position.y+j).occupy(this->ID);
+        }
+    }
+
+    return RES_CREATE_BUILDING_SUCCESS;
+}
+
+void LightFactory::sendState(Protocol & protocol,Socket & client_socket){
+    protocol.send_light_factory(
+        this->ID,
+        this->faction,
+        this->LP,
+        this->position.x,
+        this->position.y,
+        this->selected,
+        client_socket
+    );
+}
+
+
+HeavyFactory::HeavyFactory(int ID,player_t faction,int LP,int spice,int energy, Position pos, int dim_x,int dim_y)
+:
+Building(ID,faction,LP,spice,energy,pos,dim_x,dim_y)
+{
+    this->name = "Heavy Factory";
+}
+
+response_t HeavyFactory::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capacity,int& energy,int& energy_capacity){
+    response_t res;
+    res = Building::place(board,pos_x,pos_y,spice,spice_capacity,energy,energy_capacity);
+    if(res != RES_CREATE_BUILDING_SUCCESS)
+        return res;
+
+    spice -= this->spice;
+    energy -= this->energy;
+
+    for (size_t j = 0 ; j < this->getDimY() ; j++){ 
+        for (size_t i = 0 ; i < this->getDimX() ; i++){
+            board.getCell(this->position.x+i,this->position.y+j).occupy(this->ID);
+        }
+    }
+
+    return RES_CREATE_BUILDING_SUCCESS;
+}
+
+void HeavyFactory::sendState(Protocol & protocol,Socket & client_socket){
+    protocol.send_heavy_factory(
+        this->ID,
+        this->faction,
+        this->LP,
+        this->position.x,
+        this->position.y,
+        this->selected,
+        client_socket
+    );
+}
+
+Silo::Silo(int ID,player_t faction,int LP,int spice,int energy, Position pos, int dim_x,int dim_y)
+:
+Building(ID,faction,LP,spice,energy,pos,dim_x,dim_y)
+{
+    this->name = "Silo";
+}
+
+response_t Silo::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capacity,int& energy,int& energy_capacity){
+    response_t res;
+    res = Building::place(board,pos_x,pos_y,spice,spice_capacity,energy,energy_capacity);
+    if(res != RES_CREATE_BUILDING_SUCCESS)
+        return res;
+
+    spice -= this->spice;
+    energy -= this->energy;
+
+    for (size_t j = 0 ; j < this->getDimY() ; j++){ 
+        for (size_t i = 0 ; i < this->getDimX() ; i++){
+            board.getCell(this->position.x+i,this->position.y+j).occupy(this->ID);
+        }
+    }
+
+    return RES_CREATE_BUILDING_SUCCESS;
+}
+
+void Silo::sendState(Protocol & protocol,Socket & client_socket){
+    protocol.send_silo(
+        this->ID,
+        this->faction,
+        this->LP,
+        this->position.x,
+        this->position.y,
+        this->selected,
+        client_socket
+    );
+}
+
+Palace::Palace(int ID,player_t faction,int LP,int spice,int energy, Position pos, int dim_x,int dim_y)
+:
+Building(ID,faction,LP,spice,energy,pos,dim_x,dim_y)
+{
+    this->name = "Barrack";
+}
+
+response_t Palace::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capacity,int& energy,int& energy_capacity){
+    response_t res;
+    res = Building::place(board,pos_x,pos_y,spice,spice_capacity,energy,energy_capacity);
+    if(res != RES_CREATE_BUILDING_SUCCESS)
+        return res;
+
+    spice -= this->spice;
+    energy -= this->energy;
+
+    for (size_t j = 0 ; j < this->getDimY() ; j++){ 
+        for (size_t i = 0 ; i < this->getDimX() ; i++){
+            board.getCell(this->position.x+i,this->position.y+j).occupy(this->ID);
+        }
+    }
+
+    return RES_CREATE_BUILDING_SUCCESS;
+}
+
+void Palace::sendState(Protocol & protocol,Socket & client_socket){
+    protocol.send_palace(
+        this->ID,
+        this->faction,
+        this->LP,
+        this->position.x,
+        this->position.y,
+        this->selected,
+        client_socket
+    );
+}

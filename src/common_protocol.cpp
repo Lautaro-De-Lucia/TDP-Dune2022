@@ -501,6 +501,42 @@ void Protocol::send_barrack(int id, int faction, int lp, int pos_x, int pos_y, b
     return;
 }
 
+void Protocol::send_light_factory(int id, int faction, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket) {
+
+    this->send_selectable_type(SEL_LIGHT_FACTORY, client_socket);
+
+    this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    return;
+}
+
+void Protocol::send_heavy_factory(int id, int faction, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket) {
+
+    this->send_selectable_type(SEL_HEAVY_FACTORY, client_socket);
+
+    this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    return;
+}
+
+void Protocol::send_silo(int id, int faction, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket) {
+
+    this->send_selectable_type(SEL_SILO, client_socket);
+
+    this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    return;
+}
+
+void Protocol::send_palace(int id, int faction, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket) {
+
+    this->send_selectable_type(SEL_PALACE, client_socket);
+
+    this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    return;
+}
+
 void Protocol::send_refinery(int id, int faction, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket) {
 
     this->send_selectable_type(SEL_REFINERY, client_socket);
@@ -558,6 +594,34 @@ void Protocol::receive_air_trap(int& id, int& faction, int& lp, int& pos_x, int&
 }
 
 void Protocol::receive_barrack(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket) {
+
+    this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    return;
+}
+
+void Protocol::receive_light_factory(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket) {
+
+    this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    return;
+}
+
+void Protocol::receive_heavy_factory(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket) {
+
+    this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    return;
+}
+
+void Protocol::receive_silo(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket) {
+
+    this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    return;
+}
+
+void Protocol::receive_palace(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket) {
 
     this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 
