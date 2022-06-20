@@ -1,7 +1,7 @@
 
 #include "server_clienthandler.h"
 
-ClientHandler::ClientHandler(player_t faction,int init_energy, int init_spice ,Socket & client_socket,GameResources * game)
+ClientHandler::ClientHandler(player_t faction,int init_energy, int init_spice ,Socket && client_socket,GameResources * game)
     :
     faction(faction),
     spice(init_spice),
@@ -23,8 +23,10 @@ void ClientHandler::run(Socket && client_socket) {
 
     auto base_time_instruction = clock();
 
-    while (true) {
+    std::cout << "This is the new player of faction: " << this->faction << std::endl;
+    std::cout << "This is my memory address: " << this << std::endl;
 
+    while (true) {
         command_t command;
         this->protocol.receive_command(command, client_socket);
         response_t res;
@@ -68,6 +70,7 @@ void ClientHandler::run(Socket && client_socket) {
                 break;
         }
         this->protocol.send_command_response(res, client_socket);
+        this->game->update();
         reportState(client_socket);
     }
 }
@@ -81,6 +84,7 @@ response_t ClientHandler::createBuilding(int type, int pos_x, int pos_y, int& sp
 }
 
 void ClientHandler::handleLeftClick(int x, int y) {
+    std::cout << "Faction: " << faction << std::endl;
     this->game->selectElement(this->faction,x,y);
 }
 
@@ -105,3 +109,5 @@ void ClientHandler::reportState(Socket& client_socket){
     this->protocol.send_selectables_to_read(this->game->totalElements(),client_socket);
     this->game->sendElements(this->protocol,client_socket);
 }
+
+

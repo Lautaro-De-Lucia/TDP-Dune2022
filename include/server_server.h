@@ -23,7 +23,7 @@ class Server {
  private:
     Socket socket;       ///   Accepting socket for new clients
     GameResources game;                  ///   Monitor to handle resources
-    std::vector<ClientHandler> players;   ///   Client Handlers each of them holding a thread
+    std::vector<std::unique_ptr<ClientHandler>> players;  ///   Client Handlers each of them holding a thread
     bool running;                         ///   Status flag
 
  public:

@@ -104,10 +104,11 @@ response_t GameResources::createUnit(player_t faction,unit_t type,int & spice){
     return res;
 }
 
-response_t GameResources::createBuilding(player_t faction,building_t type,int pos_x,int pos_y,int spice,int c_spice,int energy,int c_energy){
+response_t GameResources::createBuilding(player_t faction,building_t type,int pos_x,int pos_y,int & spice,int & c_spice,int & energy,int & c_energy){
     std::lock_guard<std::mutex> locker(this->lock);
     std::unique_ptr<Building> building = BuildingFactory::manufacture(type,faction,ID);
     //  Attempt to add to board
+    std::cout << "Creando un edificio de faccion" << building->getFaction() << std::endl;
     response_t res = (*building).place(board,pos_x,pos_y,spice,c_spice,energy,c_energy);
     if (res == RES_CREATE_BUILDING_SUCCESS){
         (this->elements).insert({ID, std::move(building)});
@@ -167,4 +168,14 @@ void GameResources::clearChangedCells(){
 }
 std::vector<Position> GameResources::getChangedCells(){
     return this->board.getChangedSandPositions();
+}
+
+void GameResources::update(){
+    State state;
+    std::vector<State> states;
+    for (auto& e : this->elements){
+        state.ID = e.first;
+        e.second->update(state,this->board);
+        states.push_back(state);
+    }
 }

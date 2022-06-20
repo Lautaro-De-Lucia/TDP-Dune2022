@@ -266,6 +266,7 @@ Socket Socket::accept() {
     int skt = ::accept(this->skt, nullptr, nullptr);
     if (skt == -1)
         throw accept_failed_exception();
+    
     /*
      * Creamos un Socket en el scope de Socket::accept() y lo retornamos.
      * Por default C y C++ harian una copia pero copiar un Socket no tiene

@@ -14,9 +14,10 @@ Server::Server(const char* service_name, std::vector<std::vector<cell_t>> cells)
 
 void Server::run() {
     this->running = true;
+    size_t i = 1;
     while (running == true){
         Socket client_socket = (this->socket.accept());
-        this->players.push_back(ClientHandler(HARKONNEN,INIT_ENERGY,INIT_SPICE,client_socket,&(this->game)));
+        this->players.push_back(std::unique_ptr<ClientHandler>(new ClientHandler((player_t) i++,INIT_ENERGY,INIT_SPICE,std::move(client_socket),&(this->game))));
         checkForFinishedClients();
     }
     closeAllClients();
@@ -24,8 +25,8 @@ void Server::run() {
 
 void Server::checkForFinishedClients(){
     for (size_t k = 0; k < this->players.size(); k++){ 
-        if (this->players[k].isDone() == true){
-            this->players[k].close();
+        if (this->players[k]->isDone() == true){
+            this->players[k]->close();
             this->players.erase(this->players.begin() + k);
         }
     }
@@ -33,7 +34,7 @@ void Server::checkForFinishedClients(){
 
 void Server::closeAllClients() {
     for (size_t k = 0; k < this->players.size(); k++){ 
-        this->players[k].close();
+        this->players[k]->close();
     }
 }
 

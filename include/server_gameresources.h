@@ -46,7 +46,7 @@ public:
     std::vector<Position> getSurroundings(Position position, int e_dim_x, int e_dim_y);
     void removeCreator(unit_t unit);
     response_t createUnit(player_t faction,unit_t type,int & spice);
-    response_t createBuilding(player_t faction,building_t type,int pos_x,int pos_y,int spice,int c_spice,int energy,int c_energy);
+    response_t createBuilding(player_t faction,building_t type,int pos_x,int pos_y,int & spice,int &c_spice,int &energy,int &c_energy);
     void selectElement(player_t faction,int pos_x, int pos_y);
     void selectElements(player_t faction,int Xmin, int Xmax,int Ymin, int Ymax);
     void reactToPosition(player_t faction, int pos_x, int pos_y);
@@ -54,5 +54,5 @@ public:
     void sendElements(Protocol & protocol, Socket & client_socket);
     int getBoardHeight();
     int getBoardWidth();
-
+    void update();
 };

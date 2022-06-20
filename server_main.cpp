@@ -67,7 +67,9 @@ int main() {
     std::vector<std::vector<cell_t>> cells = generate_server_map(DATA_PATH MAP_FILE);
     Server server(SERVICE_NAME,cells);
     std::thread server_thread(&Server::run, &server);
-    //readInput();    //  Hold for input
+    while (1) {
+
+    }    //  Hold for input
     server.stop();
     server_thread.join();
 }

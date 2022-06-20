@@ -33,7 +33,7 @@ class ClientHandler {
    std::thread thread;
 
  public:    
-   ClientHandler (player_t faction,int init_energy, int init_spice ,Socket & client_socket,GameResources * game);
+   ClientHandler (player_t faction,int init_energy, int init_spice ,Socket && client_socket,GameResources * game);
    void run(Socket && client_socket); // This should receive the socket in the future
    response_t createBuilding(int type, int pos_x, int pos_y, int& spice, int& c_spice, int& energy, int& c_energy);
    response_t createUnit(int type, int& spice);
