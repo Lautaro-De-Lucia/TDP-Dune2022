@@ -12,6 +12,9 @@
 
 #include <iostream>
 
+#include "client_audioplayer.h"
+
+
 FactionWindow::FactionWindow(QWidget *parent, int* faction)
     : QMainWindow(parent)
     , ui(new Ui::FactionWindow)
@@ -37,20 +40,37 @@ FactionWindow::FactionWindow(QWidget *parent, int* faction)
 }
 
 void FactionWindow::handleAtreides(){
+
+    AudioPlayer audio;
+    audio.play(GAME_START);
+
     *(this->faction) = 2;
+    sleep(1);
     emit jugar();
 }
 
 void FactionWindow::handleHarkonnen(){
+    
+    AudioPlayer audio;
+    audio.play(GAME_START);
+
     *(this->faction) = 1;
+    sleep(1);
     emit jugar();
 }
 
 void FactionWindow::handleOrdos(){
+
+    AudioPlayer audio;
+    audio.play(GAME_START);
+
     *(this->faction) = 3;
+    sleep(1);
     emit jugar();
 }
 
 FactionWindow::~FactionWindow() {
     delete ui;
 }
+
+

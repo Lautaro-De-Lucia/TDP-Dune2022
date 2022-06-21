@@ -81,14 +81,11 @@ void run_sdl(const int* _faction) {
 	SDL2pp::SDLTTF ttf;
 
     AudioPlayer audio;
-    audio.play(GAME_START);
-
-    sleep(1);
-
-    player_t faction = (player_t) *(_faction); //Esto debe poder definirse desde el menú de Qt
 
     SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,0);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
+
+    player_t faction = (player_t) *(_faction); //Esto debe poder definirse desde el menú de Qt
 
     std::cout << "faction is: " << faction << std::endl;
 
@@ -106,6 +103,8 @@ void run_sdl(const int* _faction) {
     default:
         break;
     }
+
+    sleep(3);
 
     std::vector<std::vector<std::string>> cell_paths = generate_client_map(DATA_PATH MAP_FILE);    
     Camera cam(CAMERA_INITIAL_POS_X*(faction-1),CAMERA_INITIAL_POS_Y*(faction-1),CAMERA_WIDTH,CAMERA_HEIGHT,SCREEN_WIDTH,SCREEN_HEIGHT);
@@ -134,8 +133,6 @@ int main(int argc, char *argv[]) {
     //QObject::connect(&l, &LobbyWindow::jugar, &l, [=]() {QtConcurrent::run(run_sdl);});
     QObject::connect(&f, &FactionWindow::jugar, &f, &QMainWindow::close);
     QObject::connect(&f, &FactionWindow::jugar, &f, [=]() {QtConcurrent::run(run_sdl, std::ref(_faction));});
-
-    sleep(1);
 
     return a.exec();
 
