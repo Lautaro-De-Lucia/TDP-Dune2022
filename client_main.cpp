@@ -27,8 +27,9 @@
 
 #define TOTAL_TILE_SPRITES 5
 
-#define HOST_ADDRESS "localhost"
-#define SERVICE "http-alt"
+#define CMD_ARG_IP 1
+#define CMD_ARG_PORT 2
+#define MAX_CMD_ARGS 3
 
 std::vector<std::vector<std::string>> generate_client_map (std::string tile_map_file){
     //  Produce cell matrix
@@ -75,7 +76,7 @@ void greet(SDL2pp::Renderer& game_renderer) {
 }
 
 
-void run_sdl(const int* _faction) {
+void run_sdl(const int* _faction, std::string host_name, std::string service_name) {
 
     //  This is only to initialize TTF
 	SDL2pp::SDLTTF ttf;
@@ -103,9 +104,13 @@ void run_sdl(const int* _faction) {
     default:
         break;
     }
+
+    const char* _host_name = host_name.c_str();
+    const char* _service_name = service_name.c_str();
+
     std::vector<std::vector<std::string>> cell_paths = generate_client_map(DATA_PATH MAP_FILE);    
     Camera cam(CAMERA_INITIAL_POS_X*(faction-1),CAMERA_INITIAL_POS_Y*(faction-1),CAMERA_WIDTH,CAMERA_HEIGHT,SCREEN_WIDTH,SCREEN_HEIGHT);
-    Player client_player(faction,HOST_ADDRESS,SERVICE,cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cell_paths);
+    Player client_player(faction,_host_name,_service_name,cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cell_paths);
 
     client_player.play();
 };
@@ -113,7 +118,20 @@ void run_sdl(const int* _faction) {
 
 int main(int argc, char *argv[]) {
 
-    QApplication a(argc, argv);
+    if (argc != MAX_CMD_ARGS)
+        return 1;
+
+    const char* host_name = argv[CMD_ARG_IP];
+    const char* service_name = argv[CMD_ARG_PORT];
+
+    std::string _host_name(host_name);
+    std::string _service_name(service_name);
+
+    std::string _program_name = "./client";
+    int _argc = 1;
+    char *_argv[] = {"./client"};
+
+    QApplication a(_argc, _argv);
     a.setWindowIcon(QIcon("./src/resources/img/icon.png"));
     MainWindow w;
     w.show();
@@ -129,7 +147,7 @@ int main(int argc, char *argv[]) {
     QObject::connect(&w, &MainWindow::jugar, &f, &QMainWindow::show);
     //QObject::connect(&l, &LobbyWindow::jugar, &l, [=]() {QtConcurrent::run(run_sdl);});
     QObject::connect(&f, &FactionWindow::jugar, &f, &QMainWindow::close);
-    QObject::connect(&f, &FactionWindow::jugar, &f, [=]() {QtConcurrent::run(run_sdl, std::ref(_faction));});
+    QObject::connect(&f, &FactionWindow::jugar, &f, [=]() {QtConcurrent::run(run_sdl, std::ref(_faction), _host_name, _service_name);});
 
     return a.exec();
 

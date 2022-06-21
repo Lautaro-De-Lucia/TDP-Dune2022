@@ -154,8 +154,10 @@ void ClientHandler::update(){
 }	
 
 response_t ClientHandler::queueUnit(unit_t type){
-	if(this->game->getCreator(this->faction,type) == -1)
+    if(this->game->getCreator(this->faction,type) == -1)
 		return RES_CREATE_UNIT_FAILURE_CREATOR;
+    if(this->game->isEnabled(this->faction,type) == false)
+        return RES_CREATE_UNIT_FAILURE_SPECIAL;
 	this->units_to_create[type]++;
 	return RES_SUCCESS;
 }
@@ -164,15 +166,19 @@ response_t ClientHandler::checkCreation(unit_t type){
 	if(this->units_to_create[type] == 0)
 		return RES_SUCCESS;
     std::cout << "Units to create: " << this->units_to_create[type] << std::endl;
-	this->unit_time[type] += this->game->getTotalCreators(this->faction,type); 
+    std::cout << "Total creators: " << this->game->getTotalCreators(this->faction,type) << std::endl;
+    this->unit_time[type] += this->game->getTotalCreators(this->faction,type); 
 	std::cout << "Unit time: " << this->unit_time[type] << std::endl;
     if(this->unit_time[type] >= this->unit_creation_time[type]){
 		response_t res;
         res = this->game->createUnit(this->faction,type,this->spice);
-        this->unit_time[type] = 0;
-        this->units_to_create[type]--;
-        if (res != RES_SUCCESS)
+        if (res != RES_CREATE_UNIT_SUCCESS){
             return res;
-    }
+        } else {   
+            this->unit_time[type] = 0;
+            this->units_to_create[type]--;
+            return res;
+        }
+    }   
     return RES_SUCCESS;
 }

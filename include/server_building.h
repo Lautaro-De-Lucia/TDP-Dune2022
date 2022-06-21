@@ -17,6 +17,7 @@ class Building : public Selectable {
     virtual void react(int x, int y, Board& board);
     virtual void sendState(Protocol & protocol,Socket & client_socket);
     virtual bool canCreate(unit_t type);
+    virtual bool canEnable(unit_t type);
 };
 class AirTrap : public Building {
     int c_energy;
@@ -73,4 +74,5 @@ class Palace : public Building {
     Palace(int ID,player_t faction, int LP, int spice, int energy, Position pos, int dim_x, int dim_y);
     response_t place(Board& board, int pos_x, int pos_y, int& spice, int& spice_capacity, int& energy, int& energy_capacity);
     virtual void sendState(Protocol & protocol,Socket & client_socket);
+    virtual bool canEnable(unit_t type);
 };

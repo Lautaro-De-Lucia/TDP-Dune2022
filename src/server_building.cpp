@@ -10,6 +10,7 @@ Selectable(ID,faction,LP,pos,dim_x,dim_y,false)
 }
 
 bool Building::canCreate(unit_t type){return false;}
+bool Building::canEnable(unit_t type){return false;}
 
 response_t Building::place(Board& board, int pos_x, int pos_y, int& spice, int& spice_capacity, int& energy, int& energy_capacity){
     
@@ -331,3 +332,5 @@ void Palace::sendState(Protocol & protocol,Socket & client_socket){
         client_socket
     );
 }
+
+bool Palace::canEnable(unit_t type){return (type == SARDAUKAR || type == DEVASTATOR) ? true : false;}

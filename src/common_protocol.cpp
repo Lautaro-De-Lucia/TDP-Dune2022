@@ -418,8 +418,6 @@ void Protocol::receive_response(response_t& response, Socket& client_socket) {
     int sent_size = -1;
     bool was_closed = false;
 
-    std::cout << "Size to send: " << _size << std::endl;
-
     sent_size = client_socket.sendall(&size_buffer, sizeof(size_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
 
@@ -437,8 +435,6 @@ void Protocol::receive_responses_size(int& size, Socket& client_socket) {
     recv_size = client_socket.recvall(&size_buffer, sizeof(size_buffer), &was_closed);
     handle_receive(was_closed, recv_size);
     _size = (uint16_t) ntohs(size_buffer);
-
-    std::cout << "Size received: " << _size << std::endl;
 
     size = (int) _size;
 

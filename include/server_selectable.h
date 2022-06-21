@@ -39,6 +39,7 @@ class Selectable {
     virtual void getState(State& state);
     virtual void sendState(Protocol & protocol,Socket & client_socket);
     virtual bool canCreate(unit_t type);
+    virtual bool canEnable(unit_t type);
     player_t getFaction();
     int getLP();
     std::string getName();

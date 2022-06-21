@@ -8,6 +8,7 @@ std::map<response_t, std::string> usr_msg = {
         {RES_CREATE_UNIT_FAILURE_SPICE, "Not enough spice"},
         {RES_CREATE_UNIT_FAILURE_CREATOR, "There's no creator for this unit"},
         {RES_CREATE_UNIT_FAILURE_SPACE, "Not enough space"},
+        {RES_CREATE_UNIT_FAILURE_SPECIAL, "Special Units may only be created when you have a Palace"},
         {RES_CREATE_BUILDING_SUCCESS, "Building successfully created!"},
         {RES_CREATE_BUILDING_FAILURE_SPICE, "Not enough spice"},
         {RES_CREATE_BUILDING_FAILURE_ENERGY, "Not enough energy"},
@@ -236,7 +237,6 @@ void Player::play(){
         } else {
             command = IDLE;
         }
-        std::cout << "I should block here " << std::endl;
         //  La pasamos por socket
         this->protocol.send_command(command, this->socket);
 

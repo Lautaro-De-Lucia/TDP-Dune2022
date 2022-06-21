@@ -33,6 +33,7 @@ public:
     bool canHarvest(int x, int y);
     bool canTraverse(int x, int y);
     bool hasEnemy(int x, int y, player_t player_faction);
+    bool isEnabled(player_t faction,unit_t unit);
     void dealDamage(int x, int y, int damage);
     int getTotalChangedCells();
     int getTotalCreators(player_t faction, unit_t type);

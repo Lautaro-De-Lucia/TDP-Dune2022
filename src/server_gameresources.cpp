@@ -29,6 +29,18 @@ bool GameResources::canDeposit(int x, int y,player_t faction){
 bool GameResources::canHarvest(int x, int y){return this->board.canHarvest(x,y);}
 bool GameResources::canTraverse(int x, int y){return this->board.canTraverse(x,y);}
 
+bool GameResources::isEnabled(player_t faction,unit_t unit){
+    if(unit != SARDAUKAR && unit != DEVASTATOR)
+        return true;
+    for (auto& e : this->elements)
+        if(e.second->getFaction() == faction)
+            if(e.second->canEnable(unit))
+                return true;
+    return false;
+}
+
+
+
 bool GameResources::hasEnemy(int x, int y, player_t player_faction){
     std::lock_guard<std::mutex> locker(this->lock);
     return this->board.hasEnemy(x,y,player_faction);
@@ -114,7 +126,6 @@ response_t GameResources::createBuilding(player_t faction,building_t type,int po
     std::lock_guard<std::mutex> locker(this->lock);
     std::unique_ptr<Building> building = BuildingFactory::manufacture(type,faction,ID);
     //  Attempt to add to board
-    std::cout << "Creando un edificio de faccion" << building->getFaction() << std::endl;
     response_t res = (*building).place(board,pos_x,pos_y,spice,c_spice,energy,c_energy);
     if (res == RES_CREATE_BUILDING_SUCCESS){
         (this->elements).insert({ID, std::move(building)});

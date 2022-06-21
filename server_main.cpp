@@ -10,7 +10,8 @@
 
 #define TOTAL_TILE_SPRITES 8
 
-#define SERVICE_NAME "http-alt"
+#define CMD_ARG_PORT 1
+#define MAX_CMD_ARGS 2
 
 std::vector<std::vector<cell_t>> generate_server_map (std::string tile_map_file) {
     //  Produce cell matrix
@@ -62,10 +63,14 @@ std::vector<std::vector<cell_t>> generate_server_map (std::string tile_map_file)
     return cells;
 }
 
-int main() {
+int main(int argc, char *argv[]) {
+
+    if (argc != MAX_CMD_ARGS)
+        return 1;
+    const char* service_name = argv[CMD_ARG_PORT];
 
     std::vector<std::vector<cell_t>> cells = generate_server_map(DATA_PATH MAP_FILE);
-    Server server(SERVICE_NAME,cells);
+    Server server(service_name,cells);
     std::thread server_thread(&Server::run, &server);
     while (1) {
 

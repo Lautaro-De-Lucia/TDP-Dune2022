@@ -20,29 +20,29 @@ elements(elements)
         }
     }
 
-    this->creatorID[ATREIDES][FREMEN] = 0;
-    this->creatorID[ATREIDES][INFANTRY] = 0;
-    this->creatorID[ATREIDES][SARDAUKAR] = 0;
-    this->creatorID[ATREIDES][HARVESTER] = 0;
-    this->creatorID[ATREIDES][TRIKE] = 0;
-    this->creatorID[ATREIDES][TANK] = 0;
-    this->creatorID[ATREIDES][DEVASTATOR] = 0;
+    this->creatorID[ATREIDES][FREMEN] = -1;
+    this->creatorID[ATREIDES][INFANTRY] = -1;
+    this->creatorID[ATREIDES][SARDAUKAR] = -1;
+    this->creatorID[ATREIDES][HARVESTER] = -1;
+    this->creatorID[ATREIDES][TRIKE] = -1;
+    this->creatorID[ATREIDES][TANK] = -1;
+    this->creatorID[ATREIDES][DEVASTATOR] = -1;
 
-    this->creatorID[HARKONNEN][FREMEN] = 0;
-    this->creatorID[HARKONNEN][INFANTRY] = 0;
-    this->creatorID[HARKONNEN][SARDAUKAR] = 0;
-    this->creatorID[HARKONNEN][HARVESTER] = 0;
-    this->creatorID[HARKONNEN][TRIKE] = 0;
-    this->creatorID[HARKONNEN][TANK] = 0;
-    this->creatorID[HARKONNEN][DEVASTATOR] = 0;
+    this->creatorID[HARKONNEN][FREMEN] = -1;
+    this->creatorID[HARKONNEN][INFANTRY] = -1;
+    this->creatorID[HARKONNEN][SARDAUKAR] = -1;
+    this->creatorID[HARKONNEN][HARVESTER] = -1;
+    this->creatorID[HARKONNEN][TRIKE] = -1;
+    this->creatorID[HARKONNEN][TANK] = -1;
+    this->creatorID[HARKONNEN][DEVASTATOR] = -1;
 
-    this->creatorID[ORDOS][FREMEN] = 0;
-    this->creatorID[ORDOS][INFANTRY] = 0;
-    this->creatorID[ORDOS][SARDAUKAR] = 0;
-    this->creatorID[ORDOS][HARVESTER] = 0;
-    this->creatorID[ORDOS][TRIKE] = 0;
-    this->creatorID[ORDOS][TANK] = 0;
-    this->creatorID[ORDOS][DEVASTATOR] = 0;
+    this->creatorID[ORDOS][FREMEN] = -1;
+    this->creatorID[ORDOS][INFANTRY] = -1;
+    this->creatorID[ORDOS][SARDAUKAR] = -1;
+    this->creatorID[ORDOS][HARVESTER] = -1;
+    this->creatorID[ORDOS][TRIKE] = -1;
+    this->creatorID[ORDOS][TANK] = -1;
+    this->creatorID[ORDOS][DEVASTATOR] = -1;
 
     this->creators[ATREIDES][FREMEN] = 0;
     this->creators[ATREIDES][INFANTRY] = 0;
@@ -270,20 +270,20 @@ int Board::getCreator(player_t faction,unit_t type){
 }
 
 void Board::makeCreator(int building_ID){
-    if (this->elements.at(building_ID)->getName() == "Barrack") {
-        this->creatorID[this->elements.at(building_ID)->getFaction()][INFANTRY] = building_ID;
+    if(this->elements.at(building_ID)->canCreate(FREMEN))
         this->creatorID[this->elements.at(building_ID)->getFaction()][FREMEN] = building_ID;
-        this->creatorID[this->elements.at(building_ID)->getFaction()][SARDAUKAR] = building_ID; 
-    }
-    if (this->elements.at(building_ID)->getName() == "Light Factory"){
-        this->creatorID[this->elements.at(building_ID)->getFaction()][TRIKE] = building_ID;     
-    }
-    if (this->elements.at(building_ID)->getName() == "Heavy Factory"){
+    if(this->elements.at(building_ID)->canCreate(INFANTRY))
+        this->creatorID[this->elements.at(building_ID)->getFaction()][INFANTRY] = building_ID;
+    if(this->elements.at(building_ID)->canCreate(SARDAUKAR))
+        this->creatorID[this->elements.at(building_ID)->getFaction()][SARDAUKAR] = building_ID;
+    if(this->elements.at(building_ID)->canCreate(HARVESTER))
+        this->creatorID[this->elements.at(building_ID)->getFaction()][HARVESTER] = building_ID;
+    if(this->elements.at(building_ID)->canCreate(TRIKE))
+        this->creatorID[this->elements.at(building_ID)->getFaction()][TRIKE] = building_ID;
+    if(this->elements.at(building_ID)->canCreate(TANK))
         this->creatorID[this->elements.at(building_ID)->getFaction()][TANK] = building_ID;
+    if(this->elements.at(building_ID)->canCreate(DEVASTATOR))
         this->creatorID[this->elements.at(building_ID)->getFaction()][DEVASTATOR] = building_ID;
-        this->creatorID[this->elements.at(building_ID)->getFaction()][HARVESTER] = building_ID;    
-    }
-    std::cout << this->elements.at(building_ID)->getName() << " of ID: " << building_ID << " is now a creator" << std::endl;
 }
 
 void Board::removeCreator(player_t faction, unit_t unit) {
