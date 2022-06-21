@@ -9,6 +9,8 @@ Selectable(ID,faction,LP,pos,dim_x,dim_y,false)
     std::cout << "New building created of faction: " << this->faction << std::endl;
 }
 
+bool Building::canCreate(unit_t type){return false;}
+
 response_t Building::place(Board& board, int pos_x, int pos_y, int& spice, int& spice_capacity, int& energy, int& energy_capacity){
     
     if ((spice - this->getSpice()) < 0){
@@ -96,6 +98,8 @@ Building(ID,faction,LP,spice,energy,pos,dim_x,dim_y)
     this->name = "Barrack";
 }
 
+bool Barrack::canCreate(unit_t type){return (type == FREMEN || type == INFANTRY || type == SARDAUKAR)? true : false;}
+
 response_t Barrack::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capacity,int& energy,int& energy_capacity){
     response_t res;
     res = Building::place(board,pos_x,pos_y,spice,spice_capacity,energy,energy_capacity);
@@ -133,6 +137,9 @@ Building(ID,faction,LP,spice,energy,pos,dim_x,dim_y)
     this->name = "Refinery";
     this->c_spice= c_spice;
 }
+
+bool Refinery::canCreate(unit_t type){return type == HARVESTER? true : false;}
+
 
 response_t Refinery::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capacity,int& energy,int& energy_capacity){
     response_t res;
@@ -178,6 +185,9 @@ Building(ID,faction,LP,spice,energy,pos,dim_x,dim_y)
     this->name = "Light Factory";
 }
 
+bool LightFactory::canCreate(unit_t type){return type == TRIKE? true : false;}
+
+
 response_t LightFactory::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capacity,int& energy,int& energy_capacity){
     response_t res;
     res = Building::place(board,pos_x,pos_y,spice,spice_capacity,energy,energy_capacity);
@@ -215,6 +225,8 @@ Building(ID,faction,LP,spice,energy,pos,dim_x,dim_y)
 {
     this->name = "Heavy Factory";
 }
+
+bool HeavyFactory::canCreate(unit_t type){return (type == TRIKE || type == DEVASTATOR)? true : false;}
 
 response_t HeavyFactory::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capacity,int& energy,int& energy_capacity){
     response_t res;

@@ -25,9 +25,9 @@ class GameResources {
 public:    
     GameResources(std::vector<std::vector<cell_t>> cells);
     Cell& getCell(int x, int y);
-    int getCreator(unit_t type);
+    int getCreator(player_t faction, unit_t type);
     std::unique_ptr<Selectable>& getElementAt(int x, int y);
-    void makeCreator(int ID);
+    //void makeCreator(int ID);
     status_t canPlace(const Position& location, int dim_x, int dim_y);
     bool canDeposit(int x, int y, player_t faction);
     bool canHarvest(int x, int y);
@@ -35,6 +35,7 @@ public:
     bool hasEnemy(int x, int y, player_t player_faction);
     void dealDamage(int x, int y, int damage);
     int getTotalChangedCells();
+    int getTotalCreators(player_t faction, unit_t type);
     void clearChangedCells();
     std::vector<Position> getChangedCells();
     void addSandPosition(int x, int y);
@@ -44,7 +45,7 @@ public:
     void addDepositPositions(std::vector<Position> & new_deposit_positions);
     std::vector<Position> & getDepositPositions();
     std::vector<Position> getSurroundings(Position position, int e_dim_x, int e_dim_y);
-    void removeCreator(unit_t unit);
+    //void removeCreator(unit_t unit);
     response_t createUnit(player_t faction,unit_t type,int & spice);
     response_t createBuilding(player_t faction,building_t type,int pos_x,int pos_y,int & spice,int &c_spice,int &energy,int &c_energy);
     void selectElement(player_t faction,int pos_x, int pos_y);

@@ -21,7 +21,8 @@ class Board{
     int dim_y;
     std::vector<std::vector<Cell>> cells;
     std::map<int,std::unique_ptr<Selectable>> & elements;
-    std::map<unit_t,int> creators;
+    std::map<player_t,std::map<unit_t,int>> creatorID;
+    std::map<player_t,std::map<unit_t,int>> creators;
     std::vector<Position> deposit_positions;
     std::vector<Position> changed_sand_positions;
     std::vector<Position> destroyed_positions;
@@ -30,9 +31,12 @@ class Board{
     Cell& getCell(int x, int y);
     int getDimX(){return this-> dim_x;}
     int getDimY(){return this-> dim_y;}
-    int getCreator(unit_t type);
+    int getCreator(player_t faction,unit_t type);
     std::unique_ptr<Selectable>& getElementAt(int x, int y);
     void makeCreator(int ID);
+    void addUnitCreator(player_t faction,building_t type);
+    void removeUnitCreator(player_t faction, unit_t type);
+    int getTotalCreators(player_t faction, unit_t type);
     void print();
     void print(std::vector<Position> path);
     status_t canPlace(const Position& location, int dim_x, int dim_y);
@@ -52,5 +56,5 @@ class Board{
     void addDepositPositions(std::vector<Position> & new_deposit_positions);
     std::vector<Position> & getDepositPositions();
     std::vector<Position> getSurroundings(Position position, int e_dim_x, int e_dim_y);
-    void removeCreator(unit_t unit);
+    void removeCreator(player_t faction,unit_t unit);
 };

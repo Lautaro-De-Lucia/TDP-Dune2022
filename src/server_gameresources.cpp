@@ -44,6 +44,11 @@ std::unique_ptr<Selectable> & GameResources::getElementAt(int x, int y){
     return this->board.getElementAt(x,y);
 }
 
+int GameResources::getTotalCreators(player_t faction, unit_t type){
+    return this->board.getTotalCreators(faction,type);
+}
+
+
 int GameResources::getBoardWidth() {
     return this->board.get_width();  
 }
@@ -71,12 +76,13 @@ std::vector<Position> & GameResources::getDepositPositions(){
     return this->board.getDepositPositions();
 }
 
-int GameResources::getCreator(unit_t type){
-    return this->board.getCreator(type);
+int GameResources::getCreator(player_t faction,unit_t type){
+    return this->board.getCreator(faction,type);
 }
 
-void GameResources::makeCreator(int building_ID){this->board.makeCreator(building_ID);}
-void GameResources::removeCreator(unit_t unit) {this->board.removeCreator(unit);}
+//  void GameResources::makeCreator(int building_ID){this->board.makeCreator(building_ID);}
+//  void GameResources::removeCreator(unit_t unit) {this->board.removeCreator(unit);}
+
 
 std::vector<Position> GameResources::getSurroundings(Position position, int e_dim_x, int e_dim_y){
     std::lock_guard<std::mutex> locker(this->lock);
@@ -85,12 +91,12 @@ std::vector<Position> GameResources::getSurroundings(Position position, int e_di
 
 response_t GameResources::createUnit(player_t faction,unit_t type,int & spice){    
     std::lock_guard<std::mutex> locker(this->lock);
-    if (this->board.getCreator(type) == -1)
+    if (this->board.getCreator(faction,type) == -1)
         return RES_CREATE_UNIT_FAILURE_CREATOR;
 
-    Position building_pos = (elements.at(board.getCreator(type)))->getPosition();
-    int building_dim_x = (elements.at(board.getCreator((type))))->getDimX();
-    int building_dim_y = (elements.at(board.getCreator((type))))->getDimY();
+    Position building_pos = (elements.at(board.getCreator(faction,type)))->getPosition();
+    int building_dim_x = (elements.at(board.getCreator(faction,type)))->getDimX();
+    int building_dim_y = (elements.at(board.getCreator(faction,type)))->getDimY();
 
     std::vector<Position> positions = board.getSurroundings(building_pos, building_dim_x, building_dim_y); //  FAILING HERE
 
@@ -113,6 +119,7 @@ response_t GameResources::createBuilding(player_t faction,building_t type,int po
     if (res == RES_CREATE_BUILDING_SUCCESS){
         (this->elements).insert({ID, std::move(building)});
         ID++;
+        this->board.addUnitCreator(faction,type);
     }
     return res;
 }

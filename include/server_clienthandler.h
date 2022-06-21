@@ -30,17 +30,24 @@ class ClientHandler {
    Protocol protocol;
    GameResources * game;
    bool finished;
+   std::map<unit_t,size_t> units_to_create;
+	 std::map<unit_t,size_t> unit_time;
+	 std::map<unit_t,size_t> unit_creation_time;
    std::thread thread;
+   std::vector<response_t> responses_buffer;
 
  public:    
    ClientHandler (int init_energy, int init_spice ,Socket && client_socket,GameResources * game);
-   void run(Socket && client_socket); // This should receive the socket in the future
+   void run(Socket&& client_socket); // This should receive the socket in the future
    response_t createBuilding(int type, int pos_x, int pos_y, int& spice, int& c_spice, int& energy, int& c_energy);
    response_t createUnit(int type, int& spice);
    void handleLeftClick(int x, int y);
    void handleRightClick(int x, int y);
    void handleSelection(int xmin, int xmax, int ymin, int ymax);
-   void reportState(Socket& client_socket);
+   void update();
+   response_t queueUnit(unit_t type);
+   response_t checkCreation(unit_t type);
+   void reportState(Socket & client_socket);
    bool isDone();
    void close();
 };

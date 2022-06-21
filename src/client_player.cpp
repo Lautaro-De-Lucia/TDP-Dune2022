@@ -51,7 +51,6 @@ void Player::play(){
     std::vector<int> new_mouse_event;
 
     while (true) {
-
         //  loopeamos infinitamente
         //  Actualizamos la cámara
             
@@ -237,7 +236,7 @@ void Player::play(){
         } else {
             command = IDLE;
         }
-
+        std::cout << "I should block here " << std::endl;
         //  La pasamos por socket
         this->protocol.send_command(command, this->socket);
 
@@ -262,11 +261,25 @@ void Player::play(){
             default:
                 break;
         }
-        response_t res;
-        this->protocol.receive_command_response(res,this->socket);
-        if (res != RES_SUCCESS)
-            this->print(usr_msg[res], DATA_PATH FONT_IMPACT_PATH, 200, 300, 10, res >= RESPONSE_FAILURE_OFFSET ? colors[GREEN] : colors[RED], 1000);
-        
+
+        response_t response;
+        int responses_size = 0;
+        std::vector<response_t> responses;
+
+        this->protocol.receive_responses_size(responses_size, this->socket);
+
+        for (size_t i = 0; i < responses_size; i++){
+            this->protocol.receive_response(response, this->socket);
+            responses.push_back(response);
+        }
+
+        for (response_t res : responses) {
+            if (res != RES_SUCCESS)
+                this->print(usr_msg[res], DATA_PATH FONT_IMPACT_PATH, 200, 300, 10, res >= RESPONSE_FAILURE_OFFSET ? colors[GREEN] : colors[RED], 1000);
+        }
+
+        responses.clear();
+
         current_time = clock();
         auto frame_time_update = current_time - base_time_update;
         if (frame_time_update < 100 && game_has_started)

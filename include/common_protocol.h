@@ -45,10 +45,12 @@ class Protocol {
     void receive_mouse_selection(int& pos_x_min, int& pos_x_max, int& pos_y_min, int& pos_y_max, Socket& client_socket);
 
     // server to client requests responses
-    void send_command_response(response_t response, Socket& client_socket);
+    void send_response(response_t response, Socket& client_socket);
+    void send_responses_size(int responses_size, Socket& client_socket);
 
     // client side command status receiver
-    void receive_command_response(response_t& response, Socket& client_socket);
+    void receive_response(response_t& response, Socket& client_socket);
+    void receive_responses_size(int& responses_size, Socket& client_socket);
 
     // single send/receive type of selectable
     void send_selectable_type(selectable_t type, Socket& client_socket);

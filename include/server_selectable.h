@@ -38,6 +38,7 @@ class Selectable {
     virtual void receiveDamage(int damage);
     virtual void getState(State& state);
     virtual void sendState(Protocol & protocol,Socket & client_socket);
+    virtual bool canCreate(unit_t type);
     player_t getFaction();
     int getLP();
     std::string getName();

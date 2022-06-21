@@ -10,6 +10,30 @@ ClientHandler::ClientHandler(int init_energy, int init_spice ,Socket && client_s
     thread(&ClientHandler::run,this,std::move(client_socket))
 {
     this->faction = (player_t) -1;
+
+    this->units_to_create[FREMEN] = 0;
+    this->units_to_create[INFANTRY] = 0;
+    this->units_to_create[SARDAUKAR] = 0;
+    this->units_to_create[HARVESTER] = 0;
+    this->units_to_create[TRIKE] = 0;
+    this->units_to_create[TANK] = 0;
+    this->units_to_create[DEVASTATOR] = 0;
+
+    this->unit_time[FREMEN] = 0;
+    this->unit_time[INFANTRY] = 0;
+    this->unit_time[SARDAUKAR] = 0;
+    this->unit_time[HARVESTER] = 0;
+    this->unit_time[TRIKE] = 0;
+    this->unit_time[TANK] = 0;
+    this->unit_time[DEVASTATOR] = 0;
+
+    this->unit_creation_time[FREMEN] = 500;
+    this->unit_creation_time[INFANTRY] = 500;
+    this->unit_creation_time[SARDAUKAR] = 500;
+    this->unit_creation_time[HARVESTER] = 500;
+    this->unit_creation_time[TRIKE] = 500;
+    this->unit_creation_time[TANK] = 500;
+    this->unit_creation_time[DEVASTATOR] = 500;
 }
 
 bool ClientHandler::isDone(){
@@ -41,10 +65,9 @@ void ClientHandler::run(Socket && client_socket) {
         int type, pos_x, pos_y, pos_x_min,pos_x_max,pos_y_min,pos_y_max;
 
         switch (command){
-            
             case CREATE_UNIT:
                 this->protocol.receive_create_unit_request(type, client_socket);
-                res = createUnit(type, this->spice);
+                res = queueUnit((unit_t)type);
                 break;
             case CREATE_BUILDING:
                 this->protocol.receive_create_building_request(type, pos_x, pos_y, client_socket);
@@ -72,8 +95,15 @@ void ClientHandler::run(Socket && client_socket) {
                 res = RES_SUCCESS;
                 break;
         }
-        this->protocol.send_command_response(res, client_socket);
+
+        this->responses_buffer.push_back(res);
+
         this->game->update();
+        this->update();
+        this->protocol.send_responses_size(this->responses_buffer.size(), client_socket);
+        for (response_t res : this->responses_buffer)
+            this->protocol.send_response(res, client_socket);
+        this->responses_buffer.clear();
         reportState(client_socket);
     }
 }
@@ -113,4 +143,36 @@ void ClientHandler::reportState(Socket& client_socket){
     this->game->sendElements(this->protocol,client_socket);
 }
 
+void ClientHandler::update(){
+	this->responses_buffer.push_back(this->checkCreation(TRIKE));
+	this->responses_buffer.push_back(this->checkCreation(HARVESTER));
+	this->responses_buffer.push_back(this->checkCreation(FREMEN));
+	this->responses_buffer.push_back(this->checkCreation(INFANTRY));
+	this->responses_buffer.push_back(this->checkCreation(SARDAUKAR));
+	this->responses_buffer.push_back(this->checkCreation(TANK));
+	this->responses_buffer.push_back(this->checkCreation(DEVASTATOR));
+}	
 
+response_t ClientHandler::queueUnit(unit_t type){
+	if(this->game->getCreator(this->faction,type) == -1)
+		return RES_CREATE_UNIT_FAILURE_CREATOR;
+	this->units_to_create[type]++;
+	return RES_SUCCESS;
+}
+
+response_t ClientHandler::checkCreation(unit_t type){
+	if(this->units_to_create[type] == 0)
+		return RES_SUCCESS;
+    std::cout << "Units to create: " << this->units_to_create[type] << std::endl;
+	this->unit_time[type] += this->game->getTotalCreators(this->faction,type); 
+	std::cout << "Unit time: " << this->unit_time[type] << std::endl;
+    if(this->unit_time[type] >= this->unit_creation_time[type]){
+		response_t res;
+        res = this->game->createUnit(this->faction,type,this->spice);
+        this->unit_time[type] = 0;
+        this->units_to_create[type]--;
+        if (res != RES_SUCCESS)
+            return res;
+    }
+    return RES_SUCCESS;
+}

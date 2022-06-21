@@ -19,13 +19,55 @@ elements(elements)
             cells[i][j].setTerrain(cell_types[i][j]);
         }
     }
-    this->creators.insert({HARVESTER,-1});
-    this->creators.insert({TRIKE,-1});
-    this->creators.insert({FREMEN,-1});
-    this->creators.insert({INFANTRY,-1});
-    this->creators.insert({SARDAUKAR,-1});
-    this->creators.insert({TANK,-1});
-    this->creators.insert({DEVASTATOR,-1});
+
+    this->creatorID[ATREIDES][FREMEN] = 0;
+    this->creatorID[ATREIDES][INFANTRY] = 0;
+    this->creatorID[ATREIDES][SARDAUKAR] = 0;
+    this->creatorID[ATREIDES][HARVESTER] = 0;
+    this->creatorID[ATREIDES][TRIKE] = 0;
+    this->creatorID[ATREIDES][TANK] = 0;
+    this->creatorID[ATREIDES][DEVASTATOR] = 0;
+
+    this->creatorID[HARKONNEN][FREMEN] = 0;
+    this->creatorID[HARKONNEN][INFANTRY] = 0;
+    this->creatorID[HARKONNEN][SARDAUKAR] = 0;
+    this->creatorID[HARKONNEN][HARVESTER] = 0;
+    this->creatorID[HARKONNEN][TRIKE] = 0;
+    this->creatorID[HARKONNEN][TANK] = 0;
+    this->creatorID[HARKONNEN][DEVASTATOR] = 0;
+
+    this->creatorID[ORDOS][FREMEN] = 0;
+    this->creatorID[ORDOS][INFANTRY] = 0;
+    this->creatorID[ORDOS][SARDAUKAR] = 0;
+    this->creatorID[ORDOS][HARVESTER] = 0;
+    this->creatorID[ORDOS][TRIKE] = 0;
+    this->creatorID[ORDOS][TANK] = 0;
+    this->creatorID[ORDOS][DEVASTATOR] = 0;
+
+    this->creators[ATREIDES][FREMEN] = 0;
+    this->creators[ATREIDES][INFANTRY] = 0;
+    this->creators[ATREIDES][SARDAUKAR] = 0;
+    this->creators[ATREIDES][HARVESTER] = 0;
+    this->creators[ATREIDES][TRIKE] = 0;
+    this->creators[ATREIDES][TANK] = 0;
+    this->creators[ATREIDES][DEVASTATOR] = 0;
+
+    this->creators[HARKONNEN][FREMEN] = 0;
+    this->creators[HARKONNEN][INFANTRY] = 0;
+    this->creators[HARKONNEN][SARDAUKAR] = 0;
+    this->creators[HARKONNEN][HARVESTER] = 0;
+    this->creators[HARKONNEN][TRIKE] = 0;
+    this->creators[HARKONNEN][TANK] = 0;
+    this->creators[HARKONNEN][DEVASTATOR] = 0;
+
+    this->creators[ORDOS][FREMEN] = 0;
+    this->creators[ORDOS][INFANTRY] = 0;
+    this->creators[ORDOS][SARDAUKAR] = 0;
+    this->creators[ORDOS][HARVESTER] = 0;
+    this->creators[ORDOS][TRIKE] = 0;
+    this->creators[ORDOS][TANK] = 0;
+    this->creators[ORDOS][DEVASTATOR] = 0;
+
 }
 
 void Board::addSandPosition(int x, int y){
@@ -33,6 +75,29 @@ void Board::addSandPosition(int x, int y){
 }
 void Board::clearSandPositions(){
     this->changed_sand_positions.clear();
+}
+
+void Board::addUnitCreator(player_t faction, building_t type){
+    if(type == BARRACK){
+        this->creators[faction][FREMEN]++;
+        this->creators[faction][INFANTRY]++;
+        this->creators[faction][SARDAUKAR]++;
+    }
+    if(type == REFINERY)
+        this->creators[faction][HARVESTER]++;
+    if(type == LIGHT_FACTORY)
+        this->creators[faction][TRIKE]++;
+    if(type == HEAVY_FACTORY){
+        this->creators[faction][TANK]++;
+        this->creators[faction][DEVASTATOR]++;
+    }
+}
+
+void Board::removeUnitCreator(player_t faction, unit_t type){
+    this->creators[faction][type]--;
+}
+int Board::getTotalCreators(player_t faction, unit_t type){
+    return this->creators[faction][type];
 }
 
 status_t Board::canPlace(const Position& location, int dim_x,int dim_y) {
@@ -73,21 +138,37 @@ void Board::dealDamage(int x, int y, int damage){
     std::unique_ptr<Selectable>& element = this->elements.at(this->cells[x][y].getID());
     element->receiveDamage(damage);
     if(element->getLP() <= 0){
+        if(element->canCreate(FREMEN)) 
+            this->removeUnitCreator(element->getFaction(),TRIKE);
+        if(element->canCreate(INFANTRY)) 
+            this->removeUnitCreator(element->getFaction(),INFANTRY);
+        if(element->canCreate(SARDAUKAR)) 
+            this->removeUnitCreator(element->getFaction(),SARDAUKAR);
+        if(element->canCreate(HARVESTER)) 
+            this->removeUnitCreator(element->getFaction(),HARVESTER);
+        if(element->canCreate(TRIKE)) 
+            this->removeUnitCreator(element->getFaction(),TRIKE);    
+        if(element->canCreate(TANK)) 
+            this->removeUnitCreator(element->getFaction(),TANK);
+        if(element->canCreate(DEVASTATOR)) 
+            this->removeUnitCreator(element->getFaction(),DEVASTATOR);
+
+        player_t element_faction = element->getFaction();
         Position element_position = element->getPosition(); 
         std::vector<Position> positions = element->getPositions();
 
         // TODO: refactor
         int destroyed_building_id = this->cells[x][y].getID();
         int unit_creator_id = -1;
-        unit_creator_id = this->getCreator(INFANTRY);
+        unit_creator_id = this->getCreator(element_faction,INFANTRY);
         if (destroyed_building_id == unit_creator_id)
-            this->removeCreator(INFANTRY);
-        unit_creator_id = this->getCreator(TRIKE);
+            this->removeCreator(element_faction,INFANTRY);
+        unit_creator_id = this->getCreator(element_faction,TRIKE);
         if (destroyed_building_id == unit_creator_id)
-            this->removeCreator(TRIKE);
-        unit_creator_id = this->getCreator(TANK);
+            this->removeCreator(element_faction,TRIKE);
+        unit_creator_id = this->getCreator(element_faction,TANK);
         if (destroyed_building_id == unit_creator_id)
-            this->removeCreator(TANK);
+            this->removeCreator(element_faction,TANK);
         
         this->elements.erase(this->cells[x][y].getID());
 
@@ -184,47 +265,49 @@ std::vector<Position> & Board::getDepositPositions(){
     return this->deposit_positions;
 }
 
-int Board::getCreator(unit_t type){
-    return this->creators[type];
+int Board::getCreator(player_t faction,unit_t type){
+    return this->creatorID[faction][type];
 }
 
 void Board::makeCreator(int building_ID){
     if (this->elements.at(building_ID)->getName() == "Barrack") {
-        this->creators[INFANTRY] = building_ID;
-        this->creators[FREMEN] = building_ID;
-        this->creators[SARDAUKAR] = building_ID; 
+        this->creatorID[this->elements.at(building_ID)->getFaction()][INFANTRY] = building_ID;
+        this->creatorID[this->elements.at(building_ID)->getFaction()][FREMEN] = building_ID;
+        this->creatorID[this->elements.at(building_ID)->getFaction()][SARDAUKAR] = building_ID; 
     }
     if (this->elements.at(building_ID)->getName() == "Light Factory"){
-        this->creators[TRIKE] = building_ID;     
+        this->creatorID[this->elements.at(building_ID)->getFaction()][TRIKE] = building_ID;     
     }
     if (this->elements.at(building_ID)->getName() == "Heavy Factory"){
-        this->creators[TANK] = building_ID;
-        this->creators[DEVASTATOR] = building_ID;
-        this->creators[HARVESTER] = building_ID;    
+        this->creatorID[this->elements.at(building_ID)->getFaction()][TANK] = building_ID;
+        this->creatorID[this->elements.at(building_ID)->getFaction()][DEVASTATOR] = building_ID;
+        this->creatorID[this->elements.at(building_ID)->getFaction()][HARVESTER] = building_ID;    
     }
     std::cout << this->elements.at(building_ID)->getName() << " of ID: " << building_ID << " is now a creator" << std::endl;
 }
 
-void Board::removeCreator(unit_t unit) {
+void Board::removeCreator(player_t faction, unit_t unit) {
 
     switch (unit)
     {
     case INFANTRY:
     case FREMEN:
     case SARDAUKAR:
-        this->creators[INFANTRY] = -1;
-        this->creators[FREMEN] = -1;
-        this->creators[SARDAUKAR] = -1;
+        this->creatorID[faction][INFANTRY] = -1;
+        this->creatorID[faction][FREMEN] = -1;
+        this->creatorID[faction][SARDAUKAR] = -1;
         break;
     case TRIKE:
-        this->creators[TRIKE] = -1;
+        this->creatorID[faction][TRIKE] = -1;
         break;
     case TANK:
+        this->creatorID[faction][TANK] = -1;
+        break;
     case DEVASTATOR:
+        this->creatorID[faction][DEVASTATOR] = -1;
+        break;
     case HARVESTER:
-        this->creators[TANK] = -1;
-        this->creators[DEVASTATOR] = -1;
-        this->creators[HARVESTER] = -1;
+        this->creatorID[faction][HARVESTER] = -1;
     default:
         break;
     }

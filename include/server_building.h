@@ -16,6 +16,7 @@ class Building : public Selectable {
     virtual response_t place(Board& board, int pos_x, int pos_y, int& spice, int& spice_capacity, int& energy, int& energy_capacity);
     virtual void react(int x, int y, Board& board);
     virtual void sendState(Protocol & protocol,Socket & client_socket);
+    virtual bool canCreate(unit_t type);
 };
 class AirTrap : public Building {
     int c_energy;
@@ -31,6 +32,7 @@ class Barrack : public Building {
     Barrack(int ID,player_t faction, int LP, int spice, int energy, Position pos, int dim_x, int dim_y);
     response_t place(Board& board, int pos_x, int pos_y, int& spice, int& spice_capacity, int& energy, int& energy_capacity);
     virtual void sendState(Protocol & protocol,Socket & client_socket);
+    virtual bool canCreate(unit_t type);
 };
 
 class Refinery : public Building {
@@ -40,6 +42,7 @@ class Refinery : public Building {
     response_t place(Board& board, int pos_x, int pos_y, int& spice, int& spice_capacity, int& energy, int& energy_capacity);
     int getCSpice();
     virtual void sendState(Protocol & protocol,Socket & client_socket);
+    virtual bool canCreate(unit_t type);
 };
 
 class LightFactory : public Building {
@@ -47,6 +50,7 @@ class LightFactory : public Building {
     LightFactory(int ID,player_t faction, int LP, int spice, int energy, Position pos, int dim_x, int dim_y);
     response_t place(Board& board, int pos_x, int pos_y, int& spice, int& spice_capacity, int& energy, int& energy_capacity);
     virtual void sendState(Protocol & protocol,Socket & client_socket);
+    virtual bool canCreate(unit_t type);
 };
 
 class HeavyFactory : public Building {
@@ -54,6 +58,7 @@ class HeavyFactory : public Building {
     HeavyFactory(int ID,player_t faction, int LP, int spice, int energy, Position pos, int dim_x, int dim_y);
     response_t place(Board& board, int pos_x, int pos_y, int& spice, int& spice_capacity, int& energy, int& energy_capacity);
     virtual void sendState(Protocol & protocol,Socket & client_socket);
+    virtual bool canCreate(unit_t type);
 };
 
 class Silo : public Building {

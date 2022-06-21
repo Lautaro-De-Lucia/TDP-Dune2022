@@ -381,7 +381,7 @@ void Protocol::receive_mouse_selection(int& pos_x_min, int& pos_x_max, int& pos_
     return;
 }
 
-void Protocol::send_command_response(response_t response, Socket& client_socket) {
+void Protocol::send_response(response_t response, Socket& client_socket) {
 
     uint8_t response_buffer = (uint8_t) response;
 
@@ -394,7 +394,7 @@ void Protocol::send_command_response(response_t response, Socket& client_socket)
     return;
 }
 
-void Protocol::receive_command_response(response_t& response, Socket& client_socket) {
+void Protocol::receive_response(response_t& response, Socket& client_socket) {
 
     uint8_t new_response_buffer;
 
@@ -408,6 +408,43 @@ void Protocol::receive_command_response(response_t& response, Socket& client_soc
 
     return;
 }
+
+ 
+ void Protocol::send_responses_size(int size, Socket& client_socket) {
+
+    uint16_t _size = (uint16_t) size;
+    uint16_t size_buffer = (uint16_t) htons(_size);
+
+    int sent_size = -1;
+    bool was_closed = false;
+
+    std::cout << "Size to send: " << _size << std::endl;
+
+    sent_size = client_socket.sendall(&size_buffer, sizeof(size_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    return;
+}
+
+void Protocol::receive_responses_size(int& size, Socket& client_socket) {
+
+    uint16_t size_buffer;
+    uint16_t _size;
+
+    int recv_size = -1;
+    bool was_closed = false;
+
+    recv_size = client_socket.recvall(&size_buffer, sizeof(size_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _size = (uint16_t) ntohs(size_buffer);
+
+    std::cout << "Size received: " << _size << std::endl;
+
+    size = (int) _size;
+
+    return;
+}
+
 
 void Protocol::send_selectable_type(selectable_t type, Socket& client_socket) {
 
