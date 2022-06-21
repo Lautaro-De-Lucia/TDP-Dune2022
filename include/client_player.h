@@ -23,6 +23,14 @@ const int CAMERA_INITIAL_POS_Y = 200;
 
 const int GAME_SPEED = 20000;
 
+#define DEF_TRIKE_PATH "/unitsprites/trike/top.png"
+#define DEF_HARVESTER_PATH "/unitsprites/harvester/top.png"
+#define DEF_FREMEN_PATH "/unitsprites/fremen/top.png"
+#define DEF_INFANTRY_PATH "/unitsprites/infantry/top.png"
+#define DEF_SARDAUKAR_PATH "/unitsprites/sardaukar/top.png"
+#define DEF_TANK_PATH "/unitsprites/tank/top.png"
+#define DEF_DEVASTATOR_PATH "/unitsprites/devastator/top.png"
+
 class Player {
 
  private:

@@ -113,15 +113,8 @@ texture(renderer,path)
 }
 
 void CMovable::render(player_t player_faction, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
+    this->render_handler.renderMovable(this->texture,renderer,player_faction,this->type,this->dir,this->position.x,this->position.y,cam_pos_x,cam_pos_y,TILE_SIZE);          
 
-    //  this->render_handler.renderMovable(this->texture,renderer,this->type,this->dir,this->position.x,this->position.y,cam_pos_x,cam_pos_y,TILE_SIZE);          
-        this->texture.Update(SDL2pp::NullOpt,SDL2pp::Surface("/home/lautaro/Documents/FACULTAD/TDP/culonon/TDP-Dune2022/data/unitsprites/sardaukar/sardaukar.png"));
-        renderer.Copy(
-            texture,						//	The sprite
-                    //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
-            SDL2pp::NullOpt,		//	'cut' from the sprite (NullOpt for no cut)
-            SDL2pp::Rect(this->position.x*TILE_SIZE-cam_pos_x,this->position.y*TILE_SIZE-cam_pos_y,TILE_SIZE,TILE_SIZE)				//	set to this part of the window		
-        );
     if (this->selected == true && this->faction == player_faction)
         renderer.Copy(
             lp_texture,

@@ -11,14 +11,6 @@ extern Camera cam;
 
 #include <SDL2pp/SDL2pp.hh>
 
-#define TRIKE_PATH "/unitsprites/trike/trike.png"
-#define FREMEN_PATH "/unitsprites/fremen/fremen.png"
-#define INFANTRY_PATH "/unitsprites/infantry/infantry.png"
-#define SARDAUKAR_PATH "/unitsprites/sardaukar/sardaukar.png"
-#define TANK_PATH "/unitsprites/tank/combat-tank-atreides.png"
-#define DEVASTATOR_PATH "/unitsprites/devastator/devastator.png"
-#define HARVESTER_PATH "/unitsprites/harvester/harvester.png"
-
 #define WIND_TRAP_PATH "/buildingsprites/windtrap/windtrap.png"
 #define BARRACK_PATH "/buildingsprites/barrack/barrack.png"
 #define REFINERY_PATH "/buildingsprites/refinery/refinery.png"
@@ -26,7 +18,6 @@ extern Camera cam;
 #define HEAVY_FACTORY_PATH "/buildingsprites/heavyfactory/heavyfactory.png"
 #define SILO_PATH "/buildingsprites/silo/silo.png"
 #define PALACE_PATH "/buildingsprites/palace/palace.png"
-
 
 #define LP_PATH "/extrasprites/lp.png"
 
@@ -69,24 +60,24 @@ class CSelectable {
 //  a otro corte de la sprite en el caso de la unidad
 
 class CMovable : public CSelectable {
- private:
+ protected:
     SDL2pp::Texture texture;  
     move_direction dir;
     unit_t type;
     bool special;
  public:
     CMovable(unit_t type,int id,int faction,int lp,int pos_x,int pos_y,SDL2pp::Renderer& renderer, const std::string& lp_path , const std::string& path);
-    void render(player_t player_faction, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
-    void update(player_t player_faction, int lp,int pos_x,int pos_y,bool selected,bool special,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
+    virtual void render(player_t player_faction, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
+    virtual void update(player_t player_faction, int lp,int pos_x,int pos_y,bool selected,bool special,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
 }; 
 
 class CStatic : public CSelectable {
- private:
+ protected:
     SDL2pp::Texture texture;  
     building_t type;
  public:
     CStatic(building_t type,int id,int faction,int lp,int pos_x,int pos_y,SDL2pp::Renderer& renderer, const std::string& lp_path ,const std::string& path);
-    void render(player_t player_faction, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
-    void update(player_t player_faction, int lp,bool selected,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
+    virtual void render(player_t player_faction, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
+    virtual void update(player_t player_faction, int lp,bool selected,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
 };
 
