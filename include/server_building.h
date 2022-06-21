@@ -37,13 +37,14 @@ class Barrack : public Building {
 };
 
 class Refinery : public Building {
-    int c_spice;
+    int c_spice = 5000;
  public:
     Refinery(int ID,player_t faction, int LP, int spice, int energy, Position pos, int dim_x, int dim_y, int c_spice);
     response_t place(Board& board, int pos_x, int pos_y, int& spice, int& spice_capacity, int& energy, int& energy_capacity);
     int getCSpice();
     virtual void sendState(Protocol & protocol,Socket & client_socket);
     virtual bool canCreate(unit_t type);
+    virtual bool canStoreSpice(int & spice);
 };
 
 class LightFactory : public Building {
@@ -63,10 +64,12 @@ class HeavyFactory : public Building {
 };
 
 class Silo : public Building {
+    int c_spice = 1000;
  public:
     Silo(int ID,player_t faction, int LP, int spice, int energy, Position pos, int dim_x, int dim_y);
     response_t place(Board& board, int pos_x, int pos_y, int& spice, int& spice_capacity, int& energy, int& energy_capacity);
     virtual void sendState(Protocol & protocol,Socket & client_socket);
+    virtual bool canStoreSpice(int & spice);
 };
 
 class Palace : public Building {

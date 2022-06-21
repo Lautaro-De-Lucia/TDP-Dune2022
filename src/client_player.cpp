@@ -300,12 +300,13 @@ bool Player::contains(int ID) {
 
 void Player::update() {
     //  Setup Variables
-    int id,faction,lp,pos_x,pos_y,energy,spice; //  Values
+    int id,faction,lp,pos_x,pos_y,energy,spice,c_spice; //  Values
     bool selected,harvesting,attacking; //  State flags
     int  toread,c;                      //  Helper variables
     //  Update values for player
-    this->protocol.receive_player_state(spice,energy,this->socket);
+    this->protocol.receive_player_state(spice,c_spice,energy,this->socket);
     this->spice = spice;
+    this->c_spice = c_spice;
     this->energy = energy;
     
     //  Update the board
@@ -536,7 +537,7 @@ void Player::render(){
     this->printer.render(this->game_renderer);
     for (auto& e : this->elements)
         e.second->render(this->faction,this->game_renderer,this->camera.pos_x,this->camera.pos_y);
-    this->hud.update(this->spice,this->energy);
+    this->hud.update(this->spice,this->c_spice,this->energy);
     this->renderHud();
     this->game_renderer.Present();
 }

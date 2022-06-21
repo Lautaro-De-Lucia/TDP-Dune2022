@@ -15,6 +15,8 @@ Selectable::Selectable(int id,player_t faction,int LP, Position position, int di
 
 bool Selectable::canCreate(unit_t type){return false;}
 bool Selectable::canEnable(unit_t type){return false;}
+bool Selectable::canStoreSpice(int & spice){return false;}
+
 
 bool Selectable::isSelected(){
     return this->selected;

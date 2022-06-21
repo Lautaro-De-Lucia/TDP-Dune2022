@@ -101,6 +101,6 @@ class Protocol {
     void receive_sand_cell(int& pos_x, int& pos_y, int& spice, Socket& client_socket);
 
     // player state send/receive
-    void send_player_state(int spice, int energy, Socket& client_socket);
-    void receive_player_state(int& spice, int& energy, Socket& client_socket);
+    void send_player_state(int spice, int c_spice,int energy, Socket& client_socket);
+    void receive_player_state(int& spice, int& c_spice,int& energy, Socket& client_socket);
 };

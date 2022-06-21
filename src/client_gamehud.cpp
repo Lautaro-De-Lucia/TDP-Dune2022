@@ -92,16 +92,16 @@ void GameHud::render(SDL2pp::Renderer& renderer){
 	for (size_t i = 0; i < unit_buttons.size(); i++) {
 		unit_buttons[i].render(renderer);
 	}
+	std::string spice_values;
+	spice_values.append(std::to_string(this->spice));
+	spice_values.append(" | ");
+	spice_values.append(std::to_string(this->c_spice));
+
 	//	RENDER SPICE
     SDL2pp::Font font(DATA_PATH FONT_IMPACT_PATH,10);
-    SDL2pp::Surface surface = font.RenderText_Solid(std::to_string(this->spice),SDL_Color{255,255,0});
+    SDL2pp::Surface surface = font.RenderText_Solid(spice_values,SDL_Color{255,255,0});
     SDL2pp::Texture spice_texture(renderer,surface);
-	renderer.Copy(spice_texture,SDL2pp::NullOpt,SDL2pp::Rect(1160,670,50,20));
-
-	//	RENDER ENERGY
-    SDL2pp::Texture energy_texture(renderer, ENERGY_PATH);
-	renderer.Copy(energy_texture,SDL2pp::NullOpt,SDL2pp::Rect(1098,678-this->energy/20,7,6+this->energy/20));
-
+	renderer.Copy(spice_texture,SDL2pp::NullOpt,SDL2pp::Rect(1145,665,80,30));
 }
 
 void GameHud::addUnitButton(SDL2pp::Renderer& renderer, std::string IMG_PATH, int x, int y, int id) {
@@ -133,7 +133,8 @@ bool GameHud::clickOnHud(int& x, int& y){
 	return (dRect.Intersects(aux));
 }
 
-void GameHud::update(int spice, int energy){
+void GameHud::update(int spice, int c_spice, int energy){
 	this->spice = spice;
+	this->c_spice = c_spice;
 	this->energy = energy;
 }

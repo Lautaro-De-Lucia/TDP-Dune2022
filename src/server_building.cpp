@@ -140,6 +140,11 @@ Building(ID,faction,LP,spice,energy,pos,dim_x,dim_y)
 }
 
 bool Refinery::canCreate(unit_t type){return type == HARVESTER? true : false;}
+bool Refinery::canStoreSpice(int & spice){
+    spice = this->c_spice;
+    return true;
+}
+
 
 
 response_t Refinery::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capacity,int& energy,int& energy_capacity){
@@ -264,6 +269,11 @@ Silo::Silo(int ID,player_t faction,int LP,int spice,int energy, Position pos, in
 Building(ID,faction,LP,spice,energy,pos,dim_x,dim_y)
 {
     this->name = "Silo";
+}
+
+bool Silo::canStoreSpice(int & spice){
+    spice = this->c_spice;
+    return true;
 }
 
 response_t Silo::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capacity,int& energy,int& energy_capacity){

@@ -40,6 +40,7 @@ class Selectable {
     virtual void sendState(Protocol & protocol,Socket & client_socket);
     virtual bool canCreate(unit_t type);
     virtual bool canEnable(unit_t type);
+    virtual bool canStoreSpice(int & spice);
     player_t getFaction();
     int getLP();
     std::string getName();

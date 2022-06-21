@@ -131,7 +131,11 @@ void ClientHandler::handleRightClick(int x, int y) {
 
 void ClientHandler::reportState(Socket& client_socket){
     //  Sending spice & energy state
-    this->protocol.send_player_state(this->spice,this->energy,client_socket);
+    int max_spice = 2000 + this->game->getSpiceCapacity(this->faction);
+    if(this->spice >= max_spice)
+        this->spice = max_spice;
+    std::cout << max_spice << std::endl;
+    this->protocol.send_player_state(this->spice,max_spice,this->energy,client_socket);
     //  Sending board state
     this->protocol.send_sand_cells_size(this->game->getTotalChangedCells(),client_socket);
     for(Position pos : this->game->getChangedCells()){

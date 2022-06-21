@@ -36,6 +36,7 @@ public:
     bool isEnabled(player_t faction,unit_t unit);
     void dealDamage(int x, int y, int damage);
     int getTotalChangedCells();
+    int getSpiceCapacity(player_t faction);
     int getTotalCreators(player_t faction, unit_t type);
     void clearChangedCells();
     std::vector<Position> getChangedCells();

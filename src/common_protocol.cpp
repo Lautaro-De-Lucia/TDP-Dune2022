@@ -1066,9 +1066,10 @@ void Protocol::receive_sand_cell(int& pos_x, int& pos_y, int& spice, Socket& cli
     return;
 }
 
-void Protocol::send_player_state(int spice, int energy, Socket& client_socket) {
+void Protocol::send_player_state(int spice, int c_spice,int energy, Socket& client_socket) {
 
     uint16_t _spice = (uint16_t) spice;
+    uint16_t _c_spice = (uint16_t) c_spice;
     uint16_t _energy = (uint16_t) energy;
 
     //std::cout << "En el protocolo del cliente se envían las posiciones: " << std::endl;
@@ -1076,6 +1077,7 @@ void Protocol::send_player_state(int spice, int energy, Socket& client_socket) {
     //std::cout << "pos_y: " << pos_y << std::endl;
 
     uint16_t spice_buffer = (uint16_t) htons(_spice);
+    uint16_t c_spice_buffer = (uint16_t) htons(_c_spice);
     uint16_t energy_buffer = (uint16_t) htons(_energy);
 
     int sent_size = -1;
@@ -1084,18 +1086,23 @@ void Protocol::send_player_state(int spice, int energy, Socket& client_socket) {
     sent_size = client_socket.sendall(&spice_buffer, sizeof(spice_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
 
+    sent_size = client_socket.sendall(&c_spice_buffer, sizeof(c_spice_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
     sent_size = client_socket.sendall(&energy_buffer, sizeof(energy_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
 
     return;
 
 }
-void Protocol::receive_player_state(int& spice, int& energy, Socket& client_socket) {
+void Protocol::receive_player_state(int& spice,int& c_spice, int& energy, Socket& client_socket) {
 
     uint16_t spice_buffer;
+    uint16_t c_spice_buffer;
     uint16_t energy_buffer;
 
     uint16_t _spice;
+    uint16_t _c_spice;
     uint16_t _energy;
 
     int recv_size = -1;
@@ -1105,11 +1112,16 @@ void Protocol::receive_player_state(int& spice, int& energy, Socket& client_sock
     handle_receive(was_closed, recv_size);
     _spice = (uint16_t) ntohs(spice_buffer);
 
+    recv_size = client_socket.recvall(&c_spice_buffer, sizeof(c_spice_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _c_spice = (uint16_t) ntohs(c_spice_buffer);
+
     recv_size = client_socket.recvall(&energy_buffer, sizeof(energy_buffer), &was_closed);
     handle_receive(was_closed, recv_size);
     _energy = (uint16_t) ntohs(energy_buffer);
 
     spice = (int) _spice;
+    c_spice = (int) _c_spice;
     energy = (int) _energy;
 
     return;

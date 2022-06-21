@@ -39,6 +39,17 @@ bool GameResources::isEnabled(player_t faction,unit_t unit){
     return false;
 }
 
+int GameResources::getSpiceCapacity(player_t faction){
+    int total_spice = 0;
+    for (auto& e : this->elements)
+        if(e.second->getFaction() == faction){
+            int spice;
+            if(e.second->canStoreSpice(spice) == true)
+                total_spice += spice;
+        }
+    return total_spice;
+}
+
 
 
 bool GameResources::hasEnemy(int x, int y, player_t player_faction){

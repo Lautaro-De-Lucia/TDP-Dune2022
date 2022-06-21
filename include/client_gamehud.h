@@ -19,11 +19,12 @@ class GameHud {
    CPrinter spice_printer;
    CPrinter energy_printer;
    int spice; 
+   int c_spice;
    int energy;
  public:
    GameHud(player_t faction, SDL2pp::Renderer& renderer);
    void render(SDL2pp::Renderer& renderer);
-   void update(int spice, int energy);
+   void update(int spice,int c_spice, int energy);
    void addUnitButton(SDL2pp::Renderer& renderer, std::string IMG_PATH, int x, int y, int id);
    void addBuildButton(SDL2pp::Renderer& renderer, std::string IMG_PATH, int x, int y, int id);
    int checkUnit(int& x, int& y);
