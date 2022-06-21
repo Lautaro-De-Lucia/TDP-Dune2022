@@ -81,7 +81,9 @@ void run_sdl(const int* _faction) {
 	SDL2pp::SDLTTF ttf;
 
     AudioPlayer audio;
-    audio.play(GUN_1);
+    audio.play(GAME_START);
+
+    sleep(1);
 
     player_t faction = (player_t) *(_faction); //Esto debe poder definirse desde el menú de Qt
 
@@ -89,6 +91,21 @@ void run_sdl(const int* _faction) {
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
 
     std::cout << "faction is: " << faction << std::endl;
+
+    switch (faction)
+    {
+    case ATREIDES:
+        audio.play(ATREIDES_MUSIC);
+        break;
+    case HARKONNEN:
+        audio.play(HARKONNEN_MUSIC);
+        break;
+    case ORDOS:
+        audio.play(ORDOS_MUSIC);
+        break;    
+    default:
+        break;
+    }
 
     std::vector<std::vector<std::string>> cell_paths = generate_client_map(DATA_PATH MAP_FILE);    
     Camera cam(CAMERA_INITIAL_POS_X*(faction-1),CAMERA_INITIAL_POS_Y*(faction-1),CAMERA_WIDTH,CAMERA_HEIGHT,SCREEN_WIDTH,SCREEN_HEIGHT);
@@ -114,13 +131,11 @@ int main(int argc, char *argv[]) {
     QObject::connect(&w, &MainWindow::jugar, &w, &QMainWindow::close);
     //QObject::connect(&w, &MainWindow::jugar, &l, &QMainWindow::show);
     QObject::connect(&w, &MainWindow::jugar, &f, &QMainWindow::show);
-
     //QObject::connect(&l, &LobbyWindow::jugar, &l, [=]() {QtConcurrent::run(run_sdl);});
     QObject::connect(&f, &FactionWindow::jugar, &f, &QMainWindow::close);
-
-
-
     QObject::connect(&f, &FactionWindow::jugar, &f, [=]() {QtConcurrent::run(run_sdl, std::ref(_faction));});
+
+    sleep(1);
 
     return a.exec();
 

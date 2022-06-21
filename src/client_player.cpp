@@ -186,7 +186,38 @@ void Player::play(){
         }
 
         auto current_time = clock();
+
 	    auto frame_time_instruction = current_time - base_time_instruction;
+
+        for (size_t i = 0; i < this->attackers.size(); i++) {
+            if (current_time - this->attackers_sound_cue[i] > 7000000) {
+                switch (this->attackers[i])
+                {
+                case TRIKE:
+                    this->audio.play(ROCKET1);
+                    break;
+                case FREMEN:
+                    this->audio.play(GUN_2);
+                    break;
+                case INFANTRY:
+                    this->audio.play(GUN_1);
+                    break;
+                case SARDAUKAR:
+                    this->audio.play(MISSILE);
+                    break;
+                case TANK:
+                    this->audio.play(EXPLHG1);
+                    break;
+                case DEVASTATOR:
+                    this->audio.play(EXPLSML2);
+                    break;
+                default:
+                    break;
+                }
+                this->attackers_sound_cue[i] = current_time;
+            }
+        }
+        
 
         if (frame_time_instruction < GAME_SPEED && game_has_started)
             continue;
@@ -295,6 +326,9 @@ void Player::update() {
                 if (this->contains(id)){
                     this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,selected,attacking,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
+
+                    this->updateAttacker(TRIKE, id, attacking);
+
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(TRIKE,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH DEF_TRIKE_PATH))});
                     this->updates.push_back(true);  
@@ -315,6 +349,9 @@ void Player::update() {
                 if (this->contains(id)){
                     this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,selected,attacking,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
+
+                    this->updateAttacker(FREMEN, id, attacking);
+
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(FREMEN,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH DEF_FREMEN_PATH))});
                     this->updates.push_back(true);  
@@ -325,6 +362,9 @@ void Player::update() {
                 if (this->contains(id)){
                     this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,selected,attacking,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
+
+                    this->updateAttacker(INFANTRY, id, attacking);
+
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(INFANTRY,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH DEF_INFANTRY_PATH))});
                     this->updates.push_back(true);  
@@ -335,6 +375,9 @@ void Player::update() {
                 if (this->contains(id)){
                     this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,selected,attacking,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
+
+                    this->updateAttacker(SARDAUKAR, id, attacking);
+
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(SARDAUKAR,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH DEF_SARDAUKAR_PATH))});
                     this->updates.push_back(true);  
@@ -345,6 +388,9 @@ void Player::update() {
                 if (this->contains(id)){
                     this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,selected,attacking,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
+
+                    this->updateAttacker(TANK, id, attacking);
+
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(TANK,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH DEF_TANK_PATH))});
                     this->updates.push_back(true);  
@@ -355,6 +401,9 @@ void Player::update() {
                 if (this->contains(id)){
                     this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,selected,attacking,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
+
+                    this->updateAttacker(DEVASTATOR, id, attacking);
+
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(DEVASTATOR,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH DEF_DEVASTATOR_PATH))});
                     this->updates.push_back(true);  
@@ -524,27 +573,24 @@ hud_button_t Player::checkBtn(int& x, int& y) {
     return UNKNOWN_BTN;
 }
 
-bool Player::event_is_not_redundant(std::vector<int>& e) {
+void Player::updateAttacker(unit_t unit, int id, bool attacking) {
 
-    if (e[0] == (int) MOUSE_SELECTION) {
-        std::cout << "is mouse selection redundant?" << std::endl;
-    }
-
-    if (this->mouse_events.empty())
-        return true;
-
-    std::vector<int> last_event = this->mouse_events.back();
-
-    if (e.size() != last_event.size())
-        return true;
-
-    size_t event_size = e.size();
-
-    for (size_t i = 0; i < event_size; i++) {
-        if (e[i] != last_event[i]) {
-            return true;
+    bool found = false;
+    for (size_t i = 0; i < this->attackers.size(); i++) {
+        if (id == this->attackers_id[i]) {
+            if (!attacking) {
+                this->attackers.erase(this->attackers.begin()+i);
+                this->attackers_id.erase(this->attackers_id.begin()+i);
+                this->attackers_sound_cue.erase(this->attackers_sound_cue.begin()+i);
+                found = true;
+                break;
+            }
         }
     }
-
-    return false;
+    if (!found) {
+        this->attackers.push_back(unit);
+        this->attackers_id.push_back(id);
+        this->attackers_sound_cue.push_back(clock());
+    }
+    return;
 }

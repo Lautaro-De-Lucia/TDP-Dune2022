@@ -8,6 +8,7 @@
 #include "client_printer.h"
 #include "client_mouse.h"
 #include "client_camera.h"
+#include "client_audioplayer.h"
 
 #include "common_utils.h"
 #include "common_protocol.h"
@@ -59,6 +60,11 @@ class Player {
     bool selection;
     bool new_unit_available;
     player_t faction;
+    AudioPlayer audio;
+
+    std::vector<unit_t> attackers;
+    std::vector<int> attackers_id;
+    std::vector<clock_t> attackers_sound_cue;
 
     Player(player_t faction, const char* host_name, const char* service_name,Camera & cam, SDL2pp::Window& window,SDL2pp::Renderer& renderer, size_t spice, size_t c_spice, int energy, size_t c_energy, std::vector<std::vector<std::string>>& map_data);
 
@@ -82,5 +88,5 @@ class Player {
     bool checkHud(int& x, int& y);
     hud_button_t checkBtn(int& x, int& y);
 
-    bool event_is_not_redundant(std::vector<int>& e);
+    void updateAttacker(unit_t unit, int id, bool attacking);
 };
