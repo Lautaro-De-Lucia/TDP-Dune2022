@@ -66,12 +66,17 @@ Una vez escogida una casa y comenzado el juego, nos encontramos con una pantalla
 - arena
 - roca
 - duna
-- precipicio
+- colina
 
 En la **arena** podemos mover nuestras unidades, pero no podemos conbstruir edificios. La **duna** tiene un efecto similar sólo que las unidades se mueven más lento a través de ella. Para construir edificios y cuarteles, debemos encontrar una buena ubicación con terreno rocoso, ya que la **roca** es el único terreno lo suficientemente sólido para construir sobre él. Los **precipicios** funcionan como barreras naturales, ya que ninguna unidad puede atravesarla.
 
 #### Construcción de los edificios
 
-Para construir edificios es necesario contar con *especia*, la moneda corriente en Dune. Si bien se cuenta con una cierta cantidad de especia inicial, si la agotamos construyendo edificios y unidades no podremos generarla nuevamente. Para esto, se deben crear unidades *cosechadoras*, que se encargan de transportar la especia de lugares del mapa con arena con especia hacía la refinería. Un buen consejo es empezar construyendo una *fábrica pesada*, donde pueden entrenarse las *cosechadoras* que nos conseguirán más especia. Para construir, se hace `click izquierdo` en el ícono con el edificio que queremos construir, y luego click izquierdo en el lugar del mapa que nos resulte conveniente, siempre y cuando haya un terreno rocoso bajo su posición.
+Para construir edificios es necesario contar con *energía* y *especia*, la moneda corriente en Dune. Si bien se cuenta con una cierta cantidad de especia inicial, si la agotamos construyendo edificios y unidades no podremos generarla nuevamente. Para esto, se deben crear unidades *cosechadoras*, que se encargan de transportar la especia de lugares del mapa con arena con especia hacía la refinería. Un buen consejo es empezar construyendo una *fábrica pesada*, donde pueden entrenarse las *cosechadoras* que nos conseguirán más especia. Para construir, se hace `click izquierdo` en el ícono con el edificio que queremos construir, y luego click izquierdo en el lugar del mapa que nos resulte conveniente, siempre y cuando haya un terreno rocoso bajo su posición.
+
+
+#### Creacion de Unidades
+
+Cada unidad tiene asignada un costo en especia y un edificio creador. Las unidades de **Infantería** se crean desde el **Cuartel**. Los **Vehículos** se crean en la **Fábrica Ligera** y **Fábrica Pesada**. Cuanto más edificios creadores para una unidad, menos tiempo esta tarda en crearse. Sin embargo, hay solo una unidad creadora de la que emergen las unidades. Para designar el creador *seleccionamos* el edificio y damos *click derecho*.
 
 
