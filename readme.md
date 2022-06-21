@@ -6,7 +6,7 @@
 
 Dune 2022 es un remake del clásico videojuego de estrategia en tiempo real (RTS) Dune 2000, lanzado originalmente para Windows en 1998 y luego portado a la consola PlayStation de Sony en el año 2000. Mediante esta readaptación es posible disputar partidas en línea, ya que el producto incluye un programa "servidor" cuya finalidad es la de mantener el juego corriendo y aceptar a los clientes que deseen jugar.
 
-## ¿Cómo puedo saber si puedo correr el juego?
+### ¿Cómo puedo saber si puedo correr el juego?
 
 Por el momento el juego se encuentra disponible para computadoras personales con sistemas operativos basados en Debian, así que no deberías tener problemas si contás con una distribución de Linux como Ubuntu, Mint o Xubuntu. Se planea portar el juego a otras plataformas como Windows 10, MacOSX y Virtual Boy.
 
@@ -26,13 +26,13 @@ Es necesario también instalar las siguientes dependencias:
 
 Para instalarlas es posible utilizar el comando de Linux "apt install" seguido del nombre de la dependencia, y hacer esto con cada una. Puede ser necesario ejecutar estos comandos con permisos de superusuario, en ese caso el comando anterior debe estar precedido por "sudo" (por ejemplo, sudo apt install libsdl12-dev).
 
-#### ¿Cómo descargo el juego?
+### ¿Cómo descargo el juego?
 
 Por el momento es posible descargar el juego a través de su repositorio de GitHub (https://github.com/Lautaro-De-Lucia/TDP-Dune2022). Para esto debemos clonar el repositorio mediante el siguiente comando de consola:
 
 `$ git clone https://github.com/Lautaro-De-Lucia/TDP-Dune2022` <br>
 
-#### ¿Cómo instalo el juego?
+### ¿Cómo instalo el juego?
 
 Una vez descargados los archivos e instaladas las dependencias se procede a la etapa de "buildeo", para la cual se utilizará CMake (herramienta multiplataforma de generación de código) y Make (aplicación nativa de entornos Linux). Primero, creamos un directorio dentro del directorio "root" de los archivos descargados. Luego, desde ese directorio, vamos a construir con CMake y luego obtener los ejecutables mediante el comando "make all". Todos los pasos se encuentran detallados en orden a continuación, asumiendo que nos encontramos en el root del proyecto descargado:
 
@@ -45,6 +45,33 @@ Ahora ya resulta posible correr el juego. El directorio donde se ejecutó ese ú
 
 - Del lado del servidor
 `$ ./server http-alt` <br>
-- Del lado del cliente
+- Del lado del cliente (en una terminal aparte)
 `$ ./client localhost http-alt` <br>
+
+### ¿Cómo se juega?
+
+Se inicia el juego uniendose a la partida del servidor mediante las intrucciones detalladas más arriba. Se selecciona "Jugar" en la pantalla de inicio, y luego nos encontramos con la siguiente pantalla:
+![2022-06-21_17-00](https://user-images.githubusercontent.com/75450615/174887546-3f78a0d5-6877-4388-887c-964ab49daa9e.png)
+
+#### Pantalla de selección de casa
+
+Nos será posible elegir entre tres casas, o tres facciones distintas, toda basadas en las casas ficticias creadas por Frank Herbert en sus novelas de Dune. Es posible jugar sólo contra enemigos, o con aliados. Para esto último, los dos jugadores deben elegir la misma facción. Distintas facciones poseen distintos edificios y distintas unidades.
+
+### Inicio del juego
+
+![DUNE-REF](https://user-images.githubusercontent.com/75450615/174889424-eba884dc-2f52-4482-8392-091c9c620986.png)
+
+Una vez escogida una casa y comenzado el juego, nos encontramos con una pantalla como la de arriba. Primero se mencioan los distintos tipos de terreno:
+
+- arena
+- roca
+- duna
+- precipicio
+
+En la **arena** podemos mover nuestras unidades, pero no podemos conbstruir edificios. La **duna** tiene un efecto similar sólo que las unidades se mueven más lento a través de ella. Para construir edificios y cuarteles, debemos encontrar una buena ubicación con terreno rocoso, ya que la **roca** es el único terreno lo suficientemente sólido para construir sobre él. Los **precipicios** funcionan como barreras naturales, ya que ninguna unidad puede atravesarla.
+
+#### Construcción de los edificios
+
+Para construir edificios es necesario contar con *especia*, la moneda corriente en Dune. Si bien se cuenta con una cierta cantidad de especia inicial, si la agotamos construyendo edificios y unidades no podremos generarla nuevamente. Para esto, se deben crear unidades *cosechadoras*, que se encargan de transportar la especia de lugares del mapa con arena con especia hacía la refinería. Un buen consejo es empezar construyendo una *fábrica pesada*, donde pueden entrenarse las *cosechadoras* que nos conseguirán más especia. Para construir, se hace `click izquierdo` en el ícono con el edificio que queremos construir, y luego click izquierdo en el lugar del mapa que nos resulte conveniente, siempre y cuando haya un terreno rocoso bajo su posición.
+
 
