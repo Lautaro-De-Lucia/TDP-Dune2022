@@ -86,6 +86,8 @@ void run_sdl(const int* _faction, std::string host_name, std::string service_nam
     SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,0);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
 
+    while (_faction == nullptr){}
+
     player_t faction = (player_t) *(_faction); //Esto debe poder definirse desde el menú de Qt
 
     std::cout << "faction is: " << faction << std::endl;
