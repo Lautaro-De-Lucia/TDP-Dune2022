@@ -1,4 +1,4 @@
-![cover](https://user-images.githubusercontent.com/75450615/174878256-fcf0ccbb-9a8e-4c0b-933a-0e5e6637724e.jpeg)
+<img src="[drawing.jpg](https://user-images.githubusercontent.com/75450615/174878256-fcf0ccbb-9a8e-4c0b-933a-0e5e6637724e.jpeg)" alt="drawing" width="200"/>
 
 ## ¿Qué es?
 
