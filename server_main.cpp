@@ -51,7 +51,7 @@ std::vector<std::vector<cell_t>> generate_server_map (std::string tile_map_file)
 				exit(1);
 			}
 			if (type < 0 || type > TOTAL_TILE_SPRITES){
-				std::cout << "This ain't a valid tile number, dumbass" << std::endl; 
+				std::cout << "This ain't a valid tile number" << std::endl; 
 				exit(1);
 			}
 			//	Load cell to board

@@ -21,6 +21,11 @@ elements(elements)
     }
     this->creators.insert({HARVESTER,-1});
     this->creators.insert({TRIKE,-1});
+    this->creators.insert({FREMEN,-1});
+    this->creators.insert({INFANTRY,-1});
+    this->creators.insert({SARDAUKAR,-1});
+    this->creators.insert({TANK,-1});
+    this->creators.insert({DEVASTATOR,-1});
 }
 
 void Board::addSandPosition(int x, int y){
@@ -74,12 +79,15 @@ void Board::dealDamage(int x, int y, int damage){
         // TODO: refactor
         int destroyed_building_id = this->cells[x][y].getID();
         int unit_creator_id = -1;
+        unit_creator_id = this->getCreator(INFANTRY);
+        if (destroyed_building_id == unit_creator_id)
+            this->removeCreator(INFANTRY);
         unit_creator_id = this->getCreator(TRIKE);
         if (destroyed_building_id == unit_creator_id)
             this->removeCreator(TRIKE);
-        unit_creator_id = this->getCreator(HARVESTER);
+        unit_creator_id = this->getCreator(TANK);
         if (destroyed_building_id == unit_creator_id)
-            this->removeCreator(HARVESTER);
+            this->removeCreator(TANK);
         
         this->elements.erase(this->cells[x][y].getID());
 
@@ -181,10 +189,18 @@ int Board::getCreator(unit_t type){
 }
 
 void Board::makeCreator(int building_ID){
-    if (this->elements.at(building_ID)->getName() == "Refinery")
-        this->creators[HARVESTER] = building_ID; 
-    if (this->elements.at(building_ID)->getName() == "Barrack"){
+    if (this->elements.at(building_ID)->getName() == "Barrack") {
+        this->creators[INFANTRY] = building_ID;
+        this->creators[FREMEN] = building_ID;
+        this->creators[SARDAUKAR] = building_ID; 
+    }
+    if (this->elements.at(building_ID)->getName() == "Light Factory"){
         this->creators[TRIKE] = building_ID;     
+    }
+    if (this->elements.at(building_ID)->getName() == "Heavy Factory"){
+        this->creators[TANK] = building_ID;
+        this->creators[DEVASTATOR] = building_ID;
+        this->creators[HARVESTER] = building_ID;    
     }
     std::cout << this->elements.at(building_ID)->getName() << " of ID: " << building_ID << " is now a creator" << std::endl;
 }
@@ -193,12 +209,22 @@ void Board::removeCreator(unit_t unit) {
 
     switch (unit)
     {
+    case INFANTRY:
+    case FREMEN:
+    case SARDAUKAR:
+        this->creators[INFANTRY] = -1;
+        this->creators[FREMEN] = -1;
+        this->creators[SARDAUKAR] = -1;
+        break;
     case TRIKE:
         this->creators[TRIKE] = -1;
         break;
+    case TANK:
+    case DEVASTATOR:
     case HARVESTER:
+        this->creators[TANK] = -1;
+        this->creators[DEVASTATOR] = -1;
         this->creators[HARVESTER] = -1;
-        break;
     default:
         break;
     }
