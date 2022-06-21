@@ -3,6 +3,7 @@
 #include <fstream>
 #include <time.h>
 #include "client_player.h"
+#include "client_audioplayer.h"
 #include "common_utils.h"
 #include "client_camera.h"
 #include <SDL2pp/SDL2pp.hh>
@@ -78,6 +79,9 @@ void run_sdl(const int* _faction) {
 
     //  This is only to initialize TTF
 	SDL2pp::SDLTTF ttf;
+
+    AudioPlayer audio;
+    audio.play(GUN_1);
 
     player_t faction = (player_t) *(_faction); //Esto debe poder definirse desde el menú de Qt
 

@@ -5,10 +5,13 @@ project(DuneII)
 # set up SDL2pp library
 SET(SDL2PP_WITH_IMAGE YES)
 SET(SDL2PP_WITH_TTF YES)
+SET(SDL2PP_WITH_MIXER YES)
 add_subdirectory(external/SDL2pp)
 
 # add compilation flags
+SET(GCC_COVERAGE_LINK_FLAGS "-lSDL2_mixer")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -pthread -g3")
+SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
 ADD_DEFINITIONS(-DDATA_PATH="${PROJECT_SOURCE_DIR}/data")
 INCLUDE_DIRECTORIES("${SDL2PP_INCLUDE_DIRS}")
 
@@ -49,6 +52,7 @@ ADD_EXECUTABLE("client" client_main.cpp
             src/common_resolver.cpp
             src/common_utils.cpp
             src/client_player.cpp
+            src/client_audioplayer.cpp
             src/client_selectable.cpp
             src/client_printer.cpp
             src/client_gamemap.cpp
