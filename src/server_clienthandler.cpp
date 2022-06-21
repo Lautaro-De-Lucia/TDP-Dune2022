@@ -51,9 +51,23 @@ void ClientHandler::run(Socket && client_socket) {
     this->protocol.receive_faction_request(_faction, client_socket);
     this->faction = (player_t) _faction;
 
+    if(this->faction == ATREIDES)
+        this->game->createBuilding(this->faction,CONSTRUCTION_YARD,ATREIDES_INIT_POS_X,ATREIDES_INIT_POS_Y,this->spice,this->c_spice, this->energy, this->c_energy); 
+    if(this->faction == HARKONNEN)
+        this->game->createBuilding(this->faction,CONSTRUCTION_YARD,HARKONNEN_INIT_POS_X,HARKONNEN_INIT_POS_Y,this->spice,this->c_spice, this->energy, this->c_energy); 
+    if(this->faction == ORDOS)
+        this->game->createBuilding(this->faction,CONSTRUCTION_YARD,ORDOS_INIT_POS_X,ORDOS_INIT_POS_Y,this->spice,this->c_spice, this->energy, this->c_energy); 
+
     auto base_time_instruction = clock();
 
     while (true) {
+
+        if(this->game->hasLost(this->faction)){
+            this->finished = true;
+            break;
+        }
+
+
         command_t command;
         this->protocol.receive_command(command, client_socket);
         response_t res;

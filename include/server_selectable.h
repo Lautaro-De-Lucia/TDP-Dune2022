@@ -41,6 +41,7 @@ class Selectable {
     virtual bool canCreate(unit_t type);
     virtual bool canEnable(unit_t type);
     virtual bool canStoreSpice(int & spice);
+    virtual bool canCostTheGame();
     player_t getFaction();
     int getLP();
     std::string getName();

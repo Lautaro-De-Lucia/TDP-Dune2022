@@ -11,6 +11,8 @@ Selectable(ID,faction,LP,pos,dim_x,dim_y,false)
 
 bool Building::canCreate(unit_t type){return false;}
 bool Building::canEnable(unit_t type){return false;}
+bool Building::canCostTheGame(){return false;}
+
 
 response_t Building::place(Board& board, int pos_x, int pos_y, int& spice, int& spice_capacity, int& energy, int& energy_capacity){
     
@@ -344,3 +346,47 @@ void Palace::sendState(Protocol & protocol,Socket & client_socket){
 }
 
 bool Palace::canEnable(unit_t type){return (type == SARDAUKAR || type == DEVASTATOR) ? true : false;}
+
+
+ConstructionYard::ConstructionYard(int ID,player_t faction,int LP,int spice,int energy, Position pos, int dim_x,int dim_y)
+:
+Building(ID,faction,3000,spice,energy,pos,dim_x,dim_y)
+{
+    this->name = "Construction Yard";
+}
+
+bool ConstructionYard::canCostTheGame(){
+    return true;
+}
+
+response_t ConstructionYard::place(Board& board,int pos_x,int pos_y,int& spice,int& spice_capacity,int& energy,int& energy_capacity){
+    response_t res;
+    res = Building::place(board,pos_x,pos_y,spice,spice_capacity,energy,energy_capacity);
+    if(res != RES_CREATE_BUILDING_SUCCESS)
+        return res;
+
+    spice -= this->spice;
+    energy -= this->energy;
+
+    for (size_t j = 0 ; j < this->getDimY() ; j++){ 
+        for (size_t i = 0 ; i < this->getDimX() ; i++){
+            board.getCell(this->position.x+i,this->position.y+j).occupy(this->ID);
+        }
+    }
+
+    return RES_CREATE_BUILDING_SUCCESS;
+}
+
+void ConstructionYard::sendState(Protocol & protocol,Socket & client_socket){
+    protocol.send_construction_yard(
+        this->ID,
+        this->faction,
+        this->LP,
+        this->position.x,
+        this->position.y,
+        this->selected,
+        client_socket
+    );
+}
+
+

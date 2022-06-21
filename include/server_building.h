@@ -18,6 +18,7 @@ class Building : public Selectable {
     virtual void sendState(Protocol & protocol,Socket & client_socket);
     virtual bool canCreate(unit_t type);
     virtual bool canEnable(unit_t type);
+    virtual bool canCostTheGame();
 };
 class AirTrap : public Building {
     int c_energy;
@@ -26,6 +27,14 @@ class AirTrap : public Building {
     response_t place(Board& board, int pos_x, int pos_y, int& spice, int& spice_capacity, int& energy, int& energy_capacity);
     int getCEnergy();
     virtual void sendState(Protocol & protocol,Socket & client_socket);
+};
+
+class ConstructionYard : public Building {
+ public:
+    ConstructionYard(int ID,player_t faction, int LP, int spice, int energy, Position pos, int dim_x, int dim_y);
+    response_t place(Board& board, int pos_x, int pos_y, int& spice, int& spice_capacity, int& energy, int& energy_capacity);
+    virtual void sendState(Protocol & protocol,Socket & client_socket);
+    virtual bool canCostTheGame();
 };
 
 class Barrack : public Building {

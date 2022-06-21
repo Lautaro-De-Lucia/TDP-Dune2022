@@ -11,6 +11,7 @@ extern Camera cam;
 
 #include <SDL2pp/SDL2pp.hh>
 
+#define CONSTRUCTION_YARD_PATH "/buildingsprites/yard/yard.png"
 #define WIND_TRAP_PATH "/buildingsprites/windtrap/windtrap.png"
 #define BARRACK_PATH "/buildingsprites/barrack/barrack.png"
 #define REFINERY_PATH "/buildingsprites/refinery/refinery.png"

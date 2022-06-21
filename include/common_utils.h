@@ -50,6 +50,12 @@
 #define DEVASTATOR_RANGE 4
 
 //  These would be lifted from a file
+#define CONSTRUCTION_YARD_LP 3000
+#define CONSTRUCTION_YARD_ENERGY 0
+#define CONSTRUCTION_YARD_SPICE 0
+#define CONSTRUCTION_YARD_DIM_X 3
+#define CONSTRUCTION_YARD_DIM_Y 3
+
 #define AIR_TRAP_LP 500
 #define AIR_TRAP_ENERGY 500
 #define AIR_TRAP_SPICE 800
@@ -158,7 +164,8 @@ enum building_t {
     LIGHT_FACTORY = 4,
     HEAVY_FACTORY = 5,
     SILO = 6,
-    PALACE = 7
+    PALACE = 7,
+    CONSTRUCTION_YARD = 8
 };
 
 enum selectable_t {
@@ -175,7 +182,8 @@ enum selectable_t {
     SEL_LIGHT_FACTORY = 11,
     SEL_HEAVY_FACTORY = 12,
     SEL_SILO = 13,
-    SEL_PALACE = 14
+    SEL_PALACE = 14,
+    SEL_CONSTRUCTION_YARD = 15
 };
 
 struct Position {

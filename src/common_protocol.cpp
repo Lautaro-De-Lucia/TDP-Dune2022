@@ -612,6 +612,15 @@ void Protocol::send_harvester(int id, int faction, int lp, int pos_x, int pos_y,
 
 }
 
+void Protocol::send_construction_yard(int id, int faction, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket) {
+
+    this->send_selectable_type(SEL_CONSTRUCTION_YARD, client_socket);
+
+    this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    return;
+}
+
 void Protocol::send_air_trap(int id, int faction, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket) {
 
     this->send_selectable_type(SEL_AIR_TRAP, client_socket);
@@ -804,6 +813,14 @@ void Protocol::receive_harvester(int& id, int& faction, int& lp, int& pos_x, int
 
     return;
 }
+
+void Protocol::receive_construction_yard(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket) {
+
+    this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    return;
+}
+
 
 void Protocol::receive_air_trap(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket) {
 

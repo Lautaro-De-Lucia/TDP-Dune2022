@@ -126,11 +126,40 @@ void CMovable::render(player_t player_faction, SDL2pp::Renderer& renderer, int c
 
 void CStatic::render(player_t player_faction, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
     CSelectable::render(player_faction, renderer, cam_pos_x, cam_pos_y);
+    if (this->type == CONSTRUCTION_YARD){
+        if(this->faction == ATREIDES){
+            std::cout << "Rendering Atreides construction yard" << std::endl;
+            renderer.Copy(
+                texture,						//	The sprite
+                //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
+                SDL2pp::Rect(0,0,95,85),		//	'cut' from the sprite (NullOpt for no cut)
+                SDL2pp::Rect(this->position.x*TILE_SIZE-cam_pos_x,this->position.y*TILE_SIZE-cam_pos_y,CONSTRUCTION_YARD_DIM_X*TILE_SIZE,CONSTRUCTION_YARD_DIM_Y*TILE_SIZE)				//	set to this part of the window		
+            );
+        }
+        if(this->faction == HARKONNEN){
+            std::cout << "Rendering Harkonnen construction yard" << std::endl;
+            renderer.Copy(
+                texture,						//	The sprite
+                //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
+                SDL2pp::Rect(0,160,95,85),		//	'cut' from the sprite (NullOpt for no cut)
+                SDL2pp::Rect(this->position.x*TILE_SIZE-cam_pos_x,this->position.y*TILE_SIZE-cam_pos_y,CONSTRUCTION_YARD_DIM_X*TILE_SIZE,CONSTRUCTION_YARD_DIM_Y*TILE_SIZE)				//	set to this part of the window		
+            );
+        }
+        if(this->faction == ORDOS){
+            std::cout << "Rendering Ordos construction yard" << std::endl;
+            renderer.Copy(
+                texture,						//	The sprite
+                //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
+                SDL2pp::Rect(0,315,95,85),		//	'cut' from the sprite (NullOpt for no cut)
+                SDL2pp::Rect(this->position.x*TILE_SIZE-cam_pos_x,this->position.y*TILE_SIZE-cam_pos_y,CONSTRUCTION_YARD_DIM_X*TILE_SIZE,CONSTRUCTION_YARD_DIM_Y*TILE_SIZE)				//	set to this part of the window		
+            );
+        }
+    }
     if (this->type == AIR_TRAP){
         renderer.Copy(
 		    texture,						//	The sprite
 		    //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
-		    SDL2pp::Rect(0,0,65,80),		//	'cut' from the sprite (NullOpt for no cut)
+		    SDL2pp::Rect(0,0,95,85),		//	'cut' from the sprite (NullOpt for no cut)
 		    SDL2pp::Rect(this->position.x*TILE_SIZE-cam_pos_x,this->position.y*TILE_SIZE-cam_pos_y,AIR_TRAP_DIM_X*TILE_SIZE,AIR_TRAP_DIM_Y*TILE_SIZE)				//	set to this part of the window		
 	    );
     }

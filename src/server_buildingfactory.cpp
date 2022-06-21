@@ -6,11 +6,14 @@ https://stackoverflow.com/questions/54830073/how-make-the-factory-design-pattern
 
 std::unique_ptr<Building> BuildingFactory::manufacture(building_t unit,player_t faction, int ID) {
     switch (unit) {
+        case CONSTRUCTION_YARD:
+            return std::unique_ptr<ConstructionYard>(new ConstructionYard(ID,faction,CONSTRUCTION_YARD_LP,CONSTRUCTION_YARD_SPICE,CONSTRUCTION_YARD_ENERGY,Position(0,0),CONSTRUCTION_YARD_DIM_X,CONSTRUCTION_YARD_DIM_Y));
+            break;
         case AIR_TRAP:
             return std::unique_ptr<AirTrap>(new AirTrap(ID,faction,AIR_TRAP_LP,AIR_TRAP_SPICE,AIR_TRAP_ENERGY,Position(0,0),AIR_TRAP_DIM_X,AIR_TRAP_DIM_Y,AIR_TRAP_CAPACITY));
             break;
         case BARRACK:
-            return std::unique_ptr<Barrack>(new Barrack(ID,faction,BARRACK_LP,AIR_TRAP_SPICE,AIR_TRAP_ENERGY,Position(0,0),BARRACK_DIM_X,BARRACK_DIM_Y));
+            return std::unique_ptr<Barrack>(new Barrack(ID,faction,BARRACK_LP,BARRACK_SPICE,BARRACK_ENERGY,Position(0,0),BARRACK_DIM_X,BARRACK_DIM_Y));
             break;
         case LIGHT_FACTORY:
             return std::unique_ptr<LightFactory>(new LightFactory(ID,faction,LIGHT_FACTORY_LP,LIGHT_FACTORY_SPICE,LIGHT_FACTORY_ENERGY,Position(0,0),LIGHT_FACTORY_DIM_X,LIGHT_FACTORY_DIM_Y));

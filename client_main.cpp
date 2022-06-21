@@ -90,16 +90,25 @@ void run_sdl(const int* _faction, std::string host_name, std::string service_nam
 
     std::cout << "faction is: " << faction << std::endl;
 
+    int init_cam_pos_x;
+    int init_cam_pos_y;
+
     switch (faction)
     {
     case ATREIDES:
         audio.play(ATREIDES_MUSIC);
+        init_cam_pos_x = 0;
+        init_cam_pos_y = 0;
         break;
     case HARKONNEN:
         audio.play(HARKONNEN_MUSIC);
+        init_cam_pos_x = 70*TILE_DIM;
+        init_cam_pos_y = 35*TILE_DIM;
         break;
     case ORDOS:
         audio.play(ORDOS_MUSIC);
+        init_cam_pos_x = 0;
+        init_cam_pos_y = 35*TILE_DIM;
         break;    
     default:
         break;
@@ -108,8 +117,9 @@ void run_sdl(const int* _faction, std::string host_name, std::string service_nam
     const char* _host_name = host_name.c_str();
     const char* _service_name = service_name.c_str();
 
+    Camera cam(init_cam_pos_x,init_cam_pos_y,CAMERA_WIDTH,CAMERA_HEIGHT,SCREEN_WIDTH,SCREEN_HEIGHT);
+
     std::vector<std::vector<std::string>> cell_paths = generate_client_map(DATA_PATH MAP_FILE);    
-    Camera cam(CAMERA_INITIAL_POS_X*(faction-1),CAMERA_INITIAL_POS_Y*(faction-1),CAMERA_WIDTH,CAMERA_HEIGHT,SCREEN_WIDTH,SCREEN_HEIGHT);
     Player client_player(faction,_host_name,_service_name,cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cell_paths);
 
     client_player.play();

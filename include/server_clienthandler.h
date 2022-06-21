@@ -19,6 +19,15 @@
 #include "common_socket.h"
 #include "common_protocol.h"
 
+#define ATREIDES_INIT_POS_X 10
+#define ATREIDES_INIT_POS_Y 5
+
+#define HARKONNEN_INIT_POS_X 77 
+#define HARKONNEN_INIT_POS_Y 42
+
+#define ORDOS_INIT_POS_X 5 
+#define ORDOS_INIT_POS_Y 40
+
 class ClientHandler {
  private:
    player_t faction;

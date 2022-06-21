@@ -34,6 +34,7 @@ public:
     bool canTraverse(int x, int y);
     bool hasEnemy(int x, int y, player_t player_faction);
     bool isEnabled(player_t faction,unit_t unit);
+    bool hasLost(player_t faction);
     void dealDamage(int x, int y, int damage);
     int getTotalChangedCells();
     int getSpiceCapacity(player_t faction);

@@ -50,7 +50,13 @@ int GameResources::getSpiceCapacity(player_t faction){
     return total_spice;
 }
 
-
+bool GameResources::hasLost(player_t faction){
+    for (auto& e : this->elements)
+        if(e.second->getFaction() == faction)
+            if(e.second->canCostTheGame() == true)
+                return false;
+    return true;
+}
 
 bool GameResources::hasEnemy(int x, int y, player_t player_faction){
     std::lock_guard<std::mutex> locker(this->lock);
