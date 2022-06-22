@@ -67,7 +67,7 @@ Nos será posible elegir entre tres casas, o tres facciones distintas, toda basa
 ### Inicio del juego
 
 <p align="center">
-  <img width="400" src="https://user-images.githubusercontent.com/75450615/174889424-eba884dc-2f52-4482-8392-091c9c620986.png">
+  <img width="1200" src="https://user-images.githubusercontent.com/75450615/174889424-eba884dc-2f52-4482-8392-091c9c620986.png">
 </p>
 
 Una vez escogida una casa y comenzado el juego, nos encontramos con una pantalla como la de arriba. Primero se mencioan los distintos tipos de terreno:
