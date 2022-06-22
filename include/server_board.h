@@ -50,7 +50,6 @@ class Board{
     std::vector<Position> getChangedSandPositions(){return this->changed_sand_positions;}
     void clearSandPositions();
     void addSandPosition(int x, int y);
-    //  void move_unit(Position from, Position to,player_t faction,unit_t unit);
     std::vector<Position> get_traversable_neighbors_of(Position pos, size_t distance);
     size_t get_distance_between(Position pos1, Position pos2);
     void addDepositPositions(player_t faction,std::vector<Position> & new_deposit_positions);
