@@ -98,7 +98,7 @@ Una vez creadas las unidades, podemos desplazarlas de un punto del mapa a otro. 
 Ya sabemos como crear unidades *cosechadoras* luego de construir una *fábrica pesada*. Para ponerlas a trabajar una vez que aparezcan junto a la fábrica, necesitamos primero una **refinería**, que es el edificio donde las cosechadoras depositan la especia colectada. Luego de construir la **refinería**, seleccionamos una o mas *cosechadoras* y luego hacemos click derecho en algún lugar del mapa con arena con especia, y automáticamente estas unidades iniciaran un ciclo de colectar especia y depositarla en la refinería, hasta agotar los recursos naturales de esa región del mapa.
 
 <p align="center">
-  <img width="400" src="https://user-images.githubusercontent.com/75450615/175112064-b6afb0f8-6863-46cb-81ff-50bf652c397f.jpg)">
+  <img width="400" src="https://user-images.githubusercontent.com/75450615/175112064-b6afb0f8-6863-46cb-81ff-50bf652c397f.jpg">
 </p>
 
 #### Combate
