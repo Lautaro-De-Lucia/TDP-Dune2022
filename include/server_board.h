@@ -54,7 +54,7 @@ class Board{
     std::vector<Position> get_traversable_neighbors_of(Position pos, size_t distance);
     size_t get_distance_between(Position pos1, Position pos2);
     void addDepositPositions(std::vector<Position> & new_deposit_positions);
-    std::vector<Position> & getDepositPositions();
+    std::vector<Position> getDepositPositions();
     std::vector<Position> getSurroundings(Position position, int e_dim_x, int e_dim_y);
     void removeCreator(player_t faction,unit_t unit);
 };

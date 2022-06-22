@@ -47,16 +47,16 @@ void ClientHandler::close(){
 void ClientHandler::run(Socket && client_socket) {
 
     // faction setting
-    int _faction = -1;
+    int _faction;
     this->protocol.receive_faction_request(_faction, client_socket);
     this->faction = (player_t) _faction;
 
     if(this->faction == ATREIDES)
-        this->game->createBuilding(this->faction,CONSTRUCTION_YARD,ATREIDES_INIT_POS_X,ATREIDES_INIT_POS_Y,this->spice,this->c_spice, this->energy, this->c_energy); 
+        this->game->createBuilding(this->faction,CONSTRUCTION_YARD,ATREIDES_INIT_POS_X,ATREIDES_INIT_POS_Y,this->spice, this->energy); 
     if(this->faction == HARKONNEN)
-        this->game->createBuilding(this->faction,CONSTRUCTION_YARD,HARKONNEN_INIT_POS_X,HARKONNEN_INIT_POS_Y,this->spice,this->c_spice, this->energy, this->c_energy); 
+        this->game->createBuilding(this->faction,CONSTRUCTION_YARD,HARKONNEN_INIT_POS_X,HARKONNEN_INIT_POS_Y,this->spice, this->energy); 
     if(this->faction == ORDOS)
-        this->game->createBuilding(this->faction,CONSTRUCTION_YARD,ORDOS_INIT_POS_X,ORDOS_INIT_POS_Y,this->spice,this->c_spice, this->energy, this->c_energy); 
+        this->game->createBuilding(this->faction,CONSTRUCTION_YARD,ORDOS_INIT_POS_X,ORDOS_INIT_POS_Y,this->spice, this->energy); 
 
     auto base_time_instruction = clock();
 
@@ -66,7 +66,6 @@ void ClientHandler::run(Socket && client_socket) {
             this->finished = true;
             break;
         }
-
 
         command_t command;
         this->protocol.receive_command(command, client_socket);
@@ -85,7 +84,7 @@ void ClientHandler::run(Socket && client_socket) {
                 break;
             case CREATE_BUILDING:
                 this->protocol.receive_create_building_request(type, pos_x, pos_y, client_socket);
-                res = createBuilding(type, pos_x, pos_y, this->spice, this->c_spice, this->energy, this->c_energy);
+                res = createBuilding(type, pos_x, pos_y);
                 break;
             case MOUSE_LEFT_CLICK:
                 this->protocol.receive_mouse_left_click(pos_x, pos_y, client_socket);
@@ -109,15 +108,17 @@ void ClientHandler::run(Socket && client_socket) {
                 res = RES_SUCCESS;
                 break;
         }
-
+        
         this->responses_buffer.push_back(res);
-
-        this->game->update();
+        
         this->update();
+        
         this->protocol.send_responses_size(this->responses_buffer.size(), client_socket);
         for (response_t res : this->responses_buffer)
             this->protocol.send_response(res, client_socket);
+        
         this->responses_buffer.clear();
+        
         reportState(client_socket);
     }
 }
@@ -126,8 +127,8 @@ response_t ClientHandler::createUnit(int type, int& spice) {
     return this->game->createUnit(this->faction,(unit_t)type,spice);
 }
 
-response_t ClientHandler::createBuilding(int type, int pos_x, int pos_y, int& spice, int& c_spice, int& energy, int& c_energy) {    
-    return this->game->createBuilding(this->faction,(building_t) type,pos_x,pos_y,spice,c_spice,energy,c_energy); 
+response_t ClientHandler::createBuilding(int type, int pos_x, int pos_y) {    
+    return this->game->createBuilding(this->faction,(building_t) type,pos_x,pos_y,this->spice,this->energy); 
 }
 
 void ClientHandler::handleLeftClick(int x, int y) {
@@ -159,7 +160,7 @@ void ClientHandler::reportState(Socket& client_socket){
     this->game->sendElements(this->protocol,client_socket);
 }
 
-void ClientHandler::update(){
+void ClientHandler::update(){    
 	this->responses_buffer.push_back(this->checkCreation(TRIKE));
 	this->responses_buffer.push_back(this->checkCreation(HARVESTER));
 	this->responses_buffer.push_back(this->checkCreation(FREMEN));
@@ -167,6 +168,8 @@ void ClientHandler::update(){
 	this->responses_buffer.push_back(this->checkCreation(SARDAUKAR));
 	this->responses_buffer.push_back(this->checkCreation(TANK));
 	this->responses_buffer.push_back(this->checkCreation(DEVASTATOR));
+
+    this->game->update();
 }	
 
 response_t ClientHandler::queueUnit(unit_t type){

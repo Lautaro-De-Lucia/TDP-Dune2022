@@ -261,7 +261,7 @@ void Board::addDepositPositions(std::vector<Position> & new_deposit_positions){
         this->deposit_positions.push_back(pos);
 }
 
-std::vector<Position> & Board::getDepositPositions(){
+std::vector<Position> Board::getDepositPositions(){
     return this->deposit_positions;
 }
 
@@ -329,5 +329,5 @@ std::vector<Position> Board::getSurroundings(Position position, int e_dim_x, int
             surroundings.push_back(neighbor);
         }
     }
-    return surroundings;
+    return std::move(surroundings);
 }

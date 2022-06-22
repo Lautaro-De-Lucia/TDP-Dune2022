@@ -16,10 +16,6 @@ void GameResources::addSandPosition(int x, int y){
     std::lock_guard<std::mutex> locker(this->lock);
     this->board.addSandPosition(x,y);
 }
-status_t GameResources::canPlace(const Position& location, int dim_x,int dim_y) {
-    std::lock_guard<std::mutex> locker(this->lock);
-    return this->board.canPlace(location,dim_x,dim_y);
-}
 
 bool GameResources::canDeposit(int x, int y,player_t faction){
     std::lock_guard<std::mutex> locker(this->lock);
@@ -106,7 +102,7 @@ void GameResources::addDepositPositions(std::vector<Position> & new_deposit_posi
     this->board.addDepositPositions(new_deposit_positions);
 }
 
-std::vector<Position> & GameResources::getDepositPositions(){
+std::vector<Position> GameResources::getDepositPositions(){
     std::lock_guard<std::mutex> locker(this->lock);
     return this->board.getDepositPositions();
 }
@@ -146,11 +142,11 @@ response_t GameResources::createUnit(player_t faction,unit_t type,int & spice){
     return res;
 }
 
-response_t GameResources::createBuilding(player_t faction,building_t type,int pos_x,int pos_y,int & spice,int & c_spice,int & energy,int & c_energy){
+response_t GameResources::createBuilding(player_t faction,building_t type,int pos_x,int pos_y,int & spice,int & energy){
     std::lock_guard<std::mutex> locker(this->lock);
     std::unique_ptr<Building> building = BuildingFactory::manufacture(type,faction,ID);
     //  Attempt to add to board
-    response_t res = (*building).place(board,pos_x,pos_y,spice,c_spice,energy,c_energy);
+    response_t res = (*building).place(board,pos_x,pos_y,spice,energy);
     if (res == RES_CREATE_BUILDING_SUCCESS){
         (this->elements).insert({ID, std::move(building)});
         ID++;
