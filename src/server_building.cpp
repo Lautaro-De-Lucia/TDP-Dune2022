@@ -149,7 +149,7 @@ response_t Refinery::place(Board& board,int pos_x,int pos_y,int& spice,int& ener
             board.getCell(this->position.x+i,this->position.y+j).occupy(this->ID);
         
     std::vector<Position> deposit_positions = board.getSurroundings(this->position, this->dim_x, this->dim_y);    
-    board.addDepositPositions(deposit_positions);
+    board.addDepositPositions(this->faction,deposit_positions);
 
     return RES_CREATE_BUILDING_SUCCESS;
 }

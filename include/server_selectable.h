@@ -36,7 +36,6 @@ class Selectable {
     virtual void react(int x, int y, Board& board);
     virtual void update(State & state, Board& board);
     virtual void receiveDamage(int damage);
-    virtual void getState(State& state);
     virtual void sendState(Protocol & protocol,Socket & client_socket);
     virtual bool canCreate(unit_t type);
     virtual bool canEnable(unit_t type);

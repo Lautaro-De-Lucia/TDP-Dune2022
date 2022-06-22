@@ -118,7 +118,7 @@ status_t Board::canPlace(const Position& location, int dim_x,int dim_y) {
 
 bool Board::canDeposit(int x, int y,player_t faction){
     Position depositing_position(x,y);
-    for (Position pos : this->deposit_positions)
+    for (Position pos : this->deposit_positions[faction])
         if (depositing_position == pos)
             return true;
     return false;
@@ -256,13 +256,13 @@ size_t Board::get_distance_between(Position pos1, Position pos2) {
     return x_dist > y_dist ? x_dist : y_dist;
 }
 
-void Board::addDepositPositions(std::vector<Position> & new_deposit_positions){
+void Board::addDepositPositions(player_t faction,std::vector<Position> & new_deposit_positions){
     for (Position pos : new_deposit_positions)
-        this->deposit_positions.push_back(pos);
+        this->deposit_positions[faction].push_back(pos);
 }
 
-std::vector<Position> Board::getDepositPositions(){
-    return this->deposit_positions;
+std::vector<Position> Board::getDepositPositions(player_t faction){
+    return this->deposit_positions[faction];
 }
 
 int Board::getCreator(player_t faction,unit_t type){

@@ -23,7 +23,6 @@ void Unit::sendState(Protocol & protocol, Socket & client_socket){
 void Unit::react(int x, int y, Board& board){}
 void Unit::update(State& state, Board& board){}
 void Unit::receiveDamage(int damage){}
-void Unit::getState(State& state){}
 
 
 void Unit::move(int x, int y, Board& board) {
@@ -199,7 +198,7 @@ void Harvester::occupy(Board & board){
 void Harvester::deposit(Board & board){
     size_t best_distance = 1000;
     Position best_position;
-    for (Position pos : board.getDepositPositions()){
+    for (Position pos : board.getDepositPositions(this->faction)){
         if (board.getCell(pos.x,pos.y).isOccupied())
             continue;
         size_t distance = board.get_distance_between(this->position,pos);
@@ -217,7 +216,7 @@ void Harvester::deposit(int x, int y,Board & board) {
     size_t best_distance = 1000;
     Position refinery_position(x,y);
     Position best_position;
-    for (Position pos : board.getDepositPositions()){
+    for (Position pos : board.getDepositPositions(this->faction)){
         size_t distance = board.get_distance_between(refinery_position,pos);
         if(distance < best_distance){
             best_distance = distance;
@@ -235,14 +234,6 @@ int Harvester::getSpice() {
 
 bool Harvester::isHarvesting() {
     return this->harvesting;
-}
-
-void Harvester::getState(State& state){
-    state.ID = this->ID;
-    state.LP = this->LP;
-    state.position = this->position;
-    state.selected = this->selected;
-    state.special = this->harvesting;
 }
 
 Trike::Trike(int ID,player_t faction, int LP,int spice, Position pos, int dim_x, int dim_y,int speed,int attack,int range)
@@ -269,22 +260,6 @@ void Trike::attack(int x, int y, Board& board){
     this->attacking = true;
 	this->enemy_position = Position(x,y);
     this->moving_position = this->enemy_position;
-    //  ATTACKING UNITS
-    /*
-    this->move(
-        x-(this->position.x-this->enemy_position.x<0?1:-1),
-        y-(this->position.y-this->enemy_position.y<0?1:-1),
-        board
-    );
-    */
-    /*
-    //  ATTACKING BUILDINGS
-    Position moving_position = this->enemy_position;
-    while(!board.canTraverse(moving_position.x,moving_position.y)){
-        moving_position.x = moving_position.x - (this->position.x-moving_position.x < 0 ? 1 : -1);
-        moving_position.y = moving_position.y - (this->position.y-moving_position.y < 0 ? 1 : -1);
-    }
-    */
 
     Position selectable_pos = (board.getElementAt(x,y))->getPosition();
     int selectable_dim_x = (board.getElementAt(x,y))->getDimX();
@@ -374,14 +349,6 @@ bool Trike::isAttacking() {
     return this->attacking;
 }
 
-void Trike::getState(State& state){
-    state.ID = this->ID;
-    state.LP = this->LP;
-    state.position = this->position;
-    state.selected = this->selected;
-    state.special = this->attacking;
-}
-
 response_t Trike::place(Board& board,std::vector<Position>& positions,int * spice){
     if ((*spice - this->spice) < 0){
         return RES_CREATE_UNIT_FAILURE_SPICE;
@@ -435,22 +402,6 @@ void Fremen::attack(int x, int y, Board& board){
     this->attacking = true;
 	this->enemy_position = Position(x,y);
     this->moving_position = this->enemy_position;
-    //  ATTACKING UNITS
-    /*
-    this->move(
-        x-(this->position.x-this->enemy_position.x<0?1:-1),
-        y-(this->position.y-this->enemy_position.y<0?1:-1),
-        board
-    );
-    */
-    /*
-    //  ATTACKING BUILDINGS
-    Position moving_position = this->enemy_position;
-    while(!board.canTraverse(moving_position.x,moving_position.y)){
-        moving_position.x = moving_position.x - (this->position.x-moving_position.x < 0 ? 1 : -1);
-        moving_position.y = moving_position.y - (this->position.y-moving_position.y < 0 ? 1 : -1);
-    }
-    */
 
     Position selectable_pos = (board.getElementAt(x,y))->getPosition();
     int selectable_dim_x = (board.getElementAt(x,y))->getDimX();
@@ -540,14 +491,6 @@ bool Fremen::isAttacking() {
     return this->attacking;
 }
 
-void Fremen::getState(State& state){
-    state.ID = this->ID;
-    state.LP = this->LP;
-    state.position = this->position;
-    state.selected = this->selected;
-    state.special = this->attacking;
-}
-
 response_t Fremen::place(Board& board,std::vector<Position>& positions,int * spice){
     if ((*spice - this->spice) < 0){
         return RES_CREATE_UNIT_FAILURE_SPICE;
@@ -600,22 +543,6 @@ void Infantry::attack(int x, int y, Board& board){
     this->attacking = true;
 	this->enemy_position = Position(x,y);
     this->moving_position = this->enemy_position;
-    //  ATTACKING UNITS
-    /*
-    this->move(
-        x-(this->position.x-this->enemy_position.x<0?1:-1),
-        y-(this->position.y-this->enemy_position.y<0?1:-1),
-        board
-    );
-    */
-    /*
-    //  ATTACKING BUILDINGS
-    Position moving_position = this->enemy_position;
-    while(!board.canTraverse(moving_position.x,moving_position.y)){
-        moving_position.x = moving_position.x - (this->position.x-moving_position.x < 0 ? 1 : -1);
-        moving_position.y = moving_position.y - (this->position.y-moving_position.y < 0 ? 1 : -1);
-    }
-    */
 
     Position selectable_pos = (board.getElementAt(x,y))->getPosition();
     int selectable_dim_x = (board.getElementAt(x,y))->getDimX();
@@ -705,14 +632,6 @@ bool Infantry::isAttacking() {
     return this->attacking;
 }
 
-void Infantry::getState(State& state){
-    state.ID = this->ID;
-    state.LP = this->LP;
-    state.position = this->position;
-    state.selected = this->selected;
-    state.special = this->attacking;
-}
-
 response_t Infantry::place(Board& board,std::vector<Position>& positions,int * spice){
     if ((*spice - this->spice) < 0){
         return RES_CREATE_UNIT_FAILURE_SPICE;
@@ -766,22 +685,6 @@ void Sardaukar::attack(int x, int y, Board& board){
     this->attacking = true;
 	this->enemy_position = Position(x,y);
     this->moving_position = this->enemy_position;
-    //  ATTACKING UNITS
-    /*
-    this->move(
-        x-(this->position.x-this->enemy_position.x<0?1:-1),
-        y-(this->position.y-this->enemy_position.y<0?1:-1),
-        board
-    );
-    */
-    /*
-    //  ATTACKING BUILDINGS
-    Position moving_position = this->enemy_position;
-    while(!board.canTraverse(moving_position.x,moving_position.y)){
-        moving_position.x = moving_position.x - (this->position.x-moving_position.x < 0 ? 1 : -1);
-        moving_position.y = moving_position.y - (this->position.y-moving_position.y < 0 ? 1 : -1);
-    }
-    */
 
     Position selectable_pos = (board.getElementAt(x,y))->getPosition();
     int selectable_dim_x = (board.getElementAt(x,y))->getDimX();
@@ -871,14 +774,6 @@ bool Sardaukar::isAttacking() {
     return this->attacking;
 }
 
-void Sardaukar::getState(State& state){
-    state.ID = this->ID;
-    state.LP = this->LP;
-    state.position = this->position;
-    state.selected = this->selected;
-    state.special = this->attacking;
-}
-
 response_t Sardaukar::place(Board& board,std::vector<Position>& positions,int * spice){
     if ((*spice - this->spice) < 0){
         return RES_CREATE_UNIT_FAILURE_SPICE;
@@ -932,22 +827,6 @@ void Tank::attack(int x, int y, Board& board){
     this->attacking = true;
 	this->enemy_position = Position(x,y);
     this->moving_position = this->enemy_position;
-    //  ATTACKING UNITS
-    /*
-    this->move(
-        x-(this->position.x-this->enemy_position.x<0?1:-1),
-        y-(this->position.y-this->enemy_position.y<0?1:-1),
-        board
-    );
-    */
-    /*
-    //  ATTACKING BUILDINGS
-    Position moving_position = this->enemy_position;
-    while(!board.canTraverse(moving_position.x,moving_position.y)){
-        moving_position.x = moving_position.x - (this->position.x-moving_position.x < 0 ? 1 : -1);
-        moving_position.y = moving_position.y - (this->position.y-moving_position.y < 0 ? 1 : -1);
-    }
-    */
 
     Position selectable_pos = (board.getElementAt(x,y))->getPosition();
     int selectable_dim_x = (board.getElementAt(x,y))->getDimX();
@@ -1037,14 +916,6 @@ bool Tank::isAttacking() {
     return this->attacking;
 }
 
-void Tank::getState(State& state){
-    state.ID = this->ID;
-    state.LP = this->LP;
-    state.position = this->position;
-    state.selected = this->selected;
-    state.special = this->attacking;
-}
-
 response_t Tank::place(Board& board,std::vector<Position>& positions,int * spice){
     if ((*spice - this->spice) < 0){
         return RES_CREATE_UNIT_FAILURE_SPICE;
@@ -1098,22 +969,6 @@ void Devastator::attack(int x, int y, Board& board){
     this->attacking = true;
 	this->enemy_position = Position(x,y);
     this->moving_position = this->enemy_position;
-    //  ATTACKING UNITS
-    /*
-    this->move(
-        x-(this->position.x-this->enemy_position.x<0?1:-1),
-        y-(this->position.y-this->enemy_position.y<0?1:-1),
-        board
-    );
-    */
-    /*
-    //  ATTACKING BUILDINGS
-    Position moving_position = this->enemy_position;
-    while(!board.canTraverse(moving_position.x,moving_position.y)){
-        moving_position.x = moving_position.x - (this->position.x-moving_position.x < 0 ? 1 : -1);
-        moving_position.y = moving_position.y - (this->position.y-moving_position.y < 0 ? 1 : -1);
-    }
-    */
 
     Position selectable_pos = (board.getElementAt(x,y))->getPosition();
     int selectable_dim_x = (board.getElementAt(x,y))->getDimX();
@@ -1201,14 +1056,6 @@ void Devastator::occupy(Board & board){
 
 bool Devastator::isAttacking() {
     return this->attacking;
-}
-
-void Devastator::getState(State& state){
-    state.ID = this->ID;
-    state.LP = this->LP;
-    state.position = this->position;
-    state.selected = this->selected;
-    state.special = this->attacking;
 }
 
 response_t Devastator::place(Board& board,std::vector<Position>& positions,int * spice){

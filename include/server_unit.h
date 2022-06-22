@@ -20,7 +20,6 @@ class Unit : public Selectable {
     virtual void react(int x, int y, Board& board);
     virtual void update(State& state, Board& board);
     virtual void receiveDamage(int damage);
-    virtual void getState(State& state);
     virtual void sendState(Protocol & protocol, Socket & client_socket);
     virtual response_t place(Board& board,std::vector<Position>& positions,int* spice);
     void move(int x, int y, Board& board);
@@ -45,7 +44,6 @@ class Harvester : public Unit {
     virtual void react(int x, int y, Board& board);
     virtual void update(State& state, Board& board);
     virtual void receiveDamage(int damage);
-    virtual void getState(State& state);
     virtual void sendState(Protocol & protocol, Socket & client_socket);
     virtual response_t place(Board& board,std::vector<Position>& positions,int* spice);
     int getSpice();
@@ -71,7 +69,6 @@ class Trike : public Unit {
     virtual void react(int x, int y, Board& board);
     virtual void update(State& state, Board& board);
     virtual void receiveDamage(int damage);
-    virtual void getState(State& state);
     virtual void sendState(Protocol & protocol, Socket & client_socket);
     virtual response_t place(Board& board,std::vector<Position>& positions,int* spice);
     bool isAttacking();
@@ -94,7 +91,6 @@ class Fremen : public Unit {
     virtual void react(int x, int y, Board& board);
     virtual void update(State& state, Board& board);
     virtual void receiveDamage(int damage);
-    virtual void getState(State& state);
     virtual void sendState(Protocol & protocol, Socket & client_socket);
     virtual response_t place(Board& board,std::vector<Position>& positions,int* spice);
     bool isAttacking();
@@ -117,7 +113,6 @@ class Infantry : public Unit {
     virtual void react(int x, int y, Board& board);
     virtual void update(State& state, Board& board);
     virtual void receiveDamage(int damage);
-    virtual void getState(State& state);
     virtual void sendState(Protocol & protocol, Socket & client_socket);
     virtual response_t place(Board& board,std::vector<Position>& positions,int* spice);
     bool isAttacking();
@@ -140,7 +135,6 @@ class Sardaukar : public Unit {
     virtual void react(int x, int y, Board& board);
     virtual void update(State& state, Board& board);
     virtual void receiveDamage(int damage);
-    virtual void getState(State& state);
     virtual void sendState(Protocol & protocol, Socket & client_socket);
     virtual response_t place(Board& board,std::vector<Position>& positions,int* spice);
     bool isAttacking();
@@ -163,7 +157,6 @@ class Tank : public Unit {
     virtual void react(int x, int y, Board& board);
     virtual void update(State& state, Board& board);
     virtual void receiveDamage(int damage);
-    virtual void getState(State& state);
     virtual void sendState(Protocol & protocol, Socket & client_socket);
     virtual response_t place(Board& board,std::vector<Position>& positions,int* spice);
     bool isAttacking();
@@ -186,7 +179,6 @@ class Devastator : public Unit {
     virtual void react(int x, int y, Board& board);
     virtual void update(State& state, Board& board);
     virtual void receiveDamage(int damage);
-    virtual void getState(State& state);
     virtual void sendState(Protocol & protocol, Socket & client_socket);
     virtual response_t place(Board& board,std::vector<Position>& positions,int* spice);
     bool isAttacking();
