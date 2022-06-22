@@ -9,64 +9,19 @@ elements(elements)
     this->dim_x = cell_types.size();
     this->dim_y = cell_types[0].size();
     //  Allocate memory for the cells
-        cells.resize(dim_x);
-        for ( size_t i = 0; i < dim_x; ++i )
-            cells[i].resize(dim_y);
+    cells.resize(dim_x);
+    for ( size_t i = 0; i < dim_x; ++i )
+        cells[i].resize(dim_y);
     //  Load Position& terrain type for each cell
-    for (size_t j = 0 ; j < dim_y ; j++) {
-        for (size_t i = 0 ; i < dim_x ; i++) {
-            cells[i][j].setPosition(i,j);
+    for (size_t j = 0 ; j < dim_y ; j++) 
+        for (size_t i = 0 ; i < dim_x ; i++) 
+            cells[i][j].setPosition(i,j),
             cells[i][j].setTerrain(cell_types[i][j]);
-        }
-    }
-
-    this->creatorID[ATREIDES][FREMEN] = -1;
-    this->creatorID[ATREIDES][INFANTRY] = -1;
-    this->creatorID[ATREIDES][SARDAUKAR] = -1;
-    this->creatorID[ATREIDES][HARVESTER] = -1;
-    this->creatorID[ATREIDES][TRIKE] = -1;
-    this->creatorID[ATREIDES][TANK] = -1;
-    this->creatorID[ATREIDES][DEVASTATOR] = -1;
-
-    this->creatorID[HARKONNEN][FREMEN] = -1;
-    this->creatorID[HARKONNEN][INFANTRY] = -1;
-    this->creatorID[HARKONNEN][SARDAUKAR] = -1;
-    this->creatorID[HARKONNEN][HARVESTER] = -1;
-    this->creatorID[HARKONNEN][TRIKE] = -1;
-    this->creatorID[HARKONNEN][TANK] = -1;
-    this->creatorID[HARKONNEN][DEVASTATOR] = -1;
-
-    this->creatorID[ORDOS][FREMEN] = -1;
-    this->creatorID[ORDOS][INFANTRY] = -1;
-    this->creatorID[ORDOS][SARDAUKAR] = -1;
-    this->creatorID[ORDOS][HARVESTER] = -1;
-    this->creatorID[ORDOS][TRIKE] = -1;
-    this->creatorID[ORDOS][TANK] = -1;
-    this->creatorID[ORDOS][DEVASTATOR] = -1;
-
-    this->creators[ATREIDES][FREMEN] = 0;
-    this->creators[ATREIDES][INFANTRY] = 0;
-    this->creators[ATREIDES][SARDAUKAR] = 0;
-    this->creators[ATREIDES][HARVESTER] = 0;
-    this->creators[ATREIDES][TRIKE] = 0;
-    this->creators[ATREIDES][TANK] = 0;
-    this->creators[ATREIDES][DEVASTATOR] = 0;
-
-    this->creators[HARKONNEN][FREMEN] = 0;
-    this->creators[HARKONNEN][INFANTRY] = 0;
-    this->creators[HARKONNEN][SARDAUKAR] = 0;
-    this->creators[HARKONNEN][HARVESTER] = 0;
-    this->creators[HARKONNEN][TRIKE] = 0;
-    this->creators[HARKONNEN][TANK] = 0;
-    this->creators[HARKONNEN][DEVASTATOR] = 0;
-
-    this->creators[ORDOS][FREMEN] = 0;
-    this->creators[ORDOS][INFANTRY] = 0;
-    this->creators[ORDOS][SARDAUKAR] = 0;
-    this->creators[ORDOS][HARVESTER] = 0;
-    this->creators[ORDOS][TRIKE] = 0;
-    this->creators[ORDOS][TANK] = 0;
-    this->creators[ORDOS][DEVASTATOR] = 0;
+    //  Initialize creators
+	for (player_t FACTION : factions)
+    	for (unit_t UNIT : units)
+            this->creatorID[FACTION][UNIT] = -1,
+            this->creators[FACTION][UNIT] = 0;
 
 }
 
@@ -78,19 +33,17 @@ void Board::clearSandPositions(){
 }
 
 void Board::addUnitCreator(player_t faction, building_t type){
-    if(type == BARRACK){
-        this->creators[faction][FREMEN]++;
-        this->creators[faction][INFANTRY]++;
+    if(type == BARRACK)
+        this->creators[faction][FREMEN]++,
+        this->creators[faction][INFANTRY]++,
         this->creators[faction][SARDAUKAR]++;
-    }
     if(type == REFINERY)
         this->creators[faction][HARVESTER]++;
     if(type == LIGHT_FACTORY)
         this->creators[faction][TRIKE]++;
-    if(type == HEAVY_FACTORY){
-        this->creators[faction][TANK]++;
+    if(type == HEAVY_FACTORY)
+        this->creators[faction][TANK]++,
         this->creators[faction][DEVASTATOR]++;
-    }
 }
 
 void Board::removeUnitCreator(player_t faction, unit_t type){
@@ -101,18 +54,15 @@ int Board::getTotalCreators(player_t faction, unit_t type){
 }
 
 status_t Board::canPlace(const Position& location, int dim_x,int dim_y) {
-    //  See if any of the positions is occupaid or cant build there
-    for (size_t j = 0 ; j < dim_y ; j++) {
-        for (size_t i = 0 ; i < dim_x ; i++) {
+    //  See if any of the positions is occupied or cant build there
+    for (size_t j = 0 ; j < dim_y ; j++)
+        for (size_t i = 0 ; i < dim_x ; i++) 
             if (    
             this->cells[location.x+i][location.y+j].isOccupied()
             ||
             !(this->cells[location.x+i][location.y+j].canBuild())
-            ){
+            )
                 return FAILED_TO_ADD;
-            }
-        }
-    }
     return SUCCESS;
 }
 
@@ -138,42 +88,12 @@ void Board::dealDamage(int x, int y, int damage){
     std::unique_ptr<Selectable>& element = this->elements.at(this->cells[x][y].getID());
     element->receiveDamage(damage);
     if(element->getLP() <= 0){
-        if(element->canCreate(FREMEN)) 
-            this->removeUnitCreator(element->getFaction(),TRIKE);
-        if(element->canCreate(INFANTRY)) 
-            this->removeUnitCreator(element->getFaction(),INFANTRY);
-        if(element->canCreate(SARDAUKAR)) 
-            this->removeUnitCreator(element->getFaction(),SARDAUKAR);
-        if(element->canCreate(HARVESTER)) 
-            this->removeUnitCreator(element->getFaction(),HARVESTER);
-        if(element->canCreate(TRIKE)) 
-            this->removeUnitCreator(element->getFaction(),TRIKE);    
-        if(element->canCreate(TANK)) 
-            this->removeUnitCreator(element->getFaction(),TANK);
-        if(element->canCreate(DEVASTATOR)) 
-            this->removeUnitCreator(element->getFaction(),DEVASTATOR);
-
-        player_t element_faction = element->getFaction();
-        Position element_position = element->getPosition(); 
-        std::vector<Position> positions = element->getPositions();
-
-        // TODO: refactor
-        int destroyed_building_id = this->cells[x][y].getID();
-        int unit_creator_id = -1;
-        unit_creator_id = this->getCreator(element_faction,INFANTRY);
-        if (destroyed_building_id == unit_creator_id)
-            this->removeCreator(element_faction,INFANTRY);
-        unit_creator_id = this->getCreator(element_faction,TRIKE);
-        if (destroyed_building_id == unit_creator_id)
-            this->removeCreator(element_faction,TRIKE);
-        unit_creator_id = this->getCreator(element_faction,TANK);
-        if (destroyed_building_id == unit_creator_id)
-            this->removeCreator(element_faction,TANK);
-        
-        this->elements.erase(this->cells[x][y].getID());
-
-        for (Position pos : positions)
+        for(unit_t UNIT : units)
+            if(element->canCreate(UNIT)) 
+                this->removeUnitCreator(element->getFaction(),UNIT);
+        for (Position pos : element->getPositions())
             this->cells[pos.x][pos.y].disoccupy();
+        this->elements.erase(this->cells[x][y].getID());
     }
 }
 
@@ -184,37 +104,6 @@ Cell& Board::getCell(int x, int y){
 std::unique_ptr<Selectable> & Board::getElementAt(int x, int y){
     int elementID = this->cells[x][y].getID();
     return this->elements.at(elementID);
-}
-
-void Board::print() {
-    for (size_t j = 0 ; j < this->dim_y ; j++) {
-        for (size_t i = 0 ; i < this->dim_x ; i++)
-            this->cells[i][j].print();
-        std::cout << '\n';
-    }
-    std::cout << '\n';
-}
-
-void Board::print(std::vector<Position> path) {
-
-    std::vector <std::vector <bool>> paths_board(this->dim_x, std::vector<bool>(this->dim_y));
-
-    for (Position position : path) {
-        (paths_board)[position.x][position.y] = true;
-        (paths_board)[position.x][position.y] = true;
-    }
-
-    for (size_t j = 0 ; j < this->dim_y ; j++) {
-        for (size_t i = 0 ; i < this->dim_x ; i++) {
-            if ((paths_board)[i][j]) {
-                std::cout << "# ";
-                continue;
-            }
-            this->cells[i][j].print();
-        }
-        std::cout << '\n';
-    }
-    std::cout << '\n';
 }
 
 size_t Board::get_width() {
@@ -270,47 +159,13 @@ int Board::getCreator(player_t faction,unit_t type){
 }
 
 void Board::makeCreator(int building_ID){
-    if(this->elements.at(building_ID)->canCreate(FREMEN))
-        this->creatorID[this->elements.at(building_ID)->getFaction()][FREMEN] = building_ID;
-    if(this->elements.at(building_ID)->canCreate(INFANTRY))
-        this->creatorID[this->elements.at(building_ID)->getFaction()][INFANTRY] = building_ID;
-    if(this->elements.at(building_ID)->canCreate(SARDAUKAR))
-        this->creatorID[this->elements.at(building_ID)->getFaction()][SARDAUKAR] = building_ID;
-    if(this->elements.at(building_ID)->canCreate(HARVESTER))
-        this->creatorID[this->elements.at(building_ID)->getFaction()][HARVESTER] = building_ID;
-    if(this->elements.at(building_ID)->canCreate(TRIKE))
-        this->creatorID[this->elements.at(building_ID)->getFaction()][TRIKE] = building_ID;
-    if(this->elements.at(building_ID)->canCreate(TANK))
-        this->creatorID[this->elements.at(building_ID)->getFaction()][TANK] = building_ID;
-    if(this->elements.at(building_ID)->canCreate(DEVASTATOR))
-        this->creatorID[this->elements.at(building_ID)->getFaction()][DEVASTATOR] = building_ID;
+    for (unit_t UNIT : units)
+        if(this->elements.at(building_ID)->canCreate(UNIT))
+            this->creatorID[this->elements.at(building_ID)->getFaction()][UNIT] = building_ID;
 }
 
 void Board::removeCreator(player_t faction, unit_t unit) {
-
-    switch (unit)
-    {
-    case INFANTRY:
-    case FREMEN:
-    case SARDAUKAR:
-        this->creatorID[faction][INFANTRY] = -1;
-        this->creatorID[faction][FREMEN] = -1;
-        this->creatorID[faction][SARDAUKAR] = -1;
-        break;
-    case TRIKE:
-        this->creatorID[faction][TRIKE] = -1;
-        break;
-    case TANK:
-        this->creatorID[faction][TANK] = -1;
-        break;
-    case DEVASTATOR:
-        this->creatorID[faction][DEVASTATOR] = -1;
-        break;
-    case HARVESTER:
-        this->creatorID[faction][HARVESTER] = -1;
-    default:
-        break;
-    }
+        this->creatorID[faction][unit] = -1;
 }
 
 std::vector<Position> Board::getSurroundings(Position position, int e_dim_x, int e_dim_y){
@@ -329,5 +184,5 @@ std::vector<Position> Board::getSurroundings(Position position, int e_dim_x, int
             surroundings.push_back(neighbor);
         }
     }
-    return std::move(surroundings);
+    return surroundings;
 }

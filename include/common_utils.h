@@ -123,6 +123,9 @@ enum player_t {
     ORDOS = 3
 };
 
+constexpr std::initializer_list<player_t> factions = {HARKONNEN,ATREIDES,ORDOS};
+
+
 enum command_t {
     CLOSE = 0,
     CREATE_BUILDING = 1,
@@ -156,6 +159,8 @@ enum unit_t {
     TANK = 6,
     DEVASTATOR = 7
 };
+
+constexpr std::initializer_list<unit_t> units = {HARVESTER,TRIKE,FREMEN,INFANTRY,SARDAUKAR,TANK,DEVASTATOR};
 
 enum building_t {
     AIR_TRAP = 1, 

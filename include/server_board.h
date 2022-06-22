@@ -37,8 +37,6 @@ class Board{
     void addUnitCreator(player_t faction,building_t type);
     void removeUnitCreator(player_t faction, unit_t type);
     int getTotalCreators(player_t faction, unit_t type);
-    void print();
-    void print(std::vector<Position> path);
     status_t canPlace(const Position& location, int dim_x, int dim_y);
     bool canDeposit(int x, int y, player_t faction);
     bool canHarvest(int x, int y);

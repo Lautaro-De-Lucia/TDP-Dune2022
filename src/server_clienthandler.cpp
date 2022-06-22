@@ -11,29 +11,12 @@ ClientHandler::ClientHandler(int init_energy, int init_spice ,Socket && client_s
 {
     this->faction = (player_t) -1;
 
-    this->units_to_create[FREMEN] = 0;
-    this->units_to_create[INFANTRY] = 0;
-    this->units_to_create[SARDAUKAR] = 0;
-    this->units_to_create[HARVESTER] = 0;
-    this->units_to_create[TRIKE] = 0;
-    this->units_to_create[TANK] = 0;
-    this->units_to_create[DEVASTATOR] = 0;
+	for (unit_t UNIT : units){
+        this->units_to_create[UNIT] = 0;
+        this->unit_time[UNIT] = 0;
+        this->unit_creation_time[UNIT] = 30;
+    }
 
-    this->unit_time[FREMEN] = 0;
-    this->unit_time[INFANTRY] = 0;
-    this->unit_time[SARDAUKAR] = 0;
-    this->unit_time[HARVESTER] = 0;
-    this->unit_time[TRIKE] = 0;
-    this->unit_time[TANK] = 0;
-    this->unit_time[DEVASTATOR] = 0;
-
-    this->unit_creation_time[FREMEN] = 30;
-    this->unit_creation_time[INFANTRY] = 30;
-    this->unit_creation_time[SARDAUKAR] = 30;
-    this->unit_creation_time[HARVESTER] = 30;
-    this->unit_creation_time[TRIKE] = 30;
-    this->unit_creation_time[TANK] = 30;
-    this->unit_creation_time[DEVASTATOR] = 30;
 }
 
 bool ClientHandler::isDone(){
@@ -161,14 +144,8 @@ void ClientHandler::reportState(Socket& client_socket){
 }
 
 void ClientHandler::update(){    
-	this->responses_buffer.push_back(this->checkCreation(TRIKE));
-	this->responses_buffer.push_back(this->checkCreation(HARVESTER));
-	this->responses_buffer.push_back(this->checkCreation(FREMEN));
-	this->responses_buffer.push_back(this->checkCreation(INFANTRY));
-	this->responses_buffer.push_back(this->checkCreation(SARDAUKAR));
-	this->responses_buffer.push_back(this->checkCreation(TANK));
-	this->responses_buffer.push_back(this->checkCreation(DEVASTATOR));
-
+	for (unit_t UNIT : units) 
+        this->responses_buffer.push_back(this->checkCreation(UNIT));
     this->game->update();
 }	
 
