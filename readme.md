@@ -10,7 +10,10 @@ Dune 2022 es un remake del clásico videojuego de estrategia en tiempo real (RTS
 
 Por el momento el juego se encuentra disponible para computadoras personales con sistemas operativos basados en Debian, así que no deberías tener problemas si contás con una distribución de Linux como Ubuntu, Xubuntu o Linux Mint. Se planea portar el juego a otras plataformas como Windows 10, MacOSX y Virtual Boy en el futuro.
 
-<img src="https://user-images.githubusercontent.com/75450615/174876428-a6147531-4bdd-4770-ac3c-48c33e044653.png" width="600" align="center">
+
+<p align="center">
+  <img width="400" src="https://user-images.githubusercontent.com/75450615/174876428-a6147531-4bdd-4770-ac3c-48c33e044653.png">
+</p>
 
 Es necesario también instalar las siguientes dependencias:
 
