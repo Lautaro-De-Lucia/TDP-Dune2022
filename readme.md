@@ -71,10 +71,21 @@ Una vez escogida una casa y comenzado el juego, nos encontramos con una pantalla
 
 En la **arena** podemos mover nuestras unidades, pero no podemos construir edificios. Las **dunas** tiene un efecto similar sólo que las unidades se mueven más lento a través de ella. Para construir edificios y cuarteles, debemos encontrar una buena ubicación con terreno rocoso, ya que la **roca** es el único terreno lo suficientemente sólido para construir sobre él. Las **colinas** funcionan como barreras naturales, ya que ninguna unidad puede atravesarla.
 
+#### Objetivo del juego
+
+Cada facción comienza la partida con un centro de construcción, cuya destrucción significa el fin del juego para esa facción. Nuestro *objetivo* es entonces *defender el centro de construcción*, ayudandonos de distintos edificios que nos permitan crear distintas unidades, a la vez que intentamos *destruir el centro de construcción de cada facción opuesta*.
+
 #### Construcción de los edificios
 
-Para construir edificios es necesario contar con *energía* y *especia*, la moneda corriente en el mundo de Dune. Si bien se cuenta con cierta cantidad de especia inicial, si la agotamos construyendo edificios y unidades no podremos generarla nuevamente. Para esto, se deben crear unidades **cosechadoras**, que se encargan de transportar la especia de lugares en el mapa con arena especiada hacía la refinería. Un buen consejo es empezar construyendo una **fábrica pesada**, donde pueden entrenarse estas unidades **cosechadoras** que nos conseguirán más especia para poder seguir construyendo edificios y entrenando unidades de combate. Para construir, se hace *click izquierdo* en el ícono con el edificio que queremos construir, y luego click izquierdo en el lugar del mapa que nos resulte conveniente, siempre y cuando haya una formación rocoso bajo suyo.
+Para construir edificios es necesario contar con *energía* y *especia*, la moneda corriente en el mundo de Dune. Si bien se cuenta con cierta cantidad de especia inicial, si la agotamos construyendo edificios y unidades no podremos generarla nuevamente. Para esto, se deben crear unidades **cosechadoras**, que se encargan de transportar la especia de lugares en el mapa con arena especiada hacía la refinería. Un buen consejo es empezar construyendo una **fábrica pesada**, donde pueden entrenarse estas unidades **cosechadoras** que nos conseguirán más especia para poder seguir construyendo edificios y entrenando unidades de combate. Para construir, se hace *click izquierdo* en el ícono con el edificio que queremos construir, y luego click izquierdo en el lugar del mapa que nos resulte conveniente, siempre y cuando haya una formación rocoso bajo suyo. Ahora que tenemos un edificio
 
 #### Creacion de Unidades
 
-Cada unidad tiene asignada un costo en especia y un edificio creador. Las unidades de **infantería** se crean desde el **cuartel**. Los **vehículos** se crean en la **Fábrica Ligera** y la **Fábrica Pesada**. Cuanto más edificios creadores para una unidad, menos tiempo esta tarda en crearse. Sin embargo, hay solo una unidad creadora de la que emergen las unidades. Para designar el creador *seleccionamos* el edificio y damos *click derecho*.
+Cada unidad tiene un costo en especia y un edificio creador. Las unidades de **infantería** se crean desde el **cuartel**. Los **vehículos** se crean en la **fábrica ligera** y la **fábrica pesada**. Cuanto más edificios creadores para una unidad, menos tiempo esta tarda en crearse. Sin embargo, hay solo una unidad creadora de la que emergen las unidades. Para designar el creador seleccionamos el edificio y damos *click derecho* (la selección del edificio puede ser con un *click izquierdo* sobre el edificio o mediante una *selección* de mouse, manteniendo *click izquierdo* desde un punto del mapa hasta otro, definiendo de esta manera un rectángulo donde se seleccionan las unidades y/o edificios en nuestro poder).
+
+#### Movimiento de unidades 
+
+
+#### Cosechadoras
+
+Ya sabemos como crear unidades *cosechadoras* luego de construir una *fábrica pesada*. Para ponerlas a trabajar una vez que aparezcan junto a la fábrica, necesitamos primero una **refinería**, que es el edificio donde las cosechadoras depositan la especia colectada. Luego de construir la **refinería**, seleccionamos una o mas *cosechadoras* y luego hacemos click derecho en algún lugar del mapa con arena con especia, y automáticamente estas unidades iniciaran un ciclo de colectar especia y depositarla en la refinería, hasta agotar los recursos naturales de esa región del mapa.
