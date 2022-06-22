@@ -66,7 +66,9 @@ Nos será posible elegir entre tres casas, o tres facciones distintas, toda basa
 
 ### Inicio del juego
 
-![DUNE-REF](https://user-images.githubusercontent.com/75450615/174889424-eba884dc-2f52-4482-8392-091c9c620986.png)
+<p align="center">
+  <img width="400" src="https://user-images.githubusercontent.com/75450615/174889424-eba884dc-2f52-4482-8392-091c9c620986.pn">
+</p>
 
 Una vez escogida una casa y comenzado el juego, nos encontramos con una pantalla como la de arriba. Primero se mencioan los distintos tipos de terreno:
 
@@ -85,7 +87,9 @@ Cada facción comienza la partida con un centro de construcción, cuya destrucci
 
 Para construir edificios es necesario contar con *energía* y *especia*, la moneda corriente en el mundo de Dune. Si bien se cuenta con cierta cantidad de especia inicial, si la agotamos construyendo edificios y unidades no podremos generarla nuevamente. Para esto, se deben crear unidades **cosechadoras**, que se encargan de transportar la especia de lugares en el mapa con arena especiada hacía la refinería. Un buen consejo es empezar construyendo una **fábrica pesada**, donde pueden entrenarse estas unidades **cosechadoras** que nos conseguirán más especia para poder seguir construyendo edificios y entrenando unidades de combate. Para construir, se hace *click izquierdo* en el ícono con el edificio que queremos construir, y luego click izquierdo en el lugar del mapa que nos resulte conveniente, siempre y cuando haya una formación rocoso bajo suyo. Ahora que tenemos edificios, podemos emezar a crear unidades.
 
-![opalace](https://user-images.githubusercontent.com/75450615/175114388-1fd3d5fa-5ec2-4fd6-8fe1-182b3a7490e6.jpg)
+<p align="center">
+  <img width="600" src="https://user-images.githubusercontent.com/75450615/175114388-1fd3d5fa-5ec2-4fd6-8fe1-182b3a7490e6.jpg">
+</p>
 
 #### Creacion de Unidades
 
