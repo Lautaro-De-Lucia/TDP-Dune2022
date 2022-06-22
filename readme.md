@@ -55,7 +55,10 @@ Ahora ya resulta posible correr el juego. El directorio donde se ejecutó ese ú
 
 Se inicia el juego uniendose a la partida del servidor mediante las intrucciones detalladas más arriba. Se selecciona "Jugar" en la pantalla de inicio, y luego nos encontramos con la siguiente pantalla:
 
-![2022-06-21_17-00](https://user-images.githubusercontent.com/75450615/174887546-3f78a0d5-6877-4388-887c-964ab49daa9e.png)
+<p align="center">
+  <img width="600" src="https://user-images.githubusercontent.com/75450615/174887546-3f78a0d5-6877-4388-887c-964ab49daa9e.png">
+</p>
+
 
 #### Pantalla de selección de casa
 
@@ -88,6 +91,7 @@ Cada unidad tiene un costo en especia y un edificio creador. Las unidades de **i
 
 #### Movimiento de unidades 
 
+Una vez creadas las unidades, podemos desplazarlas de un punto del mapa a otro. Para hacer esto, debemos primero seleccionarlas y luego hacemos *click derecho* en algún punto del mapa, y nuestras unidades inciaran un trayecto hasta ese punto. Si en este punto se encuentra una **colina**, o hacemos click sobre una unidad o edificio aliado, nuestras unidades seleccionadas se moverán a la primera *posición libre del mapa más cercana* a ese punto.
 
 #### Cosechadoras
 
