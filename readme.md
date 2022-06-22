@@ -96,3 +96,12 @@ Una vez creadas las unidades, podemos desplazarlas de un punto del mapa a otro. 
 #### Cosechadoras
 
 Ya sabemos como crear unidades *cosechadoras* luego de construir una *fábrica pesada*. Para ponerlas a trabajar una vez que aparezcan junto a la fábrica, necesitamos primero una **refinería**, que es el edificio donde las cosechadoras depositan la especia colectada. Luego de construir la **refinería**, seleccionamos una o mas *cosechadoras* y luego hacemos click derecho en algún lugar del mapa con arena con especia, y automáticamente estas unidades iniciaran un ciclo de colectar especia y depositarla en la refinería, hasta agotar los recursos naturales de esa región del mapa.
+
+#### Combate
+
+Dentro de las unidades tenemos aquellas que se pueden utilizar para dañar otras unidades y edificios enemigos, como los rápidos **trikes** y los pesados **devastadores**. Para atacar al enemigo, debemos seleccionar nuestras unidades de ataque y luego hacemos *click derecho* sobre alguna unidad o edificio enemigo. Nuestras unidades ahora iniciaran un trayecto hasta estar a una distancia adecuada y luego comienzan a efectuar daño a los edificios o unidades enemigas que se encuentren en las proximidades del punto seleccionado. Cabe destacar que nuestras unidades no sólo atacan a la unidad enemiga seleccionada, sino también a cualquier unidad (o edificio) cercano a esa unidad.
+
+#### Fin del juego
+
+El juego termina cuando sólo queda un centro de construcción en pie, y la facción a la que pertenezca es declarada **ganadora** de la partida.
+
