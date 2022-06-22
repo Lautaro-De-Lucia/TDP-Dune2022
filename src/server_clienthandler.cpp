@@ -131,7 +131,6 @@ response_t ClientHandler::createBuilding(int type, int pos_x, int pos_y, int& sp
 }
 
 void ClientHandler::handleLeftClick(int x, int y) {
-    std::cout << "Faction: " << faction << std::endl;
     this->game->selectElement(this->faction,x,y);
 }
 
@@ -148,7 +147,6 @@ void ClientHandler::reportState(Socket& client_socket){
     int max_spice = 20000 + this->game->getSpiceCapacity(this->faction);
     if(this->spice >= max_spice)
         this->spice = max_spice;
-    std::cout << max_spice << std::endl;
     this->protocol.send_player_state(this->spice,max_spice,this->energy,client_socket);
     //  Sending board state
     this->protocol.send_sand_cells_size(this->game->getTotalChangedCells(),client_socket);
@@ -183,10 +181,7 @@ response_t ClientHandler::queueUnit(unit_t type){
 response_t ClientHandler::checkCreation(unit_t type){
 	if(this->units_to_create[type] == 0)
 		return RES_SUCCESS;
-    std::cout << "Units to create: " << this->units_to_create[type] << std::endl;
-    std::cout << "Total creators: " << this->game->getTotalCreators(this->faction,type) << std::endl;
     this->unit_time[type] += this->game->getTotalCreators(this->faction,type); 
-	std::cout << "Unit time: " << this->unit_time[type] << std::endl;
     if(this->unit_time[type] >= this->unit_creation_time[type]){
 		response_t res;
         res = this->game->createUnit(this->faction,type,this->spice);

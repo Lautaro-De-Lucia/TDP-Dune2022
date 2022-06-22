@@ -6,7 +6,6 @@ Selectable(ID,faction,LP,pos,dim_x,dim_y,false)
 {
     this->spice = spice;
     this->energy = energy;
-    std::cout << "New building created of faction: " << this->faction << std::endl;
 }
 
 bool Building::canCreate(unit_t type){return false;}

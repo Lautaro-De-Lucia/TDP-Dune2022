@@ -154,10 +154,6 @@ void Protocol::send_mouse_left_click(int pos_x, int pos_y, Socket& client_socket
     uint16_t _pos_x = (uint16_t) pos_x;
     uint16_t _pos_y = (uint16_t) pos_y;
 
-    //std::cout << "En el protocolo del cliente se envían las posiciones: " << std::endl;
-    //std::cout << "pos_x: " << pos_x << std::endl;
-    //std::cout << "pos_y: " << pos_y << std::endl;
-
     uint16_t pos_x_buffer = (uint16_t) htons(_pos_x);
     uint16_t pos_y_buffer = (uint16_t) htons(_pos_y);
 
@@ -309,10 +305,6 @@ void Protocol::receive_mouse_left_click(int& pos_x, int& pos_y, Socket& client_s
 
     pos_x = (int) _pos_x;
     pos_y = (int) _pos_y;
-
-    //std::cout << "En el protocolo del servidor se reciben las posiciones: " << std::endl;
-    //std::cout << "pos_x: " << pos_x << std::endl;
-    //std::cout << "pos_y: " << pos_y << std::endl;
 
     return;
 }
@@ -1088,10 +1080,6 @@ void Protocol::send_player_state(int spice, int c_spice,int energy, Socket& clie
     uint16_t _spice = (uint16_t) spice;
     uint16_t _c_spice = (uint16_t) c_spice;
     uint16_t _energy = (uint16_t) energy;
-
-    //std::cout << "En el protocolo del cliente se envían las posiciones: " << std::endl;
-    //std::cout << "pos_x: " << pos_x << std::endl;
-    //std::cout << "pos_y: " << pos_y << std::endl;
 
     uint16_t spice_buffer = (uint16_t) htons(_spice);
     uint16_t c_spice_buffer = (uint16_t) htons(_c_spice);

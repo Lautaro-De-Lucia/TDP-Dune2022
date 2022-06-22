@@ -90,8 +90,6 @@ void run_sdl(const int* _faction, std::string host_name, std::string service_nam
 
     player_t faction = (player_t) *(_faction); //Esto debe poder definirse desde el menú de Qt
 
-    std::cout << "faction is: " << faction << std::endl;
-
     int init_cam_pos_x;
     int init_cam_pos_y;
 

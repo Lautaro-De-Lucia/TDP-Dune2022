@@ -48,11 +48,9 @@ Position MouseHandler::currentPosition(){
     
     pos = pixelToGP(x, y);
 
-    //std::cout << "Current Mouse Position: " << pos << std::endl;
-    //std::cout << "Current Camera Position: (" << std::round(this->camera.pos_x/tile_dim) <<","<<std::round(this->camera.pos_y/tile_dim*2) <<")"<< std::endl;
     pos.x = pos.x + std::round(this->camera.pos_x/tile_dim);
     pos.y = pos.y + std::round(this->camera.pos_y/tile_dim);
-    //std::cout << "Mouse Position after summing camera: " << pos << std::endl;
+
     return pos;
 }
 

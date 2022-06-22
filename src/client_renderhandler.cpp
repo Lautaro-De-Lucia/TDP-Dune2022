@@ -71,7 +71,6 @@ void RenderHandler::renderMovable(
                 tank_path.append(this->directions[dir]);
                 tank_path.append(this->special[false]);
                 tank_path.append(IMG_FORMAT);
-                std::cout << "Rendering tank path: " << tank_path << std::endl;
                 texture.Update(SDL2pp::NullOpt,SDL2pp::Surface(tank_path.c_str()));
                 renderer.Copy(texture,SDL2pp::NullOpt,SDL2pp::Rect(xpos,ypos,tile_size,tile_size));
             }

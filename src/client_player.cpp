@@ -98,7 +98,6 @@ void Player::play(){
                             this->print("Place building on screen", DATA_PATH FONT_IMPACT_PATH, 200, 300, 10, colors[YELLOW], 1000);
                             this->is_holding_building = true;
                             this->building_held = checkBuild(x, y);
-                            std::cout << "Currently holding the building: " << building_held << std::endl;
                             break;
                         case UNIT_BTN:
                             if (this->new_unit_available) {
@@ -109,7 +108,6 @@ void Player::play(){
                                 this->is_holding_building = false;
                                 this->building_held = -1;
                                 this->mouse_events.push(new_mouse_event);
-                                std::cout << "Queueing: " << "CREATE_UNIT" << std::endl;
                                 this->new_unit_available = false;
                             }
 
@@ -127,14 +125,12 @@ void Player::play(){
                         this->is_holding_building = false;
                         this->building_held = -1;
                         this->mouse_events.push(new_mouse_event);
-                        std::cout << "Queueing: " << "CREATE_BUILDING" << std::endl;
                     } else {
                         new_mouse_event.push_back(MOUSE_LEFT_CLICK);
                         new_mouse_event.push_back(current_pos.x);
                         new_mouse_event.push_back(current_pos.y);
                         if (!this->left_click) {
                             this->mouse_events.push(new_mouse_event);
-                            std::cout << "Queueing: " << "MOUSE_LEFT_CLICK" << std::endl;
                             this->left_click = true;
                             this->selection = false;
                         }
@@ -149,7 +145,6 @@ void Player::play(){
                             new_mouse_event.push_back(current_pos.x);
                             new_mouse_event.push_back(current_pos.y);
                             this->mouse_events.push(new_mouse_event);
-                            std::cout << "Queueing: " << "MOUSE_RIGHT_CLICK" << std::endl;
                             this->right_click = true;
                             this->selection = false;
                         }
@@ -170,13 +165,10 @@ void Player::play(){
                         new_mouse_event.push_back(selection.Ymin);
                         new_mouse_event.push_back(selection.Ymax);
                         this->mouse_events.push(new_mouse_event);
-                        std::cout << "Queueing: " << "MOUSE_SELECTION" << std::endl;
                         this->selection = true;
                     }
-
                     this->left_click = false;
                     this->right_click = false;
-
                 }
                 break;
             default:

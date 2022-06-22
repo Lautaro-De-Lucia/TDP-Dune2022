@@ -30,6 +30,7 @@ bool GameResources::canHarvest(int x, int y){return this->board.canHarvest(x,y);
 bool GameResources::canTraverse(int x, int y){return this->board.canTraverse(x,y);}
 
 bool GameResources::isEnabled(player_t faction,unit_t unit){
+    std::lock_guard<std::mutex> locker(this->lock);
     if(unit != SARDAUKAR && unit != DEVASTATOR)
         return true;
     for (auto& e : this->elements)
@@ -40,6 +41,7 @@ bool GameResources::isEnabled(player_t faction,unit_t unit){
 }
 
 int GameResources::getSpiceCapacity(player_t faction){
+    std::lock_guard<std::mutex> locker(this->lock);
     int total_spice = 0;
     for (auto& e : this->elements)
         if(e.second->getFaction() == faction){
@@ -51,6 +53,7 @@ int GameResources::getSpiceCapacity(player_t faction){
 }
 
 bool GameResources::hasLost(player_t faction){
+    std::lock_guard<std::mutex> locker(this->lock);
     for (auto& e : this->elements)
         if(e.second->getFaction() == faction)
             if(e.second->canCostTheGame() == true)
@@ -74,14 +77,17 @@ std::unique_ptr<Selectable> & GameResources::getElementAt(int x, int y){
 }
 
 int GameResources::getTotalCreators(player_t faction, unit_t type){
+    std::lock_guard<std::mutex> locker(this->lock);
     return this->board.getTotalCreators(faction,type);
 }
 
 
 int GameResources::getBoardWidth() {
+    std::lock_guard<std::mutex> locker(this->lock);
     return this->board.get_width();  
 }
 int GameResources::getBoardHeight() {
+    std::lock_guard<std::mutex> locker(this->lock);
     return this->board.get_height();
 }
 
@@ -106,6 +112,7 @@ std::vector<Position> & GameResources::getDepositPositions(){
 }
 
 int GameResources::getCreator(player_t faction,unit_t type){
+    std::lock_guard<std::mutex> locker(this->lock);
     return this->board.getCreator(faction,type);
 }
 
@@ -176,7 +183,7 @@ void GameResources::selectElements(player_t faction,int Xmin, int Xmax,int Ymin,
     }
 }
 void GameResources::reactToPosition(player_t faction,int pos_x,int pos_y){
-    //  Traverse elements and make each selected unit handle the cell
+    std::lock_guard<std::mutex> locker(this->lock);
     for (auto& e : this->elements){
         if(e.second->getFaction() == faction){
             if (e.second->isSelected()){
@@ -187,25 +194,31 @@ void GameResources::reactToPosition(player_t faction,int pos_x,int pos_y){
 }
 
 int GameResources::totalElements(){
+    std::lock_guard<std::mutex> locker(this->lock);
     return this->elements.size();
 }
 
 void GameResources::sendElements(Protocol & protocol, Socket & client_socket){
+    std::lock_guard<std::mutex> locker(this->lock);
     for (auto& e : this->elements)
         e.second->sendState(protocol,client_socket);
 }
 
 int GameResources::getTotalChangedCells(){
+    std::lock_guard<std::mutex> locker(this->lock); 
     return this->board.getChangedSandPositions().size();
 }
 void GameResources::clearChangedCells(){
+    std::lock_guard<std::mutex> locker(this->lock);
     this->board.clearSandPositions();
 }
 std::vector<Position> GameResources::getChangedCells(){
+    std::lock_guard<std::mutex> locker(this->lock);
     return this->board.getChangedSandPositions();
 }
 
 void GameResources::update(){
+    std::lock_guard<std::mutex> locker(this->lock);
     State state;
     std::vector<State> states;
     for (auto& e : this->elements){

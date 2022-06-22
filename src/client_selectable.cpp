@@ -33,11 +33,6 @@ void CStatic::update(player_t player_faction, int lp,bool selected,SDL2pp::Rende
 
 void CMovable::update(player_t player_faction, int lp,int pos_x,int pos_y,bool selected,bool attacking,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
     
-    std::cout << "Updating unit of type: " << this->type;
-    std::cout << "The unit's new position is: " << pos_x << "," << pos_y << std::endl;
-    std::cout << "The unit's previous position was: " << this->position.x << "," <<  this->position.y << std::endl;
-
-
     if (pos_x == this->position.x && pos_y > this->position.y)
         this->dir = BOTTOM;
     if (pos_x > this->position.x && pos_y > this->position.y)
@@ -128,7 +123,6 @@ void CStatic::render(player_t player_faction, SDL2pp::Renderer& renderer, int ca
     CSelectable::render(player_faction, renderer, cam_pos_x, cam_pos_y);
     if (this->type == CONSTRUCTION_YARD){
         if(this->faction == ATREIDES){
-            std::cout << "Rendering Atreides construction yard" << std::endl;
             renderer.Copy(
                 texture,						//	The sprite
                 //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
@@ -137,7 +131,6 @@ void CStatic::render(player_t player_faction, SDL2pp::Renderer& renderer, int ca
             );
         }
         if(this->faction == HARKONNEN){
-            std::cout << "Rendering Harkonnen construction yard" << std::endl;
             renderer.Copy(
                 texture,						//	The sprite
                 //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
@@ -146,7 +139,6 @@ void CStatic::render(player_t player_faction, SDL2pp::Renderer& renderer, int ca
             );
         }
         if(this->faction == ORDOS){
-            std::cout << "Rendering Ordos construction yard" << std::endl;
             renderer.Copy(
                 texture,						//	The sprite
                 //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
