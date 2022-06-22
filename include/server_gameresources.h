@@ -24,29 +24,7 @@ class GameResources {
     std::mutex lock;
 public:    
     GameResources(std::vector<std::vector<cell_t>> cells);
-    Cell& getCell(int x, int y);
-    int getCreator(player_t faction, unit_t type);
-    std::unique_ptr<Selectable>& getElementAt(int x, int y);
-    bool canDeposit(int x, int y, player_t faction);
-    bool canHarvest(int x, int y);
-    bool canTraverse(int x, int y);
-    bool hasEnemy(int x, int y, player_t player_faction);
-    bool isEnabled(player_t faction,unit_t unit);
-    bool hasLost(player_t faction);
-    void dealDamage(int x, int y, int damage);
-    int getTotalChangedCells();
-    int getSpiceCapacity(player_t faction);
-    int getTotalCreators(player_t faction, unit_t type);
-    void clearChangedCells();
-    std::vector<Position> getChangedCells();
-    void addSandPosition(int x, int y);
-    std::vector<Position> getTraversableNeighborsOf(Position pos,size_t distance);
-    size_t getDistanceBetween(Position pos1, Position pos2);
-    std::vector<Position> getCreatingPositions(unit_t type);
-    void addDepositPositions(std::vector<Position> & new_deposit_positions);
-    std::vector<Position> getDepositPositions();
-    std::vector<Position> getSurroundings(Position position, int e_dim_x, int e_dim_y);
-    //void removeCreator(unit_t unit);
+
     response_t createUnit(player_t faction,unit_t type,int & spice);
     response_t createBuilding(player_t faction,building_t type,int pos_x,int pos_y,int & spice,int &energy);
     void selectElement(player_t faction,int pos_x, int pos_y);
@@ -54,7 +32,17 @@ public:
     void reactToPosition(player_t faction, int pos_x, int pos_y);
     int totalElements();
     void sendElements(Protocol & protocol, Socket & client_socket);
-    int getBoardHeight();
-    int getBoardWidth();
+
     void update();
+
+    Cell& getCell(int x, int y);
+    int getCreator(player_t faction, unit_t type);
+    std::unique_ptr<Selectable>& getElementAt(int x, int y);
+    bool isEnabled(player_t faction,unit_t unit);
+    bool hasLost(player_t faction);
+    int getTotalChangedCells();
+    std::vector<Position> getChangedCells();
+    int getSpiceCapacity(player_t faction);
+    int getTotalCreators(player_t faction, unit_t type);
+    void clearChangedCells();
 };
