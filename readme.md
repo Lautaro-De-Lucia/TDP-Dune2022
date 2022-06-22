@@ -1,5 +1,5 @@
 
-<img src="https://user-images.githubusercontent.com/75450615/174878256-fcf0ccbb-9a8e-4c0b-933a-0e5e6637724e.jpeg" width="1400">
+<img src="https://user-images.githubusercontent.com/75450615/175116440-0fb9283c-a1e5-4299-8b14-4e5891e6c16e.jpeg" width="1400">
 
 ## ¿Qué es?
 
@@ -10,7 +10,9 @@ Dune 2022 es un remake del clásico videojuego de estrategia en tiempo real (RTS
 
 Por el momento el juego se encuentra disponible para computadoras personales con sistemas operativos basados en Debian, así que no deberías tener problemas si contás con una distribución de Linux como Ubuntu, Xubuntu o Linux Mint. Se planea portar el juego a otras plataformas como Windows 10, MacOSX y Virtual Boy en el futuro.
 
-<img src="https://user-images.githubusercontent.com/75450615/174876428-a6147531-4bdd-4770-ac3c-48c33e044653.png" width="600" align="center">
+<p align="center">
+  <img width="400" src="https://user-images.githubusercontent.com/75450615/174876428-a6147531-4bdd-4770-ac3c-48c33e044653.png">
+</p>
 
 Es necesario también instalar las siguientes dependencias:
 
@@ -52,7 +54,10 @@ Ahora ya resulta posible correr el juego. El directorio donde se ejecutó ese ú
 
 Se inicia el juego uniendose a la partida del servidor mediante las intrucciones detalladas más arriba. Se selecciona "Jugar" en la pantalla de inicio, y luego nos encontramos con la siguiente pantalla:
 
-![2022-06-21_17-00](https://user-images.githubusercontent.com/75450615/174887546-3f78a0d5-6877-4388-887c-964ab49daa9e.png)
+<p align="center">
+  <img width="600" src="https://user-images.githubusercontent.com/75450615/174887546-3f78a0d5-6877-4388-887c-964ab49daa9e.png">
+</p>
+
 
 #### Pantalla de selección de casa
 
@@ -60,7 +65,9 @@ Nos será posible elegir entre tres casas, o tres facciones distintas, toda basa
 
 ### Inicio del juego
 
-![DUNE-REF](https://user-images.githubusercontent.com/75450615/174889424-eba884dc-2f52-4482-8392-091c9c620986.png)
+<p align="center">
+  <img width="1200" src="https://user-images.githubusercontent.com/75450615/174889424-eba884dc-2f52-4482-8392-091c9c620986.png">
+</p>
 
 Una vez escogida una casa y comenzado el juego, nos encontramos con una pantalla como la de arriba. Primero se mencioan los distintos tipos de terreno:
 
@@ -71,10 +78,47 @@ Una vez escogida una casa y comenzado el juego, nos encontramos con una pantalla
 
 En la **arena** podemos mover nuestras unidades, pero no podemos construir edificios. Las **dunas** tiene un efecto similar sólo que las unidades se mueven más lento a través de ella. Para construir edificios y cuarteles, debemos encontrar una buena ubicación con terreno rocoso, ya que la **roca** es el único terreno lo suficientemente sólido para construir sobre él. Las **colinas** funcionan como barreras naturales, ya que ninguna unidad puede atravesarla.
 
+#### Objetivo del juego
+
+Cada facción comienza la partida con un centro de construcción, cuya destrucción significa el fin del juego para esa facción. Nuestro *objetivo* es entonces *defender el centro de construcción*, ayudandonos de distintos edificios que nos permitan crear distintas unidades, a la vez que intentamos *destruir el centro de construcción de cada facción opuesta*.
+
 #### Construcción de los edificios
 
-Para construir edificios es necesario contar con *energía* y *especia*, la moneda corriente en el mundo de Dune. Si bien se cuenta con cierta cantidad de especia inicial, si la agotamos construyendo edificios y unidades no podremos generarla nuevamente. Para esto, se deben crear unidades **cosechadoras**, que se encargan de transportar la especia de lugares en el mapa con arena especiada hacía la refinería. Un buen consejo es empezar construyendo una **fábrica pesada**, donde pueden entrenarse estas unidades **cosechadoras** que nos conseguirán más especia para poder seguir construyendo edificios y entrenando unidades de combate. Para construir, se hace *click izquierdo* en el ícono con el edificio que queremos construir, y luego click izquierdo en el lugar del mapa que nos resulte conveniente, siempre y cuando haya una formación rocoso bajo suyo.
+Para construir edificios es necesario contar con *energía* y *especia*, la moneda corriente en el mundo de Dune. Si bien se cuenta con cierta cantidad de especia inicial, si la agotamos construyendo edificios y unidades no podremos generarla nuevamente. Para esto, se deben crear unidades **cosechadoras**, que se encargan de transportar la especia de lugares en el mapa con arena especiada hacía la refinería. Un buen consejo es empezar construyendo una **fábrica pesada**, donde pueden entrenarse estas unidades **cosechadoras** que nos conseguirán más especia para poder seguir construyendo edificios y entrenando unidades de combate. Para construir, se hace *click izquierdo* en el ícono con el edificio que queremos construir, y luego click izquierdo en el lugar del mapa que nos resulte conveniente, siempre y cuando haya una formación rocoso bajo suyo. Ahora que tenemos edificios, podemos emezar a crear unidades.
+
+<p align="center">
+  <img width="400" src="https://user-images.githubusercontent.com/75450615/175114388-1fd3d5fa-5ec2-4fd6-8fe1-182b3a7490e6.jpg">
+</p>
 
 #### Creacion de Unidades
 
-Cada unidad tiene asignada un costo en especia y un edificio creador. Las unidades de **infantería** se crean desde el **cuartel**. Los **vehículos** se crean en la **Fábrica Ligera** y la **Fábrica Pesada**. Cuanto más edificios creadores para una unidad, menos tiempo esta tarda en crearse. Sin embargo, hay solo una unidad creadora de la que emergen las unidades. Para designar el creador *seleccionamos* el edificio y damos *click derecho*.
+Cada unidad tiene un costo en especia y un edificio creador. Las unidades de **infantería** se crean desde el **cuartel**. Los **vehículos** se crean en la **fábrica ligera** y la **fábrica pesada**. Cuanto más edificios creadores para una unidad, menos tiempo esta tarda en crearse. Sin embargo, hay solo una unidad creadora de la que emergen las unidades. Para designar el creador seleccionamos el edificio y damos *click derecho* (la selección del edificio puede ser con un *click izquierdo* sobre el edificio o mediante una *selección* de mouse, manteniendo *click izquierdo* desde un punto del mapa hasta otro, definiendo de esta manera un rectángulo donde se seleccionan las unidades y/o edificios en nuestro poder). Existen unidades en los que el creador no será suficiente, y necesitamos tener una estructura **palacio** en pie para poder crearlas, como por ejemplo la **infantería sardaukar**.
+
+<p align="center">
+  <img width="400" src="https://user-images.githubusercontent.com/75450615/175114794-d48a411c-3efd-4115-bb52-3600e057a8d6.jpg">
+</p>
+
+#### Movimiento de unidades 
+
+Una vez creadas las unidades, podemos desplazarlas de un punto del mapa a otro. Para hacer esto, debemos primero seleccionarlas y luego hacemos *click derecho* en algún punto del mapa, y nuestras unidades inciaran un trayecto hasta ese punto. Si en este punto se encuentra una **colina**, o hacemos click sobre una unidad o edificio aliado, nuestras unidades seleccionadas se moverán a la primera *posición libre del mapa más cercana* a ese punto.
+
+<p align="center">
+  <img width="400" src="https://user-images.githubusercontent.com/75450615/175114144-f3d67eb3-08d8-4318-ad0c-5baf73eafcbd.jpg">
+</p>
+
+#### Cosechadoras
+
+Ya sabemos como crear unidades *cosechadoras* luego de construir una *fábrica pesada*. Para ponerlas a trabajar una vez que aparezcan junto a la fábrica, necesitamos primero una **refinería**, que es el edificio donde las cosechadoras depositan la especia colectada. Luego de construir la **refinería**, seleccionamos una o mas *cosechadoras* y luego hacemos click derecho en algún lugar del mapa con arena con especia, y automáticamente estas unidades iniciaran un ciclo de colectar especia y depositarla en la refinería, hasta agotar los recursos naturales de esa región del mapa.
+
+<p align="center">
+  <img width="400" src="https://user-images.githubusercontent.com/75450615/175112064-b6afb0f8-6863-46cb-81ff-50bf652c397f.jpg">
+</p>
+
+#### Combate
+
+Dentro de las unidades tenemos aquellas que se pueden utilizar para dañar otras unidades y edificios enemigos, como los rápidos **trikes** y los pesados **devastadores**. Para atacar al enemigo, debemos seleccionar nuestras unidades de ataque y luego hacemos *click derecho* sobre alguna unidad o edificio enemigo. Nuestras unidades ahora iniciaran un trayecto hasta estar a una distancia adecuada y luego comienzan a efectuar daño a los edificios o unidades enemigas que se encuentren en las proximidades del punto seleccionado. Cabe destacar que nuestras unidades no sólo atacan a la unidad enemiga seleccionada, sino también a cualquier unidad (o edificio) cercano a esa unidad.
+
+#### Fin del juego
+
+El juego termina cuando sólo queda un centro de construcción en pie, y la facción a la que pertenezca es declarada **ganadora** de la partida.
+
