@@ -73,7 +73,7 @@ int main(int argc, char *argv[]) {
     Server server(service_name,cells);
     std::thread server_thread(&Server::run, &server);
     while (1) {
-
+        sleep(10);
     }    //  Hold for input
     server.stop();
     server_thread.join();

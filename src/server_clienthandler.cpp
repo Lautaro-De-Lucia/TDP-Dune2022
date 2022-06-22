@@ -27,13 +27,13 @@ ClientHandler::ClientHandler(int init_energy, int init_spice ,Socket && client_s
     this->unit_time[TANK] = 0;
     this->unit_time[DEVASTATOR] = 0;
 
-    this->unit_creation_time[FREMEN] = 500;
-    this->unit_creation_time[INFANTRY] = 500;
-    this->unit_creation_time[SARDAUKAR] = 500;
-    this->unit_creation_time[HARVESTER] = 500;
-    this->unit_creation_time[TRIKE] = 500;
-    this->unit_creation_time[TANK] = 500;
-    this->unit_creation_time[DEVASTATOR] = 500;
+    this->unit_creation_time[FREMEN] = 30;
+    this->unit_creation_time[INFANTRY] = 30;
+    this->unit_creation_time[SARDAUKAR] = 30;
+    this->unit_creation_time[HARVESTER] = 30;
+    this->unit_creation_time[TRIKE] = 30;
+    this->unit_creation_time[TANK] = 30;
+    this->unit_creation_time[DEVASTATOR] = 30;
 }
 
 bool ClientHandler::isDone(){
@@ -145,7 +145,7 @@ void ClientHandler::handleRightClick(int x, int y) {
 
 void ClientHandler::reportState(Socket& client_socket){
     //  Sending spice & energy state
-    int max_spice = 2000 + this->game->getSpiceCapacity(this->faction);
+    int max_spice = 20000 + this->game->getSpiceCapacity(this->faction);
     if(this->spice >= max_spice)
         this->spice = max_spice;
     std::cout << max_spice << std::endl;

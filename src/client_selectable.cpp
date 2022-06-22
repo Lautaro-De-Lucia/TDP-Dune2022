@@ -159,7 +159,7 @@ void CStatic::render(player_t player_faction, SDL2pp::Renderer& renderer, int ca
         renderer.Copy(
 		    texture,						//	The sprite
 		    //	(x,y,w,h) -> top-left (x,y) coordinates, height & width
-		    SDL2pp::Rect(0,0,95,85),		//	'cut' from the sprite (NullOpt for no cut)
+		    SDL2pp::Rect(0,0,63,76),		//	'cut' from the sprite (NullOpt for no cut)
 		    SDL2pp::Rect(this->position.x*TILE_SIZE-cam_pos_x,this->position.y*TILE_SIZE-cam_pos_y,AIR_TRAP_DIM_X*TILE_SIZE,AIR_TRAP_DIM_Y*TILE_SIZE)				//	set to this part of the window		
 	    );
     }

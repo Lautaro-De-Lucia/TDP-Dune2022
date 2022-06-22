@@ -92,6 +92,10 @@ void GameHud::render(SDL2pp::Renderer& renderer){
 	for (size_t i = 0; i < unit_buttons.size(); i++) {
 		unit_buttons[i].render(renderer);
 	}
+
+	SDL2pp::Texture energy_texture(renderer, ENERGY_PATH);
+	renderer.Copy(energy_texture,SDL2pp::NullOpt,SDL2pp::Rect(1098,678-this->energy/20,7,6+this->energy/20));
+
 	std::string spice_values;
 	spice_values.append(std::to_string(this->spice));
 	spice_values.append(" | ");
