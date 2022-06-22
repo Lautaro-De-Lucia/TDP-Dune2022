@@ -69,7 +69,7 @@ Una vez escogida una casa y comenzado el juego, nos encontramos con una pantalla
 - duna
 - colina
 
-En la **arena** podemos mover nuestras unidades, pero no podemos conbstruir edificios. Las **dunas** tiene un efecto similar sólo que las unidades se mueven más lento a través de ella. Para construir edificios y cuarteles, debemos encontrar una buena ubicación con terreno rocoso, ya que la **roca** es el único terreno lo suficientemente sólido para construir sobre él. Las **colinas** funcionan como barreras naturales, ya que ninguna unidad puede atravesarla.
+En la **arena** podemos mover nuestras unidades, pero no podemos construir edificios. Las **dunas** tiene un efecto similar sólo que las unidades se mueven más lento a través de ella. Para construir edificios y cuarteles, debemos encontrar una buena ubicación con terreno rocoso, ya que la **roca** es el único terreno lo suficientemente sólido para construir sobre él. Las **colinas** funcionan como barreras naturales, ya que ninguna unidad puede atravesarla.
 
 #### Construcción de los edificios
 
