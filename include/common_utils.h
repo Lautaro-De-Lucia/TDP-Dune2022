@@ -11,41 +11,41 @@
 #define HARVESTER_LP 600
 #define HARVESTER_SPICE_COST 300
 #define HARVESTER_SPICE_CAPACITY 50
-#define HARVESTER_SPEED 12 * 10
+#define HARVESTER_SPEED 2
 
 #define TRIKE_LP 80
 #define TRIKE_SPICE_COST 100
-#define TRIKE_SPEED 64*10
+#define TRIKE_SPEED 4
 #define TRIKE_ATTACK 2
 #define TRIKE_RANGE 4
 
 #define FREMEN_LP 50
 #define FREMEN_SPICE_COST 100
-#define FREMEN_SPEED 20*10
+#define FREMEN_SPEED 2
 #define FREMEN_ATTACK 8
 #define FREMEN_RANGE 3
 
 #define INFANTRY_LP 50
 #define INFANTRY_SPICE_COST 50
-#define INFANTRY_SPEED 16*10
+#define INFANTRY_SPEED 2
 #define INFANTRY_ATTACK 2
 #define INFANTRY_RANGE 3
 
 #define SARDAUKAR_LP 80
 #define SARDAUKAR_SPICE_COST 100
-#define SARDAUKAR_SPEED 12*10
+#define SARDAUKAR_SPEED 2
 #define SARDAUKAR_ATTACK 10
 #define SARDAUKAR_RANGE 3
 
 #define TANK_LP 30
 #define TANK_SPICE_COST 300
-#define TANK_SPEED 40*10
+#define TANK_SPEED 3
 #define TANK_ATTACK 7
 #define TANK_RANGE 3
 
 #define DEVASTATOR_LP 400
 #define DEVASTATOR_SPICE_COST 400
-#define DEVASTATOR_SPEED 12*10
+#define DEVASTATOR_SPEED 2
 #define DEVASTATOR_ATTACK 8
 #define DEVASTATOR_RANGE 4
 
@@ -172,6 +172,18 @@ enum building_t {
     PALACE = 7,
     CONSTRUCTION_YARD = 8
 };
+
+enum direction_t {
+    TOP = 0,
+    TOP_RIGHT = 1,
+    RIGHT = 2,
+    BOTTOM_RIGHT = 3,
+    BOTTOM = 4,
+    BOTTOM_LEFT = 5,
+    LEFT = 6,
+    TOP_LEFT = 7
+};
+
 
 enum selectable_t {
     SEL_HARVESTER = 1,

@@ -5,9 +5,11 @@ void RenderHandler::renderMovable(
         SDL2pp::Renderer & renderer,
         player_t faction,
         unit_t type,
-        move_direction dir,
+        direction_t dir,
         int pos_x,
         int pos_y, 
+        int rel_pos_x,
+        int rel_pos_y,
         int cam_pos_x,
         int cam_pos_y,
         int tile_size)
@@ -15,8 +17,14 @@ void RenderHandler::renderMovable(
     int sprite_cut_x;
     int sprite_cut_y;
     int size;        
-    int xpos = pos_x*tile_size-cam_pos_x;
-    int ypos = pos_y*tile_size-cam_pos_y;
+
+    //std::cout << "Current position: (" << pos_x << "," << pos_y << ")" << std::endl;
+    //std::cout << "Current position in pixels: (" << pos_x*tile_size << "," << pos_y*tile_size << ")" << std::endl;
+    //std::cout << "X & Y offest: (" << -rel_pos_x << "," << -rel_pos_y << ")" << std::endl;
+    //std::cout << "Current position in pixels + offset: (" << pos_x*tile_size-rel_pos_x << "," << pos_y*tile_size-rel_pos_y << ")" << std::endl;
+
+    int xpos = pos_x*tile_size-cam_pos_x+rel_pos_x;
+    int ypos = pos_y*tile_size-cam_pos_y+rel_pos_y;
 
     switch(type){
         case TRIKE:

@@ -12,7 +12,7 @@ lp_texture(renderer,lp_path)
     this->selected = false;
 }
 
-void CSelectable::update(player_t player_faction,int lp,int pos_x,int pos_y,bool selected,bool special,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
+void CSelectable::update(player_t player_faction, int lp,int pos_x,int pos_y,direction_t direction,bool moving,bool selected,bool special,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
     int hsprites = 7;
     for (size_t state = 1 ; state <= hsprites ; state++){
         if (LP > (max_LP -(max_LP / 7)*state) && LP <= (max_LP -(max_LP / hsprites)*(state-1))){
@@ -26,31 +26,55 @@ void CSelectable::update(player_t player_faction,int lp,int pos_x,int pos_y,bool
     this->selected = selected;
 }
 
-void CStatic::update(player_t player_faction, int lp,bool selected,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
-    CSelectable::update(player_faction,lp,this->position.x,this->position.y,selected,false,renderer,cam_pos_x,cam_pos_y);
+void CStatic::update(player_t player_faction, int lp,int pos_x,int pos_y,direction_t direction,bool moving,bool selected,bool special,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
+    CSelectable::update(player_faction,lp,this->position.x,this->position.y,TOP,false,selected,false,renderer,cam_pos_x,cam_pos_y);
     this->render(player_faction, renderer, cam_pos_x, cam_pos_y);
 }
 
-void CMovable::update(player_t player_faction, int lp,int pos_x,int pos_y,bool selected,bool attacking,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
-    
-    if (pos_x == this->position.x && pos_y > this->position.y)
-        this->dir = BOTTOM;
-    if (pos_x > this->position.x && pos_y > this->position.y)
-        this->dir = BOTTOM_RIGHT;    
-    if (pos_x > this->position.x && pos_y == this->position.y)
-        this->dir = RIGHT;
-    if (pos_x > this->position.x && pos_y < this->position.y)
-        this->dir = TOP_RIGHT;
-    if (pos_x == this->position.x && pos_y < this->position.y)
-        this->dir = TOP;
-    if (pos_x < this->position.x && pos_y < this->position.y)
-        this->dir = TOP_LEFT; 
-    if (pos_x < this->position.x && pos_y == this->position.y)
-        this->dir = LEFT;
-    if (pos_x < this->position.x && pos_y > this->position.y)
-        this->dir = BOTTOM_LEFT;                    
-        
-    CSelectable::update(player_faction,lp,pos_x,pos_y,selected,attacking,renderer,cam_pos_x,cam_pos_y);
+void CMovable::update(player_t player_faction, int lp,int pos_x,int pos_y,direction_t direction,bool moving,bool selected,bool special,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){   
+
+    std::cout << "Updating on client" << std::endl;
+
+    CSelectable::update(player_faction,lp,pos_x,pos_y,dir,moving,selected,special,renderer,cam_pos_x,cam_pos_y);
+
+    std::cout << "Current direction: " << direction << std::endl;
+
+    this->dir = direction;
+    this->sp = special;
+
+    std::cout << "Dirección: " << this->dir << std::endl;
+    std::cout << "Moviendose: " << moving << std::endl;
+    std::cout << "Posicion actual: " << this->position << std::endl;
+
+    if(moving == true){
+        if(this->dir == TOP)
+            this->rel_pos_y-=this->speed;
+        if(this->dir == TOP_RIGHT)
+            this->rel_pos_y-=this->speed,
+            this->rel_pos_x+=this->speed;
+        if(this->dir == RIGHT)
+            this->rel_pos_x+=this->speed;
+        if(this->dir == BOTTOM_RIGHT)
+            this->rel_pos_y+=this->speed,
+            this->rel_pos_x+=this->speed;
+        if(this->dir == BOTTOM)
+            this->rel_pos_y+=this->speed;
+        if(this->dir == BOTTOM_LEFT)
+            this->rel_pos_y+=this->speed,
+            this->rel_pos_x-=this->speed;
+        if(this->dir == LEFT)
+            this->rel_pos_x-=this->speed;
+        if(this->dir == TOP_LEFT)
+            this->rel_pos_y-=this->speed,
+            this->rel_pos_x-=this->speed;
+    }
+
+    if(std::abs(this->rel_pos_x) > TILE_SIZE || std::abs(this->rel_pos_y) > TILE_SIZE)
+        this->rel_pos_x = 0,this->rel_pos_y = 0;
+
+    std::cout << "X offset: " << rel_pos_x << std::endl;
+    std::cout << "Y offset: " << rel_pos_y << std::endl;
+
     this->render(player_faction, renderer, cam_pos_x, cam_pos_y);
 }
 
@@ -83,9 +107,34 @@ texture(renderer,path)
             this->texture.SetColorMod(200,255,200);
             break;
     }
+    switch(type){
+        case TRIKE:
+            this->speed = TRIKE_SPEED;
+            break;
+        case HARVESTER:
+            this->speed = HARVESTER_SPEED;
+            break;    
+        case FREMEN:
+            this->speed = FREMEN_SPEED;
+            break;
+        case INFANTRY:
+            this->speed = INFANTRY_SPEED;
+            break; 
+        case SARDAUKAR:
+            this->speed = SARDAUKAR_SPEED;
+            break;
+        case TANK:
+            this->speed = TANK_SPEED;
+            break; 
+        case DEVASTATOR:
+            this->speed = DEVASTATOR_SPEED;
+            break;
+    }
     this->dir = BOTTOM;
-    this->type = type; 
-    this->special = special;    
+    this->type = type;
+    this->rel_pos_x = 0;
+    this->rel_pos_y = 0; 
+    this->sp = false;   
 }
 
 CStatic::CStatic(building_t type, int id,int faction,int lp,int pos_x,int pos_y,SDL2pp::Renderer& renderer, const std::string& lp_path, const std::string& path) 
@@ -108,15 +157,13 @@ texture(renderer,path)
 }
 
 void CMovable::render(player_t player_faction, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
-    this->render_handler.renderMovable(this->texture,renderer,player_faction,this->type,this->dir,this->position.x,this->position.y,cam_pos_x,cam_pos_y,TILE_SIZE);          
-
+    this->render_handler.renderMovable(this->texture,renderer,player_faction,this->type,this->dir,this->position.x,this->position.y,this->rel_pos_x,this->rel_pos_y,cam_pos_x,cam_pos_y,TILE_SIZE);          
     if (this->selected == true && this->faction == player_faction)
         renderer.Copy(
             lp_texture,
             SDL2pp::Rect(30,20*(this->health-1),100,20),
             SDL2pp::Rect((this->position.x-0.5)*TILE_SIZE-cam_pos_x,(this->position.y-0.5)*TILE_SIZE-cam_pos_y,30,5) 		
     );
-
 }
 
 void CStatic::render(player_t player_faction, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){

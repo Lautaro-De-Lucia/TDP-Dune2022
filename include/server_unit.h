@@ -8,7 +8,9 @@
 class Unit : public Selectable {
  protected:
     std::string name;
+    direction_t direction;
     bool moving;
+    bool targeting;
     int spice;
     int speed;
     size_t current_time;

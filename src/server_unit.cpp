@@ -7,9 +7,10 @@ Selectable(ID,faction, LP,pos,dim_x,dim_y,true)
 {
     this->spice = spice;
     this->speed = speed;
+    this->direction = BOTTOM;
     this->moving = false;
     this->current_time = 0;
-    this->movement_time = std::round(1000/speed);
+    this->movement_time = TILE_SIZE;
 }
 
 response_t Unit::place(Board& board,std::vector<Position>& positions,int * spice){
@@ -17,7 +18,6 @@ response_t Unit::place(Board& board,std::vector<Position>& positions,int * spice
 }
 
 void Unit::sendState(Protocol & protocol, Socket & client_socket){
-    std::cout << "I really shouldn't be here" << std::endl;
 }
 
 void Unit::react(int x, int y, Board& board){}
@@ -27,6 +27,7 @@ void Unit::receiveDamage(int damage){}
 
 void Unit::move(int x, int y, Board& board) {
     std::vector<Position> new_path;
+    //std::cout << "Moving to position: " << Position(x,y) << std::endl;
     if (Position(x,y) == this->getPosition()) {
         this->remaining_path = new_path;
         return;
@@ -35,8 +36,10 @@ void Unit::move(int x, int y, Board& board) {
     aStar aStar;
     new_path = aStar.algorithm(this->getPosition(),Position(x,y),board);
     this->remaining_path = new_path;
-    if(new_path.size() == 0)
+    if(new_path.size() == 0){ 
+        std::cout << "I shouldn't be here" << std::endl;
         this->moving == false;
+    }
 }
 
 Harvester::Harvester(int ID,player_t faction,int LP,int spice, Position pos, int dim_x, int dim_y,int speed, int max_spice) 
@@ -163,10 +166,10 @@ void Harvester::update(State& state, Board& board){
                 }
             }
         }
-        this->current_time++;
+        this->current_time+=this->speed;
         if (this->remaining_path.size() == 0) {
             this->moving = false;
-        } else if (this->current_time == this->movement_time) {
+        } else if (this->current_time >= this->movement_time) {
             this->current_time = 0;
             Position next = this->remaining_path.back();
             if(!(board.getCell(next.x,next.y).canTraverse())) {
@@ -242,22 +245,26 @@ Unit(ID,faction,LP,spice,pos,dim_x,dim_y,speed)
 {
     this->attack_points = attack;
     this->range = range;
+    this->direction = BOTTOM;
+    this->speed = speed;
     this->moving = false;
+    this->targeting = false;
     this->attacking = false;
 }
 
 void Trike::react(int x, int y, Board& board) {
+    //std::cout << "Trike reacting! " << std::endl;
     if (board.hasEnemy(x,y,this->faction)){
         this->attack(x,y,board);
         return;
     }
     if (!board.canTraverse(x,y))        
-        return;    
+        return;        
     this->move(x,y,board);
 }
 
 void Trike::attack(int x, int y, Board& board){
-    this->attacking = true;
+    this->targeting = true;
 	this->enemy_position = Position(x,y);
     this->moving_position = this->enemy_position;
 
@@ -293,31 +300,53 @@ bool Trike::enemySearch(Board & board){
 }
 
 void Trike::update(State & state, Board& board){
-
+    std::cout << "Updating on server" << std::endl;
     //  UPDATE MOVEMENT
-    if(this->moving == false && this->attacking == false){
+    if(this->moving == false && this->targeting == false){
 		if (this->enemySearch(board) == true)
 		    this->attack(this->enemy_position.x,this->enemy_position.y,board);
     }
-    if (this->attacking == true){
+    if (this->targeting == true){
         if(board.hasEnemy(this->enemy_position.x,this->enemy_position.y,this->faction)){
             if(!board.canTraverse(this->moving_position.x,this->moving_position.y))
                 if(this->position.x != this->moving_position.x || this->position.y != this->moving_position.y)
                     this->attack(this->enemy_position.x,this->enemy_position.y,board);
             if(board.get_distance_between(this->position,this->enemy_position) < this->range){
+                this->attacking = true;
                 board.dealDamage(this->enemy_position.x,this->enemy_position.y,this->attack_points);
             }
         } else{
             this->moving = false;
+            this->targeting = false;
             this->attacking = false;	
             return;
         }
     }
     if(this->moving == true){
-        this->current_time++;
+        //std::cout << "It is moving with the direction: "<< this->direction << std::endl;
+        Position next_position = remaining_path[1];
+        if (next_position.x == this->position.x && next_position.y > this->position.y)
+            this->direction = BOTTOM;
+        if (next_position.x > this->position.x && next_position.y > this->position.y)
+            this->direction = BOTTOM_RIGHT;    
+        if (next_position.x > this->position.x && next_position.y == this->position.y)
+            this->direction = RIGHT;
+        if (next_position.x > this->position.x && next_position.y < this->position.y)
+            this->direction = TOP_RIGHT;
+        if (next_position.x == this->position.x && next_position.y < this->position.y)
+            this->direction = TOP;
+        if (next_position.x < this->position.x && next_position.y < this->position.y)
+            this->direction = TOP_LEFT; 
+        if (next_position.x < this->position.x && next_position.y == this->position.y)
+            this->direction = LEFT;
+        if (next_position.x < this->position.x && next_position.y > this->position.y)
+            this->direction = BOTTOM_LEFT; 
+        std::cout << "Current time to change: " <<this->current_time << std::endl;
+        this->current_time+=this->speed;
+        std::cout << "Current position: " <<this->position<< std::endl;
         if (this->remaining_path.size() == 0) {
             this->moving = false;
-        } else if (this->current_time == this->movement_time) {
+        } else if (this->current_time >= this->movement_time) {
             this->current_time = 0;
             Position next = this->remaining_path.back();
             if(!(board.getCell(next.x,next.y).canTraverse())) {
@@ -335,11 +364,26 @@ void Trike::update(State & state, Board& board){
                 this->remaining_path.pop_back();
             }
         }
-        if(this->remaining_path.size() == 0)
-            this->moving = false;
     }
+    //std::cout << "But before leaving this function, this direction will have changed to: " << this->direction <<std::endl;
     Selectable::update(state,board);
 }
+
+void Trike::sendState(Protocol & protocol, Socket & client_socket){
+    //std::cout << "Now this direction: " << this->direction << " Will be sent" << std::endl;
+    protocol.send_trike(
+        this->ID,
+        this->faction,
+        this->LP,
+        this->position.x,
+        this->position.y,
+        this->direction,
+        this->moving,
+        this->selected,
+        this->attacking,
+        client_socket); 
+}
+
 
 void Trike::occupy(Board & board){
     board.getCell(this->position.x,this->position.y).occupy(this->ID);
@@ -365,17 +409,6 @@ response_t Trike::place(Board& board,std::vector<Position>& positions,int * spic
 }
 
 
-void Trike::sendState(Protocol & protocol, Socket & client_socket){
-    protocol.send_trike(
-        this->ID,
-        this->faction,
-        this->LP,
-        this->position.x,
-        this->position.y,
-        this->selected,
-        this->attacking,
-        client_socket); 
-}
 
 
 Fremen::Fremen(int ID,player_t faction, int LP,int spice, Position pos, int dim_x, int dim_y,int speed,int attack,int range)
@@ -456,10 +489,10 @@ void Fremen::update(State & state, Board& board){
         }
     }
     if(this->moving == true){
-        this->current_time++;
+        this->current_time+=this->speed;
         if (this->remaining_path.size() == 0) {
             this->moving = false;
-        } else if (this->current_time == this->movement_time) {
+        } else if (this->current_time >= this->movement_time) {
             this->current_time = 0;
             Position next = this->remaining_path.back();
             if(!(board.getCell(next.x,next.y).canTraverse())) {
@@ -597,10 +630,10 @@ void Infantry::update(State & state, Board& board){
         }
     }
     if(this->moving == true){
-        this->current_time++;
+        this->current_time+=this->speed;
         if (this->remaining_path.size() == 0) {
             this->moving = false;
-        } else if (this->current_time == this->movement_time) {
+        } else if (this->current_time >= this->movement_time) {
             this->current_time = 0;
             Position next = this->remaining_path.back();
             if(!(board.getCell(next.x,next.y).canTraverse())) {
@@ -739,10 +772,10 @@ void Sardaukar::update(State & state, Board& board){
         }
     }
     if(this->moving == true){
-        this->current_time++;
+        this->current_time+=this->speed;
         if (this->remaining_path.size() == 0) {
             this->moving = false;
-        } else if (this->current_time == this->movement_time) {
+        } else if (this->current_time >= this->movement_time) {
             this->current_time = 0;
             Position next = this->remaining_path.back();
             if(!(board.getCell(next.x,next.y).canTraverse())) {
@@ -881,10 +914,10 @@ void Tank::update(State & state, Board& board){
         }
     }
     if(this->moving == true){
-        this->current_time++;
+        this->current_time+=this->speed;
         if (this->remaining_path.size() == 0) {
             this->moving = false;
-        } else if (this->current_time == this->movement_time) {
+        } else if (this->current_time >= this->movement_time) {
             this->current_time = 0;
             Position next = this->remaining_path.back();
             if(!(board.getCell(next.x,next.y).canTraverse())) {
@@ -1023,10 +1056,10 @@ void Devastator::update(State & state, Board& board){
         }
     }
     if(this->moving == true){
-        this->current_time++;
+        this->current_time+=this->speed;
         if (this->remaining_path.size() == 0) {
             this->moving = false;
-        } else if (this->current_time == this->movement_time) {
+        } else if (this->current_time >= this->movement_time) {
             this->current_time = 0;
             Position next = this->remaining_path.back();
             if(!(board.getCell(next.x,next.y).canTraverse())) {

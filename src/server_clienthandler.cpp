@@ -11,11 +11,10 @@ ClientHandler::ClientHandler(int init_energy, int init_spice ,Socket && client_s
 {
     this->faction = (player_t) -1;
 
-	for (unit_t UNIT : units){
-        this->units_to_create[UNIT] = 0;
-        this->unit_time[UNIT] = 0;
-        this->unit_creation_time[UNIT] = 30;
-    }
+	for (unit_t UNIT : units)
+        this->units_to_create[UNIT] = 0,
+        this->unit_time[UNIT] = 0,
+        this->unit_creation_time[UNIT] = 2;
 
 }
 
@@ -128,6 +127,7 @@ void ClientHandler::handleRightClick(int x, int y) {
 
 void ClientHandler::reportState(Socket& client_socket){
     //  Sending spice & energy state
+    std::cout << "Reporting state to client" << std::endl;
     int max_spice = 20000 + this->game->getSpiceCapacity(this->faction);
     if(this->spice >= max_spice)
         this->spice = max_spice;
