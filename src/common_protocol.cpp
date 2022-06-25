@@ -464,7 +464,7 @@ void Protocol::receive_selectable_type(selectable_t& type, Socket& client_socket
     return;
 }
 
-void Protocol::send_trike(int id, int faction, int lp, int pos_x, int pos_y,int direction, bool moving,bool selected, bool attacking, bool waiting, Socket& client_socket) {
+void Protocol::send_trike(int id, int faction, int lp, int pos_x, int pos_y,int direction, bool moving, bool selected, bool attacking, int e_pos_x, int e_pos_y, bool waiting, Socket& client_socket) {
 
     this->send_selectable_type(SEL_TRIKE, client_socket);
 
@@ -479,6 +479,12 @@ void Protocol::send_trike(int id, int faction, int lp, int pos_x, int pos_y,int 
     uint8_t _attacking = (uint8_t) attacking;
     uint8_t attacking_buffer = (uint8_t) _attacking;
 
+    uint16_t _e_pos_x = (uint16_t) e_pos_x;
+    uint16_t e_pos_x_buffer = (uint16_t) htons(_e_pos_x);
+
+    uint16_t _e_pos_y = (uint16_t) e_pos_y;
+    uint16_t e_pos_y_buffer = (uint16_t) htons(_e_pos_y);
+
     uint8_t _waiting = (uint8_t) waiting;
     uint8_t waiting_buffer = (uint8_t) _waiting;
 
@@ -492,6 +498,12 @@ void Protocol::send_trike(int id, int faction, int lp, int pos_x, int pos_y,int 
     handle_dispatch(was_closed, sent_size);
 
     sent_size = client_socket.sendall(&attacking_buffer, sizeof(attacking_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&e_pos_x_buffer, sizeof(e_pos_x_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&e_pos_y_buffer, sizeof(e_pos_y_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
 
     sent_size = client_socket.sendall(&waiting_buffer, sizeof(waiting_buffer), &was_closed);
@@ -690,7 +702,7 @@ void Protocol::send_refinery(int id, int faction, int lp, int pos_x, int pos_y, 
     this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 }
 
-void Protocol::receive_trike(int& id, int& faction, int& lp, int& pos_x, int& pos_y,int& dir,bool& moving,bool& selected, bool& attacking, bool & waiting, Socket& client_socket) {
+void Protocol::receive_trike(int& id, int& faction, int& lp, int& pos_x, int& pos_y, int& dir, bool& moving,bool& selected, bool& attacking, int& e_pos_x, int& e_pos_y, bool & waiting, Socket& client_socket) {
 
     this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 
@@ -702,6 +714,12 @@ void Protocol::receive_trike(int& id, int& faction, int& lp, int& pos_x, int& po
 
     uint8_t attacking_buffer;
     uint8_t _attacking;
+
+    uint16_t e_pos_x_buffer;
+    uint16_t _e_pos_x;
+
+    uint16_t e_pos_y_buffer;
+    uint16_t _e_pos_y;
 
     uint8_t waiting_buffer;
     uint8_t _waiting;
@@ -723,6 +741,16 @@ void Protocol::receive_trike(int& id, int& faction, int& lp, int& pos_x, int& po
     handle_receive(was_closed, recv_size);
     _attacking = (uint8_t) attacking_buffer;
     attacking = (bool) _attacking;
+
+    recv_size = client_socket.recvall(&e_pos_x_buffer, sizeof(e_pos_x_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _e_pos_x = (uint16_t) ntohs(e_pos_x_buffer);
+    e_pos_x = (int) _e_pos_x;
+
+    recv_size = client_socket.recvall(&e_pos_y_buffer, sizeof(e_pos_y_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _e_pos_y = (uint16_t) ntohs(e_pos_y_buffer);
+    e_pos_y = (int) _e_pos_y;
 
     recv_size = client_socket.recvall(&waiting_buffer, sizeof(waiting_buffer), &was_closed);
     handle_receive(was_closed, recv_size);

@@ -418,6 +418,8 @@ void Trike::sendState(Protocol & protocol, Socket & client_socket){
         this->moving,
         this->selected,
         this->attacking,
+        this->enemy_position.x,
+        this->enemy_position.y,
         this->waiting,
         client_socket); 
 }

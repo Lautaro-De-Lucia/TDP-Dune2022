@@ -294,6 +294,7 @@ void Player::update() {
     //  Setup Variables
     int id,faction,lp,pos_x,pos_y,direction,energy,spice,c_spice; //  Values
     bool selected,moving,harvesting,attacking,waiting; //  State flags
+    int enemy_pos_x,enemy_pos_y; // Enemy positions
     int  toread,c;                      //  Helper variables
     //  Update values for player
     this->protocol.receive_player_state(spice,c_spice,energy,this->socket);
@@ -328,7 +329,7 @@ void Player::update() {
         this->protocol.receive_selectable_type(type,this->socket);
         switch(type){
             case SEL_TRIKE:
-                this->protocol.receive_trike(id,faction,lp,pos_x,pos_y,direction,moving,selected,attacking,waiting,this->socket);
+                this->protocol.receive_trike(id,faction,lp,pos_x,pos_y,direction,moving,selected,attacking,enemy_pos_x,enemy_pos_y,waiting,this->socket);
                 if (this->contains(id)){
                     this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,(direction_t)direction,moving,selected,attacking,waiting,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
