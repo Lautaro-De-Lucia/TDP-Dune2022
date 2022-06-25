@@ -129,7 +129,7 @@ std::vector<Position> Board::get_traversable_neighbors_of(Position pos, size_t d
             if (neighbor.x < 0 || neighbor.y < 0)
                 continue;                
             // check if neighbor is not traversable
-            if (!(this->cells[neighbor.x][neighbor.y].canTraverse()))
+            if (!(this->cells[neighbor.x][neighbor.y].canTraverse())||(this->cells[neighbor.x][neighbor.y].isOccupied()))
                 continue;
             valid_neighbors.push_back(neighbor);
         }

@@ -261,14 +261,12 @@ Unit(ID,faction,LP,spice,pos,dim_x,dim_y,speed)
 }
 
 void Trike::react(int x, int y, Board& board) {
-    //std::cout << "Trike reacting! " << std::endl;
     if (board.hasEnemy(x,y,this->faction)){
         this->attack(x,y,board);
         return;
     }
     if (!board.canTraverse(x,y))        
         return;
-
     this->pending_move.push(Position(x, y));        
 }
 
@@ -363,14 +361,14 @@ void Trike::update(State & state, Board& board){
     if(this->moving == true){
         //  Si el camino termino, dejar de moverse
         if (this->remaining_path.size() == 0) {
+            std::cout << this->ID << "-> Last direction: " << this->direction << std::endl;
             this->moving = false;
             this->current_time = 0;
             return;
-        } 
-        std::cout << "asd" << std::endl;
+        }
         //  Si se esta moviendo, siempre apunta a la direccion en la que se mueve
         Position next_position = remaining_path.back();
-        this->focus(next_position);        
+        this->focus(next_position);
         //  Miro la próxima posición
         Cell& next_cell = board.getCell(next_position.x,next_position.y); 
         if(next_cell.canTraverse() && (next_cell.getID() == -1 || next_cell.getID() == this->ID)){
@@ -381,7 +379,9 @@ void Trike::update(State & state, Board& board){
         } else {
             //  Si no puedo ir 
             if (this->remaining_path.size() <= 1) {
+                //  Me quedo
                 this->waiting = true;
+                this->moving = false;
                 std::vector<Position> empty_path;
                 this->remaining_path = empty_path;
             } else {
@@ -395,12 +395,10 @@ void Trike::update(State & state, Board& board){
         if (this->current_time >= this->movement_time) {
             //  Cuando se cumple el tiempo, cambiar de posición
             this->current_time = 0; //  Reset counter
-            if (this->remaining_path.size() != 0) {
-                    board.getCell(this->position.x,this->position.y).disoccupy();
-                    this->position = this->remaining_path.back();
-                    this->occupy(board);
-                    this->remaining_path.pop_back();
-            } 
+            board.getCell(this->position.x,this->position.y).disoccupy();
+            this->position = this->remaining_path.back();
+            this->occupy(board);
+            this->remaining_path.pop_back();
         }
     }
 }
