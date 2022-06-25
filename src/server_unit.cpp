@@ -258,8 +258,9 @@ Unit(ID,faction,LP,spice,pos,dim_x,dim_y,speed)
     this->moving = false;
     this->targeting = false;
     this->attacking = false;
+    this->enemy_position.x = -1;
+    this->enemy_position.y = -1;
 }
-
 void Trike::react(int x, int y, Board& board) {
     if (board.hasEnemy(x,y,this->faction)){
         this->attack(x,y,board);
@@ -353,7 +354,9 @@ void Trike::update(State & state, Board& board){
         } else{
             this->moving = false;
             this->targeting = false;
-            this->attacking = false;	
+            this->attacking = false;
+            this->enemy_position.x = -1;
+            this->enemy_position.y = -1;	
             return;
         }
     }
