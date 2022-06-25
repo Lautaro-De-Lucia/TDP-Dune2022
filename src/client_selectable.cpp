@@ -12,7 +12,7 @@ lp_texture(renderer,lp_path)
     this->selected = false;
 }
 
-void CSelectable::update(player_t player_faction, int lp,int pos_x,int pos_y,direction_t direction,bool moving,bool selected,bool special,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
+void CSelectable::update(player_t player_faction, int lp,int pos_x,int pos_y,direction_t direction,bool moving,bool selected,bool special,bool waiting,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
     int hsprites = 7;
     for (size_t state = 1 ; state <= hsprites ; state++){
         if (LP > (max_LP -(max_LP / 7)*state) && LP <= (max_LP -(max_LP / hsprites)*(state-1))){
@@ -26,14 +26,14 @@ void CSelectable::update(player_t player_faction, int lp,int pos_x,int pos_y,dir
     this->selected = selected;
 }
 
-void CStatic::update(player_t player_faction, int lp,int pos_x,int pos_y,direction_t direction,bool moving,bool selected,bool special,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
-    CSelectable::update(player_faction,lp,this->position.x,this->position.y,TOP,false,selected,false,renderer,cam_pos_x,cam_pos_y);
+void CStatic::update(player_t player_faction, int lp,int pos_x,int pos_y,direction_t direction,bool moving,bool selected,bool special,bool waiting,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
+    CSelectable::update(player_faction,lp,this->position.x,this->position.y,TOP,false,selected,false,false,renderer,cam_pos_x,cam_pos_y);
     this->render(player_faction, renderer, cam_pos_x, cam_pos_y);
 }
 
-void CMovable::update(player_t player_faction, int lp,int pos_x,int pos_y,direction_t direction,bool moving,bool selected,bool special,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){   
+void CMovable::update(player_t player_faction, int lp,int pos_x,int pos_y,direction_t direction,bool moving,bool selected,bool special,bool waiting,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){   
 
-    CSelectable::update(player_faction,lp,pos_x,pos_y,dir,moving,selected,special,renderer,cam_pos_x,cam_pos_y);
+    CSelectable::update(player_faction,lp,pos_x,pos_y,dir,moving,selected,special,waiting,renderer,cam_pos_x,cam_pos_y);
 
     if (this->dir != direction) {
         this->rel_pos_x = 0;
@@ -43,7 +43,7 @@ void CMovable::update(player_t player_faction, int lp,int pos_x,int pos_y,direct
     this->dir = direction;
     this->sp = special;
 
-    if(moving == true){
+    if(moving == true && waiting == false){
         if(this->dir == TOP)
             this->rel_pos_y-=this->speed;
         if(this->dir == TOP_RIGHT)

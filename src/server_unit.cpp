@@ -9,6 +9,7 @@ Selectable(ID,faction, LP,pos,dim_x,dim_y,true)
     this->speed = speed;
     this->direction = BOTTOM;
     this->moving = false;
+    this->waiting = false;
     this->current_time = 0;
     this->movement_time = TILE_SIZE;
 }
@@ -338,7 +339,7 @@ void Trike::update(State & state, Board& board){
         }
     }
     if(this->moving == true){
-
+        //  Si se esta moviendo, siempre apunta a la direccion en la que se mueve
         if (this->remaining_path.size() != 0) {
             //std::cout << "It is moving with the direction: "<< this->direction << std::endl;
             Position next_position = remaining_path.back();
@@ -360,7 +361,19 @@ void Trike::update(State & state, Board& board){
                 this->direction = BOTTOM_LEFT;
             this->current_time+=this->speed;
         }
-
+        if(this->remaining_path.size() != 0){
+            Position next = this->remaining_path.back();
+            if(!(board.getCell(next.x,next.y).canTraverse())){
+                this->waiting = true;
+            } else {
+                this->waiting = false;
+            }
+        }
+        //if(this->waiting == true){
+        //    Position next = this->remaining_path.back();
+        //        if(board.getCell(next.x,next.y).canTraverse())
+        //            this->waiting = false;
+        //}
         if (this->remaining_path.size() == 0) {
             this->moving = false;
             this->current_time = 0;
@@ -369,9 +382,13 @@ void Trike::update(State & state, Board& board){
             Position next = this->remaining_path.back();
             if(!(board.getCell(next.x,next.y).canTraverse())) {
                 if (this->remaining_path.size() <= 1) {
+                    std::cout << this->ID << ": Staying here..." << std::endl;
+          //          this->waiting = true;
                     std::vector<Position> empty_path;
                     this->remaining_path = empty_path;
                 } else {
+                    std::cout << this->ID << ": Recalculating path..." << std::endl;
+          //        this->waiting = true;
                     this->move(this->remaining_path.front().x,this->remaining_path.front().y,board);
                     Position next_position = remaining_path.back();
                     if (next_position.x == this->position.x && next_position.y > this->position.y)
@@ -393,11 +410,11 @@ void Trike::update(State & state, Board& board){
                 }
             }
             if (this->remaining_path.size() != 0) {
-                board.getCell(this->position.x,this->position.y).disoccupy();
-                this->position = this->remaining_path.back();
-                this->occupy(board);
-                this->remaining_path.pop_back();
-            }
+                    board.getCell(this->position.x,this->position.y).disoccupy();
+                    this->position = this->remaining_path.back();
+                    this->occupy(board);
+                    this->remaining_path.pop_back();
+            } 
         }
     }
     //std::cout << "But before leaving this function, this direction will have changed to: " << this->direction <<std::endl;
@@ -416,6 +433,7 @@ void Trike::sendState(Protocol & protocol, Socket & client_socket){
         this->moving,
         this->selected,
         this->attacking,
+        this->waiting,
         client_socket); 
 }
 

@@ -12,6 +12,7 @@ class Unit : public Selectable {
     std::string name;
     direction_t direction;
     bool moving;
+    bool waiting;
     bool targeting;
     int spice;
     int speed;

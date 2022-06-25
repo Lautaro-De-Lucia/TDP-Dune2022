@@ -48,7 +48,7 @@ class CSelectable {
     health_t health;
  public:
     CSelectable(int id,int faction,int lp,int pos_x,int pos_y,SDL2pp::Renderer& renderer, const std::string& lp_path);
-    virtual void update(player_t player_faction, int lp,int pos_x,int pos_y,direction_t direction,bool moving,bool selected,bool special,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
+    virtual void update(player_t player_faction, int lp,int pos_x,int pos_y,direction_t direction,bool moving,bool selected,bool special,bool waiting,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
     virtual void render(player_t player_faction, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
     int get_life_points();
     int getID();
@@ -72,7 +72,7 @@ class CMovable : public CSelectable {
  public:
     CMovable(unit_t type,int id,int faction,int lp,int pos_x,int pos_y,SDL2pp::Renderer& renderer, const std::string& lp_path , const std::string& path);
     virtual void render(player_t player_faction, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
-    virtual void update(player_t player_faction, int lp,int pos_x,int pos_y,direction_t direction,bool moving,bool selected,bool special,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
+    virtual void update(player_t player_faction, int lp,int pos_x,int pos_y,direction_t direction,bool moving,bool selected,bool special,bool waiting,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
 }; 
 
 class CStatic : public CSelectable {
@@ -82,6 +82,6 @@ class CStatic : public CSelectable {
  public:
     CStatic(building_t type,int id,int faction,int lp,int pos_x,int pos_y,SDL2pp::Renderer& renderer, const std::string& lp_path ,const std::string& path);
     virtual void render(player_t player_faction, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
-    virtual void update(player_t player_faction, int lp,int pos_x,int pos_y,direction_t direction,bool moving,bool selected,bool special,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
+    virtual void update(player_t player_faction, int lp,int pos_x,int pos_y,direction_t direction,bool moving,bool selected,bool special,bool waiting,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
 };
 
