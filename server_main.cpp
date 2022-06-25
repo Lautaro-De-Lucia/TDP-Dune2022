@@ -22,7 +22,7 @@ std::vector<std::vector<cell_t>> generate_server_map (std::string tile_map_file)
     //  Load .map
 	std::ifstream map(tile_map_file.c_str());
 	if (map.fail()){
-		std::cout << "Failed to load map" << std::endl; 
+		std::cerr << "Failed to load map" << std::endl; 
 		exit(1);
 	}
 	//	Read & load tiles
@@ -48,11 +48,11 @@ std::vector<std::vector<cell_t>> generate_server_map (std::string tile_map_file)
             if (cell[0] == 'p')
                 type = PIT;    
 			if (map.fail()){
-				std::cout << "Unexpected EOF on tile map" << std::endl; 
+				std::cerr << "Unexpected EOF on tile map" << std::endl; 
 				exit(1);
 			}
 			if (type < 0 || type > TOTAL_TILE_SPRITES){
-				std::cout << "This ain't a valid tile number" << std::endl; 
+				std::cerr << "This ain't a valid tile number" << std::endl; 
 				exit(1);
 			}
 			//	Load cell to board

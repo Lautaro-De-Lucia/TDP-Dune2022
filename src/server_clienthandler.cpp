@@ -127,7 +127,6 @@ void ClientHandler::handleRightClick(int x, int y) {
 
 void ClientHandler::reportState(Socket& client_socket){
     //  Sending spice & energy state
-    std::cout << "Reporting state to client" << std::endl;
     int max_spice = 20000 + this->game->getSpiceCapacity(this->faction);
     if(this->spice >= max_spice)
         this->spice = max_spice;

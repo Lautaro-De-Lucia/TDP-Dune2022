@@ -26,27 +26,25 @@ void Unit::receiveDamage(int damage){}
 
 
 void Unit::move(int x, int y, Board& board) {
-    std::vector<Position> empty_path;
     std::vector<Position> new_path;
     //std::cout << "Moving to position: " << Position(x,y) << std::endl;
     if (Position(x,y) == this->getPosition()) {
-        this->remaining_path = empty_path;
+        this->remaining_path = new_path;
         return;
     }
     this->moving = true;
     aStar aStar;
     new_path = aStar.algorithm(this->getPosition(),Position(x,y),board);
 
-    if(new_path.size() <= 1){ 
-        std::cerr << "I shouldn't be here" << std::endl; // why not?
-        this->moving == false;
-        this->remaining_path = empty_path;
-        return;
-    }
-
     // first position is redundant
     new_path.pop_back();
-    this->remaining_path = new_path;
+
+    if(new_path.size() == 0){ 
+        std::cerr << "I shouldn't be here" << std::endl;
+        this->moving == false;
+    } else  {
+        this->remaining_path = new_path;
+    }
 }
 
 Harvester::Harvester(int ID,player_t faction,int LP,int spice, Position pos, int dim_x, int dim_y,int speed, int max_spice) 
@@ -312,8 +310,12 @@ void Trike::update(State & state, Board& board){
     if (this->pending_move.size() != 0) {
         if (this->current_time == 0) {
             Position move_to = this->pending_move.front();
-            this->pending_move.pop();
-            this->move(move_to.x,move_to.y,board);
+            int _reserved = board.getCell(move_to.x,move_to.y).getReserveID();
+            bool isOccupied = board.getCell(move_to.x,move_to.y).isOccupied();
+            if ((_reserved != this->ID) && !isOccupied) {
+                this->pending_move.pop();
+                this->move(move_to.x,move_to.y,board);
+            }
         }
     }
     //  UPDATE MOVEMENT
@@ -393,10 +395,28 @@ void Trike::update(State & state, Board& board){
                 }
             }
             if (this->remaining_path.size() != 0) {
+
+                Position _next_position = this->remaining_path.back();
+
+                int reserved = board.getCell(_next_position.x,_next_position.y).getReserveID();
+
+                if (reserved == -1) {
+                    if  (reserved != this->ID) {
+                        Selectable::update(state,board);
+                        return;
+                    }
+                }
+
                 board.getCell(this->position.x,this->position.y).disoccupy();
+
                 this->position = this->remaining_path.back();
+
+                board.getCell(this->position.x,this->position.y).unReserve();
+
                 this->occupy(board);
                 this->remaining_path.pop_back();
+                _next_position = this->remaining_path.back();
+                board.getCell(_next_position.x,_next_position.y).reserve(this->ID);
             }
         }
     }

@@ -1,4 +1,6 @@
-#pragma once 
+#pragma once
+
+#include <queue>
 
 #include "server_selectable.h"
 #include "server_astar.h"
@@ -15,6 +17,7 @@ class Unit : public Selectable {
     int speed;
     size_t current_time;
     size_t movement_time;
+    std::queue<Position> pending_move;
 
  public:
     Unit() = default;

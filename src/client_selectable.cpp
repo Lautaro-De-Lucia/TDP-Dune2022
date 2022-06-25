@@ -33,18 +33,15 @@ void CStatic::update(player_t player_faction, int lp,int pos_x,int pos_y,directi
 
 void CMovable::update(player_t player_faction, int lp,int pos_x,int pos_y,direction_t direction,bool moving,bool selected,bool special,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){   
 
-    std::cout << "Updating on client" << std::endl;
-
     CSelectable::update(player_faction,lp,pos_x,pos_y,dir,moving,selected,special,renderer,cam_pos_x,cam_pos_y);
 
-    std::cout << "Current direction: " << direction << std::endl;
+    if (this->dir != direction) {
+        this->rel_pos_x = 0;
+        this->rel_pos_y = 0;
+    }
 
     this->dir = direction;
     this->sp = special;
-
-    std::cout << "Dirección: " << this->dir << std::endl;
-    std::cout << "Moviendose: " << moving << std::endl;
-    std::cout << "Posicion actual: " << this->position << std::endl;
 
     if(moving == true){
         if(this->dir == TOP)
@@ -67,13 +64,13 @@ void CMovable::update(player_t player_faction, int lp,int pos_x,int pos_y,direct
         if(this->dir == TOP_LEFT)
             this->rel_pos_y-=this->speed,
             this->rel_pos_x-=this->speed;
+    } else {
+        this->rel_pos_x = 0;
+        this->rel_pos_y = 0;
     }
 
-    if(std::abs(this->rel_pos_x) > TILE_SIZE || std::abs(this->rel_pos_y) > TILE_SIZE)
+    if(std::abs(this->rel_pos_x) >= TILE_SIZE || std::abs(this->rel_pos_y) >= TILE_SIZE)
         this->rel_pos_x = 0,this->rel_pos_y = 0;
-
-    std::cout << "X offset: " << rel_pos_x << std::endl;
-    std::cout << "Y offset: " << rel_pos_y << std::endl;
 
     this->render(player_faction, renderer, cam_pos_x, cam_pos_y);
 }
@@ -162,7 +159,7 @@ void CMovable::render(player_t player_faction, SDL2pp::Renderer& renderer, int c
         renderer.Copy(
             lp_texture,
             SDL2pp::Rect(30,20*(this->health-1),100,20),
-            SDL2pp::Rect((this->position.x-0.5)*TILE_SIZE-cam_pos_x,(this->position.y-0.5)*TILE_SIZE-cam_pos_y,30,5) 		
+            SDL2pp::Rect((this->position.x-0.5)*TILE_SIZE-cam_pos_x+this->rel_pos_x,(this->position.y-0.5)*TILE_SIZE-cam_pos_y+this->rel_pos_y,30,5) 		
     );
 }
 

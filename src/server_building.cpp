@@ -32,7 +32,7 @@ int Building::getEnergy(){
 }
 
 void Building::sendState(Protocol & protocol,Socket & client_socket){
-    std::cout << "I shouldn't be here either" << std::endl;
+    std::cerr << "I shouldn't be here either" << std::endl;
 }
 
 void Building::react(int x, int y, Board & board){

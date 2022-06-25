@@ -24,7 +24,7 @@ std::unique_ptr<Unit> UnitFactory::create(unit_t unit, player_t faction, int ID)
             return std::unique_ptr<Devastator>(new Devastator(ID,faction,DEVASTATOR_LP,DEVASTATOR_SPICE_COST,Position(0,0),1,1,DEVASTATOR_SPEED,DEVASTATOR_ATTACK,DEVASTATOR_RANGE));
             break;
         default:
-            std::cout << "No such thing" << std::endl;
+            std::cerr << "No such thing" << std::endl;
     }
     throw std::runtime_error("Unknown unit"); 
 }

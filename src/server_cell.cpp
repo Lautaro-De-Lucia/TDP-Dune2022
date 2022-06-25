@@ -4,6 +4,7 @@ Cell::Cell(){
     this->position.x = 0;
     this->position.y = 0;
     this->element_ID = -1;
+    this->reserved = -1;
 }
 
 void Cell::setPosition(int x, int y){
@@ -61,3 +62,15 @@ bool Cell::canBuild(){return (terrain->canBuild() && !(this->isOccupied()));}
 size_t Cell::extractSpice(){return this->terrain->extractSpice();}
 
 void Cell::print(){}
+
+void Cell::reserve(int ID) {
+    this->reserved = ID;
+}
+
+void Cell::unReserve() {
+    this->reserved = -1;
+}
+
+bool Cell::getReserveID() {
+    return this->reserved;
+}

@@ -40,7 +40,7 @@ std::vector<std::vector<std::string>> generate_client_map (std::string tile_map_
     //  Load .map
 	std::ifstream map(tile_map_file.c_str());
 	if (map.fail()){
-		std::cout << "Failed to load map" << std::endl; 
+		std::cerr << "Failed to load map" << std::endl; 
 		exit(1);
 	}
 	//	Read & load tiles
@@ -49,7 +49,7 @@ std::vector<std::vector<std::string>> generate_client_map (std::string tile_map_
             std::string type;
 			map >> type;
 			if (map.fail()){
-            	std::cout << "Unexpected EOF on tile map" << std::endl; 
+            	std::cerr << "Unexpected EOF on tile map" << std::endl; 
 				exit(1);
 			}
 			//	Load cell to board

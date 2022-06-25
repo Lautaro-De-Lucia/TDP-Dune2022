@@ -33,7 +33,7 @@ bool Selectable::contains(const Position& pos){
 }
 
 void Selectable::react(int x, int y, Board& board){
-    std::cout << "reacting to cell in location: (" << x << "," << y << ") [selectable]" << std::endl;
+    std::cerr << "I really shouldn't be here" << std::endl;
 }
 
 void Selectable::receiveDamage(int damage){
@@ -78,7 +78,7 @@ std::vector<Position> Selectable::getPositions(){
 }
 void Selectable::setPosition(Position position){this->position = position;}
 void Selectable::sendState(Protocol & protocol,Socket & client_socket){
-    std::cout << "I really shouldn't be here" << std::endl;
+    std::cerr << "I really shouldn't be here" << std::endl;
 }
 
 

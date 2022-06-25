@@ -51,7 +51,6 @@ std::vector<Position> aStar::reconstruct_path(Position current) {
             break;
         current = (this->predecessors)[(current)];
     }
-
     return path;
 }
 

@@ -12,6 +12,7 @@ class Cell {
     std::unique_ptr<Terrain> terrain;
     Position position;
     int element_ID;
+    int reserved;
 
  public:
     Cell();
@@ -28,5 +29,8 @@ class Cell {
     bool canHarvest();
     bool canBuild();
     void print();
+    void reserve(int ID);
+    void unReserve();
+    bool getReserveID();
 };
 
