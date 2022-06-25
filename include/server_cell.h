@@ -31,6 +31,6 @@ class Cell {
     void print();
     void reserve(int ID);
     void unReserve();
-    bool getReserveID();
+    int getReserveID();
 };
 

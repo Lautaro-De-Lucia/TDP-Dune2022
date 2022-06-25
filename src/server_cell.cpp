@@ -71,6 +71,6 @@ void Cell::unReserve() {
     this->reserved = -1;
 }
 
-bool Cell::getReserveID() {
+int Cell::getReserveID() {
     return this->reserved;
 }
