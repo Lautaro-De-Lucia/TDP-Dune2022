@@ -72,6 +72,7 @@ class Trike : public Unit {
  public:
     Trike(int ID,player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int attack, int range);
     void create();
+    void focus(Position & other_position);
     virtual void react(int x, int y, Board& board);
     virtual void update(State& state, Board& board);
     virtual void receiveDamage(int damage);

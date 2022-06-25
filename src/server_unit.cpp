@@ -308,8 +308,28 @@ bool Trike::enemySearch(Board & board){
     return false;
 }
 
-void Trike::update(State & state, Board& board){
+void Trike::focus(Position & other_pos){
+    if (other_pos.x == this->position.x && other_pos.y > this->position.y)
+        this->direction = BOTTOM;
+    if (other_pos.x > this->position.x && other_pos.y > this->position.y)
+        this->direction = BOTTOM_RIGHT;    
+    if (other_pos.x > this->position.x && other_pos.y == this->position.y)
+        this->direction = RIGHT;
+    if (other_pos.x > this->position.x && other_pos.y < this->position.y)
+        this->direction = TOP_RIGHT;
+    if (other_pos.x == this->position.x && other_pos.y < this->position.y)
+        this->direction = TOP;
+    if (other_pos.x < this->position.x && other_pos.y < this->position.y)
+        this->direction = TOP_LEFT; 
+    if (other_pos.x < this->position.x && other_pos.y == this->position.y)
+        this->direction = LEFT;
+    if (other_pos.x < this->position.x && other_pos.y > this->position.y)
+        this->direction = BOTTOM_LEFT;
+}
 
+void Trike::update(State & state, Board& board){
+    Selectable::update(state,board);
+    //  
     if (this->pending_move.size() != 0) {
         if (this->current_time == 0) {
             Position move_to = this->pending_move.front();
@@ -317,11 +337,12 @@ void Trike::update(State & state, Board& board){
             this->move(move_to.x,move_to.y,board);
         }
     }
-    //  UPDATE MOVEMENT
+    //  Si no me estoy moviendo ni atacando, buscar enemigos
     if(this->moving == false && this->targeting == false){
 		if (this->enemySearch(board) == true)
 		    this->attack(this->enemy_position.x,this->enemy_position.y,board);
     }
+    //  Si estoy atacando, perseguir
     if (this->targeting == true){
         if(board.hasEnemy(this->enemy_position.x,this->enemy_position.y,this->faction)){
             if(!board.canTraverse(this->moving_position.x,this->moving_position.y))
@@ -338,77 +359,42 @@ void Trike::update(State & state, Board& board){
             return;
         }
     }
+    //  Si me estoy moviendo
     if(this->moving == true){
-        //  Si se esta moviendo, siempre apunta a la direccion en la que se mueve
-        if (this->remaining_path.size() != 0) {
-            //std::cout << "It is moving with the direction: "<< this->direction << std::endl;
-            Position next_position = remaining_path.back();
-            if (next_position.x == this->position.x && next_position.y > this->position.y)
-                this->direction = BOTTOM;
-            if (next_position.x > this->position.x && next_position.y > this->position.y)
-                this->direction = BOTTOM_RIGHT;    
-            if (next_position.x > this->position.x && next_position.y == this->position.y)
-                this->direction = RIGHT;
-            if (next_position.x > this->position.x && next_position.y < this->position.y)
-                this->direction = TOP_RIGHT;
-            if (next_position.x == this->position.x && next_position.y < this->position.y)
-                this->direction = TOP;
-            if (next_position.x < this->position.x && next_position.y < this->position.y)
-                this->direction = TOP_LEFT; 
-            if (next_position.x < this->position.x && next_position.y == this->position.y)
-                this->direction = LEFT;
-            if (next_position.x < this->position.x && next_position.y > this->position.y)
-                this->direction = BOTTOM_LEFT;
-            this->current_time+=this->speed;
-        }
-        if(this->remaining_path.size() != 0){
-            Position next = this->remaining_path.back();
-            if(!(board.getCell(next.x,next.y).canTraverse())){
-                this->waiting = true;
-            } else {
-                this->waiting = false;
-            }
-        }
-        //if(this->waiting == true){
-        //    Position next = this->remaining_path.back();
-        //        if(board.getCell(next.x,next.y).canTraverse())
-        //            this->waiting = false;
-        //}
+        //  Si el camino termino, dejar de moverse
         if (this->remaining_path.size() == 0) {
             this->moving = false;
             this->current_time = 0;
-        } else if (this->current_time >= this->movement_time) {
-            this->current_time = 0;
-            Position next = this->remaining_path.back();
-            if(!(board.getCell(next.x,next.y).canTraverse())) {
-                if (this->remaining_path.size() <= 1) {
-                    std::cout << this->ID << ": Staying here..." << std::endl;
-          //          this->waiting = true;
-                    std::vector<Position> empty_path;
-                    this->remaining_path = empty_path;
-                } else {
-                    std::cout << this->ID << ": Recalculating path..." << std::endl;
-          //        this->waiting = true;
-                    this->move(this->remaining_path.front().x,this->remaining_path.front().y,board);
-                    Position next_position = remaining_path.back();
-                    if (next_position.x == this->position.x && next_position.y > this->position.y)
-                        this->direction = BOTTOM;
-                    if (next_position.x > this->position.x && next_position.y > this->position.y)
-                        this->direction = BOTTOM_RIGHT;    
-                    if (next_position.x > this->position.x && next_position.y == this->position.y)
-                        this->direction = RIGHT;
-                    if (next_position.x > this->position.x && next_position.y < this->position.y)
-                        this->direction = TOP_RIGHT;
-                    if (next_position.x == this->position.x && next_position.y < this->position.y)
-                        this->direction = TOP;
-                    if (next_position.x < this->position.x && next_position.y < this->position.y)
-                        this->direction = TOP_LEFT; 
-                    if (next_position.x < this->position.x && next_position.y == this->position.y)
-                        this->direction = LEFT;
-                    if (next_position.x < this->position.x && next_position.y > this->position.y)
-                        this->direction = BOTTOM_LEFT;
-                }
-            }
+            return;
+        } 
+        std::cout << "asd" << std::endl;
+        //  Si se esta moviendo, siempre apunta a la direccion en la que se mueve
+        Position next_position = remaining_path.back();
+        this->focus(next_position);        
+        //  Miro la próxima posición
+        Cell& next_cell = board.getCell(next_position.x,next_position.y); 
+        if(next_cell.canTraverse() && (next_cell.getID() == -1 || next_cell.getID() == this->ID)){
+            //  Si puedo ir, ocuparla
+            this->waiting = false;
+            next_cell.occupy(this->ID);     
+            this->current_time+=this->speed;    //  Increase counter
+        } else {
+            //  Si no puedo ir 
+            if (this->remaining_path.size() <= 1) {
+                this->waiting = true;
+                std::vector<Position> empty_path;
+                this->remaining_path = empty_path;
+            } else {
+                //  Sino, recalculo el camino a destino
+                this->waiting = true;
+                this->move(this->remaining_path.front().x,this->remaining_path.front().y,board);
+                Position next_position = remaining_path.back();
+                this->focus(next_position);
+            }   
+        }
+        if (this->current_time >= this->movement_time) {
+            //  Cuando se cumple el tiempo, cambiar de posición
+            this->current_time = 0; //  Reset counter
             if (this->remaining_path.size() != 0) {
                     board.getCell(this->position.x,this->position.y).disoccupy();
                     this->position = this->remaining_path.back();
@@ -417,8 +403,6 @@ void Trike::update(State & state, Board& board){
             } 
         }
     }
-    //std::cout << "But before leaving this function, this direction will have changed to: " << this->direction <<std::endl;
-    Selectable::update(state,board);
 }
 
 void Trike::sendState(Protocol & protocol, Socket & client_socket){

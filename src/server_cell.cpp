@@ -56,7 +56,8 @@ void Cell::occupy(int ID){this->element_ID = ID;}
 void Cell::disoccupy(){this->element_ID = -1;}
 
 bool Cell::isOccupied(){return this->element_ID >= 0;}
-bool Cell::canTraverse(){return (terrain->canTraverse() && !(this->isOccupied()));}
+bool Cell::canTraverse(){return terrain->canTraverse();}
+//  bool Cell::canTraverse(){return (terrain->canTraverse() && !(this->isOccupied()));}
 bool Cell::canHarvest(){return (terrain->canExtract() && !(this->isOccupied()));}
 bool Cell::canBuild(){return (terrain->canBuild() && !(this->isOccupied()));}
 size_t Cell::extractSpice(){return this->terrain->extractSpice();}
