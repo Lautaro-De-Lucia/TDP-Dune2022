@@ -1,11 +1,11 @@
 
 #include "server_clienthandler.h"
 
-ClientHandler::ClientHandler(int init_energy, int init_spice ,Socket && client_socket,GameResources * game)
+ClientHandler::ClientHandler(int init_energy, int init_spice ,Socket && client_socket,ThreadSafeQueue & tsq)
     :
     spice(init_spice),
     energy(init_energy),
-    game{game},
+    instruction_queue(tsq),
     player_socket(std::move(client_socket)),
     finished(false),
     thread(&ClientHandler::run,this)

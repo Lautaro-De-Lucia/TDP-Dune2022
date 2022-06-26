@@ -8,22 +8,34 @@ int ID = 0;
 
 std::vector<std::string> file_input;
 
-Server::Server(const char* service_name, std::vector<std::vector<cell_t>> cells) : socket(service_name), game(cells) {
+Server::Server(const char* service_name, std::vector<std::vector<cell_t>> cells) 
+: 
+socket(service_name),
+game(cells),
+TSQ(2) 
+{
     this->running = false;
 }
 
-void Server::run() {
+void Server::acceptPlayers() {
     this->running = true;
     size_t i = 1;
     while (running == true){
+        if(this->players.size() == 2)
+            break;
         Socket client_socket = (this->socket.accept());
-        this->players.push_back(std::unique_ptr<ClientHandler>(new ClientHandler(INIT_ENERGY,INIT_SPICE,std::move(client_socket),&(this->game))));
-        checkForFinishedClients();
+        this->players.push_back(std::unique_ptr<ClientHandler>(new ClientHandler(INIT_ENERGY,INIT_SPICE,std::move(client_socket),this->TSQ)));
+        //checkForFinishedClients();
     }
-    closeAllClients();
+    //closeAllClients();
 }
 
-void Server::checkForFinishedClients(){
+void Server::run() {
+    std::cout << "hello" << std::endl;
+    sleep(10);
+}
+
+void Server::checkForFinishedClients() {
     for (size_t k = 0; k < this->players.size(); k++){ 
         if (this->players[k]->isDone() == true){
             this->players[k]->close();

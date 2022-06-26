@@ -71,10 +71,11 @@ int main(int argc, char *argv[]) {
 
     std::vector<std::vector<cell_t>> cells = generate_server_map(DATA_PATH MAP_FILE);
     Server server(service_name,cells);
-    std::thread server_thread(&Server::run, &server);
+    server.acceptPlayers();
+    std::thread game_loop(&Server::run, &server);
     while (1) {
         sleep(10);
     }    //  Hold for input
     server.stop();
-    server_thread.join();
+    game_loop.join();
 }

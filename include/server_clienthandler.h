@@ -14,6 +14,7 @@
 #include "server_unitfactory.h"
 #include "server_unit.h"
 #include "server_gameresources.h"
+#include "server_tsq.h"
 
 #include "common_utils.h"
 #include "common_socket.h"
@@ -37,7 +38,7 @@ class ClientHandler {
    int c_energy;
    int efficiency;
    Protocol protocol;
-   GameResources * game;
+   ThreadSafeQueue & instruction_queue;
    Socket player_socket;
    bool finished;
    std::map<unit_t,size_t> units_to_create;
@@ -47,7 +48,7 @@ class ClientHandler {
    std::vector<response_t> responses_buffer;
 
  public:    
-   ClientHandler (int init_energy, int init_spice ,Socket && client_socket,GameResources * game);
+   ClientHandler (int init_energy, int init_spice ,Socket && client_socket,ThreadSafeQueue & tsq);
    void run(); // This should receive the socket in the future
    response_t createBuilding(int type, int pos_x, int pos_y);
    response_t createUnit(int type, int& spice);

@@ -173,6 +173,12 @@ enum building_t {
     CONSTRUCTION_YARD = 8
 };
 
+struct instruction_t {
+    int player_ID;
+    player_t faction;
+    command_t command;
+};
+
 enum direction_t {
     TOP = 0,
     TOP_RIGHT = 1,

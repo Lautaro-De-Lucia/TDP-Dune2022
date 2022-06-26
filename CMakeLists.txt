@@ -43,6 +43,7 @@ ADD_EXECUTABLE("server" server_main.cpp
             src/server_selectable.cpp
             src/server_server.cpp
             src/server_terrain.cpp
+            src/server_tsq.cpp
             src/server_unit.cpp
             src/server_unitfactory.cpp)
 
