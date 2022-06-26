@@ -177,7 +177,84 @@ struct instruction_t {
     int player_ID;
     player_t faction;
     command_t command;
+
+    instruction_t(int player_ID, player_t faction, command_t command) {
+        this->player_ID = player_ID;
+        this->faction = faction;
+        this->command = command;
+    }
+
+    virtual ~instruction_t(){}
+
 };
+
+struct building_create_t : instruction_t {
+
+    int type;
+    int pos_x;
+    int pos_y;
+
+    building_create_t(int player_ID, player_t faction, int type, int pos_x, int pos_y) : instruction_t(player_ID, faction, CREATE_BUILDING) {
+        this->type = type;
+        this->pos_x = pos_x;
+        this->pos_y = pos_y;
+    }
+};
+
+struct unit_create_t : instruction_t {
+
+    int type;
+
+    unit_create_t(int player_ID, player_t faction, int type) : instruction_t(player_ID, faction, CREATE_UNIT) {
+        this->type = type;
+    }
+
+};
+
+struct left_click_t : instruction_t {
+
+    int pos_x;
+    int pos_y;
+
+    left_click_t(int player_ID, player_t faction, int pos_x, int pos_y) : instruction_t(player_ID, faction, MOUSE_LEFT_CLICK) {
+        this->pos_x = pos_x;
+        this->pos_y = pos_y;
+    }
+};
+
+struct right_click_t : instruction_t {
+
+    int pos_x;
+    int pos_y;
+
+    right_click_t(int player_ID, player_t faction, int pos_x, int pos_y) : instruction_t(player_ID, faction, MOUSE_RIGHT_CLICK) {
+        this->pos_x = pos_x;
+        this->pos_y = pos_y;
+    }
+};
+
+struct selection_t : instruction_t {
+
+    int Xm;
+    int XM;
+    int Ym;
+    int YM;
+
+    selection_t(int player_ID, player_t faction, int Xm, int XM, int Ym, int YM) : instruction_t(player_ID, faction, MOUSE_SELECTION) {
+        this->Xm = Xm;
+        this->XM = XM;
+        this->Ym = Ym;
+        this->YM = YM;
+    }
+};
+
+struct idle_t : instruction_t {
+
+    idle_t(int player_ID, player_t faction) : instruction_t(player_ID, faction, IDLE) {
+    }
+};
+
+
 
 enum direction_t {
     TOP = 0,

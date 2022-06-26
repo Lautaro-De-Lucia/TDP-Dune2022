@@ -27,10 +27,10 @@ void ThreadSafeQueue::push(std::unique_ptr<instruction_t> && new_instruction) {
     return;
 }
 
-std::unique_ptr<instruction_t> && ThreadSafeQueue::pop() {
+std::unique_ptr<instruction_t> ThreadSafeQueue::pop() {
 
     std::lock_guard<std::mutex> lock(this->mtx);
     std::unique_ptr<instruction_t> next_instruction = std::move(this->q.front());
     this->q.pop();
-    return std::move(next_instruction);
+    return next_instruction;
 }

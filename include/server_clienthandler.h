@@ -31,6 +31,7 @@
 
 class ClientHandler {
  private:
+   int player_id;
    player_t faction;
    int spice;
    int c_spice;
@@ -38,6 +39,7 @@ class ClientHandler {
    int c_energy;
    int efficiency;
    Protocol protocol;
+   std::vector<bool> & reading_flags;
    ThreadSafeQueue & instruction_queue;
    Socket player_socket;
    bool finished;
@@ -48,17 +50,16 @@ class ClientHandler {
    std::vector<response_t> responses_buffer;
 
  public:    
-   ClientHandler (int init_energy, int init_spice ,Socket && client_socket,ThreadSafeQueue & tsq);
+   ClientHandler (int player_id, int init_energy, int init_spice,std::vector<bool> & ready, Socket && client_socket, ThreadSafeQueue & tsq);
    void run(); // This should receive the socket in the future
-   response_t createBuilding(int type, int pos_x, int pos_y);
-   response_t createUnit(int type, int& spice);
-   void handleLeftClick(int x, int y);
-   void handleRightClick(int x, int y);
-   void handleSelection(int xmin, int xmax, int ymin, int ymax);
-   void update();
    response_t queueUnit(unit_t type);
    response_t checkCreation(unit_t type);
-   void reportState();
+   void reportState(GameResources & game);
    bool isDone();
    void close();
+   void sendResponses(std::vector<response_t> & responses);
+   int getSpice();
+   int getEnergy();
+   void setSpice(int spice);
+   void setEnergy(int energy);
 };

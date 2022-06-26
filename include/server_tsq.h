@@ -23,5 +23,5 @@ class ThreadSafeQueue {
     bool isEmpty();
     size_t getSize();
     void push(std::unique_ptr<instruction_t> && new_instruction);
-    std::unique_ptr<instruction_t> && pop();
+    std::unique_ptr<instruction_t> pop();
 };
