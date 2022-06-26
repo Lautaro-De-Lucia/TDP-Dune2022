@@ -38,6 +38,7 @@ class ClientHandler {
    int efficiency;
    Protocol protocol;
    GameResources * game;
+   Socket player_socket;
    bool finished;
    std::map<unit_t,size_t> units_to_create;
 	 std::map<unit_t,size_t> unit_time;
@@ -47,7 +48,7 @@ class ClientHandler {
 
  public:    
    ClientHandler (int init_energy, int init_spice ,Socket && client_socket,GameResources * game);
-   void run(Socket&& client_socket); // This should receive the socket in the future
+   void run(); // This should receive the socket in the future
    response_t createBuilding(int type, int pos_x, int pos_y);
    response_t createUnit(int type, int& spice);
    void handleLeftClick(int x, int y);
@@ -56,7 +57,7 @@ class ClientHandler {
    void update();
    response_t queueUnit(unit_t type);
    response_t checkCreation(unit_t type);
-   void reportState(Socket & client_socket);
+   void reportState();
    bool isDone();
    void close();
 };
