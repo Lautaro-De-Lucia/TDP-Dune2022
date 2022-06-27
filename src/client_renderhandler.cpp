@@ -106,7 +106,7 @@ void RenderHandler::renderMovable(
             }
             break;
         default:
-            throw std::runtime_error("asd");         
+            throw std::runtime_error("RenderTypeError");         
     }
 }
 
@@ -144,7 +144,7 @@ void RenderHandler::renderStatic(
             dim_y = 3;
             break;
         default:
-            throw std::runtime_error("asd");
+            throw std::runtime_error("Render error");
     }
     renderer.Copy(
         texture,						

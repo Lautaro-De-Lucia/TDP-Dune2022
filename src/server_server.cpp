@@ -25,7 +25,7 @@ TSQ(1)
 void Server::acceptPlayers() {
     this->running = true;
     size_t i = 0;
-    while (running == true){
+    while (running){
         if(this->players.size() == 1)
             break;
         Socket client_socket = (this->socket.accept());
@@ -58,13 +58,23 @@ void Server::closeAllClients() {
 
 // @TODO: lanzar excepción
 void Server::stop() {
-    running = false;
+    this->running = false;
     if ((this->socket).shutdown(SHUT_RDWR))
         std::cerr << "SHUTDOWN_ERROR: " << '\n';
 }
 
+void Server::read_command(std::istream& input_stream) {
+    std::string command;
+    while (1) {
+        input_stream >> command;
+        if (command == "q")
+            break;            
+    }
+}
+
 void Server::run() {
-    while (true) {
+    this->running = true;
+    while (this->running) {
         //std::cout << "Starting instance "<< k << " of game loop" << std::endl;
         //std::cout << "Checking for loosing players" << std::endl;
         this->checkForLosingPlayers();
@@ -83,6 +93,11 @@ void Server::run() {
             this->players[i]->reportState(this->game);
         //std::cout << "Enabling reading" << std::endl;
         this->enableReading();
+    }
+
+    for (size_t i = 0; i < (this->players).size(); i++) {
+        if (!this->players[i]->isDone())
+            this->players[i]->close();
     }
 }
 

@@ -42,6 +42,7 @@ class Server {
       void checkForLosingPlayers();
       void closeAllClients();
       void stop();
+      void read_command(std::istream& input_stream);
 
       void handleInstruction(std::unique_ptr<instruction_t> & INS);      
       void handleInstruction(building_create_t & INS);

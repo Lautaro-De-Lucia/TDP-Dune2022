@@ -302,7 +302,6 @@ Socket::~Socket() {
 }
 
 Socket::Socket(Socket&& other) {
-    std::cout << "asd" << std::endl;
     this->skt = other.skt;
     this->closed = other.closed;
 

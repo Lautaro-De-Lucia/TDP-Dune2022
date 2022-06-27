@@ -73,9 +73,7 @@ int main(int argc, char *argv[]) {
     Server server(service_name,cells);
     server.acceptPlayers();
     std::thread game_loop(&Server::run, &server);
-    while (1) {
-        sleep(10);
-    }    //  Hold for input
+    server.read_command(std::cin);
     server.stop();
     game_loop.join();
 }

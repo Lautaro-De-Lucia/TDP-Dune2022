@@ -1,7 +1,6 @@
 #pragma once
 
 #include <queue>
-// ASD
 #include "client_selectable.h"
 #include "client_gamemap.h"
 #include "client_gamehud.h"
