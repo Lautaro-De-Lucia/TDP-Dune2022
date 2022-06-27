@@ -15,7 +15,6 @@
 #include <functional>
 
 #define INIT_SPICE 20000
-//#define INIT_SPICE 15000
 #define INIT_CSPICE 20000
 #define INIT_ENERGY 3000
 #define INIT_CENERGY 5000
@@ -78,17 +77,13 @@ void greet(SDL2pp::Renderer& game_renderer) {
 
 void run_sdl(const int* _faction, std::string host_name, std::string service_name) {
 
+    while (_faction == nullptr){}
+    player_t faction = (player_t) *(_faction);
+    
     //  This is only to initialize TTF
 	SDL2pp::SDLTTF ttf;
-
-    AudioPlayer audio;
-
     SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,0);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
-
-    while (_faction == nullptr){}
-
-    player_t faction = (player_t) *(_faction); //Esto debe poder definirse desde el menú de Qt
 
     int init_cam_pos_x;
     int init_cam_pos_y;
@@ -96,17 +91,14 @@ void run_sdl(const int* _faction, std::string host_name, std::string service_nam
     switch (faction)
     {
     case ATREIDES:
-        audio.play(ATREIDES_MUSIC);
         init_cam_pos_x = 0;
         init_cam_pos_y = 0;
         break;
     case HARKONNEN:
-        audio.play(HARKONNEN_MUSIC);
         init_cam_pos_x = 70*TILE_DIM;
         init_cam_pos_y = 35*TILE_DIM;
         break;
     case ORDOS:
-        audio.play(ORDOS_MUSIC);
         init_cam_pos_x = 0;
         init_cam_pos_y = 35*TILE_DIM;
         break;    
@@ -114,10 +106,10 @@ void run_sdl(const int* _faction, std::string host_name, std::string service_nam
         break;
     }
 
+    Camera cam(init_cam_pos_x,init_cam_pos_y,CAMERA_WIDTH,CAMERA_HEIGHT,SCREEN_WIDTH,SCREEN_HEIGHT);
+
     const char* _host_name = host_name.c_str();
     const char* _service_name = service_name.c_str();
-
-    Camera cam(init_cam_pos_x,init_cam_pos_y,CAMERA_WIDTH,CAMERA_HEIGHT,SCREEN_WIDTH,SCREEN_HEIGHT);
 
     std::vector<std::vector<std::string>> cell_paths = generate_client_map(DATA_PATH MAP_FILE);    
     Player client_player(faction,_host_name,_service_name,cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cell_paths);
@@ -153,17 +145,10 @@ int main(int argc, char *argv[]) {
     FactionWindow f(nullptr,_faction);
 
     QObject::connect(&w, &MainWindow::jugar, &w, &QMainWindow::close);
-    //QObject::connect(&w, &MainWindow::jugar, &l, &QMainWindow::show);
     QObject::connect(&w, &MainWindow::jugar, &f, &QMainWindow::show);
-    //QObject::connect(&l, &LobbyWindow::jugar, &l, [=]() {QtConcurrent::run(run_sdl);});
     QObject::connect(&f, &FactionWindow::jugar, &f, &QMainWindow::close);
+
     QObject::connect(&f, &FactionWindow::jugar, &f, [=]() {QtConcurrent::run(run_sdl, std::ref(_faction), _host_name, _service_name);});
 
     return a.exec();
-
-    /*
-    run_sdl();
-
-    return 0;
-    */
 }

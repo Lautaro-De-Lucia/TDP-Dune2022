@@ -42,7 +42,7 @@ FactionWindow::FactionWindow(QWidget *parent, int* faction)
 void FactionWindow::handleAtreides(){
 
     AudioPlayer audio;
-    audio.play(GAME_START);
+    audio.play(HOUSE_CHOSEN);
 
     *(this->faction) = 2;
     sleep(1);
@@ -52,7 +52,7 @@ void FactionWindow::handleAtreides(){
 void FactionWindow::handleHarkonnen(){
     
     AudioPlayer audio;
-    audio.play(GAME_START);
+    audio.play(HOUSE_CHOSEN);
 
     *(this->faction) = 1;
     sleep(1);
@@ -62,7 +62,7 @@ void FactionWindow::handleHarkonnen(){
 void FactionWindow::handleOrdos(){
 
     AudioPlayer audio;
-    audio.play(GAME_START);
+    audio.play(HOUSE_CHOSEN);
 
     *(this->faction) = 3;
     sleep(1);

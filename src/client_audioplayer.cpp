@@ -11,6 +11,13 @@ AudioPlayer::AudioPlayer(){
 
     // SOUND EFFECTS
 
+    Mix_Chunk* house_chosen = Mix_LoadWAV(DATA_PATH HOUSE_CHOSEN_PATH);
+    if (house_chosen == NULL) {
+        printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+        exit(1);
+    }
+    this->sound_effects.insert({HOUSE_CHOSEN,house_chosen});
+
     Mix_Chunk* game_start = Mix_LoadWAV(DATA_PATH GAME_START_PATH);
     if (game_start == NULL) {
         printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
@@ -86,6 +93,13 @@ AudioPlayer::AudioPlayer(){
         exit(1);
     }
     this->background_songs.insert({ORDOS_MUSIC, ordos_music});
+
+    Mix_Music* waiting_music = Mix_LoadMUS(DATA_PATH WAITING_MUSIC_PATH);
+    if (waiting_music == NULL) {
+        printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+        exit(1);
+    }
+    this->background_songs.insert({WAITING_MUSIC, waiting_music});
 }
 
 void AudioPlayer::play(sfx_t sound_effect){

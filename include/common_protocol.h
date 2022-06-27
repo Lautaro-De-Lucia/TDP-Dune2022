@@ -28,6 +28,10 @@ class Protocol {
     void send_faction_request_response(bool success, Socket& client_socket);
     void receive_faction_request_response(bool& success, Socket& client_socket);
 
+    // game start
+    void send_game_has_started(Socket& client_socket);
+    void receive_game_has_started(Socket& client_socket);
+
     // client to server requests
     void send_command(command_t command, Socket& client_socket);
     void send_create_building_request(int type, int pos_x, int pos_y, Socket& client_socket);

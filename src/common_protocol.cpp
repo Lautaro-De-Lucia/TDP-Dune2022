@@ -93,6 +93,33 @@ void Protocol::receive_faction_request_response(bool& success, Socket& client_so
 
 }
 
+void Protocol::send_game_has_started(Socket& client_socket) {
+
+    uint8_t _game_has_started = (uint8_t) true;
+
+    uint8_t game_has_started_buffer = (uint8_t) _game_has_started;
+
+    int sent_size = -1;
+    bool was_closed = false;
+
+    sent_size = client_socket.sendall(&game_has_started_buffer, sizeof(game_has_started_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    return;
+}
+
+void Protocol::receive_game_has_started(Socket& client_socket) {
+
+    uint8_t game_has_started_buffer;
+
+    int recv_size = -1;
+    bool was_closed = false;
+
+    recv_size = client_socket.recvall(&game_has_started_buffer, sizeof(game_has_started_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+
+    return;
+}
 
 void Protocol::send_command(command_t command, Socket& client_socket) {
 

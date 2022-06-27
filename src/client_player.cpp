@@ -44,7 +44,22 @@ mouse(TILE_DIM,cam)
 
 void Player::play(){
 
+    AudioPlayer audio;
+
+    this->renderWaitingText();
+
+    this->protocol.receive_game_has_started(this->socket);
     this->protocol.send_faction_request(this->faction, this->socket);
+
+    audio.play(GAME_START);
+
+    switch (faction)
+    {
+    case ATREIDES: audio.play(ATREIDES_MUSIC); break;
+    case HARKONNEN: audio.play(HARKONNEN_MUSIC); break;
+    case ORDOS: audio.play(ORDOS_MUSIC); break;    
+    default: break;
+    }
 
     bool game_has_started = false;
     auto base_time_instruction = clock();
@@ -524,6 +539,32 @@ void Player::addElement(building_t type, State& desc){
     }
 }
 */
+
+void Player::renderWaitingText() {
+
+    AudioPlayer audio;
+    audio.play(WAITING_MUSIC);
+
+    this->game_renderer.Clear();
+    this->game_renderer.SetScale(2,2);
+    std::string waiting_text = "WAITING FOR OTHER PLAYERS...";
+    SDL2pp::Font waiting_font(DATA_PATH FONT_IMPACTED_PATH, 20);
+    SDL2pp::Texture text_sprite_waiting(this->game_renderer, waiting_font.RenderText_Blended(waiting_text, SDL_Color{255, 255, 255, 255}));
+    this->game_renderer.Copy(text_sprite_waiting, SDL2pp::NullOpt, SDL2pp::Rect(SCREEN_WIDTH/6, SCREEN_HEIGHT/6, text_sprite_waiting.GetWidth(), text_sprite_waiting.GetHeight()));
+    std::string house_text = "You chose house: ";
+    switch (this->faction)
+    {
+    case HARKONNEN: house_text += "Harkonnen"; break;
+    case ATREIDES: house_text += "Atreides"; break;
+    case ORDOS: house_text += "Ordos"; break;
+    default: house_text += "Invalid house"; break;
+    }
+    SDL2pp::Font house_font(DATA_PATH FONT_IMPACTED_PATH, 15);
+    SDL2pp::Texture text_sprite_house(this->game_renderer, house_font.RenderText_Blended(house_text, SDL_Color{255, 255, 255, 255}));
+    this->game_renderer.Copy(text_sprite_house, SDL2pp::NullOpt, SDL2pp::Rect(SCREEN_WIDTH/5, SCREEN_HEIGHT/4, text_sprite_house.GetWidth(), text_sprite_house.GetHeight()));
+    this->game_renderer.Present();
+}
+
 void Player::render(){
     this->game_renderer.Clear();
     this->renderMap();

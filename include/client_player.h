@@ -69,6 +69,7 @@ class Player {
     Player(player_t faction, const char* host_name, const char* service_name,Camera & cam, SDL2pp::Window& window,SDL2pp::Renderer& renderer, size_t spice, size_t c_spice, int energy, size_t c_energy, std::vector<std::vector<std::string>>& map_data);
 
     void play();
+    void renderWaitingText();
     void renderMap();
     void renderHud();
     void addElement(unit_t type,State& desc);
@@ -89,4 +90,6 @@ class Player {
     hud_button_t checkBtn(int& x, int& y);
 
     void updateAttacker(unit_t unit, int id, bool attacking);
+
+
 };
