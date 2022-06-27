@@ -109,6 +109,7 @@
 #define RESPONSE_FAILURE_OFFSET 20
 
 #define FONT_IMPACT_PATH "/fonts/impact/impact.ttf"
+#define FONT_IMPACTED_PATH "/fonts/impact/Impacted.ttf"
 
 enum color_t {
     RED,

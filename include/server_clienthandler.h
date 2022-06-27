@@ -64,4 +64,5 @@ class ClientHandler {
    player_t getFaction();
    void setSpice(int spice);
    void setEnergy(int energy);
+   void notifyGameStart();
 };

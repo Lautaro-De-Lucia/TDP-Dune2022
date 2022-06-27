@@ -11,7 +11,6 @@ ClientHandler::ClientHandler(int player_id, int init_energy, int init_spice,std:
     finished(false),
     thread(&ClientHandler::run,this)
 {
-    std::cout << "Hello" << std::endl;
     this->player_id = player_id;
     this->faction = (player_t) -1;
 
@@ -27,6 +26,10 @@ bool ClientHandler::isDone(){
 
 void ClientHandler::close(){
     this->thread.join();
+}
+
+void ClientHandler::notifyGameStart(){
+    this->protocol.send_game_has_started(this->player_socket);
 }
 
 void ClientHandler::run() {

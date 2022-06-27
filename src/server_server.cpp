@@ -34,6 +34,10 @@ void Server::acceptPlayers() {
         i++;
         //checkForFinishedClients();
     }
+    for (size_t i = 0; i < this->players.size(); i++) {
+        this->players[i]->notifyGameStart();
+    }
+    
     //closeAllClients();
 }
 
