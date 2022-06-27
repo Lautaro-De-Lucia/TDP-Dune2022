@@ -87,13 +87,17 @@ bool Board::hasEnemy(int x, int y, player_t player_faction){
 void Board::dealDamage(int x, int y, int damage){
     std::unique_ptr<Selectable>& element = this->elements.at(this->cells[x][y].getID());
     element->receiveDamage(damage);
+    std::cout << "Element LP" << element->getLP() <<std::endl;
     if(element->getLP() <= 0){
+        std::cout << "Element LP have reached:" << element->getLP() <<std::endl;
+        std::cout << "Thus it will be destroyed" <<std::endl;
         for(unit_t UNIT : units)
             if(element->canCreate(UNIT)) 
                 this->removeUnitCreator(element->getFaction(),UNIT);
         for (Position pos : element->getPositions())
             this->cells[pos.x][pos.y].disoccupy();
-        this->elements.erase(this->cells[x][y].getID());
+        std::cout << "Element of ID: " << element->getID() << " Was just destroyed" <<std::endl;
+        this->elements.erase(element->getID());
     }
 }
 
@@ -129,7 +133,7 @@ std::vector<Position> Board::get_traversable_neighbors_of(Position pos, size_t d
             if (neighbor.x < 0 || neighbor.y < 0)
                 continue;                
             // check if neighbor is not traversable
-            if (!(this->cells[neighbor.x][neighbor.y].canTraverse())||(this->cells[neighbor.x][neighbor.y].isOccupied()))
+            if (!(this->cells[neighbor.x][neighbor.y].canTraverse())||(this->cells[neighbor.x][neighbor.y].isOccupied())||(this->cells[neighbor.x][neighbor.y].getReserveID() != -1))                
                 continue;
             valid_neighbors.push_back(neighbor);
         }

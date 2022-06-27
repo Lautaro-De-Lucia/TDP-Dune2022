@@ -42,9 +42,10 @@ class Selectable {
     virtual bool canStoreSpice(int & spice);
     virtual bool canCostTheGame();
     player_t getFaction();
+    int getID();
     int getLP();
     std::string getName();
-    std::vector<Position> getPositions();
+    virtual std::vector<Position> getPositions();
     void setPosition(Position position);
     Position getPosition();
     int getDimX();

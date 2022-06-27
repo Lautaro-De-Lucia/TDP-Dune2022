@@ -53,7 +53,10 @@ int Cell::getSpice(){
 }
 
 void Cell::occupy(int ID){this->element_ID = ID;}
-void Cell::disoccupy(){this->element_ID = -1;}
+void Cell::disoccupy(){
+    this->element_ID = -1;
+    this->reserved = -1;    
+}
 
 bool Cell::isOccupied(){return this->element_ID >= 0;}
 bool Cell::canTraverse(){return terrain->canTraverse();}

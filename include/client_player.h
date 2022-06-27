@@ -22,7 +22,7 @@ const int CAMERA_HEIGHT = 360;
 const int CAMERA_INITIAL_POS_X = 400;
 const int CAMERA_INITIAL_POS_Y = 200;
 
-const int GAME_SPEED = 60000;
+const int GAME_SPEED = 600000;
 
 #define DEF_TRIKE_PATH "/unitsprites/trike/top.png"
 #define DEF_HARVESTER_PATH "/unitsprites/harvester/top.png"
