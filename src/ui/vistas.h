@@ -9,6 +9,7 @@ namespace Ui {
     class MainWindow;
     class LobbyWindow;
     class FactionWindow;
+    class CreditsWindow;
 }
 QT_END_NAMESPACE
 
@@ -22,9 +23,9 @@ public:
 
 signals:
     void jugar();
+    void credits();
 
 private slots:
-  void handleCreditos();
 
 private:
     Ui::MainWindow *ui;
@@ -79,6 +80,25 @@ private slots:
 
 private:
     Ui::FactionWindow *ui;
+    QButtonGroup *buttongroup;
+    QMediaPlayer *mMediaPlayer;
+};
+
+class CreditsWindow : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    CreditsWindow(QWidget *parent = nullptr);
+    ~CreditsWindow();
+
+signals:
+    void volver();
+
+private slots:
+
+private:
+    Ui::CreditsWindow *ui;
     QButtonGroup *buttongroup;
     QMediaPlayer *mMediaPlayer;
 };
