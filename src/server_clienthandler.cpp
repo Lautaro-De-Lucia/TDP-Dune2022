@@ -117,7 +117,7 @@ void ClientHandler::sendResponses(std::vector<response_t> & responses){
     responses.clear();
 }
 
-int ClientHandler::getSpice() {
+int & ClientHandler::getSpice() {
     return this->spice;
 }
 
@@ -129,7 +129,7 @@ player_t ClientHandler::getFaction() {
     return this->faction;
 }
 
-int ClientHandler::getEnergy() {
+int & ClientHandler::getEnergy() {
     return this->energy;
 }
 

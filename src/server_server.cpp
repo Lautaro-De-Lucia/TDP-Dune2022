@@ -118,13 +118,9 @@ void Server::handleInstruction(std::unique_ptr<instruction_t> & INS) {
 
 
 void Server::handleInstruction(building_create_t & INS) {
-    int current_spice = this->players[INS.player_ID]->getSpice();
-    int current_energy = this->players[INS.player_ID]->getEnergy();
     this->responses[INS.player_ID].push_back(
-        this->game.createBuilding(INS.faction,(building_t)INS.type,INS.pos_x,INS.pos_y,current_spice,current_energy)
+        this->game.createBuilding(INS.faction,(building_t)INS.type,INS.pos_x,INS.pos_y,this->players[INS.player_ID]->getSpice(),this->players[INS.player_ID]->getEnergy())
     );
-    this->players[INS.player_ID]->setSpice(current_spice);
-    this->players[INS.player_ID]->setEnergy(current_energy);
 }
 /*
 void Server::handleInstruction(unit_create_t & INS) {
@@ -188,14 +184,12 @@ response_t Server::checkCreation(player_t faction, unit_t type){
     this->unit_time[faction][type] += this->game.getTotalCreators(faction,type); 
     if(this->unit_time[faction][type] >= this->unit_creation_time[faction][type]){
 		response_t res;
-        int spice = this->getPlayer(faction)->getSpice();
-        res = this->game.createUnit(faction,type,spice);
+        res = this->game.createUnit(faction,type,this->getPlayer(faction)->getSpice());
         if (res != RES_CREATE_UNIT_SUCCESS){
             return res;
         } else {   
             this->unit_time[faction][type] = 0;
             this->units_to_create[faction][type]--;
-            this->getPlayer(faction)->setSpice(spice);
             return res;
         }
     }   

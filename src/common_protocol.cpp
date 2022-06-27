@@ -653,8 +653,6 @@ void Protocol::send_harvester(int id, int faction, int lp, int pos_x, int pos_y,
     uint8_t harvesting_buffer = (uint8_t) _harvesting;
     uint8_t waiting_buffer = (uint8_t) _waiting;
 
-    std::cout << "Sending the direction: " << (int) direction_buffer << std::endl;
-
     int sent_size = -1;
     bool was_closed = false;
 
@@ -935,7 +933,6 @@ void Protocol::receive_harvester(int& id, int& faction, int& lp, int& pos_x, int
     spice = (int) _spice;
     harvesting = (bool) _harvesting;
     waiting = (bool) _waiting;
-    std::cout << "Received the direction: " << direction << std::endl;
 
     return;
 }

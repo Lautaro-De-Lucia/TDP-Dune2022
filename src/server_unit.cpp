@@ -101,7 +101,7 @@ void Harvester::sendState(Protocol & protocol, Socket & client_socket){
 
 void Harvester::react(int x, int y, Board& board) {
     
-    if (board.canDeposit(x,y,this->faction)){
+    if (board.canDeposit(x,y,this->faction) && this->stored_spice > 0){
         this->deposit(x,y,board);
         return;
     }
@@ -140,7 +140,6 @@ void Harvester::update(State& state, Board& board){
             this->move(move_to.x,move_to.y,board);
         }
     }
-
     //  UPDATE MOVEMENT
     if(this->moving == false){
         if (this->depositing == true){
@@ -160,11 +159,20 @@ void Harvester::update(State& state, Board& board){
                 int spice = harvestcell.extractSpice();
                 board.addSandPosition(harvest_position.x,harvest_position.y);
                 if(spice == 0){
-                    this->harvesting = false;
-                    if(this->stored_spice > 0)
+                    if(this->stored_spice > 0){
                         this->deposit(board);
-                    else
-                        return;    
+                    }
+                    else{
+                        for(Position pos : board.getSurroundings(this->position,1,1)){
+                            Cell & hc = board.getCell(pos.x,pos.y);
+                            if(hc.canHarvest() && !hc.isOccupied() && (hc.getReserveID() == -1 || hc.getReserveID() == this->ID)){
+                                this->harvest(pos.x,pos.y,board);
+                                return;
+                            }
+                        }
+                        this->harvesting = false;
+                        return;
+                    }  
                 }
                 this->stored_spice += spice;
                 if(this->stored_spice == this->max_spice){
@@ -173,35 +181,36 @@ void Harvester::update(State& state, Board& board){
                     return;
                 }
             } else {
-                if(board.getCell(harvest_position.x,harvest_position.y).isOccupied()){
-                    return;
-                }
                 this->harvest(harvest_position.x,harvest_position.y,board);
             }
         } 
     }
     if(this->moving == true){
-        if (this->harvesting == true){
-            if(board.get_distance_between(this->harvest_position,this->position) <= 2){
-                if(board.getCell(harvest_position.x,harvest_position.y).isOccupied()){
-                    this->moving == false;
-                    return;
-                }
-            }
-        } 
-        if (this->depositing == true){
-            if(board.get_distance_between(this->position,this->deposit_position) <= 2){
-                  if(board.getCell(deposit_position.x,deposit_position.y).isOccupied()){
-                    this->moving == false;
-                    return;
-                }
-            }
-        }
         //  Si el camino termino, dejar de moverse
         if (this->remaining_path.size() == 0) {
             this->moving = false;
             this->current_time = 0;
             return;
+        }
+        if (this->harvesting == true){
+            if(board.get_distance_between(this->harvest_position,this->position) <= 1){
+                Cell & hc = board.getCell(harvest_position.x,harvest_position.y);
+                if(hc.isOccupied() || (hc.getReserveID() != -1 && hc.getReserveID() != this->ID)){
+                    this->moving = false;
+                    this->waiting = true;
+                    return;
+                }
+            }
+        } 
+        if (this->depositing == true){
+            if(board.get_distance_between(this->position,this->deposit_position) <= 1){
+                Cell & dc = board.getCell(deposit_position.x,deposit_position.y);
+                if(dc.isOccupied() || (dc.getReserveID() != -1 && dc.getReserveID() != this->ID)){
+                    this->moving = false;
+                    this->waiting = true;
+                    return;
+                }
+            }
         }
         //  Si se esta moviendo, siempre apunta a la direccion en la que se mueve
         Position next = remaining_path.back();
@@ -238,7 +247,6 @@ void Harvester::update(State& state, Board& board){
             this->occupy(board);
             this->remaining_path.pop_back();
         }
-        std::cout << this->ID <<"-> moving in the direction: " << this->direction << std::endl;
     }
 }
 
@@ -250,7 +258,8 @@ void Harvester::deposit(Board & board){
     size_t best_distance = 1000;
     Position best_position;
     for (Position pos : board.getDepositPositions(this->faction)){
-        if (board.getCell(pos.x,pos.y).isOccupied())
+        Cell & dc = board.getCell(pos.x,pos.y);
+        if (dc.isOccupied() || !dc.canTraverse() || (dc.getReserveID() != -1 && dc.getReserveID() != this->ID))
             continue;
         size_t distance = board.get_distance_between(this->position,pos);
         if(distance < best_distance){
