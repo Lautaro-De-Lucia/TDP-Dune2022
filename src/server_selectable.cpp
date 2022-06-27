@@ -65,6 +65,7 @@ bool Selectable::isWithin(const Area& selection){
 std::string Selectable::getName(){return this->name;}
 Position Selectable::getPosition(){return this->position;}
 player_t Selectable::getFaction(){return this->faction;}
+int Selectable::getID(){return this->ID;}
 int Selectable::getLP(){return this->LP;}
 int Selectable::getDimX(){return this->dim_x;}
 int Selectable::getDimY(){return this->dim_y;}

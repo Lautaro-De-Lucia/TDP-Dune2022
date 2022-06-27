@@ -277,9 +277,6 @@ void Player::play(){
         if (frame_time_update < 100 && game_has_started)
             continue;
         base_time_update = current_time;
-        
-        std::cout << "updating" << std::endl;
-
         this->update();
     }
 }

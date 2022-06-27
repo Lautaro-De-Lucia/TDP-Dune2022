@@ -25,6 +25,12 @@ void Unit::react(int x, int y, Board& board){}
 void Unit::update(State& state, Board& board){}
 void Unit::receiveDamage(int damage){}
 
+std::vector<Position> Unit::getPositions(){
+    std::vector<Position> positions;
+    positions.push_back(this->position);
+    positions.push_back(this->next_position);
+    return positions;
+}
 
 void Unit::move(int x, int y, Board& board) {
     std::vector<Position> empty_path;
@@ -275,17 +281,20 @@ void Trike::attack(int x, int y, Board& board){
     this->targeting = true;
 	this->enemy_position = Position(x,y);
     this->moving_position = this->enemy_position;
-
-    Position selectable_pos = (board.getElementAt(x,y))->getPosition();
-    int selectable_dim_x = (board.getElementAt(x,y))->getDimX();
-    int selectable_dim_y = (board.getElementAt(x,y))->getDimY();
-    std::vector<Position> attacking_positions = board.getSurroundings(selectable_pos, selectable_dim_x, selectable_dim_y); //  FAILING HERE
-
-    for (Position pos : attacking_positions)
-        if(board.canTraverse(pos.x,pos.y)){
+    //  Get the surrounding positions of my enemy
+    int enemy_dim_x = (board.getElementAt(x,y))->getDimX();
+    int enemy_dim_y = (board.getElementAt(x,y))->getDimY();
+    std::vector<Position> attacking_positions = board.getSurroundings(this->enemy_position, enemy_dim_x, enemy_dim_y); 
+    //  Find the first position that is neither occupied nor reserved
+    for (Position pos : attacking_positions){
+        Cell & c = board.getCell(pos.x,pos.y);
+        if(c.canTraverse() && (c.getReserveID() == -1 || c.getReserveID() == this->ID) && !c.isOccupied()){
 	        this->moving_position = pos;
             break;
-        }  
+        } 
+    } 
+    std::cout << "Moving to the position: " << this->moving_position << std::endl;
+    //  Move there
     this->move(this->moving_position.x,this->moving_position.y,board);
 }
 
@@ -338,20 +347,34 @@ void Trike::update(State & state, Board& board){
     }
     //  Si no me estoy moviendo ni atacando, buscar enemigos
     if(this->moving == false && this->targeting == false){
-		if (this->enemySearch(board) == true)
-		    this->attack(this->enemy_position.x,this->enemy_position.y,board);
+        std::cout << this->ID << "-> Buscando enemigos..." << std::endl;
+		if (this->enemySearch(board) == true){
+            std::cout << "Enemigo encontrado en la posición: " << this->enemy_position << std::endl;
+            this->attack(this->enemy_position.x,this->enemy_position.y,board);
+        }
     }
     //  Si estoy atacando, perseguir
     if (this->targeting == true){
+        std::cout << this->ID << "-> Persiguiendo enemigo" << std::endl;
+        //  If there is still an enemy at the position
         if(board.hasEnemy(this->enemy_position.x,this->enemy_position.y,this->faction)){
-            if(!board.canTraverse(this->moving_position.x,this->moving_position.y))
-                if(this->position.x != this->moving_position.x || this->position.y != this->moving_position.y)
-                    this->attack(this->enemy_position.x,this->enemy_position.y,board);
+            //  If I cannot move to the position I was moving to, I have to change where to move
+            //Cell & c = board.getCell(this->moving_position.x,this->moving_position.y);
+            //if(!c.canTraverse() || !(c.getReserveID() == -1 || c.getReserveID() == this->ID) || c.isOccupied())
+                // Unless I'm already at the position, keep attacking (so that the algorithm finds new positions)
+                //if(this->position.x != this->moving_position.x || this->position.y != this->moving_position.y)
+                    //this->attack(this->enemy_position.x,this->enemy_position.y,board);
+            //  If in range, deal damage to the enemy
             if(board.get_distance_between(this->position,this->enemy_position) < this->range){
+                this->focus(this->enemy_position);
+                this->waiting = true;    
                 this->attacking = true;
+                this->moving = false;
                 board.dealDamage(this->enemy_position.x,this->enemy_position.y,this->attack_points);
             }
         } else{
+            //  If the enemy left the position. Stop (this will get the trike on searchEnemy() mode again)
+            std::cout << this->ID << "-> No hay enemigos en esta zona" << std::endl;
             this->moving = false;
             this->targeting = false;
             this->attacking = false;
@@ -364,20 +387,19 @@ void Trike::update(State & state, Board& board){
     if(this->moving == true){
         //  Si el camino termino, dejar de moverse
         if (this->remaining_path.size() == 0) {
-            std::cout << this->ID << "-> Last direction: " << this->direction << std::endl;
             this->moving = false;
             this->current_time = 0;
             return;
         }
         //  Si se esta moviendo, siempre apunta a la direccion en la que se mueve
-        Position next_position = remaining_path.back();
-        this->focus(next_position);
+        Position next = remaining_path.back();
+        this->focus(next);
         //  Miro la próxima posición
-        Cell& next_cell = board.getCell(next_position.x,next_position.y); 
-        if(next_cell.canTraverse() && (next_cell.getID() == -1 || next_cell.getID() == this->ID)){
-            //  Si puedo ir, ocuparla
+        Cell& next_cell = board.getCell(next.x,next.y); 
+        if(next_cell.canTraverse() && (next_cell.getReserveID() == -1 || next_cell.getReserveID() == this->ID) && !next_cell.isOccupied()){            //  Si puedo ir, ocuparla
             this->waiting = false;
-            next_cell.occupy(this->ID);     
+            next_cell.reserve(this->ID);
+            this->next_position = next;          
             this->current_time+=this->speed;    //  Increase counter
         } else {
             //  Si no puedo ir 
@@ -399,6 +421,7 @@ void Trike::update(State & state, Board& board){
             //  Cuando se cumple el tiempo, cambiar de posición
             this->current_time = 0; //  Reset counter
             board.getCell(this->position.x,this->position.y).disoccupy();
+            board.getCell(this->next_position.x,this->next_position.y).unReserve();
             this->position = this->remaining_path.back();
             this->occupy(board);
             this->remaining_path.pop_back();

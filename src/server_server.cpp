@@ -58,14 +58,10 @@ void Server::run() {
     while (true) {
         this->checkForLosingPlayers();
         while(this->TSQ.getSize() < this->players.size()){}
-        std::cout << "Size before popping: " << this->TSQ.getSize() << std::endl;
         for(size_t i = 0 ; i < this->players.size(); i++) {
-            std::cout << "Popping element" << std::endl;
             std::unique_ptr<instruction_t> new_instruction = this->TSQ.pop();
             this->handleInstruction(new_instruction);
-            std::cout << "Size after popping (within loop): " << this->TSQ.getSize() << std::endl;
         }
-        std::cout << "Size after popping: " << this->TSQ.getSize() << std::endl;
         this->sendResponses();
         this->update();
         for(size_t i = 0; i < this->players.size(); i++)

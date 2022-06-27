@@ -19,6 +19,7 @@ class Building : public Selectable {
     virtual bool canCreate(unit_t type);
     virtual bool canEnable(unit_t type);
     virtual bool canCostTheGame();
+    virtual std::vector<Position> getPositions();
 };
 class AirTrap : public Building {
     int c_energy;

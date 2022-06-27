@@ -31,6 +31,14 @@ int Building::getEnergy(){
     return this->energy;
 }
 
+std::vector<Position> Building::getPositions(){
+    std::vector<Position> positions;
+    for (size_t i = 0; i < this->dim_x ; i++)
+        for(size_t j = 0; j < this->dim_y ; j++)
+            positions.push_back(Position(this->position.x+i,this->position.y+j));
+    return positions;
+}
+
 void Building::sendState(Protocol & protocol,Socket & client_socket){
     std::cerr << "I shouldn't be here either" << std::endl;
 }

@@ -16,6 +16,7 @@ class Unit : public Selectable {
     bool targeting;
     int spice;
     int speed;
+    Position next_position;
     size_t current_time;
     size_t movement_time;
     std::queue<Position> pending_move;
@@ -28,6 +29,7 @@ class Unit : public Selectable {
     virtual void receiveDamage(int damage);
     virtual void sendState(Protocol & protocol, Socket & client_socket);
     virtual response_t place(Board& board,std::vector<Position>& positions,int* spice);
+    virtual std::vector<Position> getPositions();
     void move(int x, int y, Board& board);
 
 };
