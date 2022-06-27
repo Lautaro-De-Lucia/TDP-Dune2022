@@ -61,7 +61,7 @@ Se inicia el juego uniendose a la partida del servidor mediante las intrucciones
 
 #### Pantalla de selección de casa
 
-Nos será posible elegir entre tres casas, o tres facciones distintas, toda basadas en las casas ficticias creadas por Frank Herbert en sus novelas de Dune. Es posible jugar sólo contra enemigos, o con aliados. Para esto último, los dos jugadores deben elegir la misma facción. Distintas facciones poseen distintos edificios y distintas unidades.
+Nos será posible elegir entre tres casas, o tres facciones distintas, todas basadas en las casas ficticias creadas por Frank Herbert en sus novelas de Dune. Es posible jugar sólo contra enemigos, o con aliados. Para esto último, los dos jugadores deben elegir la misma facción. Distintas facciones poseen distintos edificios y distintas unidades.
 
 ### Inicio del juego
 
