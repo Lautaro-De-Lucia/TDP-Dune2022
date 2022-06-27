@@ -18,6 +18,8 @@ ClientHandler::ClientHandler(int player_id, int init_energy, int init_spice,std:
         this->units_to_create[UNIT] = 0,
         this->unit_time[UNIT] = 0,
         this->unit_creation_time[UNIT] = 2;
+
+    this->finished = false;
 }
 
 bool ClientHandler::isDone(){
@@ -38,8 +40,6 @@ void ClientHandler::run() {
     int _faction;
     this->protocol.receive_faction_request(_faction, this->player_socket);
     this->faction = (player_t) _faction;
-    std::cout << "My faction is: " << _faction << std::endl;
-    std::cout << "asd" << std::endl;
     if(this->faction == ATREIDES)
         this->instruction_queue.push(std::unique_ptr<building_create_t>(new building_create_t(this->player_id, this->faction,CONSTRUCTION_YARD,ATREIDES_INIT_POS_X,ATREIDES_INIT_POS_Y)));
     if(this->faction == HARKONNEN)
