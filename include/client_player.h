@@ -9,6 +9,7 @@
 #include "client_mouse.h"
 #include "client_camera.h"
 #include "client_audioplayer.h"
+#include "client_shotshandler.h"
 
 #include "common_utils.h"
 #include "common_protocol.h"

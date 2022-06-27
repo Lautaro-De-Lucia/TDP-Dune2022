@@ -62,6 +62,7 @@ ADD_EXECUTABLE("client" client_main.cpp
             src/client_gamehud_button.cpp
             src/client_camera.cpp
             src/client_mouse.cpp
+            src/client_shotshandler.cpp
             src/ui/vistas.h
             src/ui/mainwindow.cpp
             src/ui/mainwindow.ui

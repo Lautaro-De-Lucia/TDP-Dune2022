@@ -293,6 +293,7 @@ void Player::play(){
             continue;
         base_time_update = current_time;
         this->update();
+        sleepcp(10);
     }
 }
 
