@@ -101,7 +101,7 @@ void Harvester::sendState(Protocol & protocol, Socket & client_socket){
 
 void Harvester::react(int x, int y, Board& board) {
     
-    if (board.canDeposit(x,y,this->faction)){
+    if (board.canDeposit(x,y,this->faction) && this->stored_spice > 0){
         this->deposit(x,y,board);
         return;
     }
@@ -155,7 +155,6 @@ void Harvester::update(State& state, Board& board){
             }
         }
         if(this->harvesting == true){
-            std::cout << "Imma harvest here" << std::endl;
             if(this->position == this->harvest_position){
                 Cell& harvestcell = board.getCell(harvest_position.x,harvest_position.y);
                 int spice = harvestcell.extractSpice();
@@ -190,17 +189,19 @@ void Harvester::update(State& state, Board& board){
         }
         if (this->harvesting == true){
             if(board.get_distance_between(this->harvest_position,this->position) <= 2){
-                if(board.getCell(harvest_position.x,harvest_position.y).isOccupied()){
-                    this->moving == false;
+                Cell & hc = board.getCell(harvest_position.x,harvest_position.y);
+                if(hc.isOccupied() || (hc.getReserveID() != -1 && hc.getReserveID() != this->ID)){
+                    this->moving = false;
+                    this->waiting = true;
                     return;
                 }
             }
         } 
         if (this->depositing == true){
-            std::cout << "Going to deposit..." << std::endl;
             if(board.get_distance_between(this->position,this->deposit_position) <= 2){
                   if(board.getCell(deposit_position.x,deposit_position.y).isOccupied()){
-                    this->moving == false;
+                    this->moving = false;
+                    this->waiting = true;
                     return;
                 }
             }
@@ -259,7 +260,6 @@ void Harvester::deposit(Board & board){
             best_position = pos;
         }
     }
-    std::cout << "Imma deposit at this position now: " << best_position << std::endl;
     this->deposit_position = best_position;
     this->depositing = true;
     this->move(this->deposit_position.x,this->deposit_position.y,board);
