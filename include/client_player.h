@@ -55,6 +55,7 @@ class Player {
     bool is_holding_building;
     int building_held;
     std::queue<std::vector<int>> mouse_events;
+    std::map<int,std::string> button_info_paths;
     std::vector<bool> updates;
     bool left_click;
     bool right_click;
@@ -73,6 +74,8 @@ class Player {
     void renderWaitingText();
     void renderMap();
     void renderHud();
+    void renderButtonInfo();
+    void renderHeldBuilding();
     void addElement(unit_t type,State& desc);
     void addElement(building_t type,State& desc);
     void render();

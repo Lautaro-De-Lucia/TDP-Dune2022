@@ -74,6 +74,65 @@ GameHud::GameHud(player_t faction, SDL2pp::Renderer& renderer) : texture(rendere
 
 }
 
+std::string GameHud::getButtonInfoPath(hud_button_t button,int id){
+	std::string button_info_path;
+	button_info_path.append(DATA_PATH);
+	button_info_path.append(BUTTON_TEXTURE_PATH);
+	if(button == UNKNOWN_BTN)
+		throw std::runtime_error("Unknown Button");
+	if(button == BUILD_BTN){
+		switch(id){
+			case BARRACK:
+				button_info_path.append("/barrack.png");
+				break;
+			case REFINERY:
+				button_info_path.append("/refinery.png");
+				break;
+			case AIR_TRAP:
+				button_info_path.append("/airtrap.png");
+				break;
+			case LIGHT_FACTORY:
+				button_info_path.append("/lightfactory.png");
+				break;		
+			case HEAVY_FACTORY:
+				button_info_path.append("/heavyfactory.png");
+				break;
+			case SILO:
+				button_info_path.append("/silo.png");
+				break;
+			case PALACE:
+				button_info_path.append("/palace.png");
+				break;
+		}
+	}
+	if(button == UNIT_BTN){
+		switch(id){
+			case FREMEN:
+				button_info_path.append("/fremen.png");
+				break;
+			case INFANTRY:
+				button_info_path.append("/infantry.png");
+				break;
+			case SARDAUKAR:
+				button_info_path.append("/sardaukar.png");
+				break;
+			case TRIKE:
+				button_info_path.append("/trike.png");
+				break;		
+			case TANK:
+				button_info_path.append("/tank.png");
+				break;
+			case DEVASTATOR:
+				button_info_path.append("/devastator.png");
+				break;
+			case HARVESTER:
+				button_info_path.append("/harvester.png");
+				break;
+		}
+	}
+	return button_info_path;
+}
+
 void GameHud::render(SDL2pp::Renderer& renderer){
 	renderer.Copy(
 		texture,						//	The sprite

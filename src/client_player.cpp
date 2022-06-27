@@ -563,6 +563,71 @@ void Player::renderWaitingText() {
     this->game_renderer.Present();
 }
 
+void Player::renderButtonInfo(){
+    int x, y;
+    SDL_GetMouseState(&x, &y);
+    int button = -1;
+    for(size_t i = 0 ; i < 14 ; i++ ){
+        if(this->checkBuild(x,y) != -1){
+            button = this->checkBuild(x,y);
+            break;    
+        }
+        if(this->checkUnit(x,y) != -1){
+            button = this->checkUnit(x,y);
+            break;    
+        }
+    }
+    if(button == -1)
+        return;
+    SDL2pp::Texture button_info(this->game_renderer,this->hud.getButtonInfoPath(this->checkBtn(x,y),button).c_str());
+    this->game_renderer.Copy(
+        button_info,
+        SDL2pp::NullOpt,
+        SDL2pp::Rect(x-TILE_SIZE*16,y,TILE_SIZE*16,TILE_SIZE*8)
+    );    
+}
+
+void Player::renderHeldBuilding(){
+    int x, y;
+    SDL_GetMouseState(&x, &y);
+    if(this->is_holding_building == true){
+        std::string building_texture_path;
+        building_texture_path.append(DATA_PATH);
+        switch(this->building_held){
+			case BARRACK:
+				building_texture_path.append("/buildingsprites/barrack/barrack.png");
+				break;
+			case REFINERY:
+				building_texture_path.append("/buildingsprites/refinery/refinery.png");
+				break;
+			case AIR_TRAP:
+				building_texture_path.append("/buildingsprites/windtrap/windtrap.png");
+				break;
+			case LIGHT_FACTORY:
+				building_texture_path.append("/buildingsprites/lightfactory/lightfactory.png");
+				break;		
+			case HEAVY_FACTORY:
+				building_texture_path.append("/buildingsprites/heavyfactory/heavyfactory.png");
+				break;
+			case SILO:
+				building_texture_path.append("/buildingsprites/silo/silo.png");
+				break;
+			case PALACE:
+				building_texture_path.append("/buildingsprites/palace/palace.png");
+				break;
+        }
+        std::cout << "Opening texture in path: " << building_texture_path << std::endl;
+        SDL2pp::Texture building_texture(this->game_renderer,building_texture_path.c_str());
+        building_texture.SetBlendMode(SDL_BLENDMODE_ADD);
+        std::cout << "Rendering it to positions: (" << x <<","<< y <<")"<< std::endl;
+        this->game_renderer.Copy(
+            building_texture,
+            SDL2pp::Rect(0,0,63,76),
+            SDL2pp::Rect(x,y,TILE_SIZE*3*2,TILE_SIZE*3*2)
+        );    
+    }
+}
+
 void Player::render(){
     this->game_renderer.Clear();
     this->renderMap();
@@ -571,6 +636,8 @@ void Player::render(){
         e.second->render(this->faction,this->game_renderer,this->camera.pos_x,this->camera.pos_y);
     this->hud.update(this->spice,this->c_spice,this->energy);
     this->renderHud();
+    this->renderHeldBuilding();
+    this->renderButtonInfo();
     this->game_renderer.Present();
 }
 

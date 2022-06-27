@@ -174,6 +174,9 @@ enum building_t {
     CONSTRUCTION_YARD = 8
 };
 
+constexpr std::initializer_list<building_t> buildings = {AIR_TRAP,BARRACK,REFINERY,LIGHT_FACTORY,HEAVY_FACTORY,SILO,PALACE,CONSTRUCTION_YARD};
+
+
 struct instruction_t {
     int player_ID;
     player_t faction;
