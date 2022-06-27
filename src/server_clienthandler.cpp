@@ -39,13 +39,13 @@ void ClientHandler::run() {
     this->protocol.receive_faction_request(_faction, this->player_socket);
     this->faction = (player_t) _faction;
     std::cout << "My faction is: " << _faction << std::endl;
-    //std::cout << "asd" << std::endl;
-    //if(this->faction == ATREIDES)
-    //    this->game->createBuilding(this->faction,CONSTRUCTION_YARD,ATREIDES_INIT_POS_X,ATREIDES_INIT_POS_Y,this->spice, this->energy); 
-    //if(this->faction == HARKONNEN)
-    //    this->game->createBuilding(this->faction,CONSTRUCTION_YARD,HARKONNEN_INIT_POS_X,HARKONNEN_INIT_POS_Y,this->spice, this->energy); 
-    //if(this->faction == ORDOS)
-    //    this->game->createBuilding(this->faction,CONSTRUCTION_YARD,ORDOS_INIT_POS_X,ORDOS_INIT_POS_Y,this->spice, this->energy);
+    std::cout << "asd" << std::endl;
+    if(this->faction == ATREIDES)
+        this->instruction_queue.push(std::unique_ptr<building_create_t>(new building_create_t(this->player_id, this->faction,CONSTRUCTION_YARD,ATREIDES_INIT_POS_X,ATREIDES_INIT_POS_Y)));
+    if(this->faction == HARKONNEN)
+        this->instruction_queue.push(std::unique_ptr<building_create_t>(new building_create_t(this->player_id, this->faction,CONSTRUCTION_YARD,HARKONNEN_INIT_POS_X,HARKONNEN_INIT_POS_Y)));
+    if(this->faction == ORDOS)
+        this->instruction_queue.push(std::unique_ptr<building_create_t>(new building_create_t(this->player_id, this->faction,CONSTRUCTION_YARD,ORDOS_INIT_POS_X,ORDOS_INIT_POS_Y)));
 
     while (true) {
         
@@ -60,11 +60,11 @@ void ClientHandler::run() {
         }
 
         int type, pos_x, pos_y, pos_x_min,pos_x_max,pos_y_min,pos_y_max;
-
+        //  std::cout << "Pushing instruction to queue" << std::endl;
         switch (command){
             case CREATE_UNIT:
                 this->protocol.receive_create_unit_request(type, this->player_socket);
-                this->instruction_queue.push(std::unique_ptr<unit_create_t>(new unit_create_t(this->player_id, this->faction, type)));
+                this->instruction_queue.push(std::unique_ptr<unit_create_t>(new unit_create_t(this->player_id, this->faction,(unit_t)type)));
                 break;
             case CREATE_BUILDING:
                 this->protocol.receive_create_building_request(type, pos_x, pos_y, this->player_socket);
@@ -88,6 +88,7 @@ void ClientHandler::run() {
             default:
                 break;
         }
+        //  std::cout << "Pushed instruction to queue" << std::endl;
         this->reading_flags[this->player_id] = false;
     }
 }
@@ -118,6 +119,14 @@ void ClientHandler::sendResponses(std::vector<response_t> & responses){
 
 int ClientHandler::getSpice() {
     return this->spice;
+}
+
+int ClientHandler::getID() {
+    return this->player_id;
+}
+
+player_t ClientHandler::getFaction() {
+    return this->faction;
 }
 
 int ClientHandler::getEnergy() {

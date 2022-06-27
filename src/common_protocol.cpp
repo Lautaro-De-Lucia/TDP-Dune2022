@@ -635,25 +635,43 @@ void Protocol::send_devastator(int id, int faction, int lp, int pos_x, int pos_y
     return;
 }
 
-void Protocol::send_harvester(int id, int faction, int lp, int pos_x, int pos_y, bool selected, int spice, bool harvesting, Socket& client_socket) {
+void Protocol::send_harvester(int id, int faction, int lp, int pos_x, int pos_y,int direction,bool moving, bool selected, int spice, bool harvesting,bool waiting, Socket& client_socket) {
 
     this->send_selectable_type(SEL_HARVESTER, client_socket);
 
     this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 
+    uint8_t _direction = (uint8_t) direction;
+    uint8_t _moving = (uint8_t) moving;
     uint16_t _spice = (uint16_t) spice;
     uint8_t _harvesting = (uint8_t) harvesting;
+    uint8_t _waiting = (uint8_t) waiting;
 
+    uint8_t direction_buffer = (uint8_t) _direction;
+    uint8_t moving_buffer = (uint8_t) _moving;
     uint16_t spice_buffer = (uint16_t) htons(_spice);
     uint8_t harvesting_buffer = (uint8_t) _harvesting;
+    uint8_t waiting_buffer = (uint8_t) _waiting;
+
+    std::cout << "Sending the direction: " << (int) direction_buffer << std::endl;
 
     int sent_size = -1;
     bool was_closed = false;
+
+
+    sent_size = client_socket.sendall(&direction_buffer, sizeof(direction_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&moving_buffer, sizeof(moving_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
 
     sent_size = client_socket.sendall(&spice_buffer, sizeof(spice_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
 
     sent_size = client_socket.sendall(&harvesting_buffer, sizeof(harvesting_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&waiting_buffer, sizeof(waiting_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
 
     return;
@@ -877,27 +895,47 @@ void Protocol::receive_devastator(int& id, int& faction, int& lp, int& pos_x, in
     return;
 }
 
-void Protocol::receive_harvester(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, int& spice, bool& harvesting, Socket& client_socket) {
+void Protocol::receive_harvester(int& id, int& faction, int& lp, int& pos_x, int& pos_y, int & direction,bool & moving,bool& selected, int& spice, bool& harvesting,bool & waiting, Socket& client_socket) {
 
     this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 
-    uint8_t harvesting_buffer;
-    uint8_t _harvesting;
+
+    uint8_t direction_buffer;
+    uint8_t _direction;
+    uint8_t moving_buffer;
+    uint8_t _moving;
     uint16_t spice_buffer;
     uint16_t _spice;
+    uint8_t harvesting_buffer;
+    uint8_t _harvesting;
+    uint8_t waiting_buffer;
+    uint8_t _waiting;
 
     int recv_size = -1;
     bool was_closed = false;
 
-    recv_size = client_socket.recvall(&harvesting_buffer, sizeof(harvesting_buffer), &was_closed);
+    recv_size = client_socket.recvall(&direction_buffer, sizeof(direction_buffer), &was_closed);
     handle_receive(was_closed, recv_size);
-    _harvesting = (uint8_t) harvesting_buffer;
+    _direction = (uint8_t) direction_buffer;
+    recv_size = client_socket.recvall(&moving_buffer, sizeof(moving_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _moving = (uint8_t) moving_buffer;
     recv_size = client_socket.recvall(&spice_buffer, sizeof(spice_buffer), &was_closed);
     handle_receive(was_closed, recv_size);
     _spice = (uint16_t) ntohs(spice_buffer);
+    recv_size = client_socket.recvall(&harvesting_buffer, sizeof(harvesting_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _harvesting = (uint8_t) harvesting_buffer;
+    recv_size = client_socket.recvall(&waiting_buffer, sizeof(waiting_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _waiting = (uint8_t) waiting_buffer;
 
-    harvesting = (bool) _harvesting;
+    direction = (int) _direction;
+    moving = (bool) _moving;
     spice = (int) _spice;
+    harvesting = (bool) _harvesting;
+    waiting = (bool) _waiting;
+    std::cout << "Received the direction: " << direction << std::endl;
 
     return;
 }

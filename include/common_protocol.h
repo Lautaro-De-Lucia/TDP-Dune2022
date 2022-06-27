@@ -69,7 +69,7 @@ class Protocol {
     void send_devastator(int id, int faction, int lp, int pos_x, int pos_y, bool selected, bool attacking, Socket& client_socket);
 
     void send_construction_yard(int id, int faction, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket);
-    void send_harvester(int id, int faction, int lp, int pos_x, int pos_y, bool selected, int spice, bool harvesting, Socket& client_socket);
+    void send_harvester(int id, int faction, int lp, int pos_x, int pos_y,int direction, bool moving,bool selected, int spice, bool harvesting,bool waiting, Socket& client_socket);
     void send_air_trap(int id, int faction, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket);
     void send_barrack(int id, int faction, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket);
     void send_refinery(int id, int faction, int lp, int pos_x, int pos_y, bool selected, Socket& client_socket);
@@ -87,7 +87,7 @@ class Protocol {
     void receive_devastator(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, bool& attacking, Socket& client_socket);
 
     void receive_construction_yard(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket);
-    void receive_harvester(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, int& spice, bool& harvesting, Socket& client_socket);
+    void receive_harvester(int& id, int& faction, int& lp, int& pos_x, int& pos_y,int & direction,bool& moving, bool& selected, int& spice, bool& harvesting, bool & waiting, Socket& client_socket);
     void receive_air_trap(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket);
     void receive_barrack(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket);
     void receive_refinery(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, Socket& client_socket);

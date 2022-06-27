@@ -30,6 +30,7 @@ class Unit : public Selectable {
     virtual void sendState(Protocol & protocol, Socket & client_socket);
     virtual response_t place(Board& board,std::vector<Position>& positions,int* spice);
     virtual std::vector<Position> getPositions();
+    void focus(Position & other_position);
     void move(int x, int y, Board& board);
 
 };
@@ -74,7 +75,6 @@ class Trike : public Unit {
  public:
     Trike(int ID,player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int attack, int range);
     void create();
-    void focus(Position & other_position);
     virtual void react(int x, int y, Board& board);
     virtual void update(State& state, Board& board);
     virtual void receiveDamage(int damage);

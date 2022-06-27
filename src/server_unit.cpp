@@ -26,9 +26,11 @@ void Unit::update(State& state, Board& board){}
 void Unit::receiveDamage(int damage){}
 
 std::vector<Position> Unit::getPositions(){
+    std::cout << "Getting positions of the destroyed unit" << std::endl;
     std::vector<Position> positions;
     positions.push_back(this->position);
-    positions.push_back(this->next_position);
+    if(this->next_position.x != -1 && this->next_position.y !=-1)
+        positions.push_back(this->next_position);
     return positions;
 }
 
@@ -88,10 +90,13 @@ void Harvester::sendState(Protocol & protocol, Socket & client_socket){
         this->LP,
         this->position.x,
         this->position.y,
+        this->direction,
+        this->moving,
         this->selected,
         this->spice,
         this->harvesting,
-        client_socket); 
+        this->waiting,
+        client_socket);    
 }
 
 void Harvester::react(int x, int y, Board& board) {
@@ -109,7 +114,8 @@ void Harvester::react(int x, int y, Board& board) {
 
     this->harvesting = false;
     this->depositing = false;
-    this->move(x,y,board);
+
+    this->pending_move.push(Position(x, y));        
 }
 
 void Harvester::harvest(int x, int y, Board& board){
@@ -124,6 +130,17 @@ void Harvester::receiveDamage(int damage){
 }
 
 void Harvester::update(State& state, Board& board){
+    
+    Selectable::update(state,board);
+
+    if (this->pending_move.size() != 0) {
+        if (this->current_time == 0) {
+            Position move_to = this->pending_move.front();
+            this->pending_move.pop();
+            this->move(move_to.x,move_to.y,board);
+        }
+    }
+
     //  UPDATE MOVEMENT
     if(this->moving == false){
         if (this->depositing == true){
@@ -180,32 +197,49 @@ void Harvester::update(State& state, Board& board){
                 }
             }
         }
-        this->current_time+=this->speed;
+        //  Si el camino termino, dejar de moverse
         if (this->remaining_path.size() == 0) {
             this->moving = false;
-        } else if (this->current_time >= this->movement_time) {
             this->current_time = 0;
-            Position next = this->remaining_path.back();
-            if(!(board.getCell(next.x,next.y).canTraverse())) {
-                if (this->remaining_path.size() <= 1) {
-                    std::vector<Position> empty_path;
-                    this->remaining_path = empty_path;
-                } else {
-                    this->move(this->remaining_path.front().x,this->remaining_path.front().y,board);
-                }
-            }
-            if (this->remaining_path.size() != 0) {
-                board.getCell(this->position.x,this->position.y).disoccupy();
-                this->position = this->remaining_path.back();
-                this->occupy(board);
-                this->remaining_path.pop_back();
-            }
+            return;
         }
-        if(remaining_path.size() == 0)
-            this->moving = false;
+        //  Si se esta moviendo, siempre apunta a la direccion en la que se mueve
+        Position next = remaining_path.back();
+        this->focus(next);
+        //  Miro la próxima posición
+        Cell& next_cell = board.getCell(next.x,next.y); 
+        if(next_cell.canTraverse() && (next_cell.getReserveID() == -1 || next_cell.getReserveID() == this->ID) && !next_cell.isOccupied()){            //  Si puedo ir, ocuparla
+            this->waiting = false;
+            next_cell.reserve(this->ID);
+            this->next_position = next;          
+            this->current_time+=this->speed;    //  Increase counter
+        } else {
+            //  Si no puedo ir 
+            if (this->remaining_path.size() <= 1) {
+                //  Me quedo
+                this->waiting = true;
+                this->moving = false;
+                std::vector<Position> empty_path;
+                this->remaining_path = empty_path;
+            } else {
+                //  Sino, recalculo el camino a destino
+                this->waiting = true;
+                this->move(this->remaining_path.front().x,this->remaining_path.front().y,board);
+                Position next_position = remaining_path.back();
+                this->focus(next_position);
+            }   
+        }
+        if (this->current_time >= this->movement_time) {
+            //  Cuando se cumple el tiempo, cambiar de posición
+            this->current_time = 0; //  Reset counter
+            board.getCell(this->position.x,this->position.y).disoccupy();
+            board.getCell(this->next_position.x,this->next_position.y).unReserve();
+            this->position = this->remaining_path.back();
+            this->occupy(board);
+            this->remaining_path.pop_back();
+        }
+        std::cout << this->ID <<"-> moving in the direction: " << this->direction << std::endl;
     }
-    //  UPDATE STATE
-    Selectable::update(state,board);   
 }
 
 void Harvester::occupy(Board & board){
@@ -316,7 +350,7 @@ bool Trike::enemySearch(Board & board){
     return false;
 }
 
-void Trike::focus(Position & other_pos){
+void Unit::focus(Position & other_pos){
     if (other_pos.x == this->position.x && other_pos.y > this->position.y)
         this->direction = BOTTOM;
     if (other_pos.x > this->position.x && other_pos.y > this->position.y)
@@ -337,7 +371,7 @@ void Trike::focus(Position & other_pos){
 
 void Trike::update(State & state, Board& board){
     Selectable::update(state,board);
-    //  
+    
     if (this->pending_move.size() != 0) {
         if (this->current_time == 0) {
             Position move_to = this->pending_move.front();
@@ -347,24 +381,16 @@ void Trike::update(State & state, Board& board){
     }
     //  Si no me estoy moviendo ni atacando, buscar enemigos
     if(this->moving == false && this->targeting == false){
-        std::cout << this->ID << "-> Buscando enemigos..." << std::endl;
 		if (this->enemySearch(board) == true){
-            std::cout << "Enemigo encontrado en la posición: " << this->enemy_position << std::endl;
+            std::cout << "Attacking position: "<< this->enemy_position << std::endl;
             this->attack(this->enemy_position.x,this->enemy_position.y,board);
         }
     }
     //  Si estoy atacando, perseguir
     if (this->targeting == true){
-        std::cout << this->ID << "-> Persiguiendo enemigo" << std::endl;
         //  If there is still an enemy at the position
         if(board.hasEnemy(this->enemy_position.x,this->enemy_position.y,this->faction)){
-            //  If I cannot move to the position I was moving to, I have to change where to move
-            //Cell & c = board.getCell(this->moving_position.x,this->moving_position.y);
-            //if(!c.canTraverse() || !(c.getReserveID() == -1 || c.getReserveID() == this->ID) || c.isOccupied())
-                // Unless I'm already at the position, keep attacking (so that the algorithm finds new positions)
-                //if(this->position.x != this->moving_position.x || this->position.y != this->moving_position.y)
-                    //this->attack(this->enemy_position.x,this->enemy_position.y,board);
-            //  If in range, deal damage to the enemy
+            //  If he is on range, stop & shoot
             if(board.get_distance_between(this->position,this->enemy_position) < this->range){
                 this->focus(this->enemy_position);
                 this->waiting = true;    
@@ -374,12 +400,13 @@ void Trike::update(State & state, Board& board){
             }
         } else{
             //  If the enemy left the position. Stop (this will get the trike on searchEnemy() mode again)
-            std::cout << this->ID << "-> No hay enemigos en esta zona" << std::endl;
+            this->waiting = false;
             this->moving = false;
             this->targeting = false;
             this->attacking = false;
             this->enemy_position.x = -1;
             this->enemy_position.y = -1;	
+            this->current_time = 0;
             return;
         }
     }

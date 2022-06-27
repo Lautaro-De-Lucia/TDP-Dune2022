@@ -204,9 +204,9 @@ struct building_create_t : instruction_t {
 
 struct unit_create_t : instruction_t {
 
-    int type;
+    unit_t type;
 
-    unit_create_t(int player_ID, player_t faction, int type) : instruction_t(player_ID, faction, CREATE_UNIT) {
+    unit_create_t(int player_ID, player_t faction, unit_t type) : instruction_t(player_ID, faction, CREATE_UNIT) {
         this->type = type;
     }
 

@@ -94,8 +94,10 @@ void Board::dealDamage(int x, int y, int damage){
         for(unit_t UNIT : units)
             if(element->canCreate(UNIT)) 
                 this->removeUnitCreator(element->getFaction(),UNIT);
-        for (Position pos : element->getPositions())
+        for (Position pos : element->getPositions()){
+            std::cout << "Disoccupying cell at position: " << pos << std::endl;
             this->cells[pos.x][pos.y].disoccupy();
+        }
         std::cout << "Element of ID: " << element->getID() << " Was just destroyed" <<std::endl;
         this->elements.erase(element->getID());
     }
