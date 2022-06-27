@@ -140,10 +140,10 @@ void Harvester::update(State& state, Board& board){
             this->move(move_to.x,move_to.y,board);
         }
     }
-
     //  UPDATE MOVEMENT
     if(this->moving == false){
         if (this->depositing == true){
+            std::cout << "Depositing now..." << std::endl;
             if (this->position == this->deposit_position){
                 *(this->player_spice)+=this->stored_spice;
                 this->stored_spice = 0;
@@ -155,6 +155,7 @@ void Harvester::update(State& state, Board& board){
             }
         }
         if(this->harvesting == true){
+            std::cout << "Imma harvest here" << std::endl;
             if(this->position == this->harvest_position){
                 Cell& harvestcell = board.getCell(harvest_position.x,harvest_position.y);
                 int spice = harvestcell.extractSpice();
@@ -181,6 +182,12 @@ void Harvester::update(State& state, Board& board){
         } 
     }
     if(this->moving == true){
+        //  Si el camino termino, dejar de moverse
+        if (this->remaining_path.size() == 0) {
+            this->moving = false;
+            this->current_time = 0;
+            return;
+        }
         if (this->harvesting == true){
             if(board.get_distance_between(this->harvest_position,this->position) <= 2){
                 if(board.getCell(harvest_position.x,harvest_position.y).isOccupied()){
@@ -190,18 +197,13 @@ void Harvester::update(State& state, Board& board){
             }
         } 
         if (this->depositing == true){
+            std::cout << "Going to deposit..." << std::endl;
             if(board.get_distance_between(this->position,this->deposit_position) <= 2){
                   if(board.getCell(deposit_position.x,deposit_position.y).isOccupied()){
                     this->moving == false;
                     return;
                 }
             }
-        }
-        //  Si el camino termino, dejar de moverse
-        if (this->remaining_path.size() == 0) {
-            this->moving = false;
-            this->current_time = 0;
-            return;
         }
         //  Si se esta moviendo, siempre apunta a la direccion en la que se mueve
         Position next = remaining_path.back();
@@ -238,7 +240,6 @@ void Harvester::update(State& state, Board& board){
             this->occupy(board);
             this->remaining_path.pop_back();
         }
-        std::cout << this->ID <<"-> moving in the direction: " << this->direction << std::endl;
     }
 }
 
@@ -250,7 +251,7 @@ void Harvester::deposit(Board & board){
     size_t best_distance = 1000;
     Position best_position;
     for (Position pos : board.getDepositPositions(this->faction)){
-        if (board.getCell(pos.x,pos.y).isOccupied())
+        if (board.getCell(pos.x,pos.y).isOccupied() || !board.getCell(pos.x,pos.y).canTraverse())
             continue;
         size_t distance = board.get_distance_between(this->position,pos);
         if(distance < best_distance){
@@ -258,6 +259,7 @@ void Harvester::deposit(Board & board){
             best_position = pos;
         }
     }
+    std::cout << "Imma deposit at this position now: " << best_position << std::endl;
     this->deposit_position = best_position;
     this->depositing = true;
     this->move(this->deposit_position.x,this->deposit_position.y,board);

@@ -58,8 +58,8 @@ class ClientHandler {
    bool isDone();
    void close();
    void sendResponses(std::vector<response_t> & responses);
-   int getSpice();
-   int getEnergy();
+   int & getSpice();
+   int & getEnergy();
    int getID();
    player_t getFaction();
    void setSpice(int spice);
