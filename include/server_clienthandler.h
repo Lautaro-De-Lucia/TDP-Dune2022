@@ -60,6 +60,8 @@ class ClientHandler {
    void sendResponses(std::vector<response_t> & responses);
    int getSpice();
    int getEnergy();
+   int getID();
+   player_t getFaction();
    void setSpice(int spice);
    void setEnergy(int energy);
 };

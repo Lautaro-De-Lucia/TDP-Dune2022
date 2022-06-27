@@ -26,9 +26,11 @@ void Unit::update(State& state, Board& board){}
 void Unit::receiveDamage(int damage){}
 
 std::vector<Position> Unit::getPositions(){
+    std::cout << "Getting positions of the destroyed unit" << std::endl;
     std::vector<Position> positions;
     positions.push_back(this->position);
-    positions.push_back(this->next_position);
+    if(this->next_position.x != -1 && this->next_position.y !=-1)
+        positions.push_back(this->next_position);
     return positions;
 }
 
@@ -124,6 +126,8 @@ void Harvester::receiveDamage(int damage){
 }
 
 void Harvester::update(State& state, Board& board){
+    //  UPDATE STATE
+    Selectable::update(state,board);   
     //  UPDATE MOVEMENT
     if(this->moving == false){
         if (this->depositing == true){
@@ -204,8 +208,6 @@ void Harvester::update(State& state, Board& board){
         if(remaining_path.size() == 0)
             this->moving = false;
     }
-    //  UPDATE STATE
-    Selectable::update(state,board);   
 }
 
 void Harvester::occupy(Board & board){
@@ -337,7 +339,7 @@ void Trike::focus(Position & other_pos){
 
 void Trike::update(State & state, Board& board){
     Selectable::update(state,board);
-    //  
+    
     if (this->pending_move.size() != 0) {
         if (this->current_time == 0) {
             Position move_to = this->pending_move.front();
@@ -347,24 +349,16 @@ void Trike::update(State & state, Board& board){
     }
     //  Si no me estoy moviendo ni atacando, buscar enemigos
     if(this->moving == false && this->targeting == false){
-        std::cout << this->ID << "-> Buscando enemigos..." << std::endl;
 		if (this->enemySearch(board) == true){
-            std::cout << "Enemigo encontrado en la posición: " << this->enemy_position << std::endl;
+            std::cout << "Attacking position: "<< this->enemy_position << std::endl;
             this->attack(this->enemy_position.x,this->enemy_position.y,board);
         }
     }
     //  Si estoy atacando, perseguir
     if (this->targeting == true){
-        std::cout << this->ID << "-> Persiguiendo enemigo" << std::endl;
         //  If there is still an enemy at the position
         if(board.hasEnemy(this->enemy_position.x,this->enemy_position.y,this->faction)){
-            //  If I cannot move to the position I was moving to, I have to change where to move
-            //Cell & c = board.getCell(this->moving_position.x,this->moving_position.y);
-            //if(!c.canTraverse() || !(c.getReserveID() == -1 || c.getReserveID() == this->ID) || c.isOccupied())
-                // Unless I'm already at the position, keep attacking (so that the algorithm finds new positions)
-                //if(this->position.x != this->moving_position.x || this->position.y != this->moving_position.y)
-                    //this->attack(this->enemy_position.x,this->enemy_position.y,board);
-            //  If in range, deal damage to the enemy
+            //  If he is on range, stop & shoot
             if(board.get_distance_between(this->position,this->enemy_position) < this->range){
                 this->focus(this->enemy_position);
                 this->waiting = true;    
@@ -374,12 +368,13 @@ void Trike::update(State & state, Board& board){
             }
         } else{
             //  If the enemy left the position. Stop (this will get the trike on searchEnemy() mode again)
-            std::cout << this->ID << "-> No hay enemigos en esta zona" << std::endl;
+            this->waiting = false;
             this->moving = false;
             this->targeting = false;
             this->attacking = false;
             this->enemy_position.x = -1;
             this->enemy_position.y = -1;	
+            this->current_time = 0;
             return;
         }
     }

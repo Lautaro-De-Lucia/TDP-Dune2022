@@ -28,6 +28,9 @@ class Server {
       bool running;                         ///   Status flag
       ThreadSafeQueue TSQ;
       std::map<int,std::vector<response_t>> responses;
+      std::map<player_t,std::map<unit_t,int>> unit_creation_time;
+      std::map<player_t,std::map<unit_t,int>> units_to_create;
+      std::map<player_t,std::map<unit_t,int>> unit_time;
       std::vector<bool> ready_flags;
 
  public:
@@ -40,9 +43,7 @@ class Server {
       void closeAllClients();
       void stop();
 
-      void handleInstruction(std::unique_ptr<instruction_t> & INS);
-
-      
+      void handleInstruction(std::unique_ptr<instruction_t> & INS);      
       void handleInstruction(building_create_t & INS);
       void handleInstruction(unit_create_t & INS);
       void handleInstruction(left_click_t & INS);
@@ -50,8 +51,10 @@ class Server {
       void handleInstruction(selection_t & INS);
       void handleInstruction(idle_t & INS);
 
-
       void sendResponses();
       void enableReading();
       void update();
+
+      std::unique_ptr<ClientHandler> & getPlayer(player_t faction);
+      response_t checkCreation(player_t faction, unit_t type);
 };

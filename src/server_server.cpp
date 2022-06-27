@@ -12,16 +12,21 @@ Server::Server(const char* service_name, std::vector<std::vector<cell_t>> cells)
 : 
 socket(service_name),
 game(cells),
-TSQ(2) 
+TSQ(1) 
 {
     this->running = false;
+    for(player_t FACTION: factions)
+        for (unit_t UNIT : units)
+            this->units_to_create[FACTION][UNIT] = 0,
+            this->unit_time[FACTION][UNIT] = 0,
+            this->unit_creation_time[FACTION][UNIT] = 100;
 }
 
 void Server::acceptPlayers() {
     this->running = true;
     size_t i = 0;
     while (running == true){
-        if(this->players.size() == 2)
+        if(this->players.size() == 1)
             break;
         Socket client_socket = (this->socket.accept());
         this->ready_flags.push_back(true);
@@ -110,13 +115,27 @@ void Server::handleInstruction(building_create_t & INS) {
     this->players[INS.player_ID]->setSpice(current_spice);
     this->players[INS.player_ID]->setEnergy(current_energy);
 }
-
+/*
 void Server::handleInstruction(unit_create_t & INS) {
     int current_spice = this->players[INS.player_ID]->getSpice();
     this->responses[INS.player_ID].push_back(
         this->game.createUnit(INS.faction,(unit_t)INS.type,current_spice)
     );
     this->players[INS.player_ID]->setSpice(current_spice);
+}
+*/
+
+void Server::handleInstruction(unit_create_t & INS) {
+    if(this->game.getCreator(INS.faction,INS.type) == -1){
+		this->responses[INS.player_ID].push_back(RES_CREATE_UNIT_FAILURE_CREATOR);
+        return;
+    }
+    if(this->game.isEnabled(INS.faction,INS.type) == false){
+        this->responses[INS.player_ID].push_back(RES_CREATE_UNIT_FAILURE_SPECIAL);
+        return;
+    }
+	this->units_to_create[INS.faction][INS.type]++;
+	this->responses[INS.player_ID].push_back(RES_SUCCESS);
 }
 
 void Server::handleInstruction(left_click_t & INS) {
@@ -131,10 +150,7 @@ void Server::handleInstruction(selection_t & INS) {
     this->game.selectElements(INS.faction,INS.Xm,INS.XM,INS.Ym,INS.YM);    
 }
 
-void Server::handleInstruction(idle_t & INS) {
-    
-}
-
+void Server::handleInstruction(idle_t & INS) {}
 
 void Server::sendResponses() {
     for (size_t i = 0 ; i < this->players.size(); i++)
@@ -142,7 +158,37 @@ void Server::sendResponses() {
 }
 
 void Server::update(){    
+    for(std::unique_ptr<ClientHandler>& player : this->players )
+        for(unit_t UNIT: units)
+            this->responses[player->getID()].push_back(checkCreation(player->getFaction(),UNIT));
     this->game.update();
+}
+
+std::unique_ptr<ClientHandler> & Server::getPlayer(player_t faction){
+    for(size_t i = 0; i < this->players.size() ; i++)
+        if(this->players[i]->getFaction()==faction)
+            return this->players[i];
+    throw std::runtime_error("Player of this faction has not been initialized");        
+}
+
+response_t Server::checkCreation(player_t faction, unit_t type){
+    if(this->units_to_create[faction][type] == 0)
+		return RES_SUCCESS;
+    this->unit_time[faction][type] += this->game.getTotalCreators(faction,type); 
+    if(this->unit_time[faction][type] >= this->unit_creation_time[faction][type]){
+		response_t res;
+        int spice = this->getPlayer(faction)->getSpice();
+        res = this->game.createUnit(faction,type,spice);
+        if (res != RES_CREATE_UNIT_SUCCESS){
+            return res;
+        } else {   
+            this->unit_time[faction][type] = 0;
+            this->units_to_create[faction][type]--;
+            this->getPlayer(faction)->setSpice(spice);
+            return res;
+        }
+    }   
+    return RES_SUCCESS;
 }
 
 void Server::enableReading(){
