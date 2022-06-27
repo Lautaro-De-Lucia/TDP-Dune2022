@@ -354,9 +354,9 @@ void Player::update() {
                 }
                 break;
             case SEL_HARVESTER:
-                this->protocol.receive_harvester(id,faction,lp,pos_x,pos_y,selected,spice,harvesting,this->socket);
+                this->protocol.receive_harvester(id,faction,lp,pos_x,pos_y,direction,moving,selected,spice,harvesting,waiting,this->socket);
                 if (this->contains(id)){
-                    this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,TOP,false,selected,harvesting,waiting,this->game_renderer,camera.pos_x,camera.pos_y);
+                    this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,(direction_t)direction,moving,selected,harvesting,waiting,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(HARVESTER,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH DEF_HARVESTER_PATH))});

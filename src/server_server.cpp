@@ -19,7 +19,7 @@ TSQ(1)
         for (unit_t UNIT : units)
             this->units_to_create[FACTION][UNIT] = 0,
             this->unit_time[FACTION][UNIT] = 0,
-            this->unit_creation_time[FACTION][UNIT] = 100;
+            this->unit_creation_time[FACTION][UNIT] = 10;
 }
 
 void Server::acceptPlayers() {
@@ -65,16 +65,23 @@ void Server::stop() {
 
 void Server::run() {
     while (true) {
+        //std::cout << "Starting instance "<< k << " of game loop" << std::endl;
+        //std::cout << "Checking for loosing players" << std::endl;
         this->checkForLosingPlayers();
+        //std::cout << "Waiting for players to notify" << std::endl;
         while(this->TSQ.getSize() < this->players.size()){}
         for(size_t i = 0 ; i < this->players.size(); i++) {
             std::unique_ptr<instruction_t> new_instruction = this->TSQ.pop();
             this->handleInstruction(new_instruction);
         }
+        //std::cout << "Sending responses" << std::endl;
         this->sendResponses();
+        //std::cout << "Updating game" << std::endl;
         this->update();
+        //std::cout << "Reporting the state of the game to players" << std::endl;
         for(size_t i = 0; i < this->players.size(); i++)
             this->players[i]->reportState(this->game);
+        //std::cout << "Enabling reading" << std::endl;
         this->enableReading();
     }
 }

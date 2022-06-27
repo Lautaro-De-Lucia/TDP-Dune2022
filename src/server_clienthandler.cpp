@@ -60,7 +60,7 @@ void ClientHandler::run() {
         }
 
         int type, pos_x, pos_y, pos_x_min,pos_x_max,pos_y_min,pos_y_max;
-
+        //  std::cout << "Pushing instruction to queue" << std::endl;
         switch (command){
             case CREATE_UNIT:
                 this->protocol.receive_create_unit_request(type, this->player_socket);
@@ -88,6 +88,7 @@ void ClientHandler::run() {
             default:
                 break;
         }
+        //  std::cout << "Pushed instruction to queue" << std::endl;
         this->reading_flags[this->player_id] = false;
     }
 }
