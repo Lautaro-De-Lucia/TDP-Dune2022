@@ -143,7 +143,6 @@ void Harvester::update(State& state, Board& board){
     //  UPDATE MOVEMENT
     if(this->moving == false){
         if (this->depositing == true){
-            std::cout << "Depositing now..." << std::endl;
             if (this->position == this->deposit_position){
                 *(this->player_spice)+=this->stored_spice;
                 this->stored_spice = 0;
@@ -160,11 +159,20 @@ void Harvester::update(State& state, Board& board){
                 int spice = harvestcell.extractSpice();
                 board.addSandPosition(harvest_position.x,harvest_position.y);
                 if(spice == 0){
-                    this->harvesting = false;
-                    if(this->stored_spice > 0)
+                    if(this->stored_spice > 0){
                         this->deposit(board);
-                    else
-                        return;    
+                    }
+                    else{
+                        for(Position pos : board.getSurroundings(this->position,1,1)){
+                            Cell & hc = board.getCell(pos.x,pos.y);
+                            if(hc.canHarvest() && !hc.isOccupied() && (hc.getReserveID() == -1 || hc.getReserveID() == this->ID)){
+                                this->harvest(pos.x,pos.y,board);
+                                return;
+                            }
+                        }
+                        this->harvesting = false;
+                        return;
+                    }  
                 }
                 this->stored_spice += spice;
                 if(this->stored_spice == this->max_spice){
@@ -173,9 +181,6 @@ void Harvester::update(State& state, Board& board){
                     return;
                 }
             } else {
-                if(board.getCell(harvest_position.x,harvest_position.y).isOccupied()){
-                    return;
-                }
                 this->harvest(harvest_position.x,harvest_position.y,board);
             }
         } 
@@ -188,7 +193,7 @@ void Harvester::update(State& state, Board& board){
             return;
         }
         if (this->harvesting == true){
-            if(board.get_distance_between(this->harvest_position,this->position) <= 2){
+            if(board.get_distance_between(this->harvest_position,this->position) <= 1){
                 Cell & hc = board.getCell(harvest_position.x,harvest_position.y);
                 if(hc.isOccupied() || (hc.getReserveID() != -1 && hc.getReserveID() != this->ID)){
                     this->moving = false;
@@ -198,8 +203,9 @@ void Harvester::update(State& state, Board& board){
             }
         } 
         if (this->depositing == true){
-            if(board.get_distance_between(this->position,this->deposit_position) <= 2){
-                  if(board.getCell(deposit_position.x,deposit_position.y).isOccupied()){
+            if(board.get_distance_between(this->position,this->deposit_position) <= 1){
+                Cell & dc = board.getCell(deposit_position.x,deposit_position.y);
+                if(dc.isOccupied() || (dc.getReserveID() != -1 && dc.getReserveID() != this->ID)){
                     this->moving = false;
                     this->waiting = true;
                     return;
@@ -252,7 +258,8 @@ void Harvester::deposit(Board & board){
     size_t best_distance = 1000;
     Position best_position;
     for (Position pos : board.getDepositPositions(this->faction)){
-        if (board.getCell(pos.x,pos.y).isOccupied() || !board.getCell(pos.x,pos.y).canTraverse())
+        Cell & dc = board.getCell(pos.x,pos.y);
+        if (dc.isOccupied() || !dc.canTraverse() || (dc.getReserveID() != -1 && dc.getReserveID() != this->ID))
             continue;
         size_t distance = board.get_distance_between(this->position,pos);
         if(distance < best_distance){
