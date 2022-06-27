@@ -15,7 +15,7 @@ LobbyWindow::LobbyWindow(QWidget *parent)
     ui->setupUi(this);
 
     mMediaPlayer = new QMediaPlayer(this);
-    mMediaPlayer->setMedia(QUrl("qrc:/resources/music/lobby.mp3"));
+    mMediaPlayer->setMedia(QUrl("qrc:/resources/music/lobby.wav"));
     mMediaPlayer->setVolume(50);
     mMediaPlayer->play();
     connect(mMediaPlayer,&QMediaPlayer::mediaStatusChanged,mMediaPlayer,&QMediaPlayer::play);

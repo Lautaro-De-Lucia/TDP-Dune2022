@@ -143,11 +143,18 @@ int main(int argc, char *argv[]) {
 
     LobbyWindow l;
     FactionWindow f(nullptr,_faction);
+    CreditsWindow c;
 
     QObject::connect(&w, &MainWindow::jugar, &w, &QMainWindow::close);
-    QObject::connect(&w, &MainWindow::jugar, &f, &QMainWindow::show);
-    QObject::connect(&f, &FactionWindow::jugar, &f, &QMainWindow::close);
+    QObject::connect(&w, &MainWindow::credits, &w, &QMainWindow::close);
 
+    QObject::connect(&w, &MainWindow::jugar, &f, &QMainWindow::show);
+    QObject::connect(&w, &MainWindow::credits, &c, &QMainWindow::show);
+    
+    QObject::connect(&f, &FactionWindow::jugar, &f, &QMainWindow::close);
+    QObject::connect(&c, &CreditsWindow::volver, &c, &QMainWindow::close);
+    QObject::connect(&c, &CreditsWindow::volver, &w, &QMainWindow::show);
+    
     QObject::connect(&f, &FactionWindow::jugar, &f, [=]() {QtConcurrent::run(run_sdl, std::ref(_faction), _host_name, _service_name);});
 
     return a.exec();
