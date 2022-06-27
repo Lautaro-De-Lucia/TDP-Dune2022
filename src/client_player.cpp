@@ -278,6 +278,8 @@ void Player::play(){
             continue;
         base_time_update = current_time;
         
+        std::cout << "updating" << std::endl;
+
         this->update();
     }
 }

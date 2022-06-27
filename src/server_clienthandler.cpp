@@ -48,12 +48,8 @@ void ClientHandler::run() {
         
         while(this->reading_flags[this->player_id] == false){}
 
-        std::cout << "Previous to receiving command..." << std::endl; 
-
         command_t command;
         this->protocol.receive_command(command, this->player_socket);
-
-        std::cout << "Received command: " << command << std::endl;
 
         if(command == CLOSE) {
             this->finished = true;
@@ -89,7 +85,6 @@ void ClientHandler::run() {
             default:
                 break;
         }
-        std::cout << "Pushed instruction to queue" << std::endl;
         this->reading_flags[this->player_id] = false;
     }
 }
