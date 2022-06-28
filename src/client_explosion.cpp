@@ -2,8 +2,8 @@
 
 Explosion::Explosion(selectable_t type, Position pos) {
 
-    this->pixel_pos_x = pos.x*TILE_SIZE - 16;
-    this->pixel_pos_y = pos.y*TILE_SIZE - 16;
+    this->pixel_pos_x = pos.x*TILE_SIZE - 20;
+    this->pixel_pos_y = pos.y*TILE_SIZE - 20;
 
     this->type = type;
 
