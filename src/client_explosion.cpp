@@ -2,15 +2,15 @@
 
 Explosion::Explosion(selectable_t type, Position pos) {
 
-    this->pixel_pos_x = pos.x*TILE_SIZE - 20;
-    this->pixel_pos_y = pos.y*TILE_SIZE - 20;
+    this->pixel_pos_x = pos.x*TILE_SIZE - 22;
+    this->pixel_pos_y = pos.y*TILE_SIZE - 22;
 
     this->type = type;
 
     this->explosion_width = 64;
     this->explosion_height = 64;
 
-    this->speed = 10000;
+    this->speed = 20000;
 
     this->current_frame = 0;
 
