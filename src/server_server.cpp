@@ -76,10 +76,12 @@ void Server::run() {
     this->running = true;
     while (this->running) {
 
+        /*
         // TO TEST TRIKE ATTACK
         int __spice = 1000000;
         int __energy = 40000000;
         this->game.createBuilding(HARKONNEN,PALACE,HARKONNEN_INIT_POS_X,HARKONNEN_INIT_POS_Y,__spice,__energy);
+        */
 
 
         //std::cout << "Starting instance "<< k << " of game loop" << std::endl;

@@ -16,6 +16,7 @@
 #define EXPLHG1_PATH "/sounds/EXPLHG1.WAV"
 #define ROCKET1_PATH "/sounds/ROCKET1.WAV"
 #define EXPLSML2_PATH "/sounds/EXPLSML2.WAV"
+#define SONIC3_PATH "/sounds/SONIC3.WAV"
 
 enum sfx_t {
     HOUSE_CHOSEN,
@@ -25,7 +26,8 @@ enum sfx_t {
     MISSILE,
     EXPLHG1,
     ROCKET1,
-    EXPLSML2
+    EXPLSML2,
+    SONIC3
 };
 
 enum music_t {

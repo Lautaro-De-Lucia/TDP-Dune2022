@@ -95,8 +95,6 @@ void Player::play(){
 
         this->render();
 
-        this->shotsHandler.render(this->game_renderer, camera.pos_x, camera.pos_y);
-            
         //  Obtenemos la instrucción del mouse
         mouse.getEvent(&event);
         Position current_pos = mouse.currentPosition();
@@ -635,6 +633,7 @@ void Player::render(){
     for (auto& e : this->elements)
         e.second->render(this->faction,this->game_renderer,this->camera.pos_x,this->camera.pos_y);
     this->hud.update(this->spice,this->c_spice,this->energy);
+    this->shotsHandler.render(this->game_renderer, this->camera.pos_x, this->camera.pos_y);
     this->renderHud();
     this->renderHeldBuilding();
     this->renderButtonInfo();

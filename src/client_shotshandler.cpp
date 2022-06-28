@@ -25,14 +25,13 @@ void ShotsHandler::updateAttacker(int id, unit_t type, Position attacker_pos, Po
     this->attackers_target.insert({id,target_pos});
     this->attackers_shot_cue.insert({id,clock()});
 
-    int speed = 100000000;
+
 
     switch (type)
     {
     case TRIKE:
-        speed = 1000000;
-        this->audio.play(ROCKET1);
-        this->shots.push_back(Shot(attacker_pos, target_pos, speed, type));
+        this->audio.play(SONIC3);
+        this->shots.push_back(Shot(attacker_pos, target_pos, TRIKE_BULLET_SPEED, type));
         break;
     
     default:
@@ -92,8 +91,8 @@ void ShotsHandler::update() {
         {
         case TRIKE:
             if (time_since_last_shot > 3000000) {
-                this->audio.play(ROCKET1);
-                this->shots.push_back(Shot(this->attackers_position[id], this->attackers_target[id], 4000000, TRIKE));
+                this->audio.play(SONIC3);
+                this->shots.push_back(Shot(this->attackers_position[id], this->attackers_target[id], TRIKE_BULLET_SPEED, TRIKE));
                 this->attackers_shot_cue[id] = clock();
             }
             break;

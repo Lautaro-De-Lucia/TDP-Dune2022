@@ -61,14 +61,19 @@ AudioPlayer::AudioPlayer(){
     }
     this->sound_effects.insert({ROCKET1,rocket1});
 
-    
-
     Mix_Chunk* explsml2 = Mix_LoadWAV(DATA_PATH EXPLSML2_PATH);
     if (explsml2 == NULL) {
         printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
         exit(1);
     }
     this->sound_effects.insert({EXPLSML2,explsml2});
+
+    Mix_Chunk* sonic3 = Mix_LoadWAV(DATA_PATH SONIC3_PATH);
+    if (sonic3 == NULL) {
+        printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+        exit(1);
+    }
+    this->sound_effects.insert({SONIC3,sonic3});
 
     // MUSIC
 

@@ -18,11 +18,13 @@ class Shot{
     unit_t unit;
     int current_pixel_pos_x;
     int current_pixel_pos_y;
-    double m;
-    double b;
+
     int shot_width;
     int shot_height;
     clock_t shot_delay;
+
+    std::vector<int> x_positions;
+    std::vector<int> y_positions;
 
  public:
     Shot(Position origin, Position target, int speed, unit_t unit);

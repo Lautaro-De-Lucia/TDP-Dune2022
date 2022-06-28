@@ -11,14 +11,49 @@ Shot::Shot(Position origin, Position target, int speed, unit_t unit){
     this->speed = speed;
     this->unit = unit;
 
-    this->m = (double) ((pixel_target_pos_y-pixel_origin_pos_y)/(pixel_target_pos_x-pixel_origin_pos_x));
-    this->b = (double) (pixel_target_pos_y - (pixel_target_pos_x*(pixel_target_pos_y-pixel_origin_pos_y)/(pixel_target_pos_x-pixel_origin_pos_x))) ;
-
-    this->shot_width = 4;
-    this->shot_height = 4;
+    this->shot_width = 2;
+    this->shot_height = 2;
 
     this->current_pixel_pos_x = this->pixel_origin_pos_x;
     this->current_pixel_pos_y = this->pixel_origin_pos_y;
+
+    int x1 = this->pixel_origin_pos_x;
+    int x2 = this->pixel_target_pos_x;
+
+    int y1 = this->pixel_origin_pos_y;
+    int y2 = this->pixel_target_pos_y;
+
+    int dx = x2 - x1;
+    int dy = y2 - y1;
+
+    int steps;
+
+    if (abs(dx) > abs(dy))
+    steps = abs(dx);
+    else
+    steps = abs(dy);
+
+    float x_increment = dx / (float) steps;
+    float y_increment = dy / (float) steps;
+
+    float current_pos_x = (float) this->pixel_origin_pos_x;
+    float current_pos_y = (float) this->pixel_origin_pos_y;
+
+    this->x_positions.push_back(round(current_pos_x));
+    this->y_positions.push_back(round(current_pos_y));
+
+    // all but last 8 pixels
+    for (int i = 0; i < steps - 8; i++) {
+
+        current_pos_x += x_increment;
+        current_pos_y += y_increment;
+        this->x_positions.push_back(round(current_pos_x));
+        this->y_positions.push_back(round(current_pos_y));
+    }
+
+    // remove first 8 pixels
+    for (size_t i = 0; i < 8; i++)
+        this->nextPosition();
 
     this->shot_delay = clock();
 }
@@ -55,14 +90,13 @@ void Shot::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
 
 void Shot::nextPosition(){
 
-    int dx = this->pixel_target_pos_x - this->pixel_origin_pos_x;
-    int dy = this->pixel_target_pos_y - this->pixel_origin_pos_y;
+    if (this->x_positions.size() == 0)
+        return;
 
-    //int next_pixel_pos_x = (int) this->current_pixel_pos_x + 2;
-    //int next_pixel_pos_y = (int) floor(this->b + (this->m * next_pixel_pos_x));
-
-    int next_pixel_pos_x = this->current_pixel_pos_x + 2;
-    int next_pixel_pos_y = this->pixel_origin_pos_y + dy * (next_pixel_pos_x - this->pixel_origin_pos_x) / dx;
+    int next_pixel_pos_x = this->x_positions.front();
+    this->x_positions.erase(this->x_positions.begin());
+    int next_pixel_pos_y = this->y_positions.front();
+    this->y_positions.erase(this->y_positions.begin());
 
     this->current_pixel_pos_x = next_pixel_pos_x;
     this->current_pixel_pos_y = next_pixel_pos_y;
@@ -81,12 +115,12 @@ void Shot::update(bool& has_reached_its_target) {
     has_reached_its_target = false;
 
     if (current_time - this->shot_delay > this->speed) {
-        this->nextPosition();
-        if (this->current_pixel_pos_x > this->pixel_target_pos_x)
+        if (this->x_positions.size() == 0) {
             has_reached_its_target = true;
-        if (this->current_pixel_pos_y > this->pixel_target_pos_y)
-            has_reached_its_target = true;
-        this->shot_delay = current_time;
+        } else {
+            this->nextPosition();
+            this->shot_delay = current_time;
+        }
     }
     return;
 }
