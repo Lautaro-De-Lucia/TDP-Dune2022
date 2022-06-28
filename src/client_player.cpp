@@ -583,7 +583,7 @@ void Player::renderButtonInfo(){
     this->game_renderer.Copy(
         button_info,
         SDL2pp::NullOpt,
-        SDL2pp::Rect(x-TILE_SIZE*16,y,TILE_SIZE*16,TILE_SIZE*8)
+        SDL2pp::Rect(x-TILE_SIZE*12,y,TILE_SIZE*12,TILE_SIZE*8)
     );    
 }
 
