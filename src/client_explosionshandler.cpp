@@ -15,7 +15,13 @@ void ExplosionsHandler::addExplosion(int id, selectable_t type, Position pos) {
     this->explosions_type.insert({id,type});
     this->explosions_position.insert({id,pos});
 
-    this->audio.play(EXPLSML2);
+    if ((int) type <= 7) {
+        this->audio.play(EXPLSML2);
+    } else {
+        this->audio.play(EXPLHG1);
+    }
+
+    
     this->explosions.push_back(Explosion(type, pos));
 }
 
