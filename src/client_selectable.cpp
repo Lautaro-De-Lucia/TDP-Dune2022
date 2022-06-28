@@ -161,6 +161,9 @@ void CMovable::render(player_t player_faction, SDL2pp::Renderer& renderer, int c
             SDL2pp::Rect(30,20*(this->health-1),100,20),
             SDL2pp::Rect((this->position.x-0.5)*TILE_SIZE-cam_pos_x+this->rel_pos_x,(this->position.y-0.5)*TILE_SIZE-cam_pos_y+this->rel_pos_y,30,5) 		
     );
+
+    std::cout << "rendering unit on pixel position: (" << (this->position.x-0.5)*TILE_SIZE-cam_pos_x << "," << (this->position.y-0.5)*TILE_SIZE-cam_pos_y << ")" << std::endl;
+    std::cout << "rendering unit on pixel position: (" << (this->position.x-0.5)*TILE_SIZE-cam_pos_x << "," << (this->position.y-0.5)*TILE_SIZE-cam_pos_y << ")" << std::endl;
 }
 
 void CStatic::render(player_t player_faction, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){

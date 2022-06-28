@@ -16,6 +16,8 @@
 #define DEVASTATOR_PATH "/unitsprites/devastator"
 #define SARDAUKAR_PATH "/unitsprites/sardaukar"
 
+#define TRIKE_SHOT_PATH "/unitshots/trike/shot"
+
 class RenderHandler {
     private:
     std::map<direction_t,const char *> directions = {

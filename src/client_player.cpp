@@ -25,7 +25,8 @@ game_window(window),
 game_renderer(renderer),
 map(renderer,map_data),
 hud(faction,renderer),
-mouse(TILE_DIM,cam)
+mouse(TILE_DIM,cam),
+shotsHandler(renderer)
 
 {
     this->spice = spice;
@@ -93,6 +94,8 @@ void Player::play(){
             this->camera.move(0,1);
 
         this->render();
+
+        this->shotsHandler.render(this->game_renderer, camera.pos_x, camera.pos_y);
             
         //  Obtenemos la instrucción del mouse
         mouse.getEvent(&event);
@@ -196,36 +199,10 @@ void Player::play(){
 
 	    auto frame_time_instruction = current_time - base_time_instruction;
 
-        for (size_t i = 0; i < this->attackers.size(); i++) {
-            if (current_time - this->attackers_sound_cue[i] > 7000000) {
-                switch (this->attackers[i])
-                {
-                case TRIKE:
-                    this->audio.play(ROCKET1);
-                    break;
-                case FREMEN:
-                    this->audio.play(GUN_2);
-                    break;
-                case INFANTRY:
-                    this->audio.play(GUN_1);
-                    break;
-                case SARDAUKAR:
-                    this->audio.play(MISSILE);
-                    break;
-                case TANK:
-                    this->audio.play(EXPLHG1);
-                    break;
-                case DEVASTATOR:
-                    this->audio.play(EXPLSML2);
-                    break;
-                default:
-                    break;
-                }
-                this->attackers_sound_cue[i] = current_time;
-            }
-        }
-        
+        this->shotsHandler.update();
 
+        sleepcp(1);
+        
         if (frame_time_instruction < GAME_SPEED && game_has_started)
             continue;
 
@@ -293,7 +270,6 @@ void Player::play(){
             continue;
         base_time_update = current_time;
         this->update();
-        sleepcp(10);
     }
 }
 
@@ -348,7 +324,11 @@ void Player::update() {
                 if (this->contains(id)){
                     this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,(direction_t)direction,moving,selected,attacking,waiting,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
-                    this->updateAttacker(TRIKE, id, attacking);
+                    if (attacking) {
+                        this->updateAttacker(id, TRIKE, Position(pos_x, pos_y), Position(enemy_pos_x, enemy_pos_y));
+                    } else {
+                        this->removeAttacker(id);
+                    }
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(TRIKE,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH DEF_TRIKE_PATH))});
                     this->updates.push_back(true);  
@@ -369,7 +349,11 @@ void Player::update() {
                 if (this->contains(id)){
                     this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,TOP,false,selected,attacking,waiting,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
-                    this->updateAttacker(FREMEN, id, attacking);
+                    if (attacking) {
+                        this->updateAttacker(id, FREMEN, Position(pos_x, pos_y), Position(enemy_pos_x, enemy_pos_y));
+                    } else {
+                        this->removeAttacker(id);
+                    }
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(FREMEN,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH DEF_FREMEN_PATH))});
                     this->updates.push_back(true);  
@@ -380,7 +364,11 @@ void Player::update() {
                 if (this->contains(id)){
                     this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,TOP,false,selected,attacking,waiting,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
-                    this->updateAttacker(INFANTRY, id, attacking);
+                    if (attacking) {
+                        this->updateAttacker(id, INFANTRY, Position(pos_x, pos_y), Position(enemy_pos_x, enemy_pos_y));
+                    } else {
+                        this->removeAttacker(id);
+                    }
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(INFANTRY,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH DEF_INFANTRY_PATH))});
                     this->updates.push_back(true);  
@@ -391,7 +379,11 @@ void Player::update() {
                 if (this->contains(id)){
                     this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,TOP,false,selected,attacking,waiting,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
-                    this->updateAttacker(SARDAUKAR, id, attacking);
+                    if (attacking) {
+                        this->updateAttacker(id, SARDAUKAR, Position(pos_x, pos_y), Position(enemy_pos_x, enemy_pos_y));
+                    } else {
+                        this->removeAttacker(id);
+                    }
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(SARDAUKAR,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH DEF_SARDAUKAR_PATH))});
                     this->updates.push_back(true);  
@@ -402,7 +394,11 @@ void Player::update() {
                 if (this->contains(id)){
                     this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,TOP,false,selected,attacking,waiting,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
-                    this->updateAttacker(TANK, id, attacking);
+                    if (attacking) {
+                        this->updateAttacker(id, TANK, Position(pos_x, pos_y), Position(enemy_pos_x, enemy_pos_y));
+                    } else {
+                        this->removeAttacker(id);
+                    }
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(TANK,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH DEF_TANK_PATH))});
                     this->updates.push_back(true);  
@@ -413,7 +409,11 @@ void Player::update() {
                 if (this->contains(id)){
                     this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,TOP,false,selected,attacking,waiting,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
-                    this->updateAttacker(DEVASTATOR, id, attacking);
+                    if (attacking) {
+                        this->updateAttacker(id, DEVASTATOR, Position(pos_x, pos_y), Position(enemy_pos_x, enemy_pos_y));
+                    } else {
+                        this->removeAttacker(id);
+                    }
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(DEVASTATOR,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH DEF_DEVASTATOR_PATH))});
                     this->updates.push_back(true);  
@@ -616,10 +616,10 @@ void Player::renderHeldBuilding(){
 				building_texture_path.append("/buildingsprites/palace/palace.png");
 				break;
         }
-        std::cout << "Opening texture in path: " << building_texture_path << std::endl;
+        //std::cout << "Opening texture in path: " << building_texture_path << std::endl;
         SDL2pp::Texture building_texture(this->game_renderer,building_texture_path.c_str());
         building_texture.SetBlendMode(SDL_BLENDMODE_ADD);
-        std::cout << "Rendering it to positions: (" << x <<","<< y <<")"<< std::endl;
+        //std::cout << "Rendering it to positions: (" << x <<","<< y <<")"<< std::endl;
         this->game_renderer.Copy(
             building_texture,
             SDL2pp::Rect(0,0,63,76),
@@ -686,24 +686,12 @@ hud_button_t Player::checkBtn(int& x, int& y) {
     return UNKNOWN_BTN;
 }
 
-void Player::updateAttacker(unit_t unit, int id, bool attacking) {
+void Player::removeAttacker(int id) {
 
-    bool found = false;
-    for (size_t i = 0; i < this->attackers.size(); i++) {
-        if (id == this->attackers_id[i]) {
-            if (!attacking) {
-                this->attackers.erase(this->attackers.begin()+i);
-                this->attackers_id.erase(this->attackers_id.begin()+i);
-                this->attackers_sound_cue.erase(this->attackers_sound_cue.begin()+i);
-                found = true;
-                break;
-            }
-        }
-    }
-    if (!found) {
-        this->attackers.push_back(unit);
-        this->attackers_id.push_back(id);
-        this->attackers_sound_cue.push_back(clock());
-    }
-    return;
+    this->shotsHandler.removeAttacker(id);
+}
+
+void Player::updateAttacker(int id, unit_t type, Position attacker_pos, Position target_pos) {
+
+    this->shotsHandler.updateAttacker(id, type, attacker_pos, target_pos);
 }

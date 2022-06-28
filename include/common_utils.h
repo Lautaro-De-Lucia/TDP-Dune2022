@@ -327,6 +327,8 @@ struct Area {
 };
 
 void sleepcp(int milliseconds);
+Position pixelToGP(int x, int y);
+void GPToPixel(Position pos, int& pixel_x, int& pixel_y);
 
 enum hud_button_t {
     UNKNOWN_BTN = 0,

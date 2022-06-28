@@ -36,6 +36,8 @@ void RenderHandler::renderMovable(
                 trike_path.append(IMG_FORMAT);
                 texture.Update(SDL2pp::NullOpt,SDL2pp::Surface(trike_path.c_str()));
                 renderer.Copy(texture,SDL2pp::NullOpt,SDL2pp::Rect(xpos,ypos,tile_size,tile_size));
+
+                // << "trike_path: " << trike_path << std::endl;
             }
             break;
         case FREMEN:
