@@ -33,17 +33,26 @@ void Board::clearSandPositions(){
 }
 
 void Board::addUnitCreator(player_t faction, building_t type){
-    if(type == BARRACK)
-        this->creators[faction][FREMEN]++,
-        this->creators[faction][INFANTRY]++,
+
+    if (type == BARRACK) {
+        this->creators[faction][FREMEN]++;
+        this->creators[faction][INFANTRY]++;
         this->creators[faction][SARDAUKAR]++;
-    if(type == REFINERY)
+    }
+
+    if (type == REFINERY) {
         this->creators[faction][HARVESTER]++;
-    if(type == LIGHT_FACTORY)
+    }
+
+    if (type == LIGHT_FACTORY) {
         this->creators[faction][TRIKE]++;
-    if(type == HEAVY_FACTORY)
-        this->creators[faction][TANK]++,
+    }
+
+    if (type == HEAVY_FACTORY) {
+        this->creators[faction][TANK]++;
         this->creators[faction][DEVASTATOR]++;
+    }
+
 }
 
 void Board::removeUnitCreator(player_t faction, unit_t type){

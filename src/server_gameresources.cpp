@@ -89,6 +89,19 @@ response_t GameResources::createBuilding(player_t faction,building_t type,int po
         (this->elements).insert({ID, std::move(building)});
         ID++;
         this->board.addUnitCreator(faction,type);
+        unit_t model_unit;
+        if (type == BARRACK) {
+            model_unit = FREMEN;
+        } else if (type == REFINERY) {
+            model_unit = HARVESTER;
+        } else if (type == LIGHT_FACTORY) {
+            model_unit = TRIKE;
+        } else if (type == HEAVY_FACTORY) {
+            model_unit = TANK;
+        }
+
+        if (this->board.getTotalCreators(faction, model_unit) == 1)
+            this->board.makeCreator(ID - 1);
     }
     return res;
 }
