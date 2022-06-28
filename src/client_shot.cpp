@@ -14,24 +14,10 @@ Shot::Shot(Position origin, Position target, int speed, unit_t unit){
     this->shot_width = 2;
     this->shot_height = 2;
 
-    this->current_pixel_pos_x = this->pixel_origin_pos_x;
-    this->current_pixel_pos_y = this->pixel_origin_pos_y;
+    int dx = this->pixel_target_pos_x - this->pixel_origin_pos_x;
+    int dy = this->pixel_target_pos_y - this->pixel_origin_pos_y;
 
-    int x1 = this->pixel_origin_pos_x;
-    int x2 = this->pixel_target_pos_x;
-
-    int y1 = this->pixel_origin_pos_y;
-    int y2 = this->pixel_target_pos_y;
-
-    int dx = x2 - x1;
-    int dy = y2 - y1;
-
-    int steps;
-
-    if (abs(dx) > abs(dy))
-    steps = abs(dx);
-    else
-    steps = abs(dy);
+    int steps = (abs(dx) > abs(dy)) ? abs(dx) : abs(dy);
 
     float x_increment = dx / (float) steps;
     float y_increment = dy / (float) steps;
@@ -44,7 +30,6 @@ Shot::Shot(Position origin, Position target, int speed, unit_t unit){
 
     // all but last 8 pixels
     for (int i = 0; i < steps - 8; i++) {
-
         current_pos_x += x_increment;
         current_pos_y += y_increment;
         this->x_positions.push_back(round(current_pos_x));
@@ -54,6 +39,9 @@ Shot::Shot(Position origin, Position target, int speed, unit_t unit){
     // remove first 8 pixels
     for (size_t i = 0; i < 8; i++)
         this->nextPosition();
+
+    this->current_pixel_pos_x = this->pixel_origin_pos_x;
+    this->current_pixel_pos_y = this->pixel_origin_pos_y;
 
     this->shot_delay = clock();
 }
