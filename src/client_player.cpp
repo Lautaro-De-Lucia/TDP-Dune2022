@@ -26,7 +26,8 @@ game_renderer(renderer),
 map(renderer,map_data),
 hud(faction,renderer),
 mouse(TILE_DIM,cam),
-shotsHandler(renderer)
+shotsHandler(renderer),
+explosionsHandler(renderer)
 
 {
     this->spice = spice;
@@ -198,6 +199,7 @@ void Player::play(){
 	    auto frame_time_instruction = current_time - base_time_instruction;
 
         this->shotsHandler.update();
+        this->explosionsHandler.update();
 
         sleepcp(1);
         
@@ -500,13 +502,23 @@ void Player::update() {
         }
     }
     //  Destroy non-updated elements
-    for (size_t i = 0 ; i < this->updates.size() ; i++)
-        if(this->updates[i] == false)
-            if(this->contains(i))
-                this->elements.erase(i);     
+    for (size_t i = 0 ; i < this->updates.size() ; i++) {
+        if(this->updates[i] == false) {
+            if(this->contains(i)) {
+                int _id = i;
+                selectable_t _type = this->elements.at(i)->getType();
+                Position _pos = this->elements.at(i)->getPosition();
+ 
+                this->addExplosion(_id, _type, _pos);
+                this->elements.erase(i);
+            }
+        }
+    }
+
+                    
 }
 
-/*
+/*º
 void Player::addElement(unit_t type,State& desc) {
     //  Ahora estamos hablando de SPRITES
     //  Va a ser una imágen con la unidad en muchas posiciones
@@ -634,6 +646,7 @@ void Player::render(){
         e.second->render(this->faction,this->game_renderer,this->camera.pos_x,this->camera.pos_y);
     this->hud.update(this->spice,this->c_spice,this->energy);
     this->shotsHandler.render(this->game_renderer, this->camera.pos_x, this->camera.pos_y);
+    this->explosionsHandler.render(this->game_renderer, this->camera.pos_x, this->camera.pos_y);
     this->renderHud();
     this->renderHeldBuilding();
     this->renderButtonInfo();
@@ -693,4 +706,9 @@ void Player::removeAttacker(int id) {
 void Player::updateAttacker(int id, unit_t type, Position attacker_pos, Position target_pos) {
 
     this->shotsHandler.updateAttacker(id, type, attacker_pos, target_pos);
+}
+
+void Player::addExplosion(int id, selectable_t type, Position pos) {
+
+    this->explosionsHandler.addExplosion(id, type, pos);
 }

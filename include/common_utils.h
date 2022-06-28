@@ -174,6 +174,24 @@ enum building_t {
     CONSTRUCTION_YARD = 8
 };
 
+enum selectable_t {
+    SEL_HARVESTER = 1,
+    SEL_TRIKE = 2,
+    SEL_FREMEN = 3,
+    SEL_INFANTRY = 4,
+    SEL_SARDAUKAR = 5,
+    SEL_TANK = 6,
+    SEL_DEVASTATOR = 7,
+    SEL_AIR_TRAP = 8,
+    SEL_BARRACK = 9,
+    SEL_REFINERY = 10,
+    SEL_LIGHT_FACTORY = 11,
+    SEL_HEAVY_FACTORY = 12,
+    SEL_SILO = 13,
+    SEL_PALACE = 14,
+    SEL_CONSTRUCTION_YARD = 15
+};
+
 constexpr std::initializer_list<building_t> buildings = {AIR_TRAP,BARRACK,REFINERY,LIGHT_FACTORY,HEAVY_FACTORY,SILO,PALACE,CONSTRUCTION_YARD};
 
 
@@ -271,24 +289,6 @@ enum direction_t {
     TOP_LEFT = 7
 };
 
-
-enum selectable_t {
-    SEL_HARVESTER = 1,
-    SEL_TRIKE = 2,
-    SEL_FREMEN = 3,
-    SEL_INFANTRY = 4,
-    SEL_SARDAUKAR = 5,
-    SEL_TANK = 6,
-    SEL_DEVASTATOR = 7,
-    SEL_AIR_TRAP = 8,
-    SEL_BARRACK = 9,
-    SEL_REFINERY = 10,
-    SEL_LIGHT_FACTORY = 11,
-    SEL_HEAVY_FACTORY = 12,
-    SEL_SILO = 13,
-    SEL_PALACE = 14,
-    SEL_CONSTRUCTION_YARD = 15
-};
 
 struct Position {
  public:

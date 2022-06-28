@@ -47,7 +47,7 @@ void Unit::move(int x, int y, Board& board) {
     new_path = aStar.algorithm(this->getPosition(),Position(x,y),board);
 
     if(new_path.size() <= 1){ 
-        std::cerr << "I shouldn't be here" << std::endl; // why not?
+        //std::cerr << "I shouldn't be here" << std::endl; // why not?
         this->moving == false;
         this->remaining_path = empty_path;
         return;

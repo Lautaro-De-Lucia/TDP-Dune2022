@@ -11,7 +11,7 @@
 
 #define IMG_FORMAT ".png"
 
-#define TRIKE_BULLET_SPEED 10000
+#define TRIKE_BULLET_SPEED 1000
 
 class ShotsHandler {
  private:

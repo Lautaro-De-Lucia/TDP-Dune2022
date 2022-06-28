@@ -73,7 +73,7 @@ void Shot::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
     texture.Update(SDL2pp::NullOpt,SDL2pp::Surface(unit_shot_path.c_str()));
     renderer.Copy(texture,SDL2pp::NullOpt,SDL2pp::Rect(xpos,ypos,this->shot_width,this->shot_height));
 
-    std::cout << "rendering shot on pixel position: (" << xpos << "," << ypos << ")" << std::endl;
+    //std::cout << "rendering shot on pixel position: (" << xpos << "," << ypos << ")" << std::endl;
 }
 
 void Shot::nextPosition(){

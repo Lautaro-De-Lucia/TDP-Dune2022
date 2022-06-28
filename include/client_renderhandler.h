@@ -18,6 +18,8 @@
 
 #define TRIKE_SHOT_PATH "/unitshots/trike/shot"
 
+#define EXPLOSION_PATH "/explosions/explosion"
+
 class RenderHandler {
     private:
     std::map<direction_t,const char *> directions = {

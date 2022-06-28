@@ -2,7 +2,7 @@
 
 extern std::map<color_t,SDL_Color> colors;
 
-#define MAX_CONNECTIONS 1
+#define MAX_CONNECTIONS 2
 
 int ID = 0;
 
@@ -12,7 +12,7 @@ Server::Server(const char* service_name, std::vector<std::vector<cell_t>> cells)
 : 
 socket(service_name),
 game(cells),
-TSQ(1) 
+TSQ(MAX_CONNECTIONS) 
 {
     this->running = false;
     for(player_t FACTION: factions)
@@ -26,7 +26,7 @@ void Server::acceptPlayers() {
     this->running = true;
     size_t i = 0;
     while (running){
-        if(this->players.size() == 1)
+        if(this->players.size() == MAX_CONNECTIONS)
             break;
         Socket client_socket = (this->socket.accept());
         this->ready_flags.push_back(true);

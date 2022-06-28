@@ -9,6 +9,7 @@
 #include "client_camera.h"
 #include "client_audioplayer.h"
 #include "client_shotshandler.h"
+#include "client_explosionshandler.h"
 
 #include "common_utils.h"
 #include "common_protocol.h"
@@ -64,6 +65,7 @@ class Player {
    AudioPlayer audio;
 
    ShotsHandler shotsHandler;
+   ExplosionsHandler explosionsHandler;
 
    Player(player_t faction, const char* host_name, const char* service_name,Camera & cam, SDL2pp::Window& window,SDL2pp::Renderer& renderer, size_t spice, size_t c_spice, int energy, size_t c_energy, std::vector<std::vector<std::string>>& map_data);
 
@@ -92,4 +94,7 @@ class Player {
 
    void removeAttacker(int id);
    void updateAttacker(int id, unit_t type, Position attacker_pos, Position target_pos);
+
+   void addExplosion(int id, selectable_t type, Position pos);
 };
+

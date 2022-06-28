@@ -74,8 +74,14 @@ void ShotsHandler::update() {
             shots_to_remove.push_back(i);
     }
 
-    for (size_t i = 0; i < shots_to_remove.size(); i++)
-        this->shots.erase(this->shots.begin()+i);    
+    for (size_t i = 0; i < shots_to_remove.size(); i++) {
+        this->attackers_type.erase(i);
+        this->attackers_position.erase(i);
+        this->attackers_target.erase(i);
+        this->attackers_shot_cue.erase(i);
+        this->shots.erase(this->shots.begin()+shots_to_remove[i]);
+    }
+        
 
 
     for (size_t i = 0; i < this->shots.size(); i++)

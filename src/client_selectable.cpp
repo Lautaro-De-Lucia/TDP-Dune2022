@@ -85,8 +85,11 @@ void CSelectable::render(player_t player_faction, SDL2pp::Renderer& renderer, in
         );
 }
 
-int CSelectable::get_life_points() {    return this->LP;}
+int CSelectable::get_life_points() { return this->LP;}
 int CSelectable::getID() {return this->ID;}
+
+Position CSelectable::getPosition() {std::cout << "i shouldnt be here" << std::endl;};
+selectable_t CSelectable::getType() {std::cout << "i shouldnt be here" << std::endl;};
 
 CMovable::CMovable(unit_t type,int id,int faction,int lp,int pos_x,int pos_y, SDL2pp::Renderer& renderer, const std::string& lp_path , const std::string& path)
 :
@@ -161,9 +164,6 @@ void CMovable::render(player_t player_faction, SDL2pp::Renderer& renderer, int c
             SDL2pp::Rect(30,20*(this->health-1),100,20),
             SDL2pp::Rect((this->position.x-0.5)*TILE_SIZE-cam_pos_x+this->rel_pos_x,(this->position.y-0.5)*TILE_SIZE-cam_pos_y+this->rel_pos_y,30,5) 		
     );
-
-    std::cout << "rendering unit on pixel position: (" << (this->position.x-0.5)*TILE_SIZE-cam_pos_x << "," << (this->position.y-0.5)*TILE_SIZE-cam_pos_y << ")" << std::endl;
-    std::cout << "rendering unit on pixel position: (" << (this->position.x-0.5)*TILE_SIZE-cam_pos_x << "," << (this->position.y-0.5)*TILE_SIZE-cam_pos_y << ")" << std::endl;
 }
 
 void CStatic::render(player_t player_faction, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
@@ -323,4 +323,20 @@ void CStatic::render(player_t player_faction, SDL2pp::Renderer& renderer, int ca
             SDL2pp::Rect(30,20*(this->health-1),100,20),
             SDL2pp::Rect((this->position.x-0.5)*TILE_SIZE-cam_pos_x,(this->position.y-0.5)*TILE_SIZE-cam_pos_y,30,5) 		
     );
+}
+
+Position CMovable::getPosition() {
+    return this->position;
+}
+
+Position CStatic::getPosition() {
+    return this->position;
+}
+
+selectable_t CMovable::getType() {
+    return (selectable_t) this->type;
+}
+
+selectable_t CStatic::getType() {
+   return (selectable_t) ((int) this->type + 7);
 }
