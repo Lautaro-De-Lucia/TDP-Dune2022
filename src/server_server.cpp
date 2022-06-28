@@ -83,13 +83,15 @@ void Server::run() {
         this->game.createBuilding(HARKONNEN,PALACE,HARKONNEN_INIT_POS_X,HARKONNEN_INIT_POS_Y,__spice,__energy);
         */
 
-
         //std::cout << "Starting instance "<< k << " of game loop" << std::endl;
         //std::cout << "Checking for loosing players" << std::endl;
         this->checkForLosingPlayers();
         //std::cout << "Waiting for players to notify" << std::endl;
         while(this->TSQ.getSize() < this->players.size()){}
-        for(size_t i = 0 ; i < this->players.size(); i++) {
+        // pop until empty, then update
+        // if > 1000 pops, exit
+        // sleep in server
+        for(size_t i = 0 ; i < this->players.size(); i++) { // while (!queue.empty)
             std::unique_ptr<instruction_t> new_instruction = this->TSQ.pop();
             this->handleInstruction(new_instruction);
         }
@@ -102,6 +104,8 @@ void Server::run() {
             this->players[i]->reportState(this->game);
         //std::cout << "Enabling reading" << std::endl;
         this->enableReading();
+
+        //sleep(10); mismo que los keepalive de los clientes, no mas keepalive
     }
 
     for (size_t i = 0; i < (this->players).size(); i++) {

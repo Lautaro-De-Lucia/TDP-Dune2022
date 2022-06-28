@@ -20,7 +20,6 @@ void ExplosionsHandler::addExplosion(int id, selectable_t type, Position pos) {
     } else {
         this->audio.play(EXPLHG1);
     }
-
     
     this->explosions.push_back(Explosion(type, pos));
 }

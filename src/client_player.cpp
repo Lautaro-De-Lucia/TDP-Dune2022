@@ -71,128 +71,131 @@ void Player::play(){
     while (true) {
         //  loopeamos infinitamente
         //  Actualizamos la cámara
-            
+
         SDL_Event event;
-        SDL_PollEvent(&event);
 
-        if( event.type == SDL_QUIT ) {
+        while (SDL_PollEvent(&event)) {
+
+            if (event.type == SDL_QUIT) {
+                new_mouse_event.clear();
+                new_mouse_event.push_back(CLOSE);
+                this->mouse_events.push(new_mouse_event);
+                break; // salir del otro loop también
+            }
+            
+            int x, y;
+
+            SDL_GetMouseState(&x, &y);
+
+            if (x < 80) 
+                this->camera.move(-1,0);
+            if (x > 1010 && x < 1090) 
+                this->camera.move(1,0);
+            if (y < 60) 
+                this->camera.move(0,-1);
+            if (y > 660) 
+                this->camera.move(0,1);
+
+            //  Obtenemos la instrucción del mouse
+            mouse.getEvent(&event);
+            Position current_pos = mouse.currentPosition();
+
             new_mouse_event.clear();
-            new_mouse_event.push_back(CLOSE);
-            this->mouse_events.push(new_mouse_event);
-            break;
-        }
-        
-        int x, y;
-        SDL_GetMouseState(&x, &y);
 
-        if (x < 80) 
-            this->camera.move(-1,0);
-        if (x > 1010 && x < 1090) 
-            this->camera.move(1,0);
-        if (y < 60) 
-            this->camera.move(0,-1);
-        if (y > 660) 
-            this->camera.move(0,1);
+            switch(event.type) {
+                case SDL_MOUSEBUTTONDOWN:
+                    if (mouse.leftClick()){
+                        mouse.click();
+                        SDL_GetMouseState(&x, &y);
+                        if (checkHud(x,y)) {
+                            mouse.unclick();
+                            switch (checkBtn(x, y))
+                            {
+                            case BUILD_BTN:
+                                this->print("Place building on screen", DATA_PATH FONT_IMPACT_PATH, 200, 300, 10, colors[YELLOW], 1000);
+                                this->is_holding_building = true;
+                                this->building_held = checkBuild(x, y);
+                                break;
+                            case UNIT_BTN:
+                                if (this->new_unit_available) {
+                                    new_mouse_event.push_back(CREATE_UNIT);
+                                    new_mouse_event.push_back(checkUnit(x,y));
+                                    new_mouse_event.push_back(current_pos.x);
+                                    new_mouse_event.push_back(current_pos.y);
+                                    this->is_holding_building = false;
+                                    this->building_held = -1;
+                                    this->mouse_events.push(new_mouse_event);
+                                    this->new_unit_available = false;
+                                }
 
-        this->render();
-
-        //  Obtenemos la instrucción del mouse
-        mouse.getEvent(&event);
-        Position current_pos = mouse.currentPosition();
-
-        new_mouse_event.clear();
-
-        switch(event.type) {
-            case SDL_MOUSEBUTTONDOWN:
-                if (mouse.leftClick()){
-                    mouse.click();
-                    SDL_GetMouseState(&x, &y);
-                    if (checkHud(x,y)) {
-                        mouse.unclick();
-                        switch (checkBtn(x, y))
-                        {
-                        case BUILD_BTN:
-                            this->print("Place building on screen", DATA_PATH FONT_IMPACT_PATH, 200, 300, 10, colors[YELLOW], 1000);
-                            this->is_holding_building = true;
-                            this->building_held = checkBuild(x, y);
-                            break;
-                        case UNIT_BTN:
-                            if (this->new_unit_available) {
-                                new_mouse_event.push_back(CREATE_UNIT);
-                                new_mouse_event.push_back(checkUnit(x,y));
-                                new_mouse_event.push_back(current_pos.x);
-                                new_mouse_event.push_back(current_pos.y);
+                                break;
+                            default:
                                 this->is_holding_building = false;
                                 this->building_held = -1;
-                                this->mouse_events.push(new_mouse_event);
-                                this->new_unit_available = false;
+                                break;
                             }
-
-                            break;
-                        default:
-                            this->is_holding_building = false;
-                            this->building_held = -1;
-                            break;
-                        }
-                    } else if (this->is_holding_building) {
-                        new_mouse_event.push_back(CREATE_BUILDING);
-                        new_mouse_event.push_back(this->building_held);
-                        new_mouse_event.push_back(current_pos.x);
-                        new_mouse_event.push_back(current_pos.y);
-                        this->is_holding_building = false;
-                        this->building_held = -1;
-                        this->mouse_events.push(new_mouse_event);
-                    } else {
-                        new_mouse_event.push_back(MOUSE_LEFT_CLICK);
-                        new_mouse_event.push_back(current_pos.x);
-                        new_mouse_event.push_back(current_pos.y);
-                        if (!this->left_click) {
-                            this->mouse_events.push(new_mouse_event);
-                            this->left_click = true;
-                            this->selection = false;
-                        }
-                    }
-            }
-                if (mouse.rightClick()){
-                    mouse.unclick();
-                    if(checkHud(x,y)) {
-                    } else {
-                        if (!this->right_click) {
-                            new_mouse_event.push_back(MOUSE_RIGHT_CLICK);
+                        } else if (this->is_holding_building) {
+                            new_mouse_event.push_back(CREATE_BUILDING);
+                            new_mouse_event.push_back(this->building_held);
                             new_mouse_event.push_back(current_pos.x);
                             new_mouse_event.push_back(current_pos.y);
+                            this->is_holding_building = false;
+                            this->building_held = -1;
                             this->mouse_events.push(new_mouse_event);
-                            this->right_click = true;
-                            this->selection = false;
+                        } else {
+                            new_mouse_event.push_back(MOUSE_LEFT_CLICK);
+                            new_mouse_event.push_back(current_pos.x);
+                            new_mouse_event.push_back(current_pos.y);
+                            if (!this->left_click) {
+                                this->mouse_events.push(new_mouse_event);
+                                this->left_click = true;
+                                this->selection = false;
+                            }
+                        }
+                }
+                    if (mouse.rightClick()){
+                        mouse.unclick();
+                        if(checkHud(x,y)) {
+                        } else {
+                            if (!this->right_click) {
+                                new_mouse_event.push_back(MOUSE_RIGHT_CLICK);
+                                new_mouse_event.push_back(current_pos.x);
+                                new_mouse_event.push_back(current_pos.y);
+                                this->mouse_events.push(new_mouse_event);
+                                this->right_click = true;
+                                this->selection = false;
+                            }
                         }
                     }
-                }
-                break;
-            case SDL_MOUSEBUTTONUP:
-                if(checkHud(x,y)) {
-                        this->new_unit_available = true;
-                        break;
-                }
-                if (!(mouse.clickedPosition() == mouse.currentPosition())){
-                    if(!this->selection) {
-                        Area selection = mouse.getSelection(mouse.clickedPosition(),mouse.currentPosition());
-                        new_mouse_event.push_back(MOUSE_SELECTION);
-                        new_mouse_event.push_back(selection.Xmin);
-                        new_mouse_event.push_back(selection.Xmax);
-                        new_mouse_event.push_back(selection.Ymin);
-                        new_mouse_event.push_back(selection.Ymax);
-                        this->mouse_events.push(new_mouse_event);
-                        this->selection = true;
+                    break;
+                case SDL_MOUSEBUTTONUP:
+                    if(checkHud(x,y)) {
+                            this->new_unit_available = true;
+                            break;
                     }
+                    if (!(mouse.clickedPosition() == mouse.currentPosition())){
+                        if(!this->selection) {
+                            Area selection = mouse.getSelection(mouse.clickedPosition(),mouse.currentPosition());
+                            new_mouse_event.push_back(MOUSE_SELECTION);
+                            new_mouse_event.push_back(selection.Xmin);
+                            new_mouse_event.push_back(selection.Xmax);
+                            new_mouse_event.push_back(selection.Ymin);
+                            new_mouse_event.push_back(selection.Ymax);
+                            this->mouse_events.push(new_mouse_event);
+                            this->selection = true;
+                        }
+                        this->left_click = false;
+                        this->right_click = false;
+                    }
+                    break;
+                default:
                     this->left_click = false;
                     this->right_click = false;
-                }
-                break;
-            default:
-                this->left_click = false;
-                this->right_click = false;
-                break;
+                    break;
+            }
         }
+
+        this->render();
 
         auto current_time = clock();
 
@@ -201,10 +204,12 @@ void Player::play(){
         this->shotsHandler.update();
         this->explosionsHandler.update();
 
-        sleepcp(1);
-        
+        sleepcp(20);
+
         if (frame_time_instruction < GAME_SPEED && game_has_started)
             continue;
+
+        std::cout << "after GAME_SPEED" << std::endl;
 
         game_has_started = true;
 
