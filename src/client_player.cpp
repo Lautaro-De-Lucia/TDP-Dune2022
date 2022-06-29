@@ -74,12 +74,15 @@ void Player::play(){
 
         SDL_Event event;
 
+        bool quit = false;
+
         while (SDL_PollEvent(&event)) {
 
             if (event.type == SDL_QUIT) {
                 new_mouse_event.clear();
                 new_mouse_event.push_back(CLOSE);
                 this->mouse_events.push(new_mouse_event);
+                quit = true;
                 break; // salir del otro loop también
             }
             
@@ -88,13 +91,13 @@ void Player::play(){
             SDL_GetMouseState(&x, &y);
 
             if (x < 80) 
-                this->camera.move(-1,0);
+                this->camera.move(-2,0);
             if (x > 1010 && x < 1090) 
-                this->camera.move(1,0);
+                this->camera.move(2,0);
             if (y < 60) 
-                this->camera.move(0,-1);
+                this->camera.move(0,-2);
             if (y > 660) 
-                this->camera.move(0,1);
+                this->camera.move(0,2);
 
             //  Obtenemos la instrucción del mouse
             mouse.getEvent(&event);
@@ -195,6 +198,9 @@ void Player::play(){
             }
         }
 
+        if (quit)
+            break;
+
         this->render();
 
         auto current_time = clock();
@@ -208,8 +214,6 @@ void Player::play(){
 
         if (frame_time_instruction < GAME_SPEED && game_has_started)
             continue;
-
-        std::cout << "after GAME_SPEED" << std::endl;
 
         game_has_started = true;
 

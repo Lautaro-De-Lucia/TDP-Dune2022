@@ -107,7 +107,7 @@ void Board::dealDamage(int x, int y, int damage){
             std::cout << "Disoccupying cell at position: " << pos << std::endl;
             this->cells[pos.x][pos.y].disoccupy();
         }
-        std::cout << "Element of ID: " << element->getID() << " Was just destroyed" <<std::endl;
+        std::cout << "Element of ID: " << element->getID() << " was just destroyed" <<std::endl;
         this->elements.erase(element->getID());
     }
 }

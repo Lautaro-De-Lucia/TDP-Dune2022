@@ -26,8 +26,6 @@ Explosion::Explosion(selectable_t type, Position pos) {
 
 void Explosion::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
 
-    std::cout << "rendering frame: " << this->current_frame << " of the explosion" << std::endl;
-
     int xpos = this->pixel_pos_x-cam_pos_x;
     int ypos = this->pixel_pos_y-cam_pos_y;
 
