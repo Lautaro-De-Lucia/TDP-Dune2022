@@ -32,11 +32,11 @@ void Explosion::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y)
     std::string explosion_path;
     explosion_path.append(DATA_PATH);
 
-    explosion_path.append(EXPLOSION_PATH);
+    explosion_path.append(DATA_PATH "/explosions");
 
     explosion_path.append(std::to_string(this->current_frame));
 
-    explosion_path.append(IMG_FORMAT);
+    explosion_path.append(".png");
 
     SDL2pp::Texture texture(renderer, explosion_path.c_str());
     texture.Update(SDL2pp::NullOpt,SDL2pp::Surface(explosion_path.c_str()));
