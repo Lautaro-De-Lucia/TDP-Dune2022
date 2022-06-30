@@ -84,8 +84,9 @@ void run_sdl(const int* _faction, std::string host_name, std::string service_nam
 	SDL2pp::SDLTTF ttf;
     SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,0);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
-    std::cout << "Initializing textures" << std::endl;
+    std::cout << "Loading textures" << std::endl;
     TextureHandler textures(game_renderer);
+    std::cout << "Finished loading textures" << std::endl;
 
     int init_cam_pos_x;
     int init_cam_pos_y;
@@ -131,8 +132,9 @@ int main(int argc, char *argv[]) {
     std::string _host_name(host_name);
     std::string _service_name(service_name);
 
+    char* _program_name = (char*) "./client";
     int _argc = 1;
-    char *_argv[1] = {"./client"};
+    char *_argv[1] = {_program_name};
 
     QApplication a(_argc, _argv);
     a.setWindowIcon(QIcon("./src/resources/img/icon.png"));
