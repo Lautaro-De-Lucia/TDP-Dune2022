@@ -11,8 +11,8 @@ class ThreadSafeQueue {
 
  private:
     std::queue<std::unique_ptr<instruction_t>> q;
-    std::mutex mtx;
-    //std:condition_variable cv;
+    mutable std::mutex mtx;
+    std::condition_variable cv;
 
     size_t max;
 

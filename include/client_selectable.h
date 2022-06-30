@@ -3,6 +3,7 @@
 #include <string>
 
 #include "client_camera.h"
+
 #include "common_utils.h"
 #include "client_texturehandler.h"
 
