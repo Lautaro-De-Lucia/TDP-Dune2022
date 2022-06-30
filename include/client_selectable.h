@@ -3,6 +3,7 @@
 #include <string>
 
 #include "client_camera.h"
+#include "client_renderhandler.h"
 
 #include "common_utils.h"
 #include "client_texturehandler.h"
@@ -37,6 +38,7 @@ enum health_t {
 class CSelectable {
  protected:
     SDL2pp::Texture lp_texture;  
+    RenderHandler render_handler;
     TextureHandler & textures;
     rgb_t color;
     int dim_x;

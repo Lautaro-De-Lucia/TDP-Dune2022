@@ -609,43 +609,16 @@ void Player::renderButtonInfo(){
 }
 
 void Player::renderHeldBuilding(){
-    int x, y;
+    int x, y, dim_x, dim_y;
     SDL_GetMouseState(&x, &y);
     if(this->is_holding_building == true){
-        std::string building_texture_path;
-        building_texture_path.append(DATA_PATH);
-        switch(this->building_held){
-			case BARRACK:
-				building_texture_path.append("/buildingsprites/barrack/barrack.png");
-				break;
-			case REFINERY:
-				building_texture_path.append("/buildingsprites/refinery/refinery.png");
-				break;
-			case AIR_TRAP:
-				building_texture_path.append("/buildingsprites/windtrap/windtrap.png");
-				break;
-			case LIGHT_FACTORY:
-				building_texture_path.append("/buildingsprites/lightfactory/lightfactory.png");
-				break;		
-			case HEAVY_FACTORY:
-				building_texture_path.append("/buildingsprites/heavyfactory/heavyfactory.png");
-				break;
-			case SILO:
-				building_texture_path.append("/buildingsprites/silo/silo.png");
-				break;
-			case PALACE:
-				building_texture_path.append("/buildingsprites/palace/palace.png");
-				break;
-        }
-        //std::cout << "Opening texture in path: " << building_texture_path << std::endl;
-        SDL2pp::Texture building_texture(this->game_renderer,building_texture_path.c_str());
-        building_texture.SetBlendMode(SDL_BLENDMODE_ADD);
-        //std::cout << "Rendering it to positions: (" << x <<","<< y <<")"<< std::endl;
+        SDL2pp::Texture & texture = this->textures.getTexture((building_t)this->building_held,this->faction);
+        texture.SetBlendMode(SDL_BLENDMODE_ADD);
         this->game_renderer.Copy(
-            building_texture,
-            SDL2pp::Rect(0,0,63,76),
-            SDL2pp::Rect(x,y,TILE_SIZE*3*2,TILE_SIZE*3*2)
-        );    
+            texture,
+            SDL2pp::NullOpt,
+            SDL2pp::Rect(x,y,texture.GetWidth(),texture.GetHeight()));				
+        texture.SetBlendMode(SDL_BLENDMODE_BLEND);
     }
 }
 

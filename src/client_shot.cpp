@@ -57,7 +57,7 @@ void Shot::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
     switch (this->unit)
     {
     case TRIKE:
-        unit_shot_path.append(TRIKE_SHOT_PATH);
+        unit_shot_path.append(DATA_PATH "unitshots/trike/shot");
         break;
     
     default:
@@ -65,7 +65,7 @@ void Shot::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
         //break;
     }
 
-    unit_shot_path.append(IMG_FORMAT);
+    unit_shot_path.append(".png");
 
     //std::cout << "unit_shot_path: " << unit_shot_path << std::endl;
 
