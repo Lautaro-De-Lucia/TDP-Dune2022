@@ -34,20 +34,22 @@ const char * stringify(unit_t unit){
 
 const char * stringify(building_t building){
     switch(building){
-        case HARVESTER:
-            return "harvester";
-        case TRIKE:
-            return "trike";
-        case FREMEN:
-            return "fremen";
-        case INFANTRY:
-            return "infantry";
-        case SARDAUKAR:
-            return "sardaukar";
-        case TANK:
-            return "tank";
-        case DEVASTATOR:
-            return "devastator";
+        case AIR_TRAP:
+            return "windtrap";
+        case BARRACK:
+            return "barrack";
+        case REFINERY:
+            return "refinery";
+        case LIGHT_FACTORY:
+            return "lightfactory";
+        case HEAVY_FACTORY:
+            return "heavyfactory";
+        case SILO:
+            return "silo";
+        case PALACE:
+            return "palace";
+        case CONSTRUCTION_YARD:
+            return "yard";
     }
     throw std::runtime_error("Unknown Unit");
 }

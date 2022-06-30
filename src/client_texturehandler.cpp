@@ -25,9 +25,10 @@ TextureHandler::TextureHandler(SDL2pp::Renderer & game_renderer){
                 .append("/").append("buildings")
                 .append("/").append(stringify(BUILDING))
                 .append("/").append(stringify(FACTION))
-                .append(".png"),
-            building_textures[BUILDING].emplace(FACTION,SDL2pp::Texture(game_renderer,path.c_str())),
-            path.clear();          
+                .append("/").append(".png"),
+                std::cout << "Loading path: " << path << std::endl,
+                building_textures[BUILDING].emplace(FACTION,SDL2pp::Texture(game_renderer,path.c_str())),
+                path.clear();          
 };
 
 SDL2pp::Texture & TextureHandler::getTexture(unit_t unit, player_t faction, direction_t direction){

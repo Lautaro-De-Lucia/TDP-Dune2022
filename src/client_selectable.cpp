@@ -1,14 +1,17 @@
 #include "client_selectable.h"
 
-CSelectable::CSelectable(int id,int faction,int lp,int pos_x,int pos_y, SDL2pp::Renderer& renderer, const std::string& lp_path)
+CSelectable::CSelectable(int id,int faction,int lp,int pos_x,int pos_y,int dim_x,int dim_y,SDL2pp::Renderer& renderer,TextureHandler & textures,const std::string& lp_path)
 :
-lp_texture(renderer,lp_path)
+lp_texture(renderer,lp_path),
+textures(textures)
 {
     this->ID = id;
     this->faction = faction;
     this->LP = lp;
     this->max_LP = lp;
     this->position = Position(pos_x,pos_y);
+    this->dim_x = dim_x;
+    this->dim_y = dim_y;
     this->selected = false;
 }
 
@@ -76,13 +79,6 @@ void CMovable::update(player_t player_faction, int lp,int pos_x,int pos_y,direct
 }
 
 void CSelectable::render(player_t player_faction, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
-    //  Render Health
-    if (this->selected == true && this->faction == player_faction)
-        renderer.Copy(
-            lp_texture,
-            SDL2pp::Rect(30,20*(this->health-1),100,20),
-            SDL2pp::Rect((this->position.x-0.5)*TILE_SIZE-cam_pos_x,(this->position.y-0.5)*TILE_SIZE-cam_pos_y,30,5) 		
-        );
 }
 
 int CSelectable::get_life_points() { return this->LP;}
@@ -91,20 +87,19 @@ int CSelectable::getID() {return this->ID;}
 Position CSelectable::getPosition() {std::cout << "i shouldnt be here" << std::endl;};
 selectable_t CSelectable::getType() {std::cout << "i shouldnt be here" << std::endl;};
 
-CMovable::CMovable(unit_t type,int id,int faction,int lp,int pos_x,int pos_y, SDL2pp::Renderer& renderer, const std::string& lp_path , const std::string& path)
+CMovable::CMovable(unit_t type,int id,int faction,int lp,int pos_x,int pos_y,int dim_x,int dim_y,SDL2pp::Renderer& renderer,TextureHandler & textures,const std::string& lp_path)
 :
-CSelectable(id,faction,lp,pos_x,pos_y,renderer,lp_path),
-texture(renderer,path)
+CSelectable(id,faction,lp,pos_x,pos_y,dim_x,dim_y,renderer,textures,lp_path)
 {
     switch(faction){
         case ATREIDES:
-            this->texture.SetColorMod(200,200,255);
+            this->color.set(200,200,255);
             break;
         case HARKONNEN:
-            this->texture.SetColorMod(255,200,200);
+            this->color.set(255,200,200);
             break;
         case ORDOS:
-            this->texture.SetColorMod(200,255,200);
+            this->color.set(200,255,200);
             break;
     }
     switch(type){
@@ -137,37 +132,55 @@ texture(renderer,path)
     this->sp = false;   
 }
 
-CStatic::CStatic(building_t type, int id,int faction,int lp,int pos_x,int pos_y,SDL2pp::Renderer& renderer, const std::string& lp_path, const std::string& path) 
+CStatic::CStatic(building_t type, int id,int faction,int lp,int pos_x,int pos_y,int dim_x,int dim_y,SDL2pp::Renderer& renderer,TextureHandler & textures,const std::string& lp_path) 
 :
-CSelectable(id,faction,lp,pos_x,pos_y,renderer,lp_path),
-texture(renderer,path)
+CSelectable(id,faction,lp,pos_x,pos_y,dim_x,dim_y,renderer,textures,lp_path)
 {
     switch(faction){
         case ATREIDES:
-            this->texture.SetColorMod(200,200,255);
+            this->color.set(200,200,255);
             break;
         case HARKONNEN:
-            this->texture.SetColorMod(255,200,200);
+            this->color.set(255,200,200);
             break;
         case ORDOS:
-            this->texture.SetColorMod(200,255,200);
+            this->color.set(200,255,200);
             break;
     }
     this->type = type;     
 }
 
 void CMovable::render(player_t player_faction, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
-    this->render_handler.renderMovable(this->texture,renderer,player_faction,this->type,this->dir,this->position.x,this->position.y,this->rel_pos_x,this->rel_pos_y,cam_pos_x,cam_pos_y,TILE_SIZE);          
+    //this->render_handler.renderMovable(this->texture,renderer,player_faction,this->type,this->dir,this->position.x,this->position.y,this->rel_pos_x,this->rel_pos_y,cam_pos_x,cam_pos_y,TILE_SIZE);          
+    int xpos = this->position.x*TILE_SIZE-cam_pos_x+this->rel_pos_x;
+    int ypos = this->position.y*TILE_SIZE-cam_pos_y+this->rel_pos_y;
+    int xdim = this->dim_x*TILE_SIZE;
+    int ydim = this->dim_y*TILE_SIZE;
+    renderer.Copy(
+        this->textures.getTexture(this->type,(player_t)this->faction,this->dir).SetColorMod(this->color.r,this->color.g,this->color.b),
+        SDL2pp::NullOpt,
+        SDL2pp::Rect(xpos,ypos,xdim,ydim)
+    );
     if (this->selected == true && this->faction == player_faction)
         renderer.Copy(
             lp_texture,
             SDL2pp::Rect(30,20*(this->health-1),100,20),
-            SDL2pp::Rect((this->position.x-0.5)*TILE_SIZE-cam_pos_x+this->rel_pos_x,(this->position.y-0.5)*TILE_SIZE-cam_pos_y+this->rel_pos_y,30,5) 		
+            SDL2pp::Rect(xpos-TILE_SIZE/2,ypos-TILE_SIZE/2,30,5) 		
     );
 }
 
 void CStatic::render(player_t player_faction, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
-    CSelectable::render(player_faction, renderer, cam_pos_x, cam_pos_y);
+    // CSelectable::render(player_faction, renderer, cam_pos_x, cam_pos_y);
+    int xpos = this->position.x*TILE_SIZE-cam_pos_x;
+    int ypos = this->position.y*TILE_SIZE-cam_pos_y;
+    int xdim = this->dim_x*TILE_SIZE;
+    int ydim = this->dim_y*TILE_SIZE;
+    renderer.Copy(
+        this->textures.getTexture(this->type,(player_t)this->faction).SetColorMod(this->color.r,this->color.g,this->color.b),
+        SDL2pp::NullOpt,
+        SDL2pp::Rect(xpos,ypos,xdim,ydim)
+    );
+    /*
     if (this->type == CONSTRUCTION_YARD){
         if(this->faction == ATREIDES){
             renderer.Copy(
@@ -317,6 +330,7 @@ void CStatic::render(player_t player_faction, SDL2pp::Renderer& renderer, int ca
                 SDL2pp::Rect(this->position.x*TILE_SIZE-cam_pos_x,this->position.y*TILE_SIZE-cam_pos_y,PALACE_DIM_X*TILE_SIZE,PALACE_DIM_Y*TILE_SIZE)				//	set to this part of the window		
             );
     }
+    */
     if (this->selected == true  && this->faction == player_faction)
         renderer.Copy(
             lp_texture,

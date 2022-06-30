@@ -14,8 +14,8 @@
 
 #include <functional>
 
-#define INIT_SPICE 2000
-#define INIT_CSPICE 2000
+#define INIT_SPICE 20000
+#define INIT_CSPICE 20000
 #define INIT_ENERGY 3000
 #define INIT_CENERGY 5000
 
@@ -84,6 +84,9 @@ void run_sdl(const int* _faction, std::string host_name, std::string service_nam
 	SDL2pp::SDLTTF ttf;
     SDL2pp::Window game_window("Dune II",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH, SCREEN_HEIGHT,0);
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
+    std::cout << "Initializing textures" << std::endl;
+    TextureHandler textures(game_renderer);
+    std::cout << "xD" << std::endl;
 
     int init_cam_pos_x;
     int init_cam_pos_y;
@@ -112,7 +115,7 @@ void run_sdl(const int* _faction, std::string host_name, std::string service_nam
     const char* _service_name = service_name.c_str();
 
     std::vector<std::vector<std::string>> cell_paths = generate_client_map(DATA_PATH MAP_FILE);    
-    Player client_player(faction,_host_name,_service_name,cam,game_window,game_renderer,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cell_paths);
+    Player client_player(faction,_host_name,_service_name,cam,game_window,game_renderer,textures,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cell_paths);
 
     client_player.play();
 };

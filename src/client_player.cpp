@@ -17,7 +17,7 @@ std::map<response_t, std::string> usr_msg = {
 };
 
 //  @TODO: Meter en un bloque try{} en el main
-Player::Player(player_t faction, const char* host_name, const char* service_name,Camera & cam ,SDL2pp::Window& window,SDL2pp::Renderer& renderer,size_t spice, size_t cspice, int energy, size_t c_energy, std::vector<std::vector<std::string>>& map_data)
+Player::Player(player_t faction, const char* host_name, const char* service_name,Camera & cam ,SDL2pp::Window& window,SDL2pp::Renderer& renderer,TextureHandler & textures,size_t spice, size_t cspice, int energy, size_t c_energy, std::vector<std::vector<std::string>>& map_data)
 :
 socket(host_name, service_name),
 camera(cam),
@@ -27,8 +27,8 @@ map(renderer,map_data),
 hud(faction,renderer),
 mouse(TILE_DIM,cam),
 shotsHandler(renderer),
-explosionsHandler(renderer)
-
+explosionsHandler(renderer),
+textures(textures)
 {
     this->spice = spice;
     this->c_spice = c_spice;
@@ -341,7 +341,7 @@ void Player::update() {
                         this->removeAttacker(id);
                     }
                 } else {
-                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(TRIKE,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH DEF_TRIKE_PATH))});
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(TRIKE,id,faction,lp,pos_x,pos_y,1,1,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
                     this->updates.push_back(true);  
                 }
                 break;
@@ -351,7 +351,7 @@ void Player::update() {
                     this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,(direction_t)direction,moving,selected,harvesting,waiting,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
                 } else {
-                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(HARVESTER,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH DEF_HARVESTER_PATH))});
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(HARVESTER,id,faction,lp,pos_x,pos_y,1,1,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
                     this->updates.push_back(true);  
                 }
                 break;
@@ -366,7 +366,7 @@ void Player::update() {
                         this->removeAttacker(id);
                     }
                 } else {
-                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(FREMEN,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH DEF_FREMEN_PATH))});
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(FREMEN,id,faction,lp,pos_x,pos_y,1,1,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
                     this->updates.push_back(true);  
                 }
                 break;
@@ -381,7 +381,7 @@ void Player::update() {
                         this->removeAttacker(id);
                     }
                 } else {
-                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(INFANTRY,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH DEF_INFANTRY_PATH))});
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(INFANTRY,id,faction,lp,pos_x,pos_y,1,1,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
                     this->updates.push_back(true);  
                 }
                 break;    
@@ -396,7 +396,7 @@ void Player::update() {
                         this->removeAttacker(id);
                     }
                 } else {
-                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(SARDAUKAR,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH DEF_SARDAUKAR_PATH))});
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(SARDAUKAR,id,faction,lp,pos_x,pos_y,1,1,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
                     this->updates.push_back(true);  
                 }
                 break;    
@@ -411,7 +411,7 @@ void Player::update() {
                         this->removeAttacker(id);
                     }
                 } else {
-                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(TANK,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH DEF_TANK_PATH))});
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(TANK,id,faction,lp,pos_x,pos_y,1,1,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
                     this->updates.push_back(true);  
                 }
                 break;    
@@ -426,7 +426,7 @@ void Player::update() {
                         this->removeAttacker(id);
                     }
                 } else {
-                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(DEVASTATOR,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH DEF_DEVASTATOR_PATH))});
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(DEVASTATOR,id,faction,lp,pos_x,pos_y,1,1,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
                     this->updates.push_back(true);  
                 }
                 break;   
@@ -436,7 +436,7 @@ void Player::update() {
                     this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,TOP,false,selected,false,false,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
                 } else {
-                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(CONSTRUCTION_YARD,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH CONSTRUCTION_YARD_PATH))});
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(CONSTRUCTION_YARD,id,faction,lp,pos_x,pos_y,CONSTRUCTION_YARD_DIM_X,CONSTRUCTION_YARD_DIM_Y,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
                     this->updates.push_back(true);  
                 }  
                 break;    
@@ -446,7 +446,7 @@ void Player::update() {
                     this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,TOP,false,selected,false,false,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
                 } else {
-                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(AIR_TRAP,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH WIND_TRAP_PATH))});
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(AIR_TRAP,id,faction,lp,pos_x,pos_y,AIR_TRAP_DIM_X,AIR_TRAP_DIM_Y,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
                     this->updates.push_back(true);  
                 }     
                 break;
@@ -456,7 +456,7 @@ void Player::update() {
                     this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,TOP,false,selected,false,false,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
                 } else {
-                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(REFINERY,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH REFINERY_PATH))});
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(REFINERY,id,faction,lp,pos_x,pos_y,REFINERY_DIM_X,REFINERY_DIM_Y,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
                     this->updates.push_back(true);  
                 } 
                 break;
@@ -466,7 +466,7 @@ void Player::update() {
                     this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,TOP,false,selected,false,false,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
                 } else {
-                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(BARRACK,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH BARRACK_PATH))});
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(BARRACK,id,faction,lp,pos_x,pos_y,BARRACK_DIM_X,BARRACK_DIM_Y,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
                     this->updates.push_back(true);  
                 }  
                 break;   
@@ -476,7 +476,7 @@ void Player::update() {
                     this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,TOP,false,selected,false,false,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
                 } else {
-                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(LIGHT_FACTORY,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH LIGHT_FACTORY_PATH))});
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(LIGHT_FACTORY,id,faction,lp,pos_x,pos_y,LIGHT_FACTORY_DIM_X,LIGHT_FACTORY_DIM_Y,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
                     this->updates.push_back(true);  
                 }  
                 break;  
@@ -486,7 +486,7 @@ void Player::update() {
                     this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,TOP,false,selected,false,false,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
                 } else {
-                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(HEAVY_FACTORY,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH HEAVY_FACTORY_PATH))});
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(HEAVY_FACTORY,id,faction,lp,pos_x,pos_y,HEAVY_FACTORY_DIM_X,HEAVY_FACTORY_DIM_Y,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
                     this->updates.push_back(true);  
                 }  
                 break;      
@@ -496,7 +496,7 @@ void Player::update() {
                     this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,TOP,false,selected,false,false,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
                 } else {
-                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(SILO,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH SILO_PATH))});
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(SILO,id,faction,lp,pos_x,pos_y,SILO_DIM_X,SILO_DIM_Y,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
                     this->updates.push_back(true);  
                 }  
                 break;    
@@ -506,7 +506,7 @@ void Player::update() {
                     this->elements.at(id)->update(this->faction,lp,pos_x,pos_y,TOP,false,selected,false,false,this->game_renderer,camera.pos_x,camera.pos_y);
                     this->updates[id] = true;
                 } else {
-                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(PALACE,id,faction,lp,pos_x,pos_y,this->game_renderer,DATA_PATH LP_PATH,DATA_PATH PALACE_PATH))});
+                    this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(PALACE,id,faction,lp,pos_x,pos_y,PALACE_DIM_X,PALACE_DIM_Y,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
                     this->updates.push_back(true);  
                 }  
                 break;                      

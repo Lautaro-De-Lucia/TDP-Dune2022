@@ -498,5 +498,21 @@ class accept_failed_exception : public std::exception {
     }
 };
 
+struct rgb_t {
+    uint8_t r;
+    uint8_t g;
+    uint8_t b;
+    rgb_t(){
+        this->r = 0;
+        this->g = 0;
+        this->b = 0;
+    }
+    void set (uint8_t r,uint8_t g,uint8_t b){
+        this->r = r;
+        this->g = g;
+        this->b = b;
+    }
+};
+
 // ===============================================
 // ===============================================

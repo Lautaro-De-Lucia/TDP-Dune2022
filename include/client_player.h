@@ -9,6 +9,7 @@
 #include "client_camera.h"
 #include "client_audioplayer.h"
 #include "client_shotshandler.h"
+#include "client_texturehandler.h"
 #include "client_explosionshandler.h"
 
 #include "common_utils.h"
@@ -51,6 +52,7 @@ class Player {
    GameHud hud;
    SDL2pp::Window& game_window;
    SDL2pp::Renderer& game_renderer;
+   TextureHandler & textures;
    Camera & camera;
    bool is_holding_building;
    int building_held;
@@ -67,7 +69,7 @@ class Player {
    ShotsHandler shotsHandler;
    ExplosionsHandler explosionsHandler;
 
-   Player(player_t faction, const char* host_name, const char* service_name,Camera & cam, SDL2pp::Window& window,SDL2pp::Renderer& renderer, size_t spice, size_t c_spice, int energy, size_t c_energy, std::vector<std::vector<std::string>>& map_data);
+   Player(player_t faction, const char* host_name, const char* service_name,Camera & cam, SDL2pp::Window& window,SDL2pp::Renderer& renderer,TextureHandler & textures, size_t spice, size_t c_spice, int energy, size_t c_energy, std::vector<std::vector<std::string>>& map_data);
 
    void play();
    void renderWaitingText();
