@@ -131,9 +131,8 @@ int main(int argc, char *argv[]) {
     std::string _host_name(host_name);
     std::string _service_name(service_name);
 
-    std::string _program_name = "./client";
     int _argc = 1;
-    char *_argv[] = {"./client"};
+    char *_argv[1] = {"./client"};
 
     QApplication a(_argc, _argv);
     a.setWindowIcon(QIcon("./src/resources/img/icon.png"));
