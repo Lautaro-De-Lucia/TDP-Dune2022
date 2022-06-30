@@ -180,6 +180,12 @@ void CStatic::render(player_t player_faction, SDL2pp::Renderer& renderer, int ca
         SDL2pp::NullOpt,
         SDL2pp::Rect(xpos,ypos,xdim,ydim)
     );
+    if (this->selected == true && this->faction == player_faction)
+        renderer.Copy(
+            lp_texture,
+            SDL2pp::Rect(30,20*(this->health-1),100,20),
+            SDL2pp::Rect(xpos,ypos,30,5) 		
+    );
 }
 
 Position CMovable::getPosition() {

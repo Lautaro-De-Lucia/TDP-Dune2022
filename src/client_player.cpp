@@ -600,7 +600,7 @@ void Player::renderButtonInfo(){
     }
     if(button == -1)
         return;
-    SDL2pp::Texture button_info(this->game_renderer,this->hud.getButtonInfoPath(this->checkBtn(x,y),button).c_str());
+    SDL2pp::Texture & button_info = this->hud.getButtonInfo(this->checkBtn(x,y),button,this->textures);
     this->game_renderer.Copy(
         button_info,
         SDL2pp::NullOpt,
@@ -617,7 +617,7 @@ void Player::renderHeldBuilding(){
         this->game_renderer.Copy(
             texture,
             SDL2pp::NullOpt,
-            SDL2pp::Rect(x,y,texture.GetWidth(),texture.GetHeight()));				
+            SDL2pp::Rect(x-TILE_DIM,y-TILE_DIM,texture.GetWidth(),texture.GetHeight()));				
         texture.SetBlendMode(SDL_BLENDMODE_BLEND);
     }
 }

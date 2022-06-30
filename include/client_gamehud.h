@@ -4,6 +4,7 @@
 
 #include "client_gamehud_button.h"
 #include "client_printer.h"
+#include "client_texturehandler.h"
 
 #include "common_utils.h"
 
@@ -34,5 +35,5 @@ class GameHud {
    int checkUnit(int& x, int& y);
    int checkBuild(int& x, int& y);
    bool clickOnHud(int& x, int& y);
-  std::string getButtonInfoPath(hud_button_t button,int id);
+   SDL2pp::Texture & getButtonInfo(hud_button_t button,int id,TextureHandler & textures);
 };

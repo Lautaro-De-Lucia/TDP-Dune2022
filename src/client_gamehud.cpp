@@ -74,63 +74,31 @@ GameHud::GameHud(player_t faction, SDL2pp::Renderer& renderer) : texture(rendere
 
 }
 
-std::string GameHud::getButtonInfoPath(hud_button_t button,int id){
-	std::string button_info_path;
-	button_info_path.append(DATA_PATH);
-	button_info_path.append(BUTTON_TEXTURE_PATH);
+SDL2pp::Texture & GameHud::getButtonInfo(hud_button_t button,int id,TextureHandler & textures){
 	if(button == UNKNOWN_BTN)
 		throw std::runtime_error("Unknown Button");
 	if(button == BUILD_BTN){
 		switch(id){
-			case BARRACK:
-				button_info_path.append("/barrack.png");
-				break;
-			case REFINERY:
-				button_info_path.append("/refinery.png");
-				break;
-			case AIR_TRAP:
-				button_info_path.append("/airtrap.png");
-				break;
-			case LIGHT_FACTORY:
-				button_info_path.append("/lightfactory.png");
-				break;		
-			case HEAVY_FACTORY:
-				button_info_path.append("/heavyfactory.png");
-				break;
-			case SILO:
-				button_info_path.append("/silo.png");
-				break;
-			case PALACE:
-				button_info_path.append("/palace.png");
-				break;
+			case BARRACK: return textures.getInfo(BARRACK);
+			case REFINERY: return textures.getInfo(REFINERY);
+			case AIR_TRAP: return textures.getInfo(AIR_TRAP);
+			case LIGHT_FACTORY: return textures.getInfo(LIGHT_FACTORY);
+			case HEAVY_FACTORY: return textures.getInfo(HEAVY_FACTORY);
+			case SILO: return textures.getInfo(SILO);
+			case PALACE: return textures.getInfo(PALACE);
 		}
 	}
 	if(button == UNIT_BTN){
 		switch(id){
-			case FREMEN:
-				button_info_path.append("/fremen.png");
-				break;
-			case INFANTRY:
-				button_info_path.append("/infantry.png");
-				break;
-			case SARDAUKAR:
-				button_info_path.append("/sardaukar.png");
-				break;
-			case TRIKE:
-				button_info_path.append("/trike.png");
-				break;		
-			case TANK:
-				button_info_path.append("/tank.png");
-				break;
-			case DEVASTATOR:
-				button_info_path.append("/devastator.png");
-				break;
-			case HARVESTER:
-				button_info_path.append("/harvester.png");
-				break;
+			case FREMEN: return textures.getInfo(FREMEN);
+			case INFANTRY: return textures.getInfo(INFANTRY);
+			case SARDAUKAR: return textures.getInfo(SARDAUKAR);
+			case TRIKE: return textures.getInfo(TRIKE);
+			case TANK: return textures.getInfo(TANK);
+			case DEVASTATOR: return textures.getInfo(DEVASTATOR);
+			case HARVESTER: return textures.getInfo(HARVESTER);
 		}
 	}
-	return button_info_path;
 }
 
 void GameHud::render(SDL2pp::Renderer& renderer){
