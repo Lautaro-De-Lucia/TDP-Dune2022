@@ -1,5 +1,79 @@
 #include "common_utils.h"
 
+const char * stringify(player_t faction){
+    switch(faction){
+        case ATREIDES:
+            return "atreides";
+        case HARKONNEN:
+            return "harkonnen";
+        case ORDOS:
+            return "ordos";
+    }
+    throw std::runtime_error("Unknown Faction");
+}
+
+const char * stringify(unit_t unit){
+    switch(unit){
+        case HARVESTER:
+            return "harvester";
+        case TRIKE:
+            return "trike";
+        case FREMEN:
+            return "fremen";
+        case INFANTRY:
+            return "infantry";
+        case SARDAUKAR:
+            return "sardaukar";
+        case TANK:
+            return "tank";
+        case DEVASTATOR:
+            return "devastator";
+    }
+    throw std::runtime_error("Unknown Unit");
+}
+
+const char * stringify(building_t building){
+    switch(building){
+        case HARVESTER:
+            return "harvester";
+        case TRIKE:
+            return "trike";
+        case FREMEN:
+            return "fremen";
+        case INFANTRY:
+            return "infantry";
+        case SARDAUKAR:
+            return "sardaukar";
+        case TANK:
+            return "tank";
+        case DEVASTATOR:
+            return "devastator";
+    }
+    throw std::runtime_error("Unknown Unit");
+}
+
+const char * stringify(direction_t dir){
+    switch(dir){
+        case TOP:
+            return "top";
+        case TOP_RIGHT:
+            return "topright";
+        case RIGHT:
+            return "right";
+        case BOTTOM_RIGHT:
+            return "bottomright";
+        case BOTTOM:
+            return "bottom";
+        case BOTTOM_LEFT:
+            return "bottomleft";
+        case LEFT:
+            return "left";
+        case TOP_LEFT:
+            return "topleft";
+    }
+    throw std::runtime_error("Unknown Faction");
+}
+
 std::map<color_t,SDL_Color> colors = {
     {RED,SDL_Color{250,0,0,0}},
     {GREEN,SDL_Color{0,250,0,0}},

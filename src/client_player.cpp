@@ -50,6 +50,8 @@ void Player::play(){
 
     this->renderWaitingText();
 
+    //  Cargar Texturas
+
     this->protocol.receive_game_has_started(this->socket);
     this->protocol.send_faction_request(this->faction, this->socket);
 
@@ -214,7 +216,7 @@ void Player::play(){
 
         if (frame_time_instruction < GAME_SPEED && game_has_started)
             continue;
-
+            
         game_has_started = true;
 
         base_time_instruction = current_time;

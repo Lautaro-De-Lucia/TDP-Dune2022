@@ -95,7 +95,7 @@ void ClientHandler::run() {
 
 void ClientHandler::reportState(GameResources & game){
     //  Sending spice & energy state
-    int max_spice = 20000 + game.getSpiceCapacity(this->faction);
+    int max_spice = 2000 + game.getSpiceCapacity(this->faction);
     if (this->spice >= max_spice)
         this->spice = max_spice;
     this->protocol.send_player_state(this->spice,max_spice,this->energy,this->player_socket);

@@ -124,8 +124,13 @@ enum player_t {
     ORDOS = 3
 };
 
-constexpr std::initializer_list<player_t> factions = {HARKONNEN,ATREIDES,ORDOS};
+constexpr std::initializer_list<player_t> factions = {
+    HARKONNEN,
+    ATREIDES,
+    ORDOS
+};
 
+const char * stringify(player_t player);
 
 enum command_t {
     CLOSE = 0,
@@ -161,7 +166,17 @@ enum unit_t {
     DEVASTATOR = 7
 };
 
-constexpr std::initializer_list<unit_t> units = {HARVESTER,TRIKE,FREMEN,INFANTRY,SARDAUKAR,TANK,DEVASTATOR};
+constexpr std::initializer_list<unit_t> units = {
+    HARVESTER,
+    TRIKE,
+    FREMEN,
+    INFANTRY,
+    SARDAUKAR,
+    TANK,
+    DEVASTATOR
+};
+
+const char * stringify(unit_t unit);
 
 enum building_t {
     AIR_TRAP = 1, 
@@ -173,6 +188,43 @@ enum building_t {
     PALACE = 7,
     CONSTRUCTION_YARD = 8
 };
+
+constexpr std::initializer_list<building_t> buildings = {
+    AIR_TRAP,
+    BARRACK, 
+    REFINERY,
+    LIGHT_FACTORY,
+    HEAVY_FACTORY,
+    SILO,
+    PALACE,
+    CONSTRUCTION_YARD
+};
+
+const char * stringify(building_t building);
+
+enum direction_t {
+    TOP = 0,
+    TOP_RIGHT = 1,
+    RIGHT = 2,
+    BOTTOM_RIGHT = 3,
+    BOTTOM = 4,
+    BOTTOM_LEFT = 5,
+    LEFT = 6,
+    TOP_LEFT = 7
+};
+
+constexpr std::initializer_list<direction_t> directions = {
+    TOP,
+    TOP_RIGHT,
+    RIGHT,
+    BOTTOM_RIGHT,
+    BOTTOM,
+    BOTTOM_LEFT,
+    LEFT,
+    TOP_LEFT
+};
+
+const char * stringify(direction_t direction);
 
 enum selectable_t {
     SEL_HARVESTER = 1,
@@ -191,9 +243,6 @@ enum selectable_t {
     SEL_PALACE = 14,
     SEL_CONSTRUCTION_YARD = 15
 };
-
-constexpr std::initializer_list<building_t> buildings = {AIR_TRAP,BARRACK,REFINERY,LIGHT_FACTORY,HEAVY_FACTORY,SILO,PALACE,CONSTRUCTION_YARD};
-
 
 struct instruction_t {
     int player_ID;
@@ -274,19 +323,6 @@ struct idle_t : instruction_t {
 
     idle_t(int player_ID, player_t faction) : instruction_t(player_ID, faction, IDLE) {
     }
-};
-
-
-
-enum direction_t {
-    TOP = 0,
-    TOP_RIGHT = 1,
-    RIGHT = 2,
-    BOTTOM_RIGHT = 3,
-    BOTTOM = 4,
-    BOTTOM_LEFT = 5,
-    LEFT = 6,
-    TOP_LEFT = 7
 };
 
 
