@@ -86,7 +86,6 @@ void run_sdl(const int* _faction, std::string host_name, std::string service_nam
     SDL2pp::Renderer game_renderer(game_window, -1, SDL_RENDERER_ACCELERATED);
     std::cout << "Initializing textures" << std::endl;
     TextureHandler textures(game_renderer);
-    std::cout << "xD" << std::endl;
 
     int init_cam_pos_x;
     int init_cam_pos_y;

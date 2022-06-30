@@ -111,6 +111,22 @@
 #define FONT_IMPACT_PATH "/fonts/impact/impact.ttf"
 #define FONT_IMPACTED_PATH "/fonts/impact/Impacted.ttf"
 
+#define IMG_FORMAT ".png"
+
+/*
+#define TRIKE_PATH "/unitsprites/trike"
+#define HARVESTER_PATH "/unitsprites/harvester"
+#define TANK_PATH "/unitsprites/tank"
+#define INFANTRY_PATH "/unitsprites/infantry"
+#define FREMEN_PATH "/unitsprites/fremen"
+#define DEVASTATOR_PATH "/unitsprites/devastator"
+#define SARDAUKAR_PATH "/unitsprites/sardaukar"
+*/
+
+#define TRIKE_SHOT_PATH "/unitshots/trike/shot"
+
+#define EXPLOSION_PATH "/explosions/explosion"
+
 enum color_t {
     RED,
     BLUE,

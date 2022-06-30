@@ -6,7 +6,6 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "common_utils.h"
-#include "client_renderhandler.h"
 
 class Explosion{
  private:

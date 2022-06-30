@@ -57,7 +57,6 @@ ADD_EXECUTABLE("client" client_main.cpp
             src/client_selectable.cpp
             src/client_printer.cpp
             src/client_gamemap.cpp
-            src/client_renderhandler.cpp
             src/client_gamehud.cpp
             src/client_gamehud_button.cpp
             src/client_camera.cpp
