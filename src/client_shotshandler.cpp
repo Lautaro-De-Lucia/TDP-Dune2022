@@ -25,7 +25,10 @@ void ShotsHandler::updateAttacker(int id, unit_t type, Position attacker_pos, Po
     this->attackers_target.insert({id,target_pos});
     this->attackers_shot_cue.insert({id,clock()});
 
+    this->createShot(type, attacker_pos, target_pos);    
+}
 
+void ShotsHandler::createShot(unit_t type, Position attacker_pos, Position target_pos) {
 
     switch (type)
     {
@@ -34,15 +37,15 @@ void ShotsHandler::updateAttacker(int id, unit_t type, Position attacker_pos, Po
         this->shots.push_back(Shot(attacker_pos, target_pos, TRIKE_BULLET_SPEED, type));
         break;
     case FREMEN:
-        this->audio.play(SONIC3);
+        this->audio.play(GUN_1);
         this->shots.push_back(Shot(attacker_pos, target_pos, FREMEN_BULLET_SPEED, type));
         break;
     case INFANTRY:
-        this->audio.play(SONIC3);
+        this->audio.play(GUN_2);
         this->shots.push_back(Shot(attacker_pos, target_pos, INFANTRY_BULLET_SPEED, type));
         break;
     case SARDAUKAR:
-        this->audio.play(SONIC3);
+        this->audio.play(MISSILE);
         this->shots.push_back(Shot(attacker_pos, target_pos, SARDAUKAR_BULLET_SPEED, type));
         break;
     case TANK:
@@ -57,8 +60,6 @@ void ShotsHandler::updateAttacker(int id, unit_t type, Position attacker_pos, Po
     default:
         break;
     }
-
-    
 }
 
 void ShotsHandler::removeAttacker(int id) {
@@ -101,8 +102,6 @@ void ShotsHandler::update() {
         this->attackers_shot_cue.erase(i);
         this->shots.erase(this->shots.begin()+shots_to_remove[i]);
     }
-        
-
 
     for (size_t i = 0; i < this->shots.size(); i++)
         this->shots[i].update(has_reached_its_target);
@@ -116,44 +115,38 @@ void ShotsHandler::update() {
         switch (this->attackers_type[id])
         {
         case TRIKE:
-            if (time_since_last_shot > 3000000) {
-                this->audio.play(SONIC3);
-                this->shots.push_back(Shot(this->attackers_position[id], this->attackers_target[id], TRIKE_BULLET_SPEED, TRIKE));
+            if (time_since_last_shot > TRIKE_SHOT_FREQUENCY) {
+                this->createShot(this->attackers_type[id], this->attackers_position[id], this->attackers_target[id]);
                 this->attackers_shot_cue[id] = clock();
             }
             break;
         case FREMEN:
-            if (time_since_last_shot > 1000000) {
-                this->audio.play(SONIC3);
-                this->shots.push_back(Shot(this->attackers_position[id], this->attackers_target[id], FREMEN_BULLET_SPEED, FREMEN));
+            if (time_since_last_shot > FREMEN_SHOT_FREQUENCY) {
+                this->createShot(this->attackers_type[id], this->attackers_position[id], this->attackers_target[id]);
                 this->attackers_shot_cue[id] = clock();
             }
             break;
         case TANK:
-            if (time_since_last_shot > 5000000) {
-                this->audio.play(SONIC3);
-                this->shots.push_back(Shot(this->attackers_position[id], this->attackers_target[id], TANK_BULLET_SPEED, TANK));
+            if (time_since_last_shot > TANK_SHOT_FREQUENCY) {
+                this->createShot(this->attackers_type[id], this->attackers_position[id], this->attackers_target[id]);
                 this->attackers_shot_cue[id] = clock();
             }
             break;
         case DEVASTATOR:
-            if (time_since_last_shot > 5000000) {
-                this->audio.play(SONIC3);
-                this->shots.push_back(Shot(this->attackers_position[id], this->attackers_target[id], DEVASTATOR_BULLET_SPEED, DEVASTATOR));
+            if (time_since_last_shot > DEVASTATOR_SHOT_FREQUENCY) {
+                this->createShot(this->attackers_type[id], this->attackers_position[id], this->attackers_target[id]);
                 this->attackers_shot_cue[id] = clock();
             }
             break;
         case INFANTRY:
-            if (time_since_last_shot > 1000000) {
-                this->audio.play(SONIC3);
-                this->shots.push_back(Shot(this->attackers_position[id], this->attackers_target[id], INFANTRY_BULLET_SPEED, INFANTRY));
+            if (time_since_last_shot > INFANTRY_SHOT_FREQUENCY) {
+                this->createShot(this->attackers_type[id], this->attackers_position[id], this->attackers_target[id]);
                 this->attackers_shot_cue[id] = clock();
             }
             break;
         case SARDAUKAR:
-            if (time_since_last_shot > 2000000) {
-                this->audio.play(SONIC3);
-                this->shots.push_back(Shot(this->attackers_position[id], this->attackers_target[id], SARDAUKAR_BULLET_SPEED, SARDAUKAR));
+            if (time_since_last_shot > SARDAUKAR_SHOT_FREQUENCY) {
+                this->createShot(this->attackers_type[id], this->attackers_position[id], this->attackers_target[id]);
                 this->attackers_shot_cue[id] = clock();
             }
             break;

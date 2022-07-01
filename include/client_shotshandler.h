@@ -18,6 +18,13 @@
 #define TANK_BULLET_SPEED 1000
 #define DEVASTATOR_BULLET_SPEED 1000
 
+#define TRIKE_SHOT_FREQUENCY 3000000
+#define FREMEN_SHOT_FREQUENCY 2000000
+#define TANK_SHOT_FREQUENCY 3000000
+#define DEVASTATOR_SHOT_FREQUENCY 5000000
+#define INFANTRY_SHOT_FREQUENCY 1000000
+#define SARDAUKAR_SHOT_FREQUENCY 2000000
+
 class ShotsHandler {
  private:
     std::vector<int> attackers_id;
@@ -38,4 +45,5 @@ class ShotsHandler {
     void removeAttacker(int id);
     void update();
     void render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
+    void createShot(unit_t type, Position attacker_pos, Position target_pos);
 };

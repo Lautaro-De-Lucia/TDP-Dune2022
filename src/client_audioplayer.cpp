@@ -75,8 +75,21 @@ AudioPlayer::AudioPlayer(){
     }
     this->sound_effects.insert({SONIC3,sonic3});
 
-    // MUSIC
+    Mix_Chunk* mortar1 = Mix_LoadWAV(DATA_PATH MORTAR1_PATH);
+    if (mortar1 == NULL) {
+        printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+        exit(1);
+    }
+    this->sound_effects.insert({MORTAR1,mortar1});
 
+    Mix_Chunk* medtank1 = Mix_LoadWAV(DATA_PATH MEDTANK1_PATH);
+    if (medtank1 == NULL) {
+        printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+        exit(1);
+    }
+    this->sound_effects.insert({MEDTANK1,medtank1});
+
+    // MUSIC
 
     Mix_Music* atreides_music = Mix_LoadMUS(DATA_PATH ATREIDES_MUSIC_PATH);
     if (atreides_music == NULL) {

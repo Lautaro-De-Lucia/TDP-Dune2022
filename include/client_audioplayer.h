@@ -18,6 +18,9 @@
 #define EXPLSML2_PATH "/sounds/EXPLSML2.WAV"
 #define SONIC3_PATH "/sounds/SONIC3.WAV"
 
+#define MORTAR1_PATH "/sounds/MORTAR1.WAV"
+#define MEDTANK1_PATH "/sounds/MEDTANK1.WAV"
+
 enum sfx_t {
     HOUSE_CHOSEN,
     GAME_START,
@@ -27,7 +30,9 @@ enum sfx_t {
     EXPLHG1,
     ROCKET1,
     EXPLSML2,
-    SONIC3
+    SONIC3,
+    MORTAR1,
+    MEDTANK1
 };
 
 enum music_t {

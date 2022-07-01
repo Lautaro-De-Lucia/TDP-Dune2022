@@ -52,27 +52,26 @@ void Shot::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
     int ypos = this->current_pixel_pos_y-cam_pos_y;
 
     std::string unit_shot_path;
-    unit_shot_path.append(DATA_PATH);
 
     switch (this->unit)
     {
     case TRIKE:
-        unit_shot_path.append(DATA_PATH "unitshots/trike/shot");
+        unit_shot_path.append(TRIKE_SHOT_PATH);
         break;
     case FREMEN:
-        unit_shot_path.append(DATA_PATH "unitshots/fremen/shot");
+        unit_shot_path.append(FREMEN_SHOT_PATH);
         break;
     case INFANTRY:
-        unit_shot_path.append(DATA_PATH "unitshots/infantry/shot");
+        unit_shot_path.append(INFANTRY_SHOT_PATH);
         break;
     case TANK:
-        unit_shot_path.append(DATA_PATH "unitshots/tank/shot");
+        unit_shot_path.append(TANK_SHOT_PATH);
         break;
     case SARDAUKAR:
-        unit_shot_path.append(DATA_PATH "unitshots/sardaukar/shot");
+        unit_shot_path.append(SARDAUKAR_SHOT_PATH);
         break;
     case DEVASTATOR:
-        unit_shot_path.append(DATA_PATH "unitshots/devastator/shot");
+        unit_shot_path.append(DEVASTATOR_SHOT_PATH);
         break;
     
     default:
@@ -82,13 +81,9 @@ void Shot::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
 
     unit_shot_path.append(".png");
 
-    //std::cout << "unit_shot_path: " << unit_shot_path << std::endl;
-
     SDL2pp::Texture texture(renderer, unit_shot_path.c_str());
     texture.Update(SDL2pp::NullOpt,SDL2pp::Surface(unit_shot_path.c_str()));
     renderer.Copy(texture,SDL2pp::NullOpt,SDL2pp::Rect(xpos,ypos,this->shot_width,this->shot_height));
-
-    //std::cout << "rendering shot on pixel position: (" << xpos << "," << ypos << ")" << std::endl;
 }
 
 void Shot::nextPosition(){
