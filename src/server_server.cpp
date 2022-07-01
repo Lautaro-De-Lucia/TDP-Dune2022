@@ -140,6 +140,7 @@ void Server::handleInstruction(std::unique_ptr<instruction_t> & INS) {
 
 
 void Server::handleInstruction(building_create_t & INS) {
+
     this->responses[INS.player_ID].push_back(
         this->game.createBuilding(INS.faction,(building_t)INS.type,INS.pos_x,INS.pos_y,this->players[INS.player_ID]->getSpice(),this->players[INS.player_ID]->getEnergy())
     );
@@ -155,11 +156,12 @@ void Server::handleInstruction(unit_create_t & INS) {
 */
 
 void Server::handleInstruction(unit_create_t & INS) {
-    if(this->game.getCreator(INS.faction,INS.type) == -1){
+
+    if (this->game.getCreator(INS.faction,INS.type) == -1) {
 		this->responses[INS.player_ID].push_back(RES_CREATE_UNIT_FAILURE_CREATOR);
         return;
     }
-    if(this->game.isEnabled(INS.faction,INS.type) == false){
+    if (this->game.isEnabled(INS.faction,INS.type) == false){
         this->responses[INS.player_ID].push_back(RES_CREATE_UNIT_FAILURE_SPECIAL);
         return;
     }
@@ -193,14 +195,15 @@ void Server::update(){
     this->game.update();
 }
 
-std::unique_ptr<ClientHandler> & Server::getPlayer(player_t faction){
+std::unique_ptr<ClientHandler> & Server::getPlayer(player_t faction) {
     for(size_t i = 0; i < this->players.size() ; i++)
         if(this->players[i]->getFaction()==faction)
             return this->players[i];
     throw std::runtime_error("Player of this faction has not been initialized");        
 }
 
-response_t Server::checkCreation(player_t faction, unit_t type){
+response_t Server::checkCreation(player_t faction, unit_t type) {
+
     if(this->units_to_create[faction][type] == 0)
 		return RES_SUCCESS;
     this->unit_time[faction][type] += this->game.getTotalCreators(faction,type); 

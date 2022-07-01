@@ -224,7 +224,7 @@ Building(ID,faction,LP,spice,energy,pos,dim_x,dim_y)
     this->name = "Heavy Factory";
 }
 
-bool HeavyFactory::canCreate(unit_t type){return (type == TRIKE || type == DEVASTATOR)? true : false;}
+bool HeavyFactory::canCreate(unit_t type){return (type == TANK || type == DEVASTATOR)? true : false;}
 
 response_t HeavyFactory::place(Board& board,int pos_x,int pos_y,int& spice,int& energy){
     response_t res;
@@ -298,7 +298,7 @@ Palace::Palace(int ID,player_t faction,int LP,int spice,int energy, Position pos
 :
 Building(ID,faction,LP,spice,energy,pos,dim_x,dim_y)
 {
-    this->name = "Barrack";
+    this->name = "Palace";
 }
 
 response_t Palace::place(Board& board,int pos_x,int pos_y,int& spice,int& energy){

@@ -61,6 +61,7 @@ int GameResources::getCreator(player_t faction,unit_t type){
 
 response_t GameResources::createUnit(player_t faction,unit_t type,int & spice){    
     std::lock_guard<std::mutex> locker(this->lock);
+
     if (this->board.getCreator(faction,type) == -1)
         return RES_CREATE_UNIT_FAILURE_CREATOR;
 
@@ -101,6 +102,9 @@ response_t GameResources::createBuilding(player_t faction,building_t type,int po
         if (this->board.getTotalCreators(faction, model_unit) == 1)
             this->board.makeCreator(ID - 1);
     }
+
+    std::cout << "getCreator: " << this->board.getCreator(faction, TANK) << std::endl;
+
     return res;
 }
 

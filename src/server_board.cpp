@@ -167,6 +167,7 @@ std::vector<Position> Board::getDepositPositions(player_t faction){
 }
 
 int Board::getCreator(player_t faction,unit_t type){
+
     return this->creatorID[faction][type];
 }
 
