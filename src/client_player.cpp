@@ -93,15 +93,20 @@ void Player::play(){
 
             SDL_GetMouseState(&x, &y);
 
+
+            // SCREEN_WIDTH = 1280
+            // SCREEN_HEIGHT = 720
+
             if (this->spacebar) {
-                if (x < 80) 
-                    this->camera.move(-1,0);
-                if (x > 1010 && x < 1090) 
-                    this->camera.move(1,0);
-                if (y < 60) 
-                    this->camera.move(0,-1);
-                if (y > 660) 
-                    this->camera.move(0,1);
+                if (x > 0 && x < 80) this->camera.move(-2,0);
+                if (x > 1010 && x < 1090) this->camera.move(2,0);
+                if (y > 0 && y < 60) this->camera.move(0,-2);
+                if (y > 660 && y < 720) this->camera.move(0,2);
+
+                if (x >= 80 && x < 160) this->camera.move(-1,0);
+                if (x > 930 && x <= 1010) this->camera.move(1,0);
+                if (y >= 60 && y < 120) this->camera.move(0,-1);
+                if (y > 600 && y <= 660) this->camera.move(0,1);
             }
 
             //  Obtenemos la instrucción del mouse
