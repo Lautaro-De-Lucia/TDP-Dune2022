@@ -40,12 +40,9 @@ void Board::addUnitCreator(player_t faction, building_t type){
         this->creators[faction][SARDAUKAR]++;
     }
 
-    if (type == REFINERY) {
-        this->creators[faction][HARVESTER]++;
-    }
-
     if (type == LIGHT_FACTORY) {
         this->creators[faction][TRIKE]++;
+        this->creators[faction][HARVESTER]++;
     }
 
     if (type == HEAVY_FACTORY) {

@@ -99,4 +99,3 @@ class Player {
 
    void addExplosion(int id, selectable_t type, Position pos);
 };
-

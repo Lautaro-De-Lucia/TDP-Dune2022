@@ -76,13 +76,6 @@ void Server::run() {
     this->running = true;
     while (this->running) {
 
-
-        // TO TEST TRIKE ATTACK
-        int __spice = 1000000;
-        int __energy = 40000000;
-        this->game.createBuilding(HARKONNEN,PALACE,HARKONNEN_INIT_POS_X,HARKONNEN_INIT_POS_Y,__spice,__energy);
-
-
         //std::cout << "Starting instance "<< k << " of game loop" << std::endl;
         //std::cout << "Checking for loosing players" << std::endl;
         this->checkForLosingPlayers();
@@ -105,7 +98,8 @@ void Server::run() {
         //std::cout << "Enabling reading" << std::endl;
         this->enableReading();
 
-        //sleep(10); mismo que los keepalive de los clientes, no mas keepalive
+        // mismo que los keepalive de los clientes, no mas keepalive
+        sleepcp(10);
     }
 
     for (size_t i = 0; i < (this->players).size(); i++) {

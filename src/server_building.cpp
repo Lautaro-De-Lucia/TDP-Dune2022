@@ -136,7 +136,7 @@ Building(ID,faction,LP,spice,energy,pos,dim_x,dim_y)
     this->c_spice= c_spice;
 }
 
-bool Refinery::canCreate(unit_t type){return type == HARVESTER? true : false;}
+bool Refinery::canCreate(unit_t type){return false;}
 bool Refinery::canStoreSpice(int & spice){
     spice = this->c_spice;
     return true;
@@ -185,7 +185,7 @@ Building(ID,faction,LP,spice,energy,pos,dim_x,dim_y)
     this->name = "Light Factory";
 }
 
-bool LightFactory::canCreate(unit_t type){return type == TRIKE? true : false;}
+bool LightFactory::canCreate(unit_t type){return (type == TRIKE || type == HARVESTER)? true : false;}
 
 
 response_t LightFactory::place(Board& board,int pos_x,int pos_y,int& spice,int& energy){

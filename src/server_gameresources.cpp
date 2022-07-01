@@ -92,8 +92,6 @@ response_t GameResources::createBuilding(player_t faction,building_t type,int po
         unit_t model_unit;
         if (type == BARRACK) {
             model_unit = FREMEN;
-        } else if (type == REFINERY) {
-            model_unit = HARVESTER;
         } else if (type == LIGHT_FACTORY) {
             model_unit = TRIKE;
         } else if (type == HEAVY_FACTORY) {
