@@ -125,6 +125,11 @@
 */
 
 #define TRIKE_SHOT_PATH "/unitshots/trike/shot"
+#define FREMEN_SHOT_PATH "/unitshots/fremen/shot"
+#define INFANTRY_SHOT_PATH "/unitshots/infantry/shot"
+#define SARDAUKAR_SHOT_PATH "/unitshots/sardaukar/shot"
+#define TANK_SHOT_PATH "/unitshots/tank/shot"
+#define DEVASTATOR_SHOT_PATH "/unitshots/devastator/shot"
 
 #define EXPLOSION_PATH "/explosions/explosion"
 

@@ -539,97 +539,242 @@ void Protocol::send_trike(int id, int faction, int lp, int pos_x, int pos_y,int 
     return;
 }
 
-void Protocol::send_fremen(int id, int faction, int lp, int pos_x, int pos_y, bool selected, bool attacking, Socket& client_socket) {
+void Protocol::send_fremen(int id, int faction, int lp, int pos_x, int pos_y,int direction, bool moving, bool selected, bool attacking, int e_pos_x, int e_pos_y, bool waiting, Socket& client_socket) {
 
     this->send_selectable_type(SEL_FREMEN, client_socket);
 
     this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 
-    uint8_t _attacking = (uint8_t) attacking;
+    uint8_t _direction = (uint8_t) direction;
+    uint8_t direction_buffer = (uint8_t) _direction;
 
+    uint8_t _moving = (uint8_t) moving;
+    uint8_t moving_buffer = (uint8_t) _moving;
+
+    uint8_t _attacking = (uint8_t) attacking;
     uint8_t attacking_buffer = (uint8_t) _attacking;
+
+    uint16_t _e_pos_x = (uint16_t) e_pos_x;
+    uint16_t e_pos_x_buffer = (uint16_t) htons(_e_pos_x);
+
+    uint16_t _e_pos_y = (uint16_t) e_pos_y;
+    uint16_t e_pos_y_buffer = (uint16_t) htons(_e_pos_y);
+
+    uint8_t _waiting = (uint8_t) waiting;
+    uint8_t waiting_buffer = (uint8_t) _waiting;
 
     int sent_size = -1;
     bool was_closed = false;
 
+    sent_size = client_socket.sendall(&direction_buffer, sizeof(direction_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+    
+    sent_size = client_socket.sendall(&moving_buffer, sizeof(moving_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
     sent_size = client_socket.sendall(&attacking_buffer, sizeof(attacking_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&e_pos_x_buffer, sizeof(e_pos_x_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&e_pos_y_buffer, sizeof(e_pos_y_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&waiting_buffer, sizeof(waiting_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
 
     return;
 }
 
-void Protocol::send_infantry(int id, int faction, int lp, int pos_x, int pos_y, bool selected, bool attacking, Socket& client_socket) {
+void Protocol::send_infantry(int id, int faction, int lp, int pos_x, int pos_y,int direction, bool moving, bool selected, bool attacking, int e_pos_x, int e_pos_y, bool waiting, Socket& client_socket) {
 
     this->send_selectable_type(SEL_INFANTRY, client_socket);
 
     this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 
-    uint8_t _attacking = (uint8_t) attacking;
+    uint8_t _direction = (uint8_t) direction;
+    uint8_t direction_buffer = (uint8_t) _direction;
 
+    uint8_t _moving = (uint8_t) moving;
+    uint8_t moving_buffer = (uint8_t) _moving;
+
+    uint8_t _attacking = (uint8_t) attacking;
     uint8_t attacking_buffer = (uint8_t) _attacking;
+
+    uint16_t _e_pos_x = (uint16_t) e_pos_x;
+    uint16_t e_pos_x_buffer = (uint16_t) htons(_e_pos_x);
+
+    uint16_t _e_pos_y = (uint16_t) e_pos_y;
+    uint16_t e_pos_y_buffer = (uint16_t) htons(_e_pos_y);
+
+    uint8_t _waiting = (uint8_t) waiting;
+    uint8_t waiting_buffer = (uint8_t) _waiting;
 
     int sent_size = -1;
     bool was_closed = false;
 
+    sent_size = client_socket.sendall(&direction_buffer, sizeof(direction_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+    
+    sent_size = client_socket.sendall(&moving_buffer, sizeof(moving_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
     sent_size = client_socket.sendall(&attacking_buffer, sizeof(attacking_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&e_pos_x_buffer, sizeof(e_pos_x_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&e_pos_y_buffer, sizeof(e_pos_y_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&waiting_buffer, sizeof(waiting_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
 
     return;
 }
 
 
-void Protocol::send_sardaukar(int id, int faction, int lp, int pos_x, int pos_y, bool selected, bool attacking, Socket& client_socket) {
+void Protocol::send_sardaukar(int id, int faction, int lp, int pos_x, int pos_y,int direction, bool moving, bool selected, bool attacking, int e_pos_x, int e_pos_y, bool waiting, Socket& client_socket) {
 
     this->send_selectable_type(SEL_SARDAUKAR, client_socket);
 
     this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 
-    uint8_t _attacking = (uint8_t) attacking;
+    uint8_t _direction = (uint8_t) direction;
+    uint8_t direction_buffer = (uint8_t) _direction;
 
+    uint8_t _moving = (uint8_t) moving;
+    uint8_t moving_buffer = (uint8_t) _moving;
+
+    uint8_t _attacking = (uint8_t) attacking;
     uint8_t attacking_buffer = (uint8_t) _attacking;
+
+    uint16_t _e_pos_x = (uint16_t) e_pos_x;
+    uint16_t e_pos_x_buffer = (uint16_t) htons(_e_pos_x);
+
+    uint16_t _e_pos_y = (uint16_t) e_pos_y;
+    uint16_t e_pos_y_buffer = (uint16_t) htons(_e_pos_y);
+
+    uint8_t _waiting = (uint8_t) waiting;
+    uint8_t waiting_buffer = (uint8_t) _waiting;
 
     int sent_size = -1;
     bool was_closed = false;
 
+    sent_size = client_socket.sendall(&direction_buffer, sizeof(direction_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+    
+    sent_size = client_socket.sendall(&moving_buffer, sizeof(moving_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
     sent_size = client_socket.sendall(&attacking_buffer, sizeof(attacking_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&e_pos_x_buffer, sizeof(e_pos_x_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&e_pos_y_buffer, sizeof(e_pos_y_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&waiting_buffer, sizeof(waiting_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
 
     return;
 }
 
-void Protocol::send_tank(int id, int faction, int lp, int pos_x, int pos_y, bool selected, bool attacking, Socket& client_socket) {
+void Protocol::send_tank(int id, int faction, int lp, int pos_x, int pos_y,int direction, bool moving, bool selected, bool attacking, int e_pos_x, int e_pos_y, bool waiting, Socket& client_socket) {
 
     this->send_selectable_type(SEL_TANK, client_socket);
 
     this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 
-    uint8_t _attacking = (uint8_t) attacking;
+    uint8_t _direction = (uint8_t) direction;
+    uint8_t direction_buffer = (uint8_t) _direction;
 
+    uint8_t _moving = (uint8_t) moving;
+    uint8_t moving_buffer = (uint8_t) _moving;
+
+    uint8_t _attacking = (uint8_t) attacking;
     uint8_t attacking_buffer = (uint8_t) _attacking;
+
+    uint16_t _e_pos_x = (uint16_t) e_pos_x;
+    uint16_t e_pos_x_buffer = (uint16_t) htons(_e_pos_x);
+
+    uint16_t _e_pos_y = (uint16_t) e_pos_y;
+    uint16_t e_pos_y_buffer = (uint16_t) htons(_e_pos_y);
+
+    uint8_t _waiting = (uint8_t) waiting;
+    uint8_t waiting_buffer = (uint8_t) _waiting;
 
     int sent_size = -1;
     bool was_closed = false;
 
+    sent_size = client_socket.sendall(&direction_buffer, sizeof(direction_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+    
+    sent_size = client_socket.sendall(&moving_buffer, sizeof(moving_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
     sent_size = client_socket.sendall(&attacking_buffer, sizeof(attacking_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&e_pos_x_buffer, sizeof(e_pos_x_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&e_pos_y_buffer, sizeof(e_pos_y_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&waiting_buffer, sizeof(waiting_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
 
     return;
 }
 
-void Protocol::send_devastator(int id, int faction, int lp, int pos_x, int pos_y, bool selected, bool attacking, Socket& client_socket) {
+void Protocol::send_devastator(int id, int faction, int lp, int pos_x, int pos_y,int direction, bool moving, bool selected, bool attacking, int e_pos_x, int e_pos_y, bool waiting, Socket& client_socket) {
 
     this->send_selectable_type(SEL_DEVASTATOR, client_socket);
 
     this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 
-    uint8_t _attacking = (uint8_t) attacking;
+    uint8_t _direction = (uint8_t) direction;
+    uint8_t direction_buffer = (uint8_t) _direction;
 
+    uint8_t _moving = (uint8_t) moving;
+    uint8_t moving_buffer = (uint8_t) _moving;
+
+    uint8_t _attacking = (uint8_t) attacking;
     uint8_t attacking_buffer = (uint8_t) _attacking;
+
+    uint16_t _e_pos_x = (uint16_t) e_pos_x;
+    uint16_t e_pos_x_buffer = (uint16_t) htons(_e_pos_x);
+
+    uint16_t _e_pos_y = (uint16_t) e_pos_y;
+    uint16_t e_pos_y_buffer = (uint16_t) htons(_e_pos_y);
+
+    uint8_t _waiting = (uint8_t) waiting;
+    uint8_t waiting_buffer = (uint8_t) _waiting;
 
     int sent_size = -1;
     bool was_closed = false;
 
+    sent_size = client_socket.sendall(&direction_buffer, sizeof(direction_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+    
+    sent_size = client_socket.sendall(&moving_buffer, sizeof(moving_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
     sent_size = client_socket.sendall(&attacking_buffer, sizeof(attacking_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&e_pos_x_buffer, sizeof(e_pos_x_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&e_pos_y_buffer, sizeof(e_pos_y_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&waiting_buffer, sizeof(waiting_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
 
     return;
@@ -803,100 +948,297 @@ void Protocol::receive_trike(int& id, int& faction, int& lp, int& pos_x, int& po
     return;
 }
 
-void Protocol::receive_fremen(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, bool& attacking, Socket& client_socket) {
+void Protocol::receive_fremen(int& id, int& faction, int& lp, int& pos_x, int& pos_y, int& dir, bool& moving,bool& selected, bool& attacking, int& e_pos_x, int& e_pos_y, bool & waiting, Socket& client_socket) {
 
     this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    uint8_t direction_buffer;
+    uint8_t _direction;
+
+    uint8_t moving_buffer;
+    uint8_t _moving;
 
     uint8_t attacking_buffer;
     uint8_t _attacking;
 
+    uint16_t e_pos_x_buffer;
+    uint16_t _e_pos_x;
+
+    uint16_t e_pos_y_buffer;
+    uint16_t _e_pos_y;
+
+    uint8_t waiting_buffer;
+    uint8_t _waiting;
+
     int recv_size = -1;
     bool was_closed = false;
+
+    recv_size = client_socket.recvall(&direction_buffer, sizeof(direction_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _direction = (uint8_t) direction_buffer;
+    dir = (int) _direction;
+
+    recv_size = client_socket.recvall(&moving_buffer, sizeof(moving_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _moving = (uint8_t) moving_buffer;
+    moving = (bool) _moving;
 
     recv_size = client_socket.recvall(&attacking_buffer, sizeof(attacking_buffer), &was_closed);
     handle_receive(was_closed, recv_size);
     _attacking = (uint8_t) attacking_buffer;
     attacking = (bool) _attacking;
 
+    recv_size = client_socket.recvall(&e_pos_x_buffer, sizeof(e_pos_x_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _e_pos_x = (uint16_t) ntohs(e_pos_x_buffer);
+    e_pos_x = (int) _e_pos_x;
+
+    recv_size = client_socket.recvall(&e_pos_y_buffer, sizeof(e_pos_y_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _e_pos_y = (uint16_t) ntohs(e_pos_y_buffer);
+    e_pos_y = (int) _e_pos_y;
+
+    recv_size = client_socket.recvall(&waiting_buffer, sizeof(waiting_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _waiting = (uint8_t) waiting_buffer;
+    waiting = (bool) _waiting;
+
     return;
 }
 
-void Protocol::receive_infantry(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, bool& attacking, Socket& client_socket) {
+void Protocol::receive_infantry(int& id, int& faction, int& lp, int& pos_x, int& pos_y, int& dir, bool& moving,bool& selected, bool& attacking, int& e_pos_x, int& e_pos_y, bool & waiting, Socket& client_socket) {
 
     this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    uint8_t direction_buffer;
+    uint8_t _direction;
+
+    uint8_t moving_buffer;
+    uint8_t _moving;
 
     uint8_t attacking_buffer;
     uint8_t _attacking;
 
+    uint16_t e_pos_x_buffer;
+    uint16_t _e_pos_x;
+
+    uint16_t e_pos_y_buffer;
+    uint16_t _e_pos_y;
+
+    uint8_t waiting_buffer;
+    uint8_t _waiting;
+
     int recv_size = -1;
     bool was_closed = false;
+
+    recv_size = client_socket.recvall(&direction_buffer, sizeof(direction_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _direction = (uint8_t) direction_buffer;
+    dir = (int) _direction;
+
+    recv_size = client_socket.recvall(&moving_buffer, sizeof(moving_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _moving = (uint8_t) moving_buffer;
+    moving = (bool) _moving;
 
     recv_size = client_socket.recvall(&attacking_buffer, sizeof(attacking_buffer), &was_closed);
     handle_receive(was_closed, recv_size);
     _attacking = (uint8_t) attacking_buffer;
     attacking = (bool) _attacking;
 
+    recv_size = client_socket.recvall(&e_pos_x_buffer, sizeof(e_pos_x_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _e_pos_x = (uint16_t) ntohs(e_pos_x_buffer);
+    e_pos_x = (int) _e_pos_x;
+
+    recv_size = client_socket.recvall(&e_pos_y_buffer, sizeof(e_pos_y_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _e_pos_y = (uint16_t) ntohs(e_pos_y_buffer);
+    e_pos_y = (int) _e_pos_y;
+
+    recv_size = client_socket.recvall(&waiting_buffer, sizeof(waiting_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _waiting = (uint8_t) waiting_buffer;
+    waiting = (bool) _waiting;
+
     return;
 }
 
-void Protocol::receive_sardaukar(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, bool& attacking, Socket& client_socket) {
+void Protocol::receive_sardaukar(int& id, int& faction, int& lp, int& pos_x, int& pos_y, int& dir, bool& moving,bool& selected, bool& attacking, int& e_pos_x, int& e_pos_y, bool & waiting, Socket& client_socket) {
 
     this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    uint8_t direction_buffer;
+    uint8_t _direction;
+
+    uint8_t moving_buffer;
+    uint8_t _moving;
 
     uint8_t attacking_buffer;
     uint8_t _attacking;
 
+    uint16_t e_pos_x_buffer;
+    uint16_t _e_pos_x;
+
+    uint16_t e_pos_y_buffer;
+    uint16_t _e_pos_y;
+
+    uint8_t waiting_buffer;
+    uint8_t _waiting;
+
     int recv_size = -1;
     bool was_closed = false;
+
+    recv_size = client_socket.recvall(&direction_buffer, sizeof(direction_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _direction = (uint8_t) direction_buffer;
+    dir = (int) _direction;
+
+    recv_size = client_socket.recvall(&moving_buffer, sizeof(moving_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _moving = (uint8_t) moving_buffer;
+    moving = (bool) _moving;
 
     recv_size = client_socket.recvall(&attacking_buffer, sizeof(attacking_buffer), &was_closed);
     handle_receive(was_closed, recv_size);
     _attacking = (uint8_t) attacking_buffer;
     attacking = (bool) _attacking;
 
+    recv_size = client_socket.recvall(&e_pos_x_buffer, sizeof(e_pos_x_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _e_pos_x = (uint16_t) ntohs(e_pos_x_buffer);
+    e_pos_x = (int) _e_pos_x;
+
+    recv_size = client_socket.recvall(&e_pos_y_buffer, sizeof(e_pos_y_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _e_pos_y = (uint16_t) ntohs(e_pos_y_buffer);
+    e_pos_y = (int) _e_pos_y;
+
+    recv_size = client_socket.recvall(&waiting_buffer, sizeof(waiting_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _waiting = (uint8_t) waiting_buffer;
+    waiting = (bool) _waiting;
+
     return;
 }
 
-void Protocol::receive_tank(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, bool& attacking, Socket& client_socket) {
+void Protocol::receive_tank(int& id, int& faction, int& lp, int& pos_x, int& pos_y, int& dir, bool& moving,bool& selected, bool& attacking, int& e_pos_x, int& e_pos_y, bool & waiting, Socket& client_socket) {
 
     this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    uint8_t direction_buffer;
+    uint8_t _direction;
+
+    uint8_t moving_buffer;
+    uint8_t _moving;
 
     uint8_t attacking_buffer;
     uint8_t _attacking;
 
+    uint16_t e_pos_x_buffer;
+    uint16_t _e_pos_x;
+
+    uint16_t e_pos_y_buffer;
+    uint16_t _e_pos_y;
+
+    uint8_t waiting_buffer;
+    uint8_t _waiting;
+
     int recv_size = -1;
     bool was_closed = false;
+
+    recv_size = client_socket.recvall(&direction_buffer, sizeof(direction_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _direction = (uint8_t) direction_buffer;
+    dir = (int) _direction;
+
+    recv_size = client_socket.recvall(&moving_buffer, sizeof(moving_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _moving = (uint8_t) moving_buffer;
+    moving = (bool) _moving;
 
     recv_size = client_socket.recvall(&attacking_buffer, sizeof(attacking_buffer), &was_closed);
     handle_receive(was_closed, recv_size);
     _attacking = (uint8_t) attacking_buffer;
     attacking = (bool) _attacking;
 
+    recv_size = client_socket.recvall(&e_pos_x_buffer, sizeof(e_pos_x_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _e_pos_x = (uint16_t) ntohs(e_pos_x_buffer);
+    e_pos_x = (int) _e_pos_x;
+
+    recv_size = client_socket.recvall(&e_pos_y_buffer, sizeof(e_pos_y_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _e_pos_y = (uint16_t) ntohs(e_pos_y_buffer);
+    e_pos_y = (int) _e_pos_y;
+
+    recv_size = client_socket.recvall(&waiting_buffer, sizeof(waiting_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _waiting = (uint8_t) waiting_buffer;
+    waiting = (bool) _waiting;
+
     return;
 }
-
-void Protocol::receive_devastator(int& id, int& faction, int& lp, int& pos_x, int& pos_y, bool& selected, bool& attacking, Socket& client_socket) {
+void Protocol::receive_devastator(int& id, int& faction, int& lp, int& pos_x, int& pos_y, int& dir, bool& moving,bool& selected, bool& attacking, int& e_pos_x, int& e_pos_y, bool & waiting, Socket& client_socket) {
 
     this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    uint8_t direction_buffer;
+    uint8_t _direction;
+
+    uint8_t moving_buffer;
+    uint8_t _moving;
 
     uint8_t attacking_buffer;
     uint8_t _attacking;
 
+    uint16_t e_pos_x_buffer;
+    uint16_t _e_pos_x;
+
+    uint16_t e_pos_y_buffer;
+    uint16_t _e_pos_y;
+
+    uint8_t waiting_buffer;
+    uint8_t _waiting;
+
     int recv_size = -1;
     bool was_closed = false;
+
+    recv_size = client_socket.recvall(&direction_buffer, sizeof(direction_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _direction = (uint8_t) direction_buffer;
+    dir = (int) _direction;
+
+    recv_size = client_socket.recvall(&moving_buffer, sizeof(moving_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _moving = (uint8_t) moving_buffer;
+    moving = (bool) _moving;
 
     recv_size = client_socket.recvall(&attacking_buffer, sizeof(attacking_buffer), &was_closed);
     handle_receive(was_closed, recv_size);
     _attacking = (uint8_t) attacking_buffer;
     attacking = (bool) _attacking;
 
+    recv_size = client_socket.recvall(&e_pos_x_buffer, sizeof(e_pos_x_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _e_pos_x = (uint16_t) ntohs(e_pos_x_buffer);
+    e_pos_x = (int) _e_pos_x;
+
+    recv_size = client_socket.recvall(&e_pos_y_buffer, sizeof(e_pos_y_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _e_pos_y = (uint16_t) ntohs(e_pos_y_buffer);
+    e_pos_y = (int) _e_pos_y;
+
+    recv_size = client_socket.recvall(&waiting_buffer, sizeof(waiting_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _waiting = (uint8_t) waiting_buffer;
+    waiting = (bool) _waiting;
+
     return;
 }
-
 void Protocol::receive_harvester(int& id, int& faction, int& lp, int& pos_x, int& pos_y, int & direction,bool & moving,bool& selected, int& spice, bool& harvesting,bool & waiting, Socket& client_socket) {
 
     this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
-
 
     uint8_t direction_buffer;
     uint8_t _direction;

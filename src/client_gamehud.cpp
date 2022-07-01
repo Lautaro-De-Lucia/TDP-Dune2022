@@ -4,12 +4,14 @@
 
 #define HUD_IMG_PATH "../src/ui/resources/img/"
 #define HUD_IMG_MENU_PATH "../src/ui/resources/img/newmenu.png"
+/*
 #define BARRACK_PATH "../src/ui/resources/img/barrack.bmp"
 #define REFINERY_PATH "../src/ui/resources/img/refinery.bmp"
-#define ENERGY_PATH "../src/ui/resources/img/energy.jpg"
 #define AIR_TRAP_PATH "../src/ui/resources/img/windtrap.bmp"
 #define TRIKE_PATH "../src/ui/resources/img/trike.bmp"
 #define HARVESTER_PATH "../src/ui/resources/img/harvester.bmp"
+*/
+#define ENERGY_PATH "../src/ui/resources/img/energy.jpg"
 
 #define TOTAL_BUILDING_IMGS 8
 #define TOTAL_UNIT_IMGS 8
@@ -77,7 +79,7 @@ GameHud::GameHud(player_t faction, SDL2pp::Renderer& renderer) : texture(rendere
 SDL2pp::Texture & GameHud::getButtonInfo(hud_button_t button,int id,TextureHandler & textures){
 	if(button == UNKNOWN_BTN)
 		throw std::runtime_error("Unknown Button");
-	if(button == BUILD_BTN){
+	if(button == BUILD_BTN) {
 		switch(id){
 			case BARRACK: return textures.getInfo(BARRACK);
 			case REFINERY: return textures.getInfo(REFINERY);
@@ -87,8 +89,7 @@ SDL2pp::Texture & GameHud::getButtonInfo(hud_button_t button,int id,TextureHandl
 			case SILO: return textures.getInfo(SILO);
 			case PALACE: return textures.getInfo(PALACE);
 		}
-	}
-	if(button == UNIT_BTN){
+	} else if(button == UNIT_BTN) {
 		switch(id){
 			case FREMEN: return textures.getInfo(FREMEN);
 			case INFANTRY: return textures.getInfo(INFANTRY);
@@ -99,6 +100,8 @@ SDL2pp::Texture & GameHud::getButtonInfo(hud_button_t button,int id,TextureHandl
 			case HARVESTER: return textures.getInfo(HARVESTER);
 		}
 	}
+
+	throw std::runtime_error("Unknown Button");
 }
 
 void GameHud::render(SDL2pp::Renderer& renderer){

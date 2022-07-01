@@ -13,7 +13,6 @@ const int SCREEN_HEIGHT = 720;
 
 #define BUTTON_TEXTURE_PATH "/frameworks/"
 
-
 class GameHud {
  private:
    SDL2pp::Texture texture;

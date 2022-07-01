@@ -60,7 +60,6 @@ class Harvester : public Unit {
 
 };
 
-
 class Trike : public Unit {
     std::string name;
     int speed;
