@@ -52,11 +52,7 @@ std::vector<std::vector<std::string>> generate_client_map (std::string tile_map_
 				exit(1);
 			}
 			//	Load cell to board
-            std::string cell_data;
-            cell_data.append(DATA_PATH);
-            cell_data.append("/mapsprites/");
-            cell_data.append(type);
-            cell_data.append(".png");
+            std::string cell_data(type);
 			cells[i][j]= cell_data;
 		}
 	}

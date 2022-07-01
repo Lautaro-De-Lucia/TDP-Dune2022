@@ -639,7 +639,7 @@ void Player::render(){
 
 void Player::renderMap(){
     this->game_renderer.SetScale(2,2);
-    this->map.render(this->game_renderer, this->camera.pos_x, this->camera.pos_y);
+    this->map.render(this->game_renderer,this->textures,this->camera.pos_x,this->camera.pos_y);
 }
 
 void Player::renderHud(){

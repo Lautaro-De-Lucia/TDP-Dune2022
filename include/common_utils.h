@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <map>
+#include <vector>
 #include <SDL2pp/SDL2pp.hh>
 
 #define TILE_SIZE 16
@@ -528,6 +529,14 @@ struct rgb_t {
         this->g = g;
         this->b = b;
     }
+};
+
+
+constexpr std::initializer_list<const char *> maptiles = {
+    "d0","d1","d2","d3","d4",
+    "p0","p1","p2","p3","p4","p5","p6","p7","p8",
+    "r0","r1","r2","r3","r4","r5","r6","r7","r8",
+    "s0","s1","s2","s3"
 };
 
 // ===============================================

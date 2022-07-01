@@ -7,6 +7,7 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "client_camera.h"
+#include "client_texturehandler.h"
 
 #include "common_utils.h"
 
@@ -26,19 +27,20 @@ extern Camera cam;
 class MapCell{
  private:    
     Position position;
-    SDL2pp::Texture texture;
+    std::string type;
  public:
-    MapCell( SDL2pp::Renderer& renderer, const std::string& path,size_t pos_x, size_t pos_y);
-    void render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
+    MapCell() = default;
+    void setPosition(int pos_x, int pos_y);
+    void setType(const char * new_type);
+    void render(SDL2pp::Renderer& renderer,TextureHandler & textures, int cam_pos_x, int cam_pos_y);
 };
 class GameMap {
  private:
     int dim_x;
     int dim_y;
-    std::vector<std::vector<std::unique_ptr<MapCell>>> map_cells;
-    std::vector<Position> destroyed_positions;
+    std::vector<std::vector<MapCell>> map_cells;
  public:
     GameMap(SDL2pp::Renderer& renderer,std::vector<std::vector<std::string>>& cells);
     void updateCell(SDL2pp::Renderer& renderer,int pos_x, int pos_y,int spice);
-    void render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
+    void render(SDL2pp::Renderer& renderer,TextureHandler & texture, int cam_pos_x, int cam_pos_y);
 };

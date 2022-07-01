@@ -31,14 +31,17 @@ TextureHandler::TextureHandler(SDL2pp::Renderer & game_renderer){
             .append("/").append(stringify(UNIT)).append(".png"),
             unit_info_textures.emplace(UNIT,SDL2pp::Texture(game_renderer,path.c_str())),
             path.clear();
-            
     for(building_t BUILDING: buildings)
         path.append(DATA_PATH)
             .append("/").append("buttoninfo")
             .append("/").append(stringify(BUILDING)).append(".png"),
             building_info_textures.emplace(BUILDING,SDL2pp::Texture(game_renderer,path.c_str())),
             path.clear();
-
+    //  Load Textures for map cells
+        for(std::string tile : maptiles)
+            path.append(DATA_PATH).append("/").append("mapsprites").append("/").append(tile.c_str()).append(".png"),
+            cell_textures.emplace(tile,SDL2pp::Texture(game_renderer,path.c_str())),
+            path.clear();
 };
 
 SDL2pp::Texture & TextureHandler::getTexture(unit_t unit, player_t faction, direction_t direction){
@@ -52,4 +55,8 @@ SDL2pp::Texture & TextureHandler::getInfo(unit_t unit){
 }
 SDL2pp::Texture & TextureHandler::getInfo(building_t building){
     return this->building_info_textures.at(building);
+}
+
+SDL2pp::Texture & TextureHandler::getCell(std::string & type){
+    return this->cell_textures.at(type);
 }
