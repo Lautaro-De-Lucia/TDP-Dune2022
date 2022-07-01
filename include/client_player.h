@@ -61,6 +61,7 @@ class Player {
    std::vector<bool> updates;
    bool left_click;
    bool right_click;
+   bool spacebar;
    bool selection;
    bool new_unit_available;
    player_t faction;

@@ -39,6 +39,7 @@ textures(textures)
     this->building_held = -1;
     this->left_click = false;
     this->right_click = false;
+    this->spacebar = false;
     this->selection = false;
     this->new_unit_available = true;
     this->faction = faction;
@@ -92,14 +93,16 @@ void Player::play(){
 
             SDL_GetMouseState(&x, &y);
 
-            if (x < 80) 
-                this->camera.move(-2,0);
-            if (x > 1010 && x < 1090) 
-                this->camera.move(2,0);
-            if (y < 60) 
-                this->camera.move(0,-2);
-            if (y > 660) 
-                this->camera.move(0,2);
+            if (this->spacebar) {
+                if (x < 80) 
+                    this->camera.move(-1,0);
+                if (x > 1010 && x < 1090) 
+                    this->camera.move(1,0);
+                if (y < 60) 
+                    this->camera.move(0,-1);
+                if (y > 660) 
+                    this->camera.move(0,1);
+            }
 
             //  Obtenemos la instrucción del mouse
             mouse.getEvent(&event);
@@ -108,6 +111,17 @@ void Player::play(){
             new_mouse_event.clear();
 
             switch(event.type) {
+
+                case SDL_KEYDOWN:
+                    if (event.key.keysym.scancode == SDL_SCANCODE_SPACE)
+                        this->spacebar = true;
+                    break;
+
+                case SDL_KEYUP:
+                    if (event.key.keysym.scancode == SDL_SCANCODE_SPACE)
+                        this->spacebar = false;
+                    break;
+
                 case SDL_MOUSEBUTTONDOWN:
                     if (mouse.leftClick()){
                         mouse.click();
