@@ -48,6 +48,17 @@ TextureHandler::TextureHandler(SDL2pp::Renderer & game_renderer){
             progress_bar_textures.push_back(SDL2pp::Texture(game_renderer,path.c_str()));
             path.clear();
         }
+    //  Load Textures for unit images
+    for(unit_t UNIT: units)
+	    for(player_t FACTION: factions)
+                path.append(DATA_PATH)
+                .append("/").append("extrasprites")
+                .append("/").append("unit_imgs")
+                .append("/").append(stringify(FACTION))
+                .append("/").append(stringify(UNIT)).append(".jpg"),
+                std::cout << "Loading texture at path: " << path << std::endl,
+                unit_imgs_textures[FACTION].emplace(UNIT,SDL2pp::Texture(game_renderer,path.c_str())),
+                path.clear();
 };
 
 SDL2pp::Texture & TextureHandler::getTexture(unit_t unit, player_t faction, direction_t direction){
@@ -74,4 +85,8 @@ SDL2pp::Texture & TextureHandler::getCreationProgress(int percentage){
         if(12 * i < percentage && percentage <= 12*(i+1))
             return this->progress_bar_textures[i];
     throw std::runtime_error("Not a valid percentage number");
+}
+
+SDL2pp::Texture & TextureHandler::getUnitIMG(player_t faction, unit_t unit){
+    return this->unit_imgs_textures[faction].at(unit);
 }

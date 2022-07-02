@@ -42,7 +42,7 @@ class CSelectable {
     int dim_x;
     int dim_y;
     int ID;
-    int faction;
+    player_t faction;
     std::string name;
     int LP;
     int max_LP;
@@ -54,6 +54,7 @@ class CSelectable {
     virtual void update(player_t player_faction, int lp,int pos_x,int pos_y,direction_t direction,bool moving,bool selected,bool special,bool waiting,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
     virtual void render(player_t player_faction, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
     virtual Position getPosition();
+    player_t getFaction();
     virtual selectable_t getType();
     int get_life_points();
     int getID();

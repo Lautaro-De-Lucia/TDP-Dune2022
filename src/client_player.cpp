@@ -566,12 +566,18 @@ void Player::receiveCreationData(){
 void Player::renderCreationData(){    
     for(creation_t & c : this->creation_data){
         Position pos = this->elements[c.creator_ID]->getPosition();
-        SDL2pp::Texture & texture = this->textures.getCreationProgress(std::round(((double)c.current_time/c.total_time)*100));
+        SDL2pp::Texture & progress = this->textures.getCreationProgress(std::round(((double)c.current_time/c.total_time)*100));
         std::cout << "Rendering progress bar at position: (" << pos.x << "," << pos.y << ")" << std::endl;
         this->game_renderer.Copy(
-            texture,
+            progress,
             SDL2pp::NullOpt,
             SDL2pp::Rect(pos.x*TILE_DIM*2-this->camera.pos_x*2,pos.y*TILE_DIM*2-this->camera.pos_y*2,10,80)
+        );
+        SDL2pp::Texture & unit_being_created = this->textures.getUnitIMG(this->elements[c.creator_ID]->getFaction(),c.unit_being_created);
+        this->game_renderer.Copy(
+            unit_being_created,
+            SDL2pp::NullOpt,
+            SDL2pp::Rect(pos.x*TILE_DIM*2-this->camera.pos_x*2,(pos.y-1)*TILE_DIM*2-this->camera.pos_y*2,30,30)
         );
     }
 }
