@@ -48,6 +48,7 @@ class ClientHandler {
 	 std::map<unit_t,size_t> unit_creation_time;
    std::thread thread;
    std::vector<response_t> responses_buffer;
+   std::vector<creation_t> creation_data;
 
  public:    
    ClientHandler (int player_id, int init_energy, int init_spice,std::vector<bool> & ready, Socket && client_socket, ThreadSafeQueue & tsq);
@@ -58,7 +59,8 @@ class ClientHandler {
    bool isDone();
    void close();
    void sendResponses(std::vector<response_t> & responses);
-   void sendCreationData(std::vector<creation_t> & creation_data);
+   void setCreationData(std::vector<creation_t> & creation_data);
+   void sendCreationData();
    int & getSpice();
    int & getEnergy();
    int getID();

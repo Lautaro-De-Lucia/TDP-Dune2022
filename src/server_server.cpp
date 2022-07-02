@@ -91,8 +91,8 @@ void Server::run() {
         this->sendResponses();
         //std::cout << "Updating game" << std::endl;
         this->update();
-        this->reportCreationState();
         //std::cout << "Reporting the state of the game to players" << std::endl;
+        this->reportCreationState();
         for(size_t i = 0; i < this->players.size(); i++)
             this->players[i]->reportState(this->game);
         //std::cout << "Enabling reading" << std::endl;
@@ -206,7 +206,7 @@ response_t Server::checkCreation(player_t faction, building_t creator) {
                 this->unit_creation_time[faction][queued])
             );
     if(this->unit_time[faction][queued] >= this->unit_creation_time[faction][queued]){
-		response_t res;
+        response_t res;
         res = this->game.createUnit(faction,queued,this->getPlayer(faction)->getSpice());
         if (res != RES_CREATE_UNIT_SUCCESS){
             return res;
@@ -220,13 +220,10 @@ response_t Server::checkCreation(player_t faction, building_t creator) {
 }
 
 void Server::reportCreationState(){
-    std::cout << "Sending creation data" << std::endl;
-    for(creation_t c : this->creation_data[0])
-        std::cout << "ID: " << c.creator_ID << " ",
-        std::cout << "Type: " << stringify(c.unit_being_created) << " ",
-        std::cout << "Time: " << c.current_time << "/" << c.total_time << std::endl;
     for (size_t i = 0 ; i < this->players.size(); i++)
-        this->players[i]->sendCreationData(this->creation_data[i]);
+        this->players[i]->setCreationData(this->creation_data[i]);
+    for(size_t i = 0; i < this->creation_data.size() ; i++)
+        this->creation_data[i].clear();
 }
 
 void Server::enableReading(){

@@ -84,7 +84,7 @@ void CSelectable::render(player_t player_faction, SDL2pp::Renderer& renderer, in
 int CSelectable::get_life_points() { return this->LP;}
 int CSelectable::getID() {return this->ID;}
 
-Position CSelectable::getPosition() {std::cout << "i shouldnt be here" << std::endl; return Position(-1,-1);};
+Position CSelectable::getPosition() {return this->position;}
 selectable_t CSelectable::getType() {std::cout << "i shouldnt be here" << std::endl; return (selectable_t) (-1);};
 
 CMovable::CMovable(unit_t type,int id,int faction,int lp,int pos_x,int pos_y,int dim_x,int dim_y,SDL2pp::Renderer& renderer,TextureHandler & textures,const std::string& lp_path)

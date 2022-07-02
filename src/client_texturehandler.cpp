@@ -42,6 +42,12 @@ TextureHandler::TextureHandler(SDL2pp::Renderer & game_renderer){
             path.append(DATA_PATH).append("/").append("mapsprites").append("/").append(tile.c_str()).append(".png"),
             cell_textures.emplace(tile,SDL2pp::Texture(game_renderer,path.c_str())),
             path.clear();
+    //  Load Textures for the progress bar
+        for(size_t i = 0 ; i < 10 ; i++){
+            path.append(DATA_PATH).append("/").append("extrasprites").append("/").append("creation").append("/").append(std::to_string(i)).append(".png");
+            progress_bar_textures.push_back(SDL2pp::Texture(game_renderer,path.c_str()));
+            path.clear();
+        }
 };
 
 SDL2pp::Texture & TextureHandler::getTexture(unit_t unit, player_t faction, direction_t direction){
@@ -59,4 +65,13 @@ SDL2pp::Texture & TextureHandler::getInfo(building_t building){
 
 SDL2pp::Texture & TextureHandler::getCell(std::string & type){
     return this->cell_textures.at(type);
+}
+
+SDL2pp::Texture & TextureHandler::getCreationProgress(int percentage){
+    if(percentage > 110)
+        return this->progress_bar_textures[9]; 
+    for(size_t i = 0 ; i < 10 ; i++)
+        if(12 * i < percentage && percentage <= 12*(i+1))
+            return this->progress_bar_textures[i];
+    throw std::runtime_error("Not a valid percentage number");
 }

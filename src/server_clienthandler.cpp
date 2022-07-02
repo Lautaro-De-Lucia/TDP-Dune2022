@@ -105,6 +105,8 @@ void ClientHandler::reportState(GameResources & game){
         this->protocol.send_sand_cell(pos.x,pos.y,game.getCell(pos.x,pos.y).getSpice(),this->player_socket);
     }    
     game.clearChangedCells();
+    //  Sending creation data
+    this->sendCreationData();
     //  Sending elements states
     this->protocol.send_selectables_to_read(game.totalElements(),this->player_socket);
     game.sendElements(this->protocol,this->player_socket);
@@ -117,11 +119,15 @@ void ClientHandler::sendResponses(std::vector<response_t> & responses){
     responses.clear();
 }
 
-void ClientHandler::sendCreationData(std::vector<creation_t> & creation_data){    
-    this->protocol.send_creation_data_size(creation_data.size(), this->player_socket);
-    for (creation_t c : creation_data)
+void ClientHandler::setCreationData(std::vector<creation_t> & creation_data){    
+    this->creation_data = creation_data;
+}
+
+void ClientHandler::sendCreationData(){    
+    this->protocol.send_creation_data_size(this->creation_data.size(), this->player_socket);
+    for (creation_t c : this->creation_data)
         this->protocol.send_creation_data(c.creator_ID,c.unit_being_created,c.current_time,c.total_time,this->player_socket);
-    creation_data.clear();
+    this->creation_data.clear();
 }
 
 int & ClientHandler::getSpice() {

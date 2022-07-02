@@ -330,6 +330,8 @@ void Player::update() {
         this->protocol.receive_sand_cell(pos_x,pos_y,spice,this->socket);
         this->map.updateCell(this->game_renderer,pos_x,pos_y,spice);
     }
+
+
     //  Render debris
         // int pos_x;
         // int pos_y;
@@ -338,6 +340,8 @@ void Player::update() {
         // this->protocol.receive_sand_cell(pos_x,pos_y,spice,this->socket);
         // this->map_cells[pos_x][pos_y].setType(type);
         // }
+    //  Receive creator state
+    this->receiveCreationData();
     //  Receive elements
     //  Set updates to false
     for (size_t i = 0 ; i < this->updates.size(); i++)
@@ -548,6 +552,27 @@ void Player::update() {
                     
 }
 
+void Player::receiveCreationData(){   
+    this->creation_data.clear(); 
+    int size,creator_ID,unit,current_time,total_time;
+    this->protocol.receive_creation_data_size(size, this->socket);
+    for (size_t i = 0; i < size ; i++)
+        this->protocol.receive_creation_data(creator_ID,unit,current_time,total_time,this->socket),
+        this->creation_data.push_back(creation_t(creator_ID,(unit_t)unit,current_time,total_time));
+}
+
+void Player::renderCreationData(){    
+    for(creation_t & c : this->creation_data){
+        Position pos = this->elements[c.creator_ID]->getPosition();
+        SDL2pp::Texture & texture = this->textures.getCreationProgress(std::round(((double)c.current_time/c.total_time)*100));
+        std::cout << "Rendering progress bar at position: (" << pos.x << "," << pos.y << ")" << std::endl;
+        this->game_renderer.Copy(
+            texture,
+            SDL2pp::NullOpt,
+            SDL2pp::Rect(pos.x*TILE_DIM*2-this->camera.pos_x*2,pos.y*TILE_DIM*2-this->camera.pos_y*2,10,80)
+        );
+    }
+}
 /*º
 void Player::addElement(unit_t type,State& desc) {
     //  Ahora estamos hablando de SPRITES
@@ -653,6 +678,7 @@ void Player::render(){
     this->renderHud();
     this->renderHeldBuilding();
     this->renderButtonInfo();
+    this->renderCreationData();
     this->game_renderer.Present();
 }
 

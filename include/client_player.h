@@ -37,6 +37,7 @@ class Player {
    size_t c_energy;
    int energy;
    double efficiency;
+   std::vector<creation_t> creation_data;
    std::map<int, std::unique_ptr<CSelectable>> elements;
    MouseHandler mouse;
    CPrinter printer;
@@ -86,6 +87,9 @@ class Player {
    int checkUnit(int& x, int& );
    bool checkHud(int& x, int& y);
    hud_button_t checkBtn(int& x, int& y);
+
+   void receiveCreationData();
+   void renderCreationData();
 
    void removeAttacker(int id);
    void updateAttacker(int id, unit_t type, Position attacker_pos, Position target_pos);
