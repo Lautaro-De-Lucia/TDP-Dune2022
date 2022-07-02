@@ -58,6 +58,7 @@ class ClientHandler {
    bool isDone();
    void close();
    void sendResponses(std::vector<response_t> & responses);
+   void sendCreationData(std::vector<creation_t> & creation_data);
    int & getSpice();
    int & getEnergy();
    int getID();

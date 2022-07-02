@@ -52,9 +52,17 @@ class Protocol {
     void send_response(response_t response, Socket& client_socket);
     void send_responses_size(int responses_size, Socket& client_socket);
 
+    // server to client creation data
+    void send_creation_data(int creator_ID, int unit, int current_time, int total_time, Socket& client_socket);
+    void send_creation_data_size(int creation_data_size, Socket& client_socket);
+
     // client side command status receiver
     void receive_response(response_t& response, Socket& client_socket);
     void receive_responses_size(int& responses_size, Socket& client_socket);
+
+    // client side creation data receiver
+    void receive_creation_data(int & creator_ID, int & unit, int & current_time, int & total_time, Socket& client_socket);
+    void receive_creation_data_size(int& creation_data_size, Socket& client_socket);
 
     // single send/receive type of selectable
     void send_selectable_type(selectable_t type, Socket& client_socket);
