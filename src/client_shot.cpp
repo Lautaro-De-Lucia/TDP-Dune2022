@@ -56,22 +56,22 @@ void Shot::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
     switch (this->unit)
     {
     case TRIKE:
-        unit_shot_path.append(TRIKE_SHOT_PATH);
+        unit_shot_path.append(DATA_PATH TRIKE_SHOT_PATH);
         break;
     case FREMEN:
-        unit_shot_path.append(FREMEN_SHOT_PATH);
+        unit_shot_path.append(DATA_PATH FREMEN_SHOT_PATH);
         break;
     case INFANTRY:
-        unit_shot_path.append(INFANTRY_SHOT_PATH);
+        unit_shot_path.append(DATA_PATH INFANTRY_SHOT_PATH);
         break;
     case TANK:
-        unit_shot_path.append(TANK_SHOT_PATH);
+        unit_shot_path.append(DATA_PATH TANK_SHOT_PATH);
         break;
     case SARDAUKAR:
-        unit_shot_path.append(SARDAUKAR_SHOT_PATH);
+        unit_shot_path.append(DATA_PATH SARDAUKAR_SHOT_PATH);
         break;
     case DEVASTATOR:
-        unit_shot_path.append(DEVASTATOR_SHOT_PATH);
+        unit_shot_path.append(DATA_PATH DEVASTATOR_SHOT_PATH);
         break;
     
     default:
