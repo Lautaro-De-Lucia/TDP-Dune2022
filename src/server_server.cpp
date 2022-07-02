@@ -2,7 +2,7 @@
 
 extern std::map<color_t,SDL_Color> colors;
 
-#define MAX_CONNECTIONS 2
+#define MAX_CONNECTIONS 1
 
 int ID = 0;
 
@@ -17,9 +17,8 @@ TSQ(MAX_CONNECTIONS)
     this->running = false;
     for(player_t FACTION: factions)
         for (unit_t UNIT : units)
-            this->units_to_create[FACTION][UNIT] = 0,
             this->unit_time[FACTION][UNIT] = 0,
-            this->unit_creation_time[FACTION][UNIT] = 10;
+            this->unit_creation_time[FACTION][UNIT] = 50;
 }
 
 void Server::acceptPlayers() {
@@ -145,15 +144,6 @@ void Server::handleInstruction(building_create_t & INS) {
         this->game.createBuilding(INS.faction,(building_t)INS.type,INS.pos_x,INS.pos_y,this->players[INS.player_ID]->getSpice(),this->players[INS.player_ID]->getEnergy())
     );
 }
-/*
-void Server::handleInstruction(unit_create_t & INS) {
-    int current_spice = this->players[INS.player_ID]->getSpice();
-    this->responses[INS.player_ID].push_back(
-        this->game.createUnit(INS.faction,(unit_t)INS.type,current_spice)
-    );
-    this->players[INS.player_ID]->setSpice(current_spice);
-}
-*/
 
 void Server::handleInstruction(unit_create_t & INS) {
 
@@ -165,7 +155,8 @@ void Server::handleInstruction(unit_create_t & INS) {
         this->responses[INS.player_ID].push_back(RES_CREATE_UNIT_FAILURE_SPECIAL);
         return;
     }
-	this->units_to_create[INS.faction][INS.type]++;
+    std::cout << "Pushing: " << stringify(INS.type) << std::endl;
+	this->creating_queues[INS.faction][getCreator(INS.type)].push(INS.type);
 	this->responses[INS.player_ID].push_back(RES_SUCCESS);
 }
 
@@ -190,8 +181,8 @@ void Server::sendResponses() {
 
 void Server::update(){    
     for(std::unique_ptr<ClientHandler>& player : this->players )
-        for(unit_t UNIT: units)
-            this->responses[player->getID()].push_back(checkCreation(player->getFaction(),UNIT));
+        for(building_t CREATOR : creators)
+        this->responses[player->getID()].push_back(checkCreation(player->getFaction(),CREATOR));
     this->game.update();
 }
 
@@ -202,19 +193,19 @@ std::unique_ptr<ClientHandler> & Server::getPlayer(player_t faction) {
     throw std::runtime_error("Player of this faction has not been initialized");        
 }
 
-response_t Server::checkCreation(player_t faction, unit_t type) {
-
-    if(this->units_to_create[faction][type] == 0)
-		return RES_SUCCESS;
-    this->unit_time[faction][type] += this->game.getTotalCreators(faction,type); 
-    if(this->unit_time[faction][type] >= this->unit_creation_time[faction][type]){
+response_t Server::checkCreation(player_t faction, building_t creator) {
+    if(this->creating_queues[faction][creator].empty())
+        return RES_SUCCESS;
+    unit_t queued = this->creating_queues[faction][creator].front();
+    this->unit_time[faction][queued] += this->game.getTotalCreators(faction,queued); 
+    if(this->unit_time[faction][queued] >= this->unit_creation_time[faction][queued]){
 		response_t res;
-        res = this->game.createUnit(faction,type,this->getPlayer(faction)->getSpice());
+        res = this->game.createUnit(faction,queued,this->getPlayer(faction)->getSpice());
         if (res != RES_CREATE_UNIT_SUCCESS){
             return res;
         } else {   
-            this->unit_time[faction][type] = 0;
-            this->units_to_create[faction][type]--;
+            this->unit_time[faction][queued] = 0;
+            this->creating_queues[faction][creator].pop();
             return res;
         }
     }   
@@ -224,4 +215,14 @@ response_t Server::checkCreation(player_t faction, unit_t type) {
 void Server::enableReading(){
     for(size_t i = 0; i < this->ready_flags.size() ; i++)
         this->ready_flags[i] = true;
+}
+
+building_t Server::getCreator(unit_t type){
+    if(type == FREMEN || type == INFANTRY || type == SARDAUKAR)
+        return BARRACK;
+    if(type == TRIKE || type == HARVESTER)
+        return LIGHT_FACTORY;
+    if(type == TANK || type == DEVASTATOR)
+        return HEAVY_FACTORY;
+    throw std::runtime_error("No creator for this type");
 }

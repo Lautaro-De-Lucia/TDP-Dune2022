@@ -222,6 +222,12 @@ constexpr std::initializer_list<building_t> buildings = {
     CONSTRUCTION_YARD
 };
 
+constexpr std::initializer_list<building_t> creators = {
+    BARRACK, 
+    LIGHT_FACTORY,
+    HEAVY_FACTORY,
+};
+
 const char * stringify(building_t building);
 
 enum direction_t {

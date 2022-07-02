@@ -29,8 +29,9 @@ class Server {
       ThreadSafeQueue TSQ;
       std::map<int,std::vector<response_t>> responses;
       std::map<player_t,std::map<unit_t,int>> unit_creation_time;
-      std::map<player_t,std::map<unit_t,int>> units_to_create;
+      // std::map<player_t,std::map<unit_t,int>> units_to_create;
       std::map<player_t,std::map<unit_t,int>> unit_time;
+      std::map<player_t,std::map<building_t,std::queue<unit_t>>> creating_queues;
       std::vector<bool> ready_flags;
 
  public:
@@ -57,5 +58,6 @@ class Server {
       void update();
 
       std::unique_ptr<ClientHandler> & getPlayer(player_t faction);
-      response_t checkCreation(player_t faction, unit_t type);
+      response_t checkCreation(player_t faction, building_t type);
+      building_t getCreator(unit_t type);
 };
