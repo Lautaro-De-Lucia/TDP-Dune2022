@@ -97,6 +97,9 @@ void Player::play(){
             // SCREEN_WIDTH = 1280
             // SCREEN_HEIGHT = 720
 
+            if (!game_has_started)
+                this->camera.move(0,1);
+
             if (this->spacebar) {
                 if (x > 0 && x < 80) this->camera.move(-2,0);
                 if (x > 1010 && x < 1090) this->camera.move(2,0);
@@ -538,7 +541,6 @@ void Player::update() {
                 int _id = i;
                 selectable_t _type = this->elements.at(i)->getType();
                 Position _pos = this->elements.at(i)->getPosition();
- 
                 this->addExplosion(_id, _type, _pos);
                 this->elements.erase(i);
             }

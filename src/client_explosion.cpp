@@ -30,9 +30,8 @@ void Explosion::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y)
     int ypos = this->pixel_pos_y-cam_pos_y;
 
     std::string explosion_path;
-    explosion_path.append(DATA_PATH);
 
-    explosion_path.append(DATA_PATH "/explosions");
+    explosion_path.append(DATA_PATH EXPLOSION_PATH);
 
     explosion_path.append(std::to_string(this->current_frame));
 

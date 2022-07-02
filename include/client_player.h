@@ -24,7 +24,7 @@ const int CAMERA_HEIGHT = 360;
 const int CAMERA_INITIAL_POS_X = 400;
 const int CAMERA_INITIAL_POS_Y = 200;
 
-const int GAME_SPEED = 50000;
+const int GAME_SPEED = 100000;
 
 class Player {
 
