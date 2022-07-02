@@ -28,6 +28,7 @@ class Server {
       bool running;                         ///   Status flag
       ThreadSafeQueue TSQ;
       std::map<int,std::vector<response_t>> responses;
+      std::map<int,std::vector<creation_t>> creation_data;
       std::map<player_t,std::map<unit_t,int>> unit_creation_time;
       // std::map<player_t,std::map<unit_t,int>> units_to_create;
       std::map<player_t,std::map<unit_t,int>> unit_time;
@@ -54,6 +55,7 @@ class Server {
       void handleInstruction(idle_t & INS);
 
       void sendResponses();
+      void reportCreationState();
       void enableReading();
       void update();
 

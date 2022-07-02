@@ -428,8 +428,80 @@ void Protocol::receive_response(response_t& response, Socket& client_socket) {
     return;
 }
 
- 
- void Protocol::send_responses_size(int size, Socket& client_socket) {
+void Protocol::send_creation_data(int creator_ID, int unit, int current_time, int total_time, Socket& client_socket){
+
+    uint16_t _ID = (uint16_t) creator_ID;
+    uint16_t ID_buffer = (uint16_t) _ID;
+
+    uint8_t _unit = (uint8_t) unit;
+    uint8_t unit_buffer = (uint8_t) _unit;
+
+    uint16_t _current_time = (uint16_t) current_time;
+    uint16_t current_time_buffer = (uint16_t) _current_time;
+
+    uint16_t _total_time = (uint16_t) total_time;
+    uint16_t total_time_buffer = (uint16_t) htons(_total_time);
+
+    int sent_size = -1;
+    bool was_closed = false;
+
+    sent_size = client_socket.sendall(&ID_buffer, sizeof(ID_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+    
+    sent_size = client_socket.sendall(&unit_buffer, sizeof(unit_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&current_time_buffer, sizeof(current_time_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&total_time_buffer, sizeof(total_time_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    return;
+}
+
+void Protocol::receive_creation_data(int & creator_ID, int & unit, int & current_time, int & total_time, Socket& client_socket){
+    
+    uint16_t ID_buffer;
+    uint16_t _ID;
+
+    uint8_t unit_buffer;
+    uint8_t _unit;
+
+    uint16_t current_time_buffer;
+    uint16_t _current_time;
+
+    uint16_t total_time_buffer;
+    uint16_t _total_time;
+
+    int recv_size = -1;
+    bool was_closed = false;
+
+    recv_size = client_socket.recvall(&ID_buffer, sizeof(ID_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _ID = (uint16_t) ID_buffer;
+    creator_ID = (int) _ID;
+
+    recv_size = client_socket.recvall(&unit_buffer, sizeof(unit_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _unit = (uint8_t) unit_buffer;
+    unit = (int) _unit;
+
+    recv_size = client_socket.recvall(&current_time_buffer, sizeof(current_time_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _current_time = (uint16_t) current_time_buffer;
+    current_time = (int) _current_time;
+
+    recv_size = client_socket.recvall(&total_time_buffer, sizeof(total_time_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _total_time = (uint16_t) ntohs(total_time_buffer);
+    total_time = (int) _total_time;
+
+    return;
+}
+
+
+void Protocol::send_responses_size(int size, Socket& client_socket) {
 
     uint16_t _size = (uint16_t) size;
     uint16_t size_buffer = (uint16_t) htons(_size);
@@ -444,6 +516,37 @@ void Protocol::receive_response(response_t& response, Socket& client_socket) {
 }
 
 void Protocol::receive_responses_size(int& size, Socket& client_socket) {
+
+    uint16_t size_buffer;
+    uint16_t _size;
+
+    int recv_size = -1;
+    bool was_closed = false;
+
+    recv_size = client_socket.recvall(&size_buffer, sizeof(size_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _size = (uint16_t) ntohs(size_buffer);
+
+    size = (int) _size;
+
+    return;
+}
+
+void Protocol::send_creation_data_size(int size, Socket& client_socket) {
+
+    uint16_t _size = (uint16_t) size;
+    uint16_t size_buffer = (uint16_t) htons(_size);
+
+    int sent_size = -1;
+    bool was_closed = false;
+
+    sent_size = client_socket.sendall(&size_buffer, sizeof(size_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    return;
+}
+
+void Protocol::receive_creation_data_size(int& size, Socket& client_socket) {
 
     uint16_t size_buffer;
     uint16_t _size;

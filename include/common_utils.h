@@ -287,6 +287,19 @@ struct instruction_t {
 
 };
 
+struct creation_t {
+    int creator_ID;
+	unit_t unit_being_created;
+	int current_time;
+	int total_time;
+    creation_t(int creator_ID, unit_t unit, int current_time, int total_time) {
+        this->creator_ID = creator_ID;
+        this->unit_being_created = unit;
+        this->current_time = current_time;
+        this->total_time = total_time;
+    }
+};
+
 struct building_create_t : instruction_t {
 
     int type;

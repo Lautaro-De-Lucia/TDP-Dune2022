@@ -91,6 +91,7 @@ void Server::run() {
         this->sendResponses();
         //std::cout << "Updating game" << std::endl;
         this->update();
+        this->reportCreationState();
         //std::cout << "Reporting the state of the game to players" << std::endl;
         for(size_t i = 0; i < this->players.size(); i++)
             this->players[i]->reportState(this->game);
@@ -139,7 +140,6 @@ void Server::handleInstruction(std::unique_ptr<instruction_t> & INS) {
 
 
 void Server::handleInstruction(building_create_t & INS) {
-
     this->responses[INS.player_ID].push_back(
         this->game.createBuilding(INS.faction,(building_t)INS.type,INS.pos_x,INS.pos_y,this->players[INS.player_ID]->getSpice(),this->players[INS.player_ID]->getEnergy())
     );
@@ -155,7 +155,6 @@ void Server::handleInstruction(unit_create_t & INS) {
         this->responses[INS.player_ID].push_back(RES_CREATE_UNIT_FAILURE_SPECIAL);
         return;
     }
-    std::cout << "Pushing: " << stringify(INS.type) << std::endl;
 	this->creating_queues[INS.faction][getCreator(INS.type)].push(INS.type);
 	this->responses[INS.player_ID].push_back(RES_SUCCESS);
 }
@@ -198,6 +197,14 @@ response_t Server::checkCreation(player_t faction, building_t creator) {
         return RES_SUCCESS;
     unit_t queued = this->creating_queues[faction][creator].front();
     this->unit_time[faction][queued] += this->game.getTotalCreators(faction,queued); 
+    for(size_t i = 0; i < this->players.size(); i++)
+        if(this->players[i]->getFaction() == faction)
+            this->creation_data[i].push_back(creation_t(
+                this->game.getCreator(faction,queued),
+                queued,
+                this->unit_time[faction][queued],
+                this->unit_creation_time[faction][queued])
+            );
     if(this->unit_time[faction][queued] >= this->unit_creation_time[faction][queued]){
 		response_t res;
         res = this->game.createUnit(faction,queued,this->getPlayer(faction)->getSpice());
@@ -210,6 +217,16 @@ response_t Server::checkCreation(player_t faction, building_t creator) {
         }
     }   
     return RES_SUCCESS;
+}
+
+void Server::reportCreationState(){
+    std::cout << "Sending creation data" << std::endl;
+    for(creation_t c : this->creation_data[0])
+        std::cout << "ID: " << c.creator_ID << " ",
+        std::cout << "Type: " << stringify(c.unit_being_created) << " ",
+        std::cout << "Time: " << c.current_time << "/" << c.total_time << std::endl;
+    for (size_t i = 0 ; i < this->players.size(); i++)
+        this->players[i]->sendCreationData(this->creation_data[i]);
 }
 
 void Server::enableReading(){
