@@ -117,4 +117,7 @@ class Protocol {
     // player state send/receive
     void send_player_state(int spice, int c_spice,int energy, Socket& client_socket);
     void receive_player_state(int& spice, int& c_spice,int& energy, Socket& client_socket);
+
+    void send_creators(int barrack_id, int light_factory_id, int heavy_factory_id, Socket& client_socket);
+    void receive_creators(int& barrack_id, int& light_factory_id, int& heavy_factory_id, Socket& client_socket);
 };

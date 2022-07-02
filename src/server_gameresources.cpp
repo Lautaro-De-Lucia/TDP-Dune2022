@@ -98,13 +98,9 @@ response_t GameResources::createBuilding(player_t faction,building_t type,int po
         } else if (type == HEAVY_FACTORY) {
             model_unit = TANK;
         }
-
         if (this->board.getTotalCreators(faction, model_unit) == 1)
             this->board.makeCreator(ID - 1);
     }
-
-    std::cout << "getCreator: " << this->board.getCreator(faction, TANK) << std::endl;
-
     return res;
 }
 

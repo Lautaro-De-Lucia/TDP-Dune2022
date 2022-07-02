@@ -38,6 +38,7 @@ class Player {
    int energy;
    double efficiency;
    std::vector<creation_t> creation_data;
+   std::map<building_t, int> creators;
    std::map<int, std::unique_ptr<CSelectable>> elements;
    MouseHandler mouse;
    CPrinter printer;
@@ -90,6 +91,9 @@ class Player {
 
    void receiveCreationData();
    void renderCreationData();
+
+   void receiveCreators();
+   void renderCreators();
 
    void removeAttacker(int id);
    void updateAttacker(int id, unit_t type, Position attacker_pos, Position target_pos);

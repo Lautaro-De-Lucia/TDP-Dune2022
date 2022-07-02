@@ -46,9 +46,9 @@ void ExplosionsHandler::update() {
         this->explosions[i].update(has_ended);
 }
 
-void ExplosionsHandler::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y) {
+void ExplosionsHandler::render(SDL2pp::Renderer& renderer, TextureHandler& textures, int cam_pos_x, int cam_pos_y) {
 
     for (size_t i = 0; i < this->explosions.size(); i++) {
-        this->explosions[i].render(renderer, cam_pos_x, cam_pos_y);
+        this->explosions[i].render(renderer, textures, cam_pos_x, cam_pos_y);
     }
 }

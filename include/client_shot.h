@@ -6,6 +6,7 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "common_utils.h"
+#include "client_texturehandler.h"
 
 class Shot{
  private:
@@ -27,7 +28,7 @@ class Shot{
 
  public:
     Shot(Position origin, Position target, int speed, unit_t unit);
-    void render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
+    void render(SDL2pp::Renderer& renderer, TextureHandler& textures, int cam_pos_x, int cam_pos_y);
     void nextPosition();
     void getCurrentPosition(int& _current_pixel_pos_x, int& _current_pixel_pos_y);
     void update(bool& has_reached_its_target);

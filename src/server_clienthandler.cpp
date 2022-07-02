@@ -107,6 +107,11 @@ void ClientHandler::reportState(GameResources & game){
     game.clearChangedCells();
     //  Sending creation data
     this->sendCreationData();
+    //  Sending creators
+    int barrack_id = game.getCreator(this->faction, FREMEN);
+    int light_factory_id = game.getCreator(this->faction, TRIKE);
+    int heavy_factory_id = game.getCreator(this->faction, TANK);
+    this->protocol.send_creators(barrack_id, light_factory_id, heavy_factory_id, this->player_socket);
     //  Sending elements states
     this->protocol.send_selectables_to_read(game.totalElements(),this->player_socket);
     game.sendElements(this->protocol,this->player_socket);

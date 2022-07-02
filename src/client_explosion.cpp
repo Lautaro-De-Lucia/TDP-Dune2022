@@ -24,22 +24,17 @@ Explosion::Explosion(selectable_t type, Position pos) {
     this->explosion_delay = clock();
 }
 
-void Explosion::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
+void Explosion::render(SDL2pp::Renderer& renderer, TextureHandler& textures, int cam_pos_x, int cam_pos_y){
 
     int xpos = this->pixel_pos_x-cam_pos_x;
     int ypos = this->pixel_pos_y-cam_pos_y;
 
-    std::string explosion_path;
-
-    explosion_path.append(DATA_PATH EXPLOSION_PATH);
-
-    explosion_path.append(std::to_string(this->current_frame));
-
-    explosion_path.append(".png");
-
-    SDL2pp::Texture texture(renderer, explosion_path.c_str());
-    texture.Update(SDL2pp::NullOpt,SDL2pp::Surface(explosion_path.c_str()));
-    renderer.Copy(texture,SDL2pp::NullOpt,SDL2pp::Rect(xpos,ypos,this->explosion_width,this->explosion_height));
+    SDL2pp::Texture & explosion = textures.getExplosion(this->current_frame);
+    renderer.Copy(
+        explosion,
+        SDL2pp::NullOpt,
+        SDL2pp::Rect(xpos,ypos,this->explosion_width,this->explosion_height)
+    );
 
     //std::cout << "rendering explosion on pixel position: (" << xpos << "," << ypos << ")" << std::endl;
 }

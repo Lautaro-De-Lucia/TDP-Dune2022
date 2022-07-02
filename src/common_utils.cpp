@@ -76,6 +76,20 @@ const char * stringify(direction_t dir){
     throw std::runtime_error("Unknown Faction");
 }
 
+const char * stringify(animation_t animation){
+    switch(animation){
+        case ANIMATION_IDLE:
+            return "idle";
+        case MOVING_1:
+            return "moving1";
+        case MOVING_2:
+            return "moving2";
+        case SPECIAL:
+            return "special";
+    }
+    throw std::runtime_error("Unknown Animation");
+}
+
 std::map<color_t,SDL_Color> colors = {
     {RED,SDL_Color{250,0,0,0}},
     {GREEN,SDL_Color{0,250,0,0}},

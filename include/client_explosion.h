@@ -6,6 +6,7 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "common_utils.h"
+#include "client_texturehandler.h"
 
 class Explosion{
  private:
@@ -26,7 +27,7 @@ class Explosion{
 
  public:
    Explosion(selectable_t type, Position pos);
-   void render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
+   void render(SDL2pp::Renderer& renderer, TextureHandler& textures, int cam_pos_x, int cam_pos_y);
    void nextFrame();
    void update(bool& has_ended);
 };

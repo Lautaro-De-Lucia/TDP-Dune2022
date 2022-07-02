@@ -8,6 +8,7 @@
 #include "common_utils.h"
 #include "client_explosion.h"
 #include "client_audioplayer.h"
+#include "client_texturehandler.h"
 
 #define IMG_FORMAT ".png"
 
@@ -25,5 +26,5 @@ class ExplosionsHandler {
    ~ExplosionsHandler();
    void addExplosion(int id, selectable_t type, Position pos);
    void update();
-   void render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
+   void render(SDL2pp::Renderer& renderer, TextureHandler& textures, int cam_pos_x, int cam_pos_y);
 };

@@ -156,9 +156,9 @@ void ShotsHandler::update() {
     }
 }
 
-void ShotsHandler::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y) {
+void ShotsHandler::render(SDL2pp::Renderer& renderer, TextureHandler& textures, int cam_pos_x, int cam_pos_y) {
 
     for (size_t i = 0; i < this->shots.size(); i++) {
-        this->shots[i].render(renderer, cam_pos_x, cam_pos_y);
+        this->shots[i].render(renderer, textures, cam_pos_x, cam_pos_y);
     }
 }

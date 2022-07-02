@@ -43,6 +43,10 @@ textures(textures)
     this->selection = false;
     this->new_unit_available = true;
     this->faction = faction;
+
+    this->creators.insert({BARRACK,-1});
+    this->creators.insert({LIGHT_FACTORY,-1});
+    this->creators.insert({HEAVY_FACTORY,-1});
 }
 
 void Player::play(){
@@ -334,7 +338,6 @@ void Player::update() {
         this->map.updateCell(this->game_renderer,pos_x,pos_y,spice);
     }
 
-
     //  Render debris
         // int pos_x;
         // int pos_y;
@@ -345,6 +348,9 @@ void Player::update() {
         // }
     //  Receive creator state
     this->receiveCreationData();
+    //  Receive creators
+    this->receiveCreators();
+
     //  Receive elements
     //  Set updates to false
     for (size_t i = 0 ; i < this->updates.size(); i++)
@@ -550,11 +556,9 @@ void Player::update() {
             }
         }
     }
-
-                    
 }
 
-void Player::receiveCreationData(){   
+void Player::receiveCreationData() {   
     this->creation_data.clear(); 
     int size,creator_ID,unit,current_time,total_time;
     this->protocol.receive_creation_data_size(size, this->socket);
@@ -563,7 +567,21 @@ void Player::receiveCreationData(){
         this->creation_data.push_back(creation_t(creator_ID,(unit_t)unit,current_time,total_time));
 }
 
-void Player::renderCreationData(){    
+void Player::receiveCreators() {
+
+    //  Receive creators
+    int barrack_id = -1;
+    int light_factory_id = -1;
+    int heavy_factory_id = -1;
+
+
+    this->protocol.receive_creators(barrack_id, light_factory_id, heavy_factory_id, this->socket);
+    this->creators[BARRACK] = barrack_id;
+    this->creators[LIGHT_FACTORY] = light_factory_id;
+    this->creators[HEAVY_FACTORY] = heavy_factory_id;
+}
+
+void Player::renderCreationData() {    
     for(creation_t & c : this->creation_data){
         Position pos = this->elements[c.creator_ID]->getPosition();
         SDL2pp::Texture & progress = this->textures.getCreationProgress(std::round(((double)c.current_time/c.total_time)*100));
@@ -581,6 +599,33 @@ void Player::renderCreationData(){
         );
     }
 }
+
+void Player::renderCreators() {
+
+    std::vector<int> creators_to_render;
+
+    creators_to_render.clear();
+
+    if (this->creators[BARRACK] != -1)
+        creators_to_render.push_back(this->creators[BARRACK]);
+
+    if (this->creators[LIGHT_FACTORY] != -1)
+        creators_to_render.push_back(this->creators[LIGHT_FACTORY]);
+
+    if (this->creators[HEAVY_FACTORY] != -1)
+        creators_to_render.push_back(this->creators[HEAVY_FACTORY]);
+
+    for(int id : creators_to_render){
+        Position pos = this->elements[id]->getPosition();
+        SDL2pp::Texture & creator_mark = this->textures.getCreatorMark();
+        this->game_renderer.Copy(
+            creator_mark,
+            SDL2pp::NullOpt,
+            SDL2pp::Rect((pos.x+1)*TILE_DIM*2-this->camera.pos_x*2,(pos.y-1)*TILE_DIM*2-this->camera.pos_y*2,20,30)
+        );
+    }
+}
+
 /*º
 void Player::addElement(unit_t type,State& desc) {
     //  Ahora estamos hablando de SPRITES
@@ -681,11 +726,12 @@ void Player::render(){
     for (auto& e : this->elements)
         e.second->render(this->faction,this->game_renderer,this->camera.pos_x,this->camera.pos_y);
     this->hud.update(this->spice,this->c_spice,this->energy);
-    this->shotsHandler.render(this->game_renderer, this->camera.pos_x, this->camera.pos_y);
-    this->explosionsHandler.render(this->game_renderer, this->camera.pos_x, this->camera.pos_y);
+    this->shotsHandler.render(this->game_renderer, this->textures, this->camera.pos_x, this->camera.pos_y);
+    this->explosionsHandler.render(this->game_renderer, this->textures, this->camera.pos_x, this->camera.pos_y);
     this->renderHud();
     this->renderHeldBuilding();
     this->renderButtonInfo();
+    this->renderCreators();
     this->renderCreationData();
     this->game_renderer.Present();
 }

@@ -8,6 +8,7 @@
 #include "common_utils.h"
 #include "client_shot.h"
 #include "client_audioplayer.h"
+#include "client_texturehandler.h"
 
 #define IMG_FORMAT ".png"
 
@@ -44,6 +45,6 @@ class ShotsHandler {
     void updateAttacker(int id, unit_t type, Position attacker_pos, Position target_pos);
     void removeAttacker(int id);
     void update();
-    void render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
+    void render(SDL2pp::Renderer& renderer, TextureHandler& textures, int cam_pos_x, int cam_pos_y);
     void createShot(unit_t type, Position attacker_pos, Position target_pos);
 };

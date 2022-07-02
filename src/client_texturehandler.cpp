@@ -1,18 +1,25 @@
 #include "./client_texturehandler.h"
 
-TextureHandler::TextureHandler(SDL2pp::Renderer & game_renderer){
+TextureHandler::TextureHandler(SDL2pp::Renderer & game_renderer):
+creator_mark(game_renderer,DATA_PATH CMARK_PATH)
+{
     std::string path;
     //  Load Unit Textures
+
     for(unit_t UNIT: units)
 	    for(player_t FACTION: factions)
 		    for (direction_t DIR: directions)
-                path.append(DATA_PATH)
-                .append("/").append("units")
-                .append("/").append(stringify(UNIT))
-                .append("/").append(stringify(FACTION))
-                .append("/").append(stringify(DIR)).append(".png"),
-                unit_textures[UNIT][FACTION].emplace(DIR,SDL2pp::Texture(game_renderer,path.c_str())),
-                path.clear();
+                for (animation_t ANIMATION : animations)
+                    path.append(DATA_PATH)
+                    .append("/").append("units")
+                    .append("/").append(stringify(UNIT))
+                    .append("/").append(stringify(FACTION))
+                    .append("/").append(stringify(ANIMATION))
+                    .append("/").append(stringify(DIR)).append(".png"),
+                    std::cout << "Loading path" << path << std::endl,
+                    unit_textures[UNIT][FACTION][ANIMATION].emplace(DIR,SDL2pp::Texture(game_renderer,path.c_str())),
+                    path.clear();
+
     //  Load Building Textures
     for(building_t BUILDING: buildings)
 	    for(player_t FACTION: factions)
@@ -59,11 +66,33 @@ TextureHandler::TextureHandler(SDL2pp::Renderer & game_renderer){
                 std::cout << "Loading texture at path: " << path << std::endl,
                 unit_imgs_textures[FACTION].emplace(UNIT,SDL2pp::Texture(game_renderer,path.c_str())),
                 path.clear();
+    //  Load Textures for explosions
+    for(size_t i = 0 ; i < 20 ; i++) {
+        path.append(DATA_PATH)
+        .append("/").append("explosions")
+        .append("/").append("explosion")
+        .append(std::to_string(i)).append(".png"),
+        this->explosion_textures.push_back(SDL2pp::Texture(game_renderer,path.c_str())),
+        path.clear();
+    }
+
+    //  Load Textures for shots
+    for(unit_t UNIT: units) {
+        if (UNIT == HARVESTER)
+            continue;
+        path.append(DATA_PATH)
+        .append("/").append("unitshots")
+        .append("/").append(stringify(UNIT)).append("/shot.png"),
+        this->unit_shot_textures.emplace(UNIT,SDL2pp::Texture(game_renderer,path.c_str())),
+        path.clear();
+    }
+
 };
 
-SDL2pp::Texture & TextureHandler::getTexture(unit_t unit, player_t faction, direction_t direction){
-    return this->unit_textures[unit][faction].at(direction);
+SDL2pp::Texture & TextureHandler::getTexture(unit_t unit, player_t faction,animation_t animation, direction_t direction){
+    return this->unit_textures[unit][faction][animation].at(direction);
 }
+
 SDL2pp::Texture & TextureHandler::getTexture(building_t building, player_t faction){
     return this->building_textures[building].at(faction);
 }
@@ -89,4 +118,16 @@ SDL2pp::Texture & TextureHandler::getCreationProgress(int percentage){
 
 SDL2pp::Texture & TextureHandler::getUnitIMG(player_t faction, unit_t unit){
     return this->unit_imgs_textures[faction].at(unit);
+}
+
+SDL2pp::Texture & TextureHandler::getCreatorMark() {
+    return this->creator_mark;
+}
+
+SDL2pp::Texture & TextureHandler::getExplosion(int frame){
+    return this->explosion_textures[frame];
+}
+
+SDL2pp::Texture & TextureHandler::getUnitShot(unit_t unit){
+    return this->unit_shot_textures.at(unit);
 }

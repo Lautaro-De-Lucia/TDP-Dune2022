@@ -46,44 +46,17 @@ Shot::Shot(Position origin, Position target, int speed, unit_t unit){
     this->shot_delay = clock();
 }
 
-void Shot::render(SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y){
+void Shot::render(SDL2pp::Renderer& renderer, TextureHandler& textures, int cam_pos_x, int cam_pos_y){
 
     int xpos = this->current_pixel_pos_x-cam_pos_x;
     int ypos = this->current_pixel_pos_y-cam_pos_y;
 
-    std::string unit_shot_path;
-
-    switch (this->unit)
-    {
-    case TRIKE:
-        unit_shot_path.append(DATA_PATH TRIKE_SHOT_PATH);
-        break;
-    case FREMEN:
-        unit_shot_path.append(DATA_PATH FREMEN_SHOT_PATH);
-        break;
-    case INFANTRY:
-        unit_shot_path.append(DATA_PATH INFANTRY_SHOT_PATH);
-        break;
-    case TANK:
-        unit_shot_path.append(DATA_PATH TANK_SHOT_PATH);
-        break;
-    case SARDAUKAR:
-        unit_shot_path.append(DATA_PATH SARDAUKAR_SHOT_PATH);
-        break;
-    case DEVASTATOR:
-        unit_shot_path.append(DATA_PATH DEVASTATOR_SHOT_PATH);
-        break;
-    
-    default:
-        return;
-        //break;
-    }
-
-    unit_shot_path.append(".png");
-
-    SDL2pp::Texture texture(renderer, unit_shot_path.c_str());
-    texture.Update(SDL2pp::NullOpt,SDL2pp::Surface(unit_shot_path.c_str()));
-    renderer.Copy(texture,SDL2pp::NullOpt,SDL2pp::Rect(xpos,ypos,this->shot_width,this->shot_height));
+    SDL2pp::Texture & shot = textures.getUnitShot(this->unit);
+    renderer.Copy(
+        shot,
+        SDL2pp::NullOpt,
+        SDL2pp::Rect(xpos,ypos,this->shot_width,this->shot_height)
+    );
 }
 
 void Shot::nextPosition(){

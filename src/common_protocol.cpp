@@ -431,13 +431,13 @@ void Protocol::receive_response(response_t& response, Socket& client_socket) {
 void Protocol::send_creation_data(int creator_ID, int unit, int current_time, int total_time, Socket& client_socket){
 
     uint16_t _ID = (uint16_t) creator_ID;
-    uint16_t ID_buffer = (uint16_t) _ID;
+    uint16_t ID_buffer = (uint16_t) htons(_ID);
 
     uint8_t _unit = (uint8_t) unit;
     uint8_t unit_buffer = (uint8_t) _unit;
 
     uint16_t _current_time = (uint16_t) current_time;
-    uint16_t current_time_buffer = (uint16_t) _current_time;
+    uint16_t current_time_buffer = (uint16_t) htons(_current_time);
 
     uint16_t _total_time = (uint16_t) total_time;
     uint16_t total_time_buffer = (uint16_t) htons(_total_time);
@@ -479,7 +479,7 @@ void Protocol::receive_creation_data(int & creator_ID, int & unit, int & current
 
     recv_size = client_socket.recvall(&ID_buffer, sizeof(ID_buffer), &was_closed);
     handle_receive(was_closed, recv_size);
-    _ID = (uint16_t) ID_buffer;
+    _ID = (uint16_t) ntohs(ID_buffer);
     creator_ID = (int) _ID;
 
     recv_size = client_socket.recvall(&unit_buffer, sizeof(unit_buffer), &was_closed);
@@ -489,13 +489,73 @@ void Protocol::receive_creation_data(int & creator_ID, int & unit, int & current
 
     recv_size = client_socket.recvall(&current_time_buffer, sizeof(current_time_buffer), &was_closed);
     handle_receive(was_closed, recv_size);
-    _current_time = (uint16_t) current_time_buffer;
+    _current_time = (uint16_t) ntohs(current_time_buffer);
     current_time = (int) _current_time;
 
     recv_size = client_socket.recvall(&total_time_buffer, sizeof(total_time_buffer), &was_closed);
     handle_receive(was_closed, recv_size);
     _total_time = (uint16_t) ntohs(total_time_buffer);
     total_time = (int) _total_time;
+
+    return;
+}
+
+void Protocol::send_creators(int barrack_id, int light_factory_id, int heavy_factory_id, Socket& client_socket) {
+
+    int16_t _barrack_id = (int16_t) barrack_id;
+    int16_t barrack_id_buffer = (int16_t) htons(_barrack_id);
+
+    int16_t _light_factory_id = (int16_t) light_factory_id;
+    int16_t light_factory_id_buffer = (int16_t)  htons(_light_factory_id);
+
+    int16_t _heavy_factory_id = (int16_t) heavy_factory_id;
+    int16_t heavy_factory_id_buffer = (int16_t) htons(_heavy_factory_id);
+
+    int sent_size = -1;
+    bool was_closed = false;
+
+    sent_size = client_socket.sendall(&barrack_id_buffer, sizeof(barrack_id_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&light_factory_id_buffer, sizeof(light_factory_id_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    sent_size = client_socket.sendall(&heavy_factory_id_buffer, sizeof(heavy_factory_id_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
+
+    return;
+}
+
+void Protocol::receive_creators(int& barrack_id, int& light_factory_id, int& heavy_factory_id, Socket& client_socket){
+    
+    int16_t barrack_id_buffer;
+    int16_t _barrack_id;
+
+    int16_t light_factory_id_buffer;
+    int16_t _light_factory_id;
+
+    int16_t heavy_factory_id_buffer;
+    int16_t _heavy_factory_id;
+
+    int recv_size = -1;
+    bool was_closed = false;
+
+    recv_size = client_socket.recvall(&barrack_id_buffer, sizeof(barrack_id_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _barrack_id = (int16_t) ntohs(barrack_id_buffer);
+    barrack_id = (int) _barrack_id;
+
+
+    recv_size = client_socket.recvall(&light_factory_id_buffer, sizeof(light_factory_id_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _light_factory_id = (int16_t) ntohs(light_factory_id_buffer);
+    light_factory_id = (int) _light_factory_id;
+
+
+    recv_size = client_socket.recvall(&heavy_factory_id_buffer, sizeof(heavy_factory_id_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _heavy_factory_id = (int16_t) ntohs(heavy_factory_id_buffer);
+    heavy_factory_id = (int) _heavy_factory_id;
 
     return;
 }

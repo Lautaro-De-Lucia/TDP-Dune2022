@@ -157,11 +157,23 @@ void CMovable::render(player_t player_faction, SDL2pp::Renderer& renderer, int c
     int ypos = this->position.y*TILE_SIZE-cam_pos_y+this->rel_pos_y;
     int xdim = this->dim_x*TILE_SIZE;
     int ydim = this->dim_y*TILE_SIZE;
+    
+    animation_t animation = ANIMATION_IDLE;
+    if(this->rel_pos_x == 4 || this->rel_pos_y == 4)
+        animation = MOVING_1;
+    if(this->rel_pos_x == 8 || this->rel_pos_y == 8)
+        animation = MOVING_2;
+    if(this->rel_pos_x == 12 || this->rel_pos_y == 12)
+        animation = MOVING_1;
+    if(this->sp == true && animation == ANIMATION_IDLE)
+        animation = SPECIAL;
+
     renderer.Copy(
-        this->textures.getTexture(this->type,(player_t)this->faction,this->dir).SetColorMod(this->color.r,this->color.g,this->color.b),
+        this->textures.getTexture(this->type,(player_t)this->faction,animation,this->dir).SetColorMod(this->color.r,this->color.g,this->color.b),
         SDL2pp::NullOpt,
         SDL2pp::Rect(xpos,ypos,xdim,ydim)
     );
+
     if (this->selected == true && this->faction == player_faction)
         renderer.Copy(
             lp_texture,
