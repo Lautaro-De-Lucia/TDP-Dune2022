@@ -55,8 +55,11 @@ class Player {
    std::vector<bool> updates;
    bool left_click;
    bool right_click;
-   bool spacebar;
    bool selection;
+   bool w_key;
+   bool a_key;
+   bool s_key;
+   bool d_key;   
    bool new_unit_available;
    player_t faction;
    AudioPlayer audio;

@@ -39,8 +39,11 @@ textures(textures)
     this->building_held = -1;
     this->left_click = false;
     this->right_click = false;
-    this->spacebar = false;
     this->selection = false;
+    this->w_key = false;
+    this->a_key = false;
+    this->s_key = false;
+    this->d_key = false; 
     this->new_unit_available = true;
     this->faction = faction;
 
@@ -104,17 +107,10 @@ void Player::play(){
             if (!game_has_started)
                 this->camera.move(0,1);
 
-            if (this->spacebar) {
-                if (x > 0 && x < 80) this->camera.move(-2,0);
-                if (x > 1010 && x < 1090) this->camera.move(2,0);
-                if (y > 0 && y < 60) this->camera.move(0,-2);
-                if (y > 660 && y < 720) this->camera.move(0,2);
-
-                if (x >= 80 && x < 160) this->camera.move(-1,0);
-                if (x > 930 && x <= 1010) this->camera.move(1,0);
-                if (y >= 60 && y < 120) this->camera.move(0,-1);
-                if (y > 600 && y <= 660) this->camera.move(0,1);
-            }
+            if (this->a_key) this->camera.move(-2,0);
+            if (this->d_key) this->camera.move(2,0);
+            if (this->w_key) this->camera.move(0,-2);
+            if (this->s_key) this->camera.move(0,2);
 
             //  Obtenemos la instrucción del mouse
             mouse.getEvent(&event);
@@ -125,13 +121,25 @@ void Player::play(){
             switch(event.type) {
 
                 case SDL_KEYDOWN:
-                    if (event.key.keysym.scancode == SDL_SCANCODE_SPACE)
-                        this->spacebar = true;
+                    if (event.key.keysym.scancode == SDL_SCANCODE_W)
+                        this->w_key = true;
+                    if (event.key.keysym.scancode == SDL_SCANCODE_A)
+                        this->a_key = true;
+                    if (event.key.keysym.scancode == SDL_SCANCODE_S)
+                        this->s_key = true;
+                    if (event.key.keysym.scancode == SDL_SCANCODE_D)
+                        this->d_key = true;
                     break;
 
                 case SDL_KEYUP:
-                    if (event.key.keysym.scancode == SDL_SCANCODE_SPACE)
-                        this->spacebar = false;
+                    if (event.key.keysym.scancode == SDL_SCANCODE_W)
+                        this->w_key = false;
+                    if (event.key.keysym.scancode == SDL_SCANCODE_A)
+                        this->a_key = false;
+                    if (event.key.keysym.scancode == SDL_SCANCODE_S)
+                        this->s_key = false;
+                    if (event.key.keysym.scancode == SDL_SCANCODE_D)
+                        this->d_key = false;
                     break;
 
                 case SDL_MOUSEBUTTONDOWN:
