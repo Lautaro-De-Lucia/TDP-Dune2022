@@ -30,6 +30,7 @@ class Server {
       std::map<int,std::vector<response_t>> responses;
       std::map<int,std::vector<creation_t>> creation_data;
       std::map<player_t,std::map<unit_t,int>> unit_creation_time;
+      std::map<player_t,int> time_penalty;
       // std::map<player_t,std::map<unit_t,int>> units_to_create;
       std::map<player_t,std::map<unit_t,int>> unit_time;
       std::map<player_t,std::map<building_t,std::queue<unit_t>>> creating_queues;

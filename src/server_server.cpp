@@ -2,7 +2,7 @@
 
 extern std::map<color_t,SDL_Color> colors;
 
-#define MAX_CONNECTIONS 2
+#define MAX_CONNECTIONS 1
 
 int ID = 0;
 
@@ -140,13 +140,9 @@ void Server::handleInstruction(std::unique_ptr<instruction_t> & INS) {
 
 
 void Server::handleInstruction(building_create_t & INS) {
-    //int & wait_time = this->players[INS.player_ID]->getConstructionWait(); 
-    //if(wait_time >= 0)
-    //    return;
     this->responses[INS.player_ID].push_back(
         this->game.createBuilding(INS.faction,(building_t)INS.type,INS.pos_x,INS.pos_y,this->players[INS.player_ID]->getSpice(),this->players[INS.player_ID]->getEnergy())
     );
-    //wait_time = 100;
 }
 
 void Server::handleInstruction(unit_create_t & INS) {
@@ -183,9 +179,16 @@ void Server::sendResponses() {
 }
 
 void Server::update(){    
-    for(std::unique_ptr<ClientHandler>& player : this->players )
+    for(std::unique_ptr<ClientHandler>& player : this->players){
+        int & energy = player->getEnergy();
+        if(energy < 0)
+            this->time_penalty[player->getFaction()] = 0,
+            this->time_penalty[player->getFaction()] += round(abs(energy/100));
+        else
+            this->time_penalty[player->getFaction()] = 0;
         for(building_t CREATOR : creators)
-        this->responses[player->getID()].push_back(checkCreation(player->getFaction(),CREATOR));
+            this->responses[player->getID()].push_back(checkCreation(player->getFaction(),CREATOR));
+    }
     this->game.update();
 }
 
@@ -209,7 +212,7 @@ response_t Server::checkCreation(player_t faction, building_t creator) {
                 this->unit_time[faction][queued],
                 this->unit_creation_time[faction][queued])
             );
-    if(this->unit_time[faction][queued] >= this->unit_creation_time[faction][queued]){
+    if(this->unit_time[faction][queued] >= this->unit_creation_time[faction][queued]+this->time_penalty[faction]){
         response_t res;
         res = this->game.createUnit(faction,queued,this->getPlayer(faction)->getSpice());
         if (res != RES_CREATE_UNIT_SUCCESS){

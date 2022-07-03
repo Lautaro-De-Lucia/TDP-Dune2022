@@ -35,7 +35,7 @@ textures(textures)
     this->c_spice = c_spice;
     this->energy = energy;
     this->c_energy = c_energy;
-    this->efficiency = 1;
+    this->time_penalty = 0;
     this->construction_time = CONSTRUCTION_TIME;
     this->is_holding_building = false;
     this->building_held = -1;
@@ -335,10 +335,10 @@ bool Player::contains(int ID) {
 }
 
 void Player::update() {
-    if(this->construction_time < CONSTRUCTION_TIME){
+    if(this->construction_time < (CONSTRUCTION_TIME + this->time_penalty)){
         std::cout <<"construction time: "<< construction_time << std::endl;
-        this->construction_time+=efficiency;
-        this->hud.setBuildButtonColor(this->construction_time/CONSTRUCTION_TIME,faction_colours[this->faction]);
+        this->construction_time+=1;
+        this->hud.setBuildButtonColor(this->construction_time/(CONSTRUCTION_TIME+this->time_penalty),faction_colours[this->faction]);
     }
     //std::cout << "Construction time: "<<construction_time << std::endl;
     //  Setup Variables
@@ -351,6 +351,14 @@ void Player::update() {
     this->spice = spice;
     this->c_spice = c_spice;
     this->energy = energy;
+
+    if(energy < 0){
+        this->time_penalty = 0;
+        this->time_penalty = round(abs(energy))/100;
+        this->print("Current energy debt: " + std::to_string(abs(energy)), DATA_PATH FONT_IMPACT_PATH, 220, 300, 10, colors[RED], 1000);   
+    } else { 
+        this->time_penalty = 0;
+    }
     
     //  Update the board
     //  Get values in sand positions

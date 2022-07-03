@@ -50,7 +50,7 @@ class Player {
    size_t c_energy;
    double construction_time;
    int energy;
-   double efficiency;
+   int time_penalty;
    std::vector<creation_t> creation_data;
    std::map<building_t, int> creators;
    std::map<int, std::unique_ptr<CSelectable>> elements;
