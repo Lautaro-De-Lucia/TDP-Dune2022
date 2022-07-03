@@ -502,7 +502,7 @@ void Player::update() {
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(AIR_TRAP,id,faction,lp,pos_x,pos_y,AIR_TRAP_DIM_X,AIR_TRAP_DIM_Y,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
                     this->updates.push_back(true);  
-                    if (faction == this->faction)
+                    if (faction == (int) this->faction)
                         this->audio.play(CRUSH1);
                 }     
                 break;
@@ -514,7 +514,7 @@ void Player::update() {
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(REFINERY,id,faction,lp,pos_x,pos_y,REFINERY_DIM_X,REFINERY_DIM_Y,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
                     this->updates.push_back(true);
-                    if (faction == this->faction)
+                    if (faction == (int) this->faction)
                         this->audio.play(CRUSH1);
                 } 
                 break;
@@ -526,7 +526,7 @@ void Player::update() {
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(BARRACK,id,faction,lp,pos_x,pos_y,BARRACK_DIM_X,BARRACK_DIM_Y,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
                     this->updates.push_back(true);
-                    if (faction == this->faction)
+                    if (faction == (int) this->faction)
                         this->audio.play(CRUSH1);
                 }  
                 break;   
@@ -538,7 +538,7 @@ void Player::update() {
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(LIGHT_FACTORY,id,faction,lp,pos_x,pos_y,LIGHT_FACTORY_DIM_X,LIGHT_FACTORY_DIM_Y,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
                     this->updates.push_back(true);
-                    if (faction == this->faction)
+                    if (faction == (int) this->faction)
                         this->audio.play(CRUSH1);
                 }  
                 break;  
@@ -550,7 +550,7 @@ void Player::update() {
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(HEAVY_FACTORY,id,faction,lp,pos_x,pos_y,HEAVY_FACTORY_DIM_X,HEAVY_FACTORY_DIM_Y,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
                     this->updates.push_back(true);
-                    if (faction == this->faction)
+                    if (faction == (int) this->faction)
                         this->audio.play(CRUSH1);
                 }  
                 break;      
@@ -562,7 +562,7 @@ void Player::update() {
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(SILO,id,faction,lp,pos_x,pos_y,SILO_DIM_X,SILO_DIM_Y,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
                     this->updates.push_back(true);
-                    if (faction == this->faction)
+                    if (faction == (int) this->faction)
                         this->audio.play(CRUSH1);
                 }  
                 break;    
@@ -574,7 +574,7 @@ void Player::update() {
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(PALACE,id,faction,lp,pos_x,pos_y,PALACE_DIM_X,PALACE_DIM_Y,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
                     this->updates.push_back(true);
-                    if (faction == this->faction)
+                    if (faction == (int) this->faction)
                         this->audio.play(CRUSH1);
                 }  
                 break;                      
@@ -591,10 +591,10 @@ void Player::update() {
                 switch (_type)
                 {
                 case SEL_INFANTRY: case SEL_FREMEN: case SEL_SARDAUKAR:
-                    this->removeAttacker(id);
+                    this->removeAttacker(_id);
                     this->addCorpse(_type, _pos, clock());
                 case SEL_TRIKE: case SEL_TANK: case SEL_DEVASTATOR:
-                    this->removeAttacker(id);
+                    this->removeAttacker(_id);
                     break;
                 default:
                     break;
