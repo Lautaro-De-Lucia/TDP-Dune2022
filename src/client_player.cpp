@@ -340,7 +340,7 @@ bool Player::contains(int ID) {
 void Player::update() {
     if(this->construction_time > 0)
         this->construction_time--;
-    //std::cout << "Construction time: "<<construction_time << std::endl;
+    std::cout << "Construction time: "<<construction_time << std::endl;
     //  Setup Variables
     int id,faction,lp,pos_x,pos_y,speed,direction,energy,spice,c_spice; //  Values
     bool selected,moving,harvesting,attacking,waiting; //  State flags
@@ -632,7 +632,7 @@ void Player::renderCreationData() {
     for(creation_t & c : this->creation_data){
         Position pos = this->elements[c.creator_ID]->getPosition();
         SDL2pp::Texture & progress = this->textures.getCreationProgress(std::round(((double)c.current_time/c.total_time)*100));
-        //std::cout << "Rendering progress bar at position: (" << pos.x << "," << pos.y << ")" << std::endl;
+        std::cout << "Rendering progress bar at position: (" << pos.x << "," << pos.y << ")" << std::endl;
         this->game_renderer.Copy(
             progress,
             SDL2pp::NullOpt,
