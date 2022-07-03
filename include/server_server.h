@@ -17,7 +17,7 @@
 
 #define INIT_SPICE 20000
 #define INIT_CSPICE 20000
-#define INIT_ENERGY 3000
+#define INIT_ENERGY 2000
 #define INIT_CENERGY 5000
 
 class Server {

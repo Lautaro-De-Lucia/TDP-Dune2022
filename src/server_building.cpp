@@ -16,8 +16,6 @@ bool Building::canCostTheGame(){return false;}
 response_t Building::place(Board& board, int pos_x, int pos_y, int& spice,int& energy){    
     if ((spice - this->spice) < 0)
         return RES_CREATE_BUILDING_FAILURE_SPICE;
-    if ((energy - this->energy) < 0)
-        return RES_CREATE_BUILDING_FAILURE_ENERGY;
     if (board.canPlace(Position(pos_x,pos_y),this->dim_x,this->dim_y) == FAILED_TO_ADD)
         return RES_CREATE_BUILDING_FAILURE_TERRAIN;
     this->setPosition(Position(pos_x,pos_y));
