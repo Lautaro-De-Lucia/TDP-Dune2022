@@ -210,7 +210,7 @@ response_t Server::checkCreation(player_t faction, building_t creator) {
                 this->game.getCreator(faction,queued),
                 queued,
                 this->unit_time[faction][queued],
-                this->unit_creation_time[faction][queued])
+                this->unit_creation_time[faction][queued]+this->time_penalty[faction])
             );
     if(this->unit_time[faction][queued] >= this->unit_creation_time[faction][queued]+this->time_penalty[faction]){
         response_t res;

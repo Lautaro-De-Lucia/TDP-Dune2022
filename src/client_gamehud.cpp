@@ -121,7 +121,12 @@ void GameHud::render(SDL2pp::Renderer& renderer){
 	}
 
 	SDL2pp::Texture energy_texture(renderer, ENERGY_PATH);
-	renderer.Copy(energy_texture,SDL2pp::NullOpt,SDL2pp::Rect(1098,678-this->energy/20,7,6+this->energy/20));
+	
+	if(this->energy <= 0)
+		energy_texture.SetColorMod(255,0,0),
+		renderer.Copy(energy_texture,SDL2pp::NullOpt,SDL2pp::Rect(1098,678-100/20,7,6+100/20));
+	else
+		renderer.Copy(energy_texture,SDL2pp::NullOpt,SDL2pp::Rect(1098,678-this->energy/20,7,6+this->energy/20));
 
 	std::string spice_values;
 	spice_values.append(std::to_string(this->spice));
