@@ -590,7 +590,7 @@ void Player::update() {
                 this->addExplosion(_id, _type, _pos);
                 switch (_type)
                 {
-                case TRIKE: case INFANTRY: case FREMEN: case SARDAUKAR: case TANK: case DEVASTATOR:
+                case SEL_TRIKE: case SEL_INFANTRY: case SEL_FREMEN: case SEL_SARDAUKAR: case SEL_TANK: case SEL_DEVASTATOR:
                     this->removeAttacker(id);
                     break;
                 default:
