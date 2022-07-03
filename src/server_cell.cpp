@@ -63,6 +63,7 @@ bool Cell::canTraverse(){return terrain->canTraverse();}
 //  bool Cell::canTraverse(){return (terrain->canTraverse() && !(this->isOccupied()));}
 bool Cell::canHarvest(){return (terrain->canExtract() && !(this->isOccupied()));}
 bool Cell::canBuild(){return (terrain->canBuild() && !(this->isOccupied()));}
+bool Cell::canSlowDown(){return terrain->canSlowDown();}
 size_t Cell::extractSpice(){return this->terrain->extractSpice();}
 
 void Cell::print(){}

@@ -436,7 +436,7 @@ void Trike::update(State & state, Board& board){
             this->waiting = false;
             next_cell.reserve(this->ID);
             this->next_position = next;          
-            this->current_time+=this->speed;    //  Increase counter
+            this->current_time+=(this->speed-board.getCell(this->position.x,this->position.y).canSlowDown());    //  Increase counter
         } else {
             //  Si no puedo ir 
             if (this->remaining_path.size() <= 1) {

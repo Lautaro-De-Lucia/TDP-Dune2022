@@ -28,6 +28,7 @@ class Cell {
     bool canTraverse();
     bool canHarvest();
     bool canBuild();
+    bool canSlowDown();
     void print();
     void reserve(int ID);
     void unReserve();
