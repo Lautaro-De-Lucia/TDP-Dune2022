@@ -21,6 +21,12 @@
 #define MORTAR1_PATH "/sounds/MORTAR1.WAV"
 #define MEDTANK1_PATH "/sounds/MEDTANK1.WAV"
 
+#define CRUSH1_PATH "/sounds/CRUSH1.WAV"
+
+#define KILLGUY7_PATH "/sounds/KILLGUY7.WAV"
+#define KILLGUY8_PATH "/sounds/KILLGUY8.WAV"
+#define KILLGUY9_PATH "/sounds/KILLGUY9.WAV"
+
 enum sfx_t {
     HOUSE_CHOSEN,
     GAME_START,
@@ -32,7 +38,11 @@ enum sfx_t {
     EXPLSML2,
     SONIC3,
     MORTAR1,
-    MEDTANK1
+    MEDTANK1,
+    CRUSH1,
+    KILLGUY7,
+    KILLGUY8,
+    KILLGUY9
 };
 
 enum music_t {

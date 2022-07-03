@@ -491,7 +491,7 @@ void Player::update() {
                     this->updates[id] = true;
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(CONSTRUCTION_YARD,id,faction,lp,pos_x,pos_y,CONSTRUCTION_YARD_DIM_X,CONSTRUCTION_YARD_DIM_Y,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
-                    this->updates.push_back(true);  
+                    this->updates.push_back(true);
                 }  
                 break;    
             case SEL_AIR_TRAP:
@@ -502,6 +502,8 @@ void Player::update() {
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(AIR_TRAP,id,faction,lp,pos_x,pos_y,AIR_TRAP_DIM_X,AIR_TRAP_DIM_Y,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
                     this->updates.push_back(true);  
+                    if (faction == this->faction)
+                        this->audio.play(CRUSH1);
                 }     
                 break;
             case SEL_REFINERY:
@@ -511,7 +513,9 @@ void Player::update() {
                     this->updates[id] = true;
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(REFINERY,id,faction,lp,pos_x,pos_y,REFINERY_DIM_X,REFINERY_DIM_Y,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
-                    this->updates.push_back(true);  
+                    this->updates.push_back(true);
+                    if (faction == this->faction)
+                        this->audio.play(CRUSH1);
                 } 
                 break;
             case SEL_BARRACK:
@@ -521,7 +525,9 @@ void Player::update() {
                     this->updates[id] = true;
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(BARRACK,id,faction,lp,pos_x,pos_y,BARRACK_DIM_X,BARRACK_DIM_Y,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
-                    this->updates.push_back(true);  
+                    this->updates.push_back(true);
+                    if (faction == this->faction)
+                        this->audio.play(CRUSH1);
                 }  
                 break;   
             case SEL_LIGHT_FACTORY:
@@ -531,7 +537,9 @@ void Player::update() {
                     this->updates[id] = true;
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(LIGHT_FACTORY,id,faction,lp,pos_x,pos_y,LIGHT_FACTORY_DIM_X,LIGHT_FACTORY_DIM_Y,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
-                    this->updates.push_back(true);  
+                    this->updates.push_back(true);
+                    if (faction == this->faction)
+                        this->audio.play(CRUSH1);
                 }  
                 break;  
             case SEL_HEAVY_FACTORY:
@@ -541,7 +549,9 @@ void Player::update() {
                     this->updates[id] = true;
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(HEAVY_FACTORY,id,faction,lp,pos_x,pos_y,HEAVY_FACTORY_DIM_X,HEAVY_FACTORY_DIM_Y,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
-                    this->updates.push_back(true);  
+                    this->updates.push_back(true);
+                    if (faction == this->faction)
+                        this->audio.play(CRUSH1);
                 }  
                 break;      
             case SEL_SILO:
@@ -551,7 +561,9 @@ void Player::update() {
                     this->updates[id] = true;
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(SILO,id,faction,lp,pos_x,pos_y,SILO_DIM_X,SILO_DIM_Y,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
-                    this->updates.push_back(true);  
+                    this->updates.push_back(true);
+                    if (faction == this->faction)
+                        this->audio.play(CRUSH1);
                 }  
                 break;    
             case SEL_PALACE:
@@ -561,7 +573,9 @@ void Player::update() {
                     this->updates[id] = true;
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(PALACE,id,faction,lp,pos_x,pos_y,PALACE_DIM_X,PALACE_DIM_Y,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
-                    this->updates.push_back(true);  
+                    this->updates.push_back(true);
+                    if (faction == this->faction)
+                        this->audio.play(CRUSH1);
                 }  
                 break;                      
         }

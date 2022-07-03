@@ -89,6 +89,36 @@ AudioPlayer::AudioPlayer(){
     }
     this->sound_effects.insert({MEDTANK1,medtank1});
 
+    Mix_Chunk* crush1 = Mix_LoadWAV(DATA_PATH CRUSH1_PATH);
+    if (crush1 == NULL) {
+        printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+        exit(1);
+    }
+    this->sound_effects.insert({CRUSH1,crush1});
+
+    Mix_Chunk* killguy7 = Mix_LoadWAV(DATA_PATH KILLGUY7_PATH);
+    if (killguy7 == NULL) {
+        printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+        exit(1);
+    }
+    this->sound_effects.insert({KILLGUY7,killguy7});
+
+    Mix_Chunk* killguy8 = Mix_LoadWAV(DATA_PATH KILLGUY8_PATH);
+    if (killguy8 == NULL) {
+        printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+        exit(1);
+    }
+    this->sound_effects.insert({KILLGUY8,killguy8});
+
+    Mix_Chunk* killguy9 = Mix_LoadWAV(DATA_PATH KILLGUY9_PATH);
+    if (killguy9 == NULL) {
+        printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+        exit(1);
+    }
+    this->sound_effects.insert({KILLGUY9,killguy9});
+
+
+
     // MUSIC
 
     Mix_Music* atreides_music = Mix_LoadMUS(DATA_PATH ATREIDES_MUSIC_PATH);
