@@ -93,7 +93,16 @@ creator_mark(game_renderer,DATA_PATH CMARK_PATH)
         this->unit_shot_textures.emplace(UNIT,SDL2pp::Texture(game_renderer,path.c_str())),
         path.clear();
     }
-
+    //  Load Textures for corpses
+    for(unit_t UNIT: units) {
+        if (UNIT == HARVESTER || UNIT == TRIKE || UNIT == TANK || UNIT == DEVASTATOR)
+            continue;
+        path.append(DATA_PATH)
+        .append("/").append("corpses")
+        .append("/").append(stringify(UNIT)).append(".png"),
+        this->corpse_textures.emplace((selectable_t) UNIT,SDL2pp::Texture(game_renderer,path.c_str())),
+        path.clear();
+    }
 };
 
 SDL2pp::Texture & TextureHandler::getTexture(unit_t unit, player_t faction,frame_t animation, direction_t direction){
@@ -140,4 +149,8 @@ SDL2pp::Texture & TextureHandler::getExplosion(int frame, bool is_infantry){
 
 SDL2pp::Texture & TextureHandler::getUnitShot(unit_t unit){
     return this->unit_shot_textures.at(unit);
+}
+
+SDL2pp::Texture & TextureHandler::getCorpse(selectable_t unit){
+    return this->corpse_textures.at(unit);
 }

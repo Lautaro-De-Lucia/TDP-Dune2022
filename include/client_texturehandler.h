@@ -8,7 +8,7 @@
 #define CMARK_PATH "/extrasprites/creator_mark.png"
 
 class TextureHandler {
-    private:
+ private:
     std::map<unit_t,std::map<player_t,std::map<frame_t,std::map<direction_t,SDL2pp::Texture>>>>unit_textures;
     std::map<building_t,std::map<player_t,SDL2pp::Texture>> building_textures;
     std::map<unit_t,SDL2pp::Texture> unit_info_textures; 
@@ -19,8 +19,10 @@ class TextureHandler {
     SDL2pp::Texture creator_mark;
     std::vector<SDL2pp::Texture> explosion_textures;
     std::vector<SDL2pp::Texture> blood_textures;
-    std::map<unit_t,SDL2pp::Texture> unit_shot_textures; 
-    public:
+    std::map<unit_t,SDL2pp::Texture> unit_shot_textures;
+    std::map<selectable_t,SDL2pp::Texture> corpse_textures;
+
+ public:
     TextureHandler(SDL2pp::Renderer & game_renderer);
     SDL2pp::Texture & getTexture(unit_t unit, player_t faction,frame_t frame, direction_t direction);
     SDL2pp::Texture & getTexture(building_t building, player_t faction);
@@ -32,4 +34,5 @@ class TextureHandler {
     SDL2pp::Texture & getCreatorMark();
     SDL2pp::Texture & getExplosion(int frame, bool is_infantry);
     SDL2pp::Texture & getUnitShot(unit_t unit);
+    SDL2pp::Texture & getCorpse(selectable_t unit);
 };

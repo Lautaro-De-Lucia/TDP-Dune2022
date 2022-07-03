@@ -26,6 +26,17 @@ const int CAMERA_INITIAL_POS_Y = 200;
 
 const int GAME_SPEED = 100000;
 
+struct corpse_t {
+  selectable_t type;
+  Position position;
+  clock_t time;
+  corpse_t(selectable_t type, Position position, int time) {
+      this->type = type;
+      this->position = position;
+      this->time = time;
+  }
+};
+
 class Player {
 
  private:
@@ -67,6 +78,8 @@ class Player {
 
    ShotsHandler shotsHandler;
    ExplosionsHandler explosionsHandler;
+   std::vector<corpse_t> corpses;
+  
 
    Player(player_t faction, const char* host_name, const char* service_name,Camera & cam, SDL2pp::Window& window,SDL2pp::Renderer& renderer,TextureHandler & textures, size_t spice, size_t c_spice, int energy, size_t c_energy, std::vector<std::vector<std::string>>& map_data);
 
@@ -103,4 +116,8 @@ class Player {
    void updateAttacker(int id, unit_t type, Position attacker_pos, Position target_pos);
 
    void addExplosion(int id, selectable_t type, Position pos);
+
+   void addCorpse(selectable_t type, Position position, int time);
+
+   void renderCorpses();
 };

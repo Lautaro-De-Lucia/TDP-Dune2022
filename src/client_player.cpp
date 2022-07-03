@@ -590,7 +590,10 @@ void Player::update() {
                 this->addExplosion(_id, _type, _pos);
                 switch (_type)
                 {
-                case SEL_TRIKE: case SEL_INFANTRY: case SEL_FREMEN: case SEL_SARDAUKAR: case SEL_TANK: case SEL_DEVASTATOR:
+                case SEL_INFANTRY: case SEL_FREMEN: case SEL_SARDAUKAR:
+                    this->removeAttacker(id);
+                    this->addCorpse(_type, _pos, clock());
+                case SEL_TRIKE: case SEL_TANK: case SEL_DEVASTATOR:
                     this->removeAttacker(id);
                     break;
                 default:
@@ -766,6 +769,7 @@ void Player::renderHeldBuilding(){
 void Player::render(){
     this->game_renderer.Clear();
     this->renderMap();
+    this->renderCorpses();
     this->printer.render(this->game_renderer);
     for (auto& e : this->elements)
         e.second->render(this->faction,this->game_renderer,this->camera.pos_x,this->camera.pos_y);
@@ -838,4 +842,33 @@ void Player::updateAttacker(int id, unit_t type, Position attacker_pos, Position
 void Player::addExplosion(int id, selectable_t type, Position pos) {
 
     this->explosionsHandler.addExplosion(id, type, pos);
+}
+
+void Player::addCorpse(selectable_t type, Position position, int time) {
+
+    this->corpses.push_back({type, position, time});
+}
+
+void Player::renderCorpses() {
+
+    std::vector<int> corpses_to_remove;
+    clock_t current_time;
+
+    for (size_t i = 0; i < this->corpses.size(); i++) {
+        if (current_time - this->corpses[i].time > 50000000000)
+            corpses_to_remove.push_back(i);
+        else {
+            SDL2pp::Texture & explosion = textures.getCorpse(this->corpses[i].type);
+            int pos_x = this->corpses[i].position.x * TILE_DIM - this->camera.pos_x;
+            int pos_y = this->corpses[i].position.y * TILE_DIM - this->camera.pos_y;
+            this->game_renderer.Copy(
+                explosion,
+                SDL2pp::NullOpt,
+                SDL2pp::Rect(pos_x,pos_y,1,1)
+            );
+        }
+    }
+
+    for (size_t i = 0; i < corpses_to_remove.size(); i++)
+            this->corpses.erase(this->corpses.begin() + corpses_to_remove[i]);
 }
