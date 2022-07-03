@@ -109,6 +109,7 @@ void Harvester::sendState(Protocol & protocol, Socket & client_socket){
         this->LP,
         this->position.x,
         this->position.y,
+        this->speed,
         this->direction,
         this->moving,
         this->selected,
@@ -150,6 +151,12 @@ void Harvester::receiveDamage(int damage){
 
 void Harvester::update(State& state, Board& board){
     
+    if(board.getCell(this->position.x,this->position.y).canSlowDown()){
+        this->speed = HARVESTER_SPEED/2;
+    } else{
+        this->speed = HARVESTER_SPEED;
+    }
+
     Selectable::update(state,board);
 
     if (this->pending_move.size() != 0) {
@@ -380,7 +387,13 @@ bool Trike::enemySearch(Board & board){
 
 void Trike::update(State & state, Board& board){
     Selectable::update(state,board);
-    
+
+    if(board.getCell(this->position.x,this->position.y).canSlowDown()){
+        this->speed = TRIKE_SPEED/2;
+    } else{
+        this->speed = TRIKE_SPEED;
+    }
+
     if (this->pending_move.size() != 0) {
         if (this->current_time == 0) {
             Position move_to = this->pending_move.front();
@@ -435,8 +448,8 @@ void Trike::update(State & state, Board& board){
         if(next_cell.canTraverse() && (next_cell.getReserveID() == -1 || next_cell.getReserveID() == this->ID) && !next_cell.isOccupied()){            //  Si puedo ir, ocuparla
             this->waiting = false;
             next_cell.reserve(this->ID);
-            this->next_position = next;          
-            this->current_time+=(this->speed-board.getCell(this->position.x,this->position.y).canSlowDown());    //  Increase counter
+            this->next_position = next;    
+            this->current_time+=this->speed;    //  Increase counter
         } else {
             //  Si no puedo ir 
             if (this->remaining_path.size() <= 1) {
@@ -473,6 +486,7 @@ void Trike::sendState(Protocol & protocol, Socket & client_socket){
         this->LP,
         this->position.x,
         this->position.y,
+        this->speed,
         this->direction,
         this->moving,
         this->selected,
@@ -573,6 +587,12 @@ bool Fremen::enemySearch(Board & board){
 void Fremen::update(State & state, Board& board){
     Selectable::update(state,board);
     
+    if(board.getCell(this->position.x,this->position.y).canSlowDown()){
+        this->speed = FREMEN_SPEED/2;
+    } else{
+        this->speed = FREMEN_SPEED;
+    }
+
     if (this->pending_move.size() != 0) {
         if (this->current_time == 0) {
             Position move_to = this->pending_move.front();
@@ -665,6 +685,7 @@ void Fremen::sendState(Protocol & protocol, Socket & client_socket){
         this->LP,
         this->position.x,
         this->position.y,
+        this->speed,
         this->direction,
         this->moving,
         this->selected,
@@ -765,6 +786,12 @@ bool Infantry::enemySearch(Board & board){
 void Infantry::update(State & state, Board& board){
     Selectable::update(state,board);
     
+    if(board.getCell(this->position.x,this->position.y).canSlowDown()){
+        this->speed = INFANTRY_SPEED/2;
+    } else{
+        this->speed = INFANTRY_SPEED;
+    }
+
     if (this->pending_move.size() != 0) {
         if (this->current_time == 0) {
             Position move_to = this->pending_move.front();
@@ -857,6 +884,7 @@ void Infantry::sendState(Protocol & protocol, Socket & client_socket){
         this->LP,
         this->position.x,
         this->position.y,
+        this->speed,
         this->direction,
         this->moving,
         this->selected,
@@ -1049,6 +1077,7 @@ void Tank::sendState(Protocol & protocol, Socket & client_socket){
         this->LP,
         this->position.x,
         this->position.y,
+        this->speed,
         this->direction,
         this->moving,
         this->selected,
@@ -1241,6 +1270,7 @@ void Devastator::sendState(Protocol & protocol, Socket & client_socket){
         this->LP,
         this->position.x,
         this->position.y,
+        this->speed,
         this->direction,
         this->moving,
         this->selected,
@@ -1248,7 +1278,7 @@ void Devastator::sendState(Protocol & protocol, Socket & client_socket){
         this->enemy_position.x,
         this->enemy_position.y,
         this->waiting,
-        client_socket); 
+        client_socket);  
 }
 
 
@@ -1341,6 +1371,12 @@ bool Sardaukar::enemySearch(Board & board){
 void Sardaukar::update(State & state, Board& board){
     Selectable::update(state,board);
     
+    if(board.getCell(this->position.x,this->position.y).canSlowDown()){
+        this->speed = SARDAUKAR_SPEED/2;
+    } else{
+        this->speed = SARDAUKAR_SPEED;
+    }
+
     if (this->pending_move.size() != 0) {
         if (this->current_time == 0) {
             Position move_to = this->pending_move.front();
@@ -1433,6 +1469,7 @@ void Sardaukar::sendState(Protocol & protocol, Socket & client_socket){
         this->LP,
         this->position.x,
         this->position.y,
+        this->speed,
         this->direction,
         this->moving,
         this->selected,

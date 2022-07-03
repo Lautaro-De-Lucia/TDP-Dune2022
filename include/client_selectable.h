@@ -51,7 +51,7 @@ class CSelectable {
     health_t health;
  public:
     CSelectable(int id,int faction,int lp,int pos_x,int pos_y,int dim_x,int dim_y,SDL2pp::Renderer& renderer,TextureHandler & textures, const std::string& lp_path);
-    virtual void update(player_t player_faction, int lp,int pos_x,int pos_y,direction_t direction,bool moving,bool selected,bool special,bool waiting,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
+    virtual void update(player_t player_faction, int lp,int pos_x,int pos_y,int speed,direction_t direction,bool moving,bool selected,bool special,bool waiting,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
     virtual void render(player_t player_faction, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
     virtual Position getPosition();
     player_t getFaction();
@@ -77,7 +77,7 @@ class CMovable : public CSelectable {
  public:
     CMovable(unit_t type,int id,int faction,int lp,int pos_x,int pos_y,int dim_x,int dim_y,SDL2pp::Renderer& renderer,TextureHandler & textures, const std::string& lp_path);
     virtual void render(player_t player_faction, SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
-    virtual void update(player_t player_faction, int lp,int pos_x,int pos_y,direction_t direction,bool moving,bool selected,bool special,bool waiting,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
+    virtual void update(player_t player_faction, int lp,int pos_x,int pos_y,int speed,direction_t direction,bool moving,bool selected,bool special,bool waiting,SDL2pp::Renderer& renderer, int cam_pos_x, int cam_pos_y);
     virtual Position getPosition();
     virtual selectable_t getType();
 }; 

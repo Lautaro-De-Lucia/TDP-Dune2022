@@ -654,12 +654,15 @@ void Protocol::receive_selectable_type(selectable_t& type, Socket& client_socket
     return;
 }
 
-void Protocol::send_trike(int id, int faction, int lp, int pos_x, int pos_y,int direction, bool moving, bool selected, bool attacking, int e_pos_x, int e_pos_y, bool waiting, Socket& client_socket) {
+void Protocol::send_trike(int id, int faction, int lp, int pos_x, int pos_y,int speed,int direction, bool moving, bool selected, bool attacking, int e_pos_x, int e_pos_y, bool waiting, Socket& client_socket) {
 
     this->send_selectable_type(SEL_TRIKE, client_socket);
 
     this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 
+    uint8_t _speed = (uint8_t) speed;
+    uint8_t speed_buffer = (uint8_t) _speed;
+
     uint8_t _direction = (uint8_t) direction;
     uint8_t direction_buffer = (uint8_t) _direction;
 
@@ -680,6 +683,9 @@ void Protocol::send_trike(int id, int faction, int lp, int pos_x, int pos_y,int 
 
     int sent_size = -1;
     bool was_closed = false;
+
+    sent_size = client_socket.sendall(&speed_buffer, sizeof(speed_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
 
     sent_size = client_socket.sendall(&direction_buffer, sizeof(direction_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
@@ -702,12 +708,15 @@ void Protocol::send_trike(int id, int faction, int lp, int pos_x, int pos_y,int 
     return;
 }
 
-void Protocol::send_fremen(int id, int faction, int lp, int pos_x, int pos_y,int direction, bool moving, bool selected, bool attacking, int e_pos_x, int e_pos_y, bool waiting, Socket& client_socket) {
+void Protocol::send_fremen(int id, int faction, int lp, int pos_x, int pos_y,int speed,int direction, bool moving, bool selected, bool attacking, int e_pos_x, int e_pos_y, bool waiting, Socket& client_socket) {
 
     this->send_selectable_type(SEL_FREMEN, client_socket);
 
     this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 
+    uint8_t _speed = (uint8_t) speed;
+    uint8_t speed_buffer = (uint8_t) _speed;
+
     uint8_t _direction = (uint8_t) direction;
     uint8_t direction_buffer = (uint8_t) _direction;
 
@@ -728,6 +737,9 @@ void Protocol::send_fremen(int id, int faction, int lp, int pos_x, int pos_y,int
 
     int sent_size = -1;
     bool was_closed = false;
+
+    sent_size = client_socket.sendall(&speed_buffer, sizeof(speed_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
 
     sent_size = client_socket.sendall(&direction_buffer, sizeof(direction_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
@@ -750,12 +762,15 @@ void Protocol::send_fremen(int id, int faction, int lp, int pos_x, int pos_y,int
     return;
 }
 
-void Protocol::send_infantry(int id, int faction, int lp, int pos_x, int pos_y,int direction, bool moving, bool selected, bool attacking, int e_pos_x, int e_pos_y, bool waiting, Socket& client_socket) {
+void Protocol::send_infantry(int id, int faction, int lp, int pos_x, int pos_y,int speed,int direction, bool moving, bool selected, bool attacking, int e_pos_x, int e_pos_y, bool waiting, Socket& client_socket) {
 
     this->send_selectable_type(SEL_INFANTRY, client_socket);
 
     this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 
+    uint8_t _speed = (uint8_t) speed;
+    uint8_t speed_buffer = (uint8_t) _speed;
+
     uint8_t _direction = (uint8_t) direction;
     uint8_t direction_buffer = (uint8_t) _direction;
 
@@ -776,6 +791,9 @@ void Protocol::send_infantry(int id, int faction, int lp, int pos_x, int pos_y,i
 
     int sent_size = -1;
     bool was_closed = false;
+
+    sent_size = client_socket.sendall(&speed_buffer, sizeof(speed_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
 
     sent_size = client_socket.sendall(&direction_buffer, sizeof(direction_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
@@ -799,12 +817,15 @@ void Protocol::send_infantry(int id, int faction, int lp, int pos_x, int pos_y,i
 }
 
 
-void Protocol::send_sardaukar(int id, int faction, int lp, int pos_x, int pos_y,int direction, bool moving, bool selected, bool attacking, int e_pos_x, int e_pos_y, bool waiting, Socket& client_socket) {
+void Protocol::send_sardaukar(int id, int faction, int lp, int pos_x, int pos_y,int speed,int direction, bool moving, bool selected, bool attacking, int e_pos_x, int e_pos_y, bool waiting, Socket& client_socket) {
 
     this->send_selectable_type(SEL_SARDAUKAR, client_socket);
 
     this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 
+    uint8_t _speed = (uint8_t) speed;
+    uint8_t speed_buffer = (uint8_t) _speed;
+
     uint8_t _direction = (uint8_t) direction;
     uint8_t direction_buffer = (uint8_t) _direction;
 
@@ -825,6 +846,9 @@ void Protocol::send_sardaukar(int id, int faction, int lp, int pos_x, int pos_y,
 
     int sent_size = -1;
     bool was_closed = false;
+
+    sent_size = client_socket.sendall(&speed_buffer, sizeof(speed_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
 
     sent_size = client_socket.sendall(&direction_buffer, sizeof(direction_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
@@ -847,12 +871,15 @@ void Protocol::send_sardaukar(int id, int faction, int lp, int pos_x, int pos_y,
     return;
 }
 
-void Protocol::send_tank(int id, int faction, int lp, int pos_x, int pos_y,int direction, bool moving, bool selected, bool attacking, int e_pos_x, int e_pos_y, bool waiting, Socket& client_socket) {
+void Protocol::send_tank(int id, int faction, int lp, int pos_x, int pos_y,int speed,int direction, bool moving, bool selected, bool attacking, int e_pos_x, int e_pos_y, bool waiting, Socket& client_socket) {
 
     this->send_selectable_type(SEL_TANK, client_socket);
 
     this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 
+    uint8_t _speed = (uint8_t) speed;
+    uint8_t speed_buffer = (uint8_t) _speed;
+
     uint8_t _direction = (uint8_t) direction;
     uint8_t direction_buffer = (uint8_t) _direction;
 
@@ -873,6 +900,9 @@ void Protocol::send_tank(int id, int faction, int lp, int pos_x, int pos_y,int d
 
     int sent_size = -1;
     bool was_closed = false;
+
+    sent_size = client_socket.sendall(&speed_buffer, sizeof(speed_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
 
     sent_size = client_socket.sendall(&direction_buffer, sizeof(direction_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
@@ -895,12 +925,15 @@ void Protocol::send_tank(int id, int faction, int lp, int pos_x, int pos_y,int d
     return;
 }
 
-void Protocol::send_devastator(int id, int faction, int lp, int pos_x, int pos_y,int direction, bool moving, bool selected, bool attacking, int e_pos_x, int e_pos_y, bool waiting, Socket& client_socket) {
+void Protocol::send_devastator(int id, int faction, int lp, int pos_x, int pos_y,int speed,int direction, bool moving, bool selected, bool attacking, int e_pos_x, int e_pos_y, bool waiting, Socket& client_socket) {
 
     this->send_selectable_type(SEL_DEVASTATOR, client_socket);
 
     this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 
+    uint8_t _speed = (uint8_t) speed;
+    uint8_t speed_buffer = (uint8_t) _speed;
+
     uint8_t _direction = (uint8_t) direction;
     uint8_t direction_buffer = (uint8_t) _direction;
 
@@ -921,6 +954,9 @@ void Protocol::send_devastator(int id, int faction, int lp, int pos_x, int pos_y
 
     int sent_size = -1;
     bool was_closed = false;
+
+    sent_size = client_socket.sendall(&speed_buffer, sizeof(speed_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
 
     sent_size = client_socket.sendall(&direction_buffer, sizeof(direction_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
@@ -943,18 +979,20 @@ void Protocol::send_devastator(int id, int faction, int lp, int pos_x, int pos_y
     return;
 }
 
-void Protocol::send_harvester(int id, int faction, int lp, int pos_x, int pos_y,int direction,bool moving, bool selected, int spice, bool harvesting,bool waiting, Socket& client_socket) {
+void Protocol::send_harvester(int id, int faction, int lp, int pos_x, int pos_y,int speed,int direction,bool moving, bool selected, int spice, bool harvesting,bool waiting, Socket& client_socket) {
 
     this->send_selectable_type(SEL_HARVESTER, client_socket);
 
     this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 
+    uint8_t _speed = (uint8_t) speed;
     uint8_t _direction = (uint8_t) direction;
     uint8_t _moving = (uint8_t) moving;
     uint16_t _spice = (uint16_t) spice;
     uint8_t _harvesting = (uint8_t) harvesting;
     uint8_t _waiting = (uint8_t) waiting;
 
+    uint8_t speed_buffer = (uint8_t) _speed;
     uint8_t direction_buffer = (uint8_t) _direction;
     uint8_t moving_buffer = (uint8_t) _moving;
     uint16_t spice_buffer = (uint16_t) htons(_spice);
@@ -964,6 +1002,8 @@ void Protocol::send_harvester(int id, int faction, int lp, int pos_x, int pos_y,
     int sent_size = -1;
     bool was_closed = false;
 
+    sent_size = client_socket.sendall(&speed_buffer, sizeof(speed_buffer), &was_closed);
+    handle_dispatch(was_closed, sent_size);
 
     sent_size = client_socket.sendall(&direction_buffer, sizeof(direction_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
@@ -1053,9 +1093,12 @@ void Protocol::send_refinery(int id, int faction, int lp, int pos_x, int pos_y, 
     this->send_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 }
 
-void Protocol::receive_trike(int& id, int& faction, int& lp, int& pos_x, int& pos_y, int& dir, bool& moving,bool& selected, bool& attacking, int& e_pos_x, int& e_pos_y, bool & waiting, Socket& client_socket) {
+void Protocol::receive_trike(int& id, int& faction, int& lp, int& pos_x, int& pos_y,int& speed, int& dir, bool& moving,bool& selected, bool& attacking, int& e_pos_x, int& e_pos_y, bool & waiting, Socket& client_socket) {
 
     this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    uint8_t speed_buffer;
+    uint8_t _speed;
 
     uint8_t direction_buffer;
     uint8_t _direction;
@@ -1077,6 +1120,11 @@ void Protocol::receive_trike(int& id, int& faction, int& lp, int& pos_x, int& po
 
     int recv_size = -1;
     bool was_closed = false;
+
+    recv_size = client_socket.recvall(&speed_buffer, sizeof(speed_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _speed = (uint8_t) speed_buffer;
+    speed = (int) _speed;
 
     recv_size = client_socket.recvall(&direction_buffer, sizeof(direction_buffer), &was_closed);
     handle_receive(was_closed, recv_size);
@@ -1111,9 +1159,12 @@ void Protocol::receive_trike(int& id, int& faction, int& lp, int& pos_x, int& po
     return;
 }
 
-void Protocol::receive_fremen(int& id, int& faction, int& lp, int& pos_x, int& pos_y, int& dir, bool& moving,bool& selected, bool& attacking, int& e_pos_x, int& e_pos_y, bool & waiting, Socket& client_socket) {
+void Protocol::receive_fremen(int& id, int& faction, int& lp, int& pos_x, int& pos_y,int& speed, int& dir, bool& moving,bool& selected, bool& attacking, int& e_pos_x, int& e_pos_y, bool & waiting, Socket& client_socket) {
 
     this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    uint8_t speed_buffer;
+    uint8_t _speed;
 
     uint8_t direction_buffer;
     uint8_t _direction;
@@ -1135,6 +1186,11 @@ void Protocol::receive_fremen(int& id, int& faction, int& lp, int& pos_x, int& p
 
     int recv_size = -1;
     bool was_closed = false;
+
+    recv_size = client_socket.recvall(&speed_buffer, sizeof(speed_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _speed = (uint8_t) speed_buffer;
+    speed = (int) _speed;
 
     recv_size = client_socket.recvall(&direction_buffer, sizeof(direction_buffer), &was_closed);
     handle_receive(was_closed, recv_size);
@@ -1169,9 +1225,12 @@ void Protocol::receive_fremen(int& id, int& faction, int& lp, int& pos_x, int& p
     return;
 }
 
-void Protocol::receive_infantry(int& id, int& faction, int& lp, int& pos_x, int& pos_y, int& dir, bool& moving,bool& selected, bool& attacking, int& e_pos_x, int& e_pos_y, bool & waiting, Socket& client_socket) {
+void Protocol::receive_infantry(int& id, int& faction, int& lp, int& pos_x, int& pos_y,int& speed, int& dir, bool& moving,bool& selected, bool& attacking, int& e_pos_x, int& e_pos_y, bool & waiting, Socket& client_socket) {
 
     this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    uint8_t speed_buffer;
+    uint8_t _speed;
 
     uint8_t direction_buffer;
     uint8_t _direction;
@@ -1193,6 +1252,11 @@ void Protocol::receive_infantry(int& id, int& faction, int& lp, int& pos_x, int&
 
     int recv_size = -1;
     bool was_closed = false;
+
+    recv_size = client_socket.recvall(&speed_buffer, sizeof(speed_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _speed = (uint8_t) speed_buffer;
+    speed = (int) _speed;
 
     recv_size = client_socket.recvall(&direction_buffer, sizeof(direction_buffer), &was_closed);
     handle_receive(was_closed, recv_size);
@@ -1227,9 +1291,12 @@ void Protocol::receive_infantry(int& id, int& faction, int& lp, int& pos_x, int&
     return;
 }
 
-void Protocol::receive_sardaukar(int& id, int& faction, int& lp, int& pos_x, int& pos_y, int& dir, bool& moving,bool& selected, bool& attacking, int& e_pos_x, int& e_pos_y, bool & waiting, Socket& client_socket) {
+void Protocol::receive_sardaukar(int& id, int& faction, int& lp, int& pos_x, int& pos_y,int& speed, int& dir, bool& moving,bool& selected, bool& attacking, int& e_pos_x, int& e_pos_y, bool & waiting, Socket& client_socket) {
 
     this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    uint8_t speed_buffer;
+    uint8_t _speed;
 
     uint8_t direction_buffer;
     uint8_t _direction;
@@ -1251,6 +1318,11 @@ void Protocol::receive_sardaukar(int& id, int& faction, int& lp, int& pos_x, int
 
     int recv_size = -1;
     bool was_closed = false;
+
+    recv_size = client_socket.recvall(&speed_buffer, sizeof(speed_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _speed = (uint8_t) speed_buffer;
+    speed = (int) _speed;
 
     recv_size = client_socket.recvall(&direction_buffer, sizeof(direction_buffer), &was_closed);
     handle_receive(was_closed, recv_size);
@@ -1285,9 +1357,12 @@ void Protocol::receive_sardaukar(int& id, int& faction, int& lp, int& pos_x, int
     return;
 }
 
-void Protocol::receive_tank(int& id, int& faction, int& lp, int& pos_x, int& pos_y, int& dir, bool& moving,bool& selected, bool& attacking, int& e_pos_x, int& e_pos_y, bool & waiting, Socket& client_socket) {
+void Protocol::receive_tank(int& id, int& faction, int& lp, int& pos_x, int& pos_y,int& speed, int& dir, bool& moving,bool& selected, bool& attacking, int& e_pos_x, int& e_pos_y, bool & waiting, Socket& client_socket) {
 
     this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    uint8_t speed_buffer;
+    uint8_t _speed;
 
     uint8_t direction_buffer;
     uint8_t _direction;
@@ -1309,6 +1384,11 @@ void Protocol::receive_tank(int& id, int& faction, int& lp, int& pos_x, int& pos
 
     int recv_size = -1;
     bool was_closed = false;
+
+    recv_size = client_socket.recvall(&speed_buffer, sizeof(speed_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _speed = (uint8_t) speed_buffer;
+    speed = (int) _speed;
 
     recv_size = client_socket.recvall(&direction_buffer, sizeof(direction_buffer), &was_closed);
     handle_receive(was_closed, recv_size);
@@ -1342,9 +1422,12 @@ void Protocol::receive_tank(int& id, int& faction, int& lp, int& pos_x, int& pos
 
     return;
 }
-void Protocol::receive_devastator(int& id, int& faction, int& lp, int& pos_x, int& pos_y, int& dir, bool& moving,bool& selected, bool& attacking, int& e_pos_x, int& e_pos_y, bool & waiting, Socket& client_socket) {
+void Protocol::receive_devastator(int& id, int& faction, int& lp, int& pos_x, int& pos_y,int& speed, int& dir, bool& moving,bool& selected, bool& attacking, int& e_pos_x, int& e_pos_y, bool & waiting, Socket& client_socket) {
 
     this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
+
+    uint8_t speed_buffer;
+    uint8_t _speed;
 
     uint8_t direction_buffer;
     uint8_t _direction;
@@ -1366,6 +1449,11 @@ void Protocol::receive_devastator(int& id, int& faction, int& lp, int& pos_x, in
 
     int recv_size = -1;
     bool was_closed = false;
+
+    recv_size = client_socket.recvall(&speed_buffer, sizeof(speed_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _speed = (uint8_t) speed_buffer;
+    speed = (int) _speed;
 
     recv_size = client_socket.recvall(&direction_buffer, sizeof(direction_buffer), &was_closed);
     handle_receive(was_closed, recv_size);
@@ -1399,10 +1487,12 @@ void Protocol::receive_devastator(int& id, int& faction, int& lp, int& pos_x, in
 
     return;
 }
-void Protocol::receive_harvester(int& id, int& faction, int& lp, int& pos_x, int& pos_y, int & direction,bool & moving,bool& selected, int& spice, bool& harvesting,bool & waiting, Socket& client_socket) {
+void Protocol::receive_harvester(int& id, int& faction, int& lp, int& pos_x, int& pos_y,int& speed, int & direction,bool & moving,bool& selected, int& spice, bool& harvesting,bool & waiting, Socket& client_socket) {
 
     this->receive_element(id, faction, lp, pos_x, pos_y, selected, client_socket);
 
+    uint8_t speed_buffer;
+    uint8_t _speed;
     uint8_t direction_buffer;
     uint8_t _direction;
     uint8_t moving_buffer;
@@ -1417,6 +1507,10 @@ void Protocol::receive_harvester(int& id, int& faction, int& lp, int& pos_x, int
     int recv_size = -1;
     bool was_closed = false;
 
+    recv_size = client_socket.recvall(&speed_buffer, sizeof(speed_buffer), &was_closed);
+    handle_receive(was_closed, recv_size);
+    _speed = (uint8_t) speed_buffer;
+    speed = (int) _speed;
     recv_size = client_socket.recvall(&direction_buffer, sizeof(direction_buffer), &was_closed);
     handle_receive(was_closed, recv_size);
     _direction = (uint8_t) direction_buffer;
