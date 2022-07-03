@@ -35,8 +35,8 @@ textures(textures)
     this->c_spice = c_spice;
     this->energy = energy;
     this->c_energy = c_energy;
-    this->efficiency = efficiency;
-    this->construction_time = 0;
+    this->efficiency = 1;
+    this->construction_time = CONSTRUCTION_TIME;
     this->is_holding_building = false;
     this->building_held = -1;
     this->left_click = false;
@@ -153,6 +153,11 @@ void Player::play(){
                             switch (checkBtn(x, y))
                             {
                             case BUILD_BTN:
+                                if(this->construction_time < CONSTRUCTION_TIME){
+                                    std::cout << usr_msg[RES_WAIT_TO_BUILD] << std::endl;
+                                    this->print(usr_msg[RES_WAIT_TO_BUILD], DATA_PATH FONT_IMPACT_PATH, 200, 300, 10, colors[RED], 1000);   
+                                    continue;
+                                } 
                                 this->print("Place building on screen", DATA_PATH FONT_IMPACT_PATH, 200, 300, 10, colors[YELLOW], 1000);
                                 this->is_holding_building = true;
                                 this->building_held = checkBuild(x, y);
@@ -268,14 +273,6 @@ void Player::play(){
         } else {
             command = IDLE;
         }
-        if (command == CREATE_BUILDING){
-            if(this->construction_time > 0){
-                std::cout << usr_msg[RES_WAIT_TO_BUILD] << std::endl;
-                this->print(usr_msg[RES_WAIT_TO_BUILD], DATA_PATH FONT_IMPACT_PATH, 200, 300, 10, colors[RED], 1000);   
-                continue;;
-            }
-        }    
-
         //  La pasamos por socket
         this->protocol.send_command(command, this->socket);
 
@@ -285,7 +282,7 @@ void Player::play(){
                 break;
             case CREATE_BUILDING:
                 this->protocol.send_create_building_request(mouse_event[1], mouse_event[2],mouse_event[3],this->socket);
-                this->construction_time = 100;
+                this->construction_time = 0;
                 break;
             case MOUSE_LEFT_CLICK:
                 this->protocol.send_mouse_left_click(mouse_event[1], mouse_event[2], this->socket);
@@ -338,8 +335,11 @@ bool Player::contains(int ID) {
 }
 
 void Player::update() {
-    if(this->construction_time > 0)
-        this->construction_time--;
+    if(this->construction_time < CONSTRUCTION_TIME){
+        std::cout <<"construction time: "<< construction_time << std::endl;
+        this->construction_time+=efficiency;
+        this->hud.setBuildButtonColor(this->construction_time/CONSTRUCTION_TIME,faction_colours[this->faction]);
+    }
     //std::cout << "Construction time: "<<construction_time << std::endl;
     //  Setup Variables
     int id,faction,lp,pos_x,pos_y,speed,direction,energy,spice,c_spice; //  Values
@@ -630,9 +630,24 @@ void Player::receiveCreators() {
 
 void Player::renderCreationData() {    
     for(creation_t & c : this->creation_data){
-        Position pos = this->elements[c.creator_ID]->getPosition();
+        std::unique_ptr<CSelectable> & element = this->elements[c.creator_ID];
+        Position pos = element->getPosition();
+        switch(element->getType()){
+            case SEL_BARRACK:
+                this->hud.setUnitButtonColor(SEL_INFANTRY,((double)c.current_time/c.total_time),faction_colours[this->faction]);
+                this->hud.setUnitButtonColor(SEL_FREMEN,((double)c.current_time/c.total_time),faction_colours[this->faction]);
+                this->hud.setUnitButtonColor(SEL_SARDAUKAR,((double)c.current_time/c.total_time),faction_colours[this->faction]);
+                break;
+            case SEL_LIGHT_FACTORY:
+                this->hud.setUnitButtonColor(SEL_TRIKE,((double)c.current_time/c.total_time),faction_colours[this->faction]);
+                this->hud.setUnitButtonColor(SEL_HARVESTER,((double)c.current_time/c.total_time),faction_colours[this->faction]);
+                break;
+            case SEL_HEAVY_FACTORY:
+                this->hud.setUnitButtonColor(SEL_TANK,((double)c.current_time/c.total_time),faction_colours[this->faction]);
+                this->hud.setUnitButtonColor(SEL_DEVASTATOR,((double)c.current_time/c.total_time),faction_colours[this->faction]);
+                break;
+        }
         SDL2pp::Texture & progress = this->textures.getCreationProgress(std::round(((double)c.current_time/c.total_time)*100));
-        //std::cout << "Rendering progress bar at position: (" << pos.x << "," << pos.y << ")" << std::endl;
         this->game_renderer.Copy(
             progress,
             SDL2pp::NullOpt,

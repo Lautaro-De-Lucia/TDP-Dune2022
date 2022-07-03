@@ -35,4 +35,6 @@ class GameHud {
    int checkBuild(int& x, int& y);
    bool clickOnHud(int& x, int& y);
    SDL2pp::Texture & getButtonInfo(hud_button_t button,int id,TextureHandler & textures);
+   void setBuildButtonColor(double percentage, color_t color);
+   void setUnitButtonColor(selectable_t type, double percentage, color_t color);
 };

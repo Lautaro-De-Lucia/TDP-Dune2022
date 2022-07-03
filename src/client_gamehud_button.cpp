@@ -22,3 +22,18 @@ int Button::checkIntersection(int& x, int& y) {
 	if (dRect.Intersects(aux)) return id;
 	return -1;
 }
+
+void Button::setTextureColor(double percentage,color_t color){
+	switch(color){
+		case RED:
+			this->texture.SetColorMod((255/2)+ (percentage*255/2),percentage * 255,percentage * 255);
+			break;
+		case GREEN:
+			this->texture.SetColorMod(percentage * 255,(255/2)+ (percentage*255/2),percentage * 255);
+			break;
+		case BLUE:
+			this->texture.SetColorMod(percentage * 255,percentage * 255,(255/2)+ (percentage*255/2));
+			break;
+	}
+}
+

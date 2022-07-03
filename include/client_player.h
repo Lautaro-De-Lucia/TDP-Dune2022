@@ -26,6 +26,8 @@ const int CAMERA_INITIAL_POS_Y = 200;
 
 const int GAME_SPEED = 100000;
 
+#define CONSTRUCTION_TIME 100
+
 struct corpse_t {
   selectable_t type;
   Position position;
@@ -46,7 +48,7 @@ class Player {
    size_t spice;
    size_t c_spice;
    size_t c_energy;
-   int construction_time;
+   double construction_time;
    int energy;
    double efficiency;
    std::vector<creation_t> creation_data;
@@ -75,6 +77,12 @@ class Player {
    bool new_unit_available;
    player_t faction;
    AudioPlayer audio;
+
+   std::map<player_t,color_t> faction_colours ={
+     {ATREIDES,BLUE},
+     {HARKONNEN,RED},
+     {ORDOS,GREEN}
+  };
 
    ShotsHandler shotsHandler;
    ExplosionsHandler explosionsHandler;

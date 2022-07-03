@@ -171,3 +171,15 @@ void GameHud::update(int spice, int c_spice, int energy){
 	this->c_spice = c_spice;
 	this->energy = energy;
 }
+
+void GameHud::setBuildButtonColor(double percentage, color_t color){
+	for(Button & build_button : this->build_buttons)
+		build_button.setTextureColor(percentage,color);
+}
+
+void GameHud::setUnitButtonColor(selectable_t type, double percentage, color_t color){
+	for(Button & unit_button : this->unit_buttons){
+		if(unit_button.getID() == (int)type)
+			unit_button.setTextureColor(percentage,color);
+	}
+}

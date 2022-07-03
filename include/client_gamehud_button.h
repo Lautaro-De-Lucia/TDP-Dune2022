@@ -1,5 +1,5 @@
 #pragma once
-
+#include "common_utils.h"
 #include <SDL2pp/SDL2pp.hh>
 
 class Button {
@@ -13,4 +13,6 @@ class Button {
     Button(SDL2pp::Renderer& renderer, std::string IMG_PATH, int x, int y, int id);
     void render(SDL2pp::Renderer& renderer);
     int checkIntersection(int& x, int& y);
+    void setTextureColor(double percentage,color_t color);
+    int getID(){return this->id;}
 };
