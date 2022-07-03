@@ -44,9 +44,6 @@ class ClientHandler {
    ThreadSafeQueue & instruction_queue;
    Socket player_socket;
    bool finished;
-   std::map<unit_t,size_t> units_to_create;
-	 std::map<unit_t,size_t> unit_time;
-	 std::map<unit_t,size_t> unit_creation_time;
    std::thread thread;
    std::vector<response_t> responses_buffer;
    std::vector<creation_t> creation_data;

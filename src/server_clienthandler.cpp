@@ -15,11 +15,6 @@ ClientHandler::ClientHandler(int player_id, int init_energy, int init_spice,std:
     this->faction = (player_t) -1;
     this->construction_wait = 0;
 
-	for (unit_t UNIT : units)
-        this->units_to_create[UNIT] = 0,
-        this->unit_time[UNIT] = 0,
-        this->unit_creation_time[UNIT] = 2;
-
     this->finished = false;
 }
 
