@@ -157,16 +157,32 @@ void CMovable::render(player_t player_faction, SDL2pp::Renderer& renderer, int c
     int ypos = this->position.y*TILE_SIZE-cam_pos_y+this->rel_pos_y;
     int xdim = this->dim_x*TILE_SIZE;
     int ydim = this->dim_y*TILE_SIZE;
+    std::cout << "X offset: " << this->rel_pos_x <<" Y offset: "<<this->rel_pos_y<< std::endl;
+
+    animation_t animation;
     
-    animation_t animation = ANIMATION_IDLE;
-    if(this->rel_pos_x == 4 || this->rel_pos_y == 4)
+    if(abs(this->rel_pos_x) == 0 || abs(this->rel_pos_y) == 0)
+        animation = ANIMATION_IDLE;    
+    if(abs(this->rel_pos_x) == 2 || abs(this->rel_pos_y) == 2)
         animation = MOVING_1;
-    if(this->rel_pos_x == 8 || this->rel_pos_y == 8)
+    if(abs(this->rel_pos_x) == 4 || abs(this->rel_pos_y) == 4)
         animation = MOVING_2;
-    if(this->rel_pos_x == 12 || this->rel_pos_y == 12)
+    if(abs(this->rel_pos_x) == 6 || abs(this->rel_pos_y) == 6)
         animation = MOVING_1;
+    if(abs(this->rel_pos_x) == 8 || abs(this->rel_pos_y) == 8)
+        animation = ANIMATION_IDLE;
+    if(abs(this->rel_pos_x) == 10 || abs(this->rel_pos_y) == 10)
+        animation = MOVING_1;
+    if(abs(this->rel_pos_x) == 12 || abs(this->rel_pos_y) == 12)
+        animation = MOVING_2;
+    if(abs(this->rel_pos_x) == 14 || abs(this->rel_pos_y) == 14)
+        animation = MOVING_1;
+    if(abs(this->rel_pos_x) == 16 || abs(this->rel_pos_y) == 16)
+        animation = ANIMATION_IDLE;    
+
     if(this->sp == true && animation == ANIMATION_IDLE)
-        animation = SPECIAL;
+        animation = SPECIAL,
+        std::cout << stringify(SPECIAL) << std::endl;
 
     renderer.Copy(
         this->textures.getTexture(this->type,(player_t)this->faction,animation,this->dir).SetColorMod(this->color.r,this->color.g,this->color.b),
