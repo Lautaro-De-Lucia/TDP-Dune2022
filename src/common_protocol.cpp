@@ -1809,11 +1809,11 @@ void Protocol::send_player_state(int spice, int c_spice,int energy, Socket& clie
 
     uint16_t _spice = (uint16_t) spice;
     uint16_t _c_spice = (uint16_t) c_spice;
-    uint16_t _energy = (uint16_t) energy;
+    int16_t _energy = (int16_t) energy;
 
     uint16_t spice_buffer = (uint16_t) htons(_spice);
     uint16_t c_spice_buffer = (uint16_t) htons(_c_spice);
-    uint16_t energy_buffer = (uint16_t) htons(_energy);
+    int16_t energy_buffer = (int16_t) htons(_energy);
 
     int sent_size = -1;
     bool was_closed = false;
@@ -1834,11 +1834,11 @@ void Protocol::receive_player_state(int& spice,int& c_spice, int& energy, Socket
 
     uint16_t spice_buffer;
     uint16_t c_spice_buffer;
-    uint16_t energy_buffer;
+    int16_t energy_buffer;
 
     uint16_t _spice;
     uint16_t _c_spice;
-    uint16_t _energy;
+    int16_t _energy;
 
     int recv_size = -1;
     bool was_closed = false;
@@ -1853,7 +1853,7 @@ void Protocol::receive_player_state(int& spice,int& c_spice, int& energy, Socket
 
     recv_size = client_socket.recvall(&energy_buffer, sizeof(energy_buffer), &was_closed);
     handle_receive(was_closed, recv_size);
-    _energy = (uint16_t) ntohs(energy_buffer);
+    _energy = (int16_t) ntohs(energy_buffer);
 
     spice = (int) _spice;
     c_spice = (int) _c_spice;

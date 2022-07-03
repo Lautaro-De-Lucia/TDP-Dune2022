@@ -596,9 +596,18 @@ void Player::update() {
                 case SEL_TRIKE: case SEL_TANK: case SEL_DEVASTATOR:
                     this->removeAttacker(_id);
                     break;
+                case SEL_BARRACK:
+                    this->creators[BARRACK] = -1;
+                case SEL_LIGHT_FACTORY:
+                    this->creators[LIGHT_FACTORY] = -1;
+                case SEL_HEAVY_FACTORY:
+                    this->creators[HEAVY_FACTORY] = -1;
+
+
                 default:
                     break;
                 }
+
                 this->elements.erase(i);
             }
         }
@@ -620,7 +629,6 @@ void Player::receiveCreators() {
     int barrack_id = -1;
     int light_factory_id = -1;
     int heavy_factory_id = -1;
-
 
     this->protocol.receive_creators(barrack_id, light_factory_id, heavy_factory_id, this->socket);
     this->creators[BARRACK] = barrack_id;
