@@ -648,10 +648,6 @@ void Player::renderCreationData() {
                 break;
         }
         SDL2pp::Texture & progress = this->textures.getCreationProgress(std::round(((double)c.current_time/c.total_time)*100));
-<<<<<<< HEAD
-=======
-        std::cout << "Rendering progress bar at position: (" << pos.x << "," << pos.y << ")" << std::endl;
->>>>>>> 1f6902d54c9151d24985466925136046f11f65a9
         this->game_renderer.Copy(
             progress,
             SDL2pp::NullOpt,
