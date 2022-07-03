@@ -48,6 +48,9 @@ void ClientHandler::run() {
     if(this->faction == ORDOS)
         this->instruction_queue.push(std::unique_ptr<building_create_t>(new building_create_t(this->player_id, this->faction,CONSTRUCTION_YARD,ORDOS_INIT_POS_X,ORDOS_INIT_POS_Y)));
 
+    // attack dummy
+    this->instruction_queue.push(std::unique_ptr<building_create_t>(new building_create_t(this->player_id, HARKONNEN,PALACE,38,30)));    
+
     while (true) {
         
         while(this->reading_flags[this->player_id] == false){}
