@@ -254,21 +254,21 @@ constexpr std::initializer_list<direction_t> directions = {
 
 const char * stringify(direction_t direction);
 
-enum animation_t {
+enum frame_t {
     ANIMATION_IDLE = 0,
     MOVING_1 = 1,
     MOVING_2 = 2,
     SPECIAL = 3,
 };
 
-constexpr std::initializer_list<animation_t> animations = {
+constexpr std::initializer_list<frame_t> animations = {
     ANIMATION_IDLE,
     MOVING_1,
     MOVING_2,
     SPECIAL
 };
 
-const char * stringify(animation_t animation);
+const char * stringify(frame_t animation);
 
 
 enum selectable_t {

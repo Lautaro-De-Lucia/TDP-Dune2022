@@ -37,6 +37,7 @@ class ClientHandler {
    int c_spice;
    int energy;
    int c_energy;
+   int construction_wait;
    int efficiency;
    Protocol protocol;
    std::vector<bool> & reading_flags;
@@ -63,6 +64,7 @@ class ClientHandler {
    void sendCreationData();
    int & getSpice();
    int & getEnergy();
+   int & getConstructionWait();
    int getID();
    player_t getFaction();
    void setSpice(int spice);

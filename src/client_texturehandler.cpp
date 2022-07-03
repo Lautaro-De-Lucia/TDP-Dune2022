@@ -9,7 +9,7 @@ creator_mark(game_renderer,DATA_PATH CMARK_PATH)
     for(unit_t UNIT: units)
 	    for(player_t FACTION: factions)
 		    for (direction_t DIR: directions)
-                for (animation_t ANIMATION : animations)
+                for (frame_t ANIMATION : animations)
                     path.append(DATA_PATH)
                     .append("/").append("units")
                     .append("/").append(stringify(UNIT))
@@ -89,7 +89,7 @@ creator_mark(game_renderer,DATA_PATH CMARK_PATH)
 
 };
 
-SDL2pp::Texture & TextureHandler::getTexture(unit_t unit, player_t faction,animation_t animation, direction_t direction){
+SDL2pp::Texture & TextureHandler::getTexture(unit_t unit, player_t faction,frame_t animation, direction_t direction){
     return this->unit_textures[unit][faction][animation].at(direction);
 }
 

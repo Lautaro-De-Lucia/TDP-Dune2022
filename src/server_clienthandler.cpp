@@ -139,6 +139,11 @@ int & ClientHandler::getSpice() {
     return this->spice;
 }
 
+int & ClientHandler::getConstructionWait() {
+    return this->construction_wait;
+}
+
+
 int ClientHandler::getID() {
     return this->player_id;
 }
