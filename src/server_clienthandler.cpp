@@ -13,6 +13,7 @@ ClientHandler::ClientHandler(int player_id, int init_energy, int init_spice,std:
 {
     this->player_id = player_id;
     this->faction = (player_t) -1;
+    this->construction_wait = 0;
 
 	for (unit_t UNIT : units)
         this->units_to_create[UNIT] = 0,

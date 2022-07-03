@@ -186,7 +186,7 @@ void CMovable::render(player_t player_faction, SDL2pp::Renderer& renderer, int c
         std::cout << stringify(SPECIAL) << std::endl;
 
     renderer.Copy(
-        this->textures.getTexture(this->type,(player_t)this->faction,animation,this->dir).SetColorMod(this->color.r,this->color.g,this->color.b),
+        this->textures.getTexture(this->type,(player_t)this->faction,frame,this->dir).SetColorMod(this->color.r,this->color.g,this->color.b),
         SDL2pp::NullOpt,
         SDL2pp::Rect(xpos,ypos,xdim,ydim)
     );

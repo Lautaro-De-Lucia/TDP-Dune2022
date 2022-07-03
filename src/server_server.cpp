@@ -140,9 +140,13 @@ void Server::handleInstruction(std::unique_ptr<instruction_t> & INS) {
 
 
 void Server::handleInstruction(building_create_t & INS) {
+    //int & wait_time = this->players[INS.player_ID]->getConstructionWait(); 
+    //if(wait_time >= 0)
+    //    return;
     this->responses[INS.player_ID].push_back(
         this->game.createBuilding(INS.faction,(building_t)INS.type,INS.pos_x,INS.pos_y,this->players[INS.player_ID]->getSpice(),this->players[INS.player_ID]->getEnergy())
     );
+    //wait_time = 100;
 }
 
 void Server::handleInstruction(unit_create_t & INS) {

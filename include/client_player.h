@@ -35,6 +35,7 @@ class Player {
    size_t spice;
    size_t c_spice;
    size_t c_energy;
+   int construction_time;
    int energy;
    double efficiency;
    std::vector<creation_t> creation_data;

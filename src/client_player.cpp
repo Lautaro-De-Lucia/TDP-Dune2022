@@ -14,6 +14,7 @@ std::map<response_t, std::string> usr_msg = {
         {RES_CREATE_BUILDING_FAILURE_ENERGY, "Not enough energy"},
         {RES_CREATE_BUILDING_FAILURE_TERRAIN, "You can't build here"},
         {RES_SELECTED_BUILDING_IS_NOW_CREATOR, "The selected building is now a creator!"},
+        {RES_WAIT_TO_BUILD,"You must wait to build new units"},
 };
 
 //  @TODO: Meter en un bloque try{} en el main
@@ -35,6 +36,7 @@ textures(textures)
     this->energy = energy;
     this->c_energy = c_energy;
     this->efficiency = efficiency;
+    this->construction_time = 0;
     this->is_holding_building = false;
     this->building_held = -1;
     this->left_click = false;
@@ -266,6 +268,14 @@ void Player::play(){
         } else {
             command = IDLE;
         }
+        if (command == CREATE_BUILDING){
+            if(this->construction_time > 0){
+                std::cout << usr_msg[RES_WAIT_TO_BUILD] << std::endl;
+                this->print(usr_msg[RES_WAIT_TO_BUILD], DATA_PATH FONT_IMPACT_PATH, 200, 300, 10, colors[RED], 1000);   
+                continue;;
+            }
+        }    
+
         //  La pasamos por socket
         this->protocol.send_command(command, this->socket);
 
@@ -275,6 +285,7 @@ void Player::play(){
                 break;
             case CREATE_BUILDING:
                 this->protocol.send_create_building_request(mouse_event[1], mouse_event[2],mouse_event[3],this->socket);
+                this->construction_time = 100;
                 break;
             case MOUSE_LEFT_CLICK:
                 this->protocol.send_mouse_left_click(mouse_event[1], mouse_event[2], this->socket);
@@ -327,6 +338,9 @@ bool Player::contains(int ID) {
 }
 
 void Player::update() {
+    if(this->construction_time > 0)
+        this->construction_time--;
+    std::cout << "Construction time: "<<construction_time << std::endl;
     //  Setup Variables
     int id,faction,lp,pos_x,pos_y,speed,direction,energy,spice,c_spice; //  Values
     bool selected,moving,harvesting,attacking,waiting; //  State flags
