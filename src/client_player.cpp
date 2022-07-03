@@ -560,6 +560,19 @@ void Player::update() {
                 selectable_t _type = this->elements.at(i)->getType();
                 Position _pos = this->elements.at(i)->getPosition();
                 this->addExplosion(_id, _type, _pos);
+                switch (_type)
+                {
+                case TRIKE:
+                case INFANTRY:
+                case FREMEN:
+                case SARDAUKAR:
+                case TANK:
+                case DEVASTATOR:
+                    this->removeAttacker(id);
+                    break;
+                default:
+                    break;
+                }
                 this->elements.erase(i);
             }
         }
