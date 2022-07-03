@@ -73,6 +73,7 @@ int main(int argc, char *argv[]) {
     Server server(service_name,cells);
     server.acceptPlayers();
     std::thread game_loop(&Server::run, &server);
+    std::cout << "going to read command" << std::endl;
     server.read_command(std::cin);
     server.stop();
     game_loop.join();

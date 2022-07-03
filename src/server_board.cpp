@@ -98,8 +98,12 @@ void Board::dealDamage(int x, int y, int damage){
         std::cout << "Element LP have reached:" << element->getLP() <<std::endl;
         std::cout << "Thus it will be destroyed" <<std::endl;
         for(unit_t UNIT : units)
-            if(element->canCreate(UNIT)) 
+            if(element->canCreate(UNIT)) {
                 this->removeUnitCreator(element->getFaction(),UNIT);
+                if (element->getID() == this->creatorID[element->getFaction()][UNIT])
+                    this->creatorID[element->getFaction()][UNIT] = -1;
+            }
+
         for (Position pos : element->getPositions()){
             std::cout << "Disoccupying cell at position: " << pos << std::endl;
             this->cells[pos.x][pos.y].disoccupy();

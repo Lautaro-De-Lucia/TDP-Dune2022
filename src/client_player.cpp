@@ -336,7 +336,7 @@ bool Player::contains(int ID) {
 
 void Player::update() {
     if(this->construction_time < (CONSTRUCTION_TIME + this->time_penalty)){
-        std::cout <<"construction time: "<< construction_time << std::endl;
+        //std::cout <<"construction time: "<< construction_time << std::endl;
         this->construction_time+=1;
         this->hud.setBuildButtonColor(this->construction_time/(CONSTRUCTION_TIME+this->time_penalty),faction_colours[this->faction]);
     }
@@ -605,17 +605,18 @@ void Player::update() {
                     this->removeAttacker(_id);
                     break;
                 case SEL_BARRACK:
-                    this->creators[BARRACK] = -1;
+                    if (_id == this->creators[BARRACK])
+                        this->creators[BARRACK] = -1;
                 case SEL_LIGHT_FACTORY:
-                    this->creators[LIGHT_FACTORY] = -1;
+                    if (_id == this->creators[LIGHT_FACTORY]) {
+                        this->creators[LIGHT_FACTORY] = -1;
+                    }
                 case SEL_HEAVY_FACTORY:
-                    this->creators[HEAVY_FACTORY] = -1;
-
-
+                    if (_id == this->creators[HEAVY_FACTORY])
+                        this->creators[HEAVY_FACTORY] = -1;
                 default:
                     break;
                 }
-
                 this->elements.erase(i);
             }
         }
@@ -639,6 +640,7 @@ void Player::receiveCreators() {
     int heavy_factory_id = -1;
 
     this->protocol.receive_creators(barrack_id, light_factory_id, heavy_factory_id, this->socket);
+
     this->creators[BARRACK] = barrack_id;
     this->creators[LIGHT_FACTORY] = light_factory_id;
     this->creators[HEAVY_FACTORY] = heavy_factory_id;
@@ -682,8 +684,6 @@ void Player::renderCreators() {
 
     std::vector<int> creators_to_render;
 
-    creators_to_render.clear();
-
     if (this->creators[BARRACK] != -1)
         creators_to_render.push_back(this->creators[BARRACK]);
 
@@ -693,9 +693,8 @@ void Player::renderCreators() {
     if (this->creators[HEAVY_FACTORY] != -1)
         creators_to_render.push_back(this->creators[HEAVY_FACTORY]);
 
-    for(int id : creators_to_render){
-        if (this->elements.at(id) == nullptr)
-            continue;
+
+    for (int id : creators_to_render){
         Position pos = this->elements.at(id)->getPosition();
         SDL2pp::Texture & creator_mark = this->textures.getCreatorMark();
         this->game_renderer.Copy(
@@ -704,6 +703,7 @@ void Player::renderCreators() {
             SDL2pp::Rect((pos.x+1)*TILE_DIM*2-this->camera.pos_x*2,(pos.y-1)*TILE_DIM*2-this->camera.pos_y*2,20,30)
         );
     }
+
 }
 
 /*º

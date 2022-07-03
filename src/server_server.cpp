@@ -2,7 +2,7 @@
 
 extern std::map<color_t,SDL_Color> colors;
 
-#define MAX_CONNECTIONS 2
+#define MAX_CONNECTIONS 1
 
 int ID = 0;
 
@@ -67,7 +67,7 @@ void Server::read_command(std::istream& input_stream) {
     while (1) {
         input_stream >> command;
         if (command == "q")
-            break;            
+            continue;
     }
 }
 
