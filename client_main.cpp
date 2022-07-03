@@ -128,12 +128,6 @@ int main(int argc, char *argv[]) {
     std::string _host_name(host_name);
     std::string _service_name(service_name);
 
-    int test_faction = 2;
-
-    run_sdl(&test_faction, host_name, service_name);
-
-    /*
-
     char* _program_name = (char*) "./client";
     int _argc = 1;
     char *_argv[1] = {_program_name};
@@ -163,5 +157,4 @@ int main(int argc, char *argv[]) {
     QObject::connect(&f, &FactionWindow::jugar, &f, [=]() {QtConcurrent::run(run_sdl, std::ref(_faction), _host_name, _service_name);});
 
     return a.exec();
-    */
 }

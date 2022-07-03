@@ -23,9 +23,6 @@ GameHud::GameHud(player_t faction, SDL2pp::Renderer& renderer) : texture(rendere
 	int y = SCREEN_HEIGHT - h;
 	dRect = {x, y, w, h};
 	std::string faction_path;
-	this->spice = 0;
-   	this->c_spice = 0;
-   	this->energy = 0;
 	switch(faction){
 		case HARKONNEN:
 			faction_path.append("Harkonnen");
@@ -37,6 +34,7 @@ GameHud::GameHud(player_t faction, SDL2pp::Renderer& renderer) : texture(rendere
 			faction_path.append("Ordos");
 			break;	
 	}
+	
 	std::vector<std::string> building_paths;
 	std::vector<std::string> unit_paths;
 	for(size_t i = 0 ; i < TOTAL_BUILDING_IMGS ; i++)

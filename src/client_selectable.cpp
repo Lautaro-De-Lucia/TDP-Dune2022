@@ -158,7 +158,7 @@ void CMovable::render(player_t player_faction, SDL2pp::Renderer& renderer, int c
     int ypos = this->position.y*TILE_SIZE-cam_pos_y+this->rel_pos_y;
     int xdim = this->dim_x*TILE_SIZE;
     int ydim = this->dim_y*TILE_SIZE;
-    //std::cout << "X offset: " << this->rel_pos_x <<" Y offset: "<<this->rel_pos_y<< std::endl;
+    std::cout << "X offset: " << this->rel_pos_x <<" Y offset: "<<this->rel_pos_y<< std::endl;
 
     frame_t frame;
     
@@ -183,7 +183,7 @@ void CMovable::render(player_t player_faction, SDL2pp::Renderer& renderer, int c
 
     if(this->sp == true && frame == ANIMATION_IDLE)
         frame = SPECIAL,
-        //std::cout << stringify(SPECIAL) << std::endl;
+        std::cout << stringify(SPECIAL) << std::endl;
 
     renderer.Copy(
         this->textures.getTexture(this->type,(player_t)this->faction,frame,this->dir).SetColorMod(this->color.r,this->color.g,this->color.b),

@@ -2,7 +2,7 @@
 
 extern std::map<color_t,SDL_Color> colors;
 
-#define MAX_CONNECTIONS 1
+#define MAX_CONNECTIONS 2
 
 int ID = 0;
 
