@@ -694,7 +694,9 @@ void Player::renderCreators() {
         creators_to_render.push_back(this->creators[HEAVY_FACTORY]);
 
     for(int id : creators_to_render){
-        Position pos = this->elements[id]->getPosition();
+        if (this->elements.at(id) == nullptr)
+            continue;
+        Position pos = this->elements.at(id)->getPosition();
         SDL2pp::Texture & creator_mark = this->textures.getCreatorMark();
         this->game_renderer.Copy(
             creator_mark,
