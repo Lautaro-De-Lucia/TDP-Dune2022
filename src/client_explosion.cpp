@@ -7,6 +7,11 @@ Explosion::Explosion(selectable_t type, Position pos) {
 
     this->type = type;
 
+    if (type == SEL_INFANTRY || type == SEL_FREMEN || type == SEL_SARDAUKAR)
+        this->is_infantry = true;
+    else
+        this->is_infantry = false;
+
     if ((int) this->type <= 7) {
         this->explosion_width = 64;
         this->explosion_height = 64;
@@ -29,7 +34,8 @@ void Explosion::render(SDL2pp::Renderer& renderer, TextureHandler& textures, int
     int xpos = this->pixel_pos_x-cam_pos_x;
     int ypos = this->pixel_pos_y-cam_pos_y;
 
-    SDL2pp::Texture & explosion = textures.getExplosion(this->current_frame);
+
+    SDL2pp::Texture & explosion = textures.getExplosion(this->current_frame, this->is_infantry);
     renderer.Copy(
         explosion,
         SDL2pp::NullOpt,

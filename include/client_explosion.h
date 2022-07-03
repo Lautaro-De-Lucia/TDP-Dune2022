@@ -20,6 +20,8 @@ class Explosion{
 
    int speed;
 
+   bool is_infantry;
+
    int current_frame;
    int total_frames;
 

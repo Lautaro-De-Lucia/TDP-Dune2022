@@ -18,6 +18,7 @@ class TextureHandler {
     std::map<player_t,std::map<unit_t,SDL2pp::Texture>> unit_imgs_textures;
     SDL2pp::Texture creator_mark;
     std::vector<SDL2pp::Texture> explosion_textures;
+    std::vector<SDL2pp::Texture> blood_textures;
     std::map<unit_t,SDL2pp::Texture> unit_shot_textures; 
     public:
     TextureHandler(SDL2pp::Renderer & game_renderer);
@@ -29,6 +30,6 @@ class TextureHandler {
     SDL2pp::Texture & getCreationProgress(int percentage);
     SDL2pp::Texture & getUnitIMG(player_t faction, unit_t unit);
     SDL2pp::Texture & getCreatorMark();
-    SDL2pp::Texture & getExplosion(int frame);
+    SDL2pp::Texture & getExplosion(int frame, bool is_infantry);
     SDL2pp::Texture & getUnitShot(unit_t unit);
 };

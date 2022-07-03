@@ -75,7 +75,14 @@ creator_mark(game_renderer,DATA_PATH CMARK_PATH)
         this->explosion_textures.push_back(SDL2pp::Texture(game_renderer,path.c_str())),
         path.clear();
     }
-
+    for(size_t i = 0 ; i < 20 ; i++) {
+        path.append(DATA_PATH)
+        .append("/").append("explosions")
+        .append("/").append("blood")
+        .append(std::to_string(i)).append(".png"),
+        this->blood_textures.push_back(SDL2pp::Texture(game_renderer,path.c_str())),
+        path.clear();
+    }
     //  Load Textures for shots
     for(unit_t UNIT: units) {
         if (UNIT == HARVESTER)
@@ -124,8 +131,11 @@ SDL2pp::Texture & TextureHandler::getCreatorMark() {
     return this->creator_mark;
 }
 
-SDL2pp::Texture & TextureHandler::getExplosion(int frame){
-    return this->explosion_textures[frame];
+SDL2pp::Texture & TextureHandler::getExplosion(int frame, bool is_infantry){
+    if (is_infantry)
+        return this->blood_textures[frame];
+    else
+        return this->explosion_textures[frame];
 }
 
 SDL2pp::Texture & TextureHandler::getUnitShot(unit_t unit){
