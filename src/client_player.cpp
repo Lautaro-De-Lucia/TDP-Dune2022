@@ -355,7 +355,7 @@ void Player::update() {
     if(energy < 0){
         this->time_penalty = 0;
         this->time_penalty = round(abs(energy))/100;
-        this->print("Current energy debt: " + std::to_string(abs(energy)), DATA_PATH FONT_IMPACT_PATH, 220, 300, 10, colors[RED], 1000);   
+        this->print("Current energy debt: " + std::to_string(abs(energy)), DATA_PATH FONT_IMPACT_PATH, 400, 330, 10, colors[RED], 1000);   
     } else { 
         this->time_penalty = 0;
     }
