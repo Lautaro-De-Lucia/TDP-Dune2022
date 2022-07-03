@@ -335,18 +335,12 @@ bool Player::contains(int ID) {
 }
 
 void Player::update() {
-<<<<<<< HEAD
     if(this->construction_time < CONSTRUCTION_TIME){
         std::cout <<"construction time: "<< construction_time << std::endl;
         this->construction_time+=efficiency;
         this->hud.setBuildButtonColor(this->construction_time/CONSTRUCTION_TIME,faction_colours[this->faction]);
     }
     //std::cout << "Construction time: "<<construction_time << std::endl;
-=======
-    if(this->construction_time > 0)
-        this->construction_time--;
-    std::cout << "Construction time: "<<construction_time << std::endl;
->>>>>>> 1f6902d54c9151d24985466925136046f11f65a9
     //  Setup Variables
     int id,faction,lp,pos_x,pos_y,speed,direction,energy,spice,c_spice; //  Values
     bool selected,moving,harvesting,attacking,waiting; //  State flags
