@@ -84,7 +84,20 @@ Cada facción comienza la partida con un centro de construcción, cuya destrucci
 
 #### Construcción de los edificios
 
-Para construir edificios es necesario contar con *energía* y *especia*, la moneda corriente en el mundo de Dune. Para conseguir energía tendremos que construir **trampas de aire**. Si bien se cuenta con cierta cantidad de especia inicial, si la agotamos construyendo edificios y unidades no podremos generarla nuevamente. Para esto, se deben crear unidades **cosechadoras**, que se encargan de transportar la especia de lugares en el mapa con arena especiada hacía la refinería. Un buen consejo es empezar construyendo una **fábrica pesada**, donde pueden entrenarse estas unidades **cosechadoras** que nos conseguirán más especia para poder seguir construyendo edificios y entrenando unidades de combate. Para construir, se hace *click izquierdo* en el ícono con el edificio que queremos construir, y luego click izquierdo en el lugar del mapa que nos resulte conveniente, siempre y cuando haya una formación rocosa bajo suyo. Una vez que construímos un edificio, debemos esperar un tiempo para poder construir otro. Los tiempos de construcción y de entrenamiento se ven extendidos en caso de haber una escasez de *energía*, siendo estos proporcionales a la deuda energética. Ahora que tenemos edificios, podemos empezar a crear unidades.
+Para construir edificios es necesario contar con *energía* y *especia*, la moneda corriente en el mundo de Dune. Para conseguir energía tendremos que construir **trampas de aire**. Si bien se cuenta con cierta cantidad de especia inicial, si la agotamos construyendo edificios y unidades no podremos generarla nuevamente. Para esto, se deben crear unidades **cosechadoras**, que se encargan de transportar la especia de lugares en el mapa con arena especiada hacía la refinería. Un buen consejo es empezar construyendo una **fábrica pesada**, donde pueden entrenarse estas unidades **cosechadoras** que nos conseguirán más especia para poder seguir construyendo edificios y entrenando unidades de combate. Para construir, se hace *click izquierdo* en el ícono con el edificio que queremos construir, y luego click izquierdo en el lugar del mapa que nos resulte conveniente, siempre y cuando haya una formación rocosa bajo suyo. Una vez que construímos un edificio, debemos esperar un tiempo para poder construir otro. Los tiempos de espera pueden ser visualizados mediante la colorización de los íconos de los distintos tipos de edificio (los colores varían según la facción escogida: verde para Ordos, azul para Atreides y rojo para Harkonnen). Si el ícono de un edificio se encuentra colorizado, significa que debemos esperar una cantidad de tiempo que es proporcional a la colorización del ícono. Se observa en la imagen de abajo un ícono en proceso de decolorizacion de una **trampa de aires** para el caso de haber escogido la casa Harkonnen:
+
+<p align="center">
+  <img width="400" src="https://user-images.githubusercontent.com/75450615/177225771-b2175a60-f6f3-46d2-bf74-86f2f50b74b8.png">
+</p>
+
+Una vez que tenemos al ícono con un como el último en la figura de arriba, podemos hacer *click izquierdo* en el edificio y colocarlos en algún punto válido del mapa. Podemos saber que edificio estamos a punto de colocar ya que se puede visualizar un "fantasma" del edificio sobre el puntero del mouse, como podemos notar en la imágen de abajo:
+
+<p align="center">
+  <img width="400" src="https://user-images.githubusercontent.com/75450615/177226502-31f73ede-cd0b-47be-9af5-d3a40b8b3f21.png">
+</p>
+
+
+Los tiempos de construcción y de entrenamiento se ven extendidos en caso de haber una escasez de *energía*, siendo estos proporcionales a la deuda energética. Ahora que tenemos edificios, podemos empezar a crear unidades.
 
 <p align="center">
   <img width="400" src="https://user-images.githubusercontent.com/75450615/175114388-1fd3d5fa-5ec2-4fd6-8fe1-182b3a7490e6.jpg">
@@ -110,7 +123,7 @@ Como se explicó en la sección de edificios, la velocidad de creación de unida
   <img width="400" src="https://user-images.githubusercontent.com/75450615/177224539-fa0861a1-16ec-434f-aec3-b1f2d6c2b4fc.png">
 </p>
 
-En la imagen de arriba se observa una **fábrica ligera** en el medio del entrenamiento de un **trike**. Mientras un edificio esté entrenando algún tipo de unidad, nos informará de que tipo es la unidad en cuestión mediante un ícono ubicado arriba de la barra que nos indica el progreso. Supongamos que queremos crear una **cosechadora** una vez que termine el entrenamiento del **trike**. Para esto, le damos click al ícono de la **cosechadora** mientras la **fábrica ligera** está ocupada con el **trike**, y automáticamente la fábrica iniciará la construcción de una **cosechadora** una vez terminada la construcción del **trike**.
+En la imagen de arriba se observa una **fábrica ligera** en el medio del entrenamiento de un **trike**. Mientras un edificio esté entrenando algún tipo de unidad, nos informará de que tipo es la unidad en cuestión mediante un ícono ubicado arriba de la barra que nos indica el progreso. Supongamos que queremos crear una **cosechadora** una vez que termine el entrenamiento del **trike**. Para esto, le damos click al ícono de la **cosechadora** mientras la **fábrica ligera** está ocupada con el **trike**, y automáticamente la fábrica iniciará la construcción de una **cosechadora** una vez terminada la construcción del **trike**. Debajo tenemos una imagen de lo que veríamos en la pantalla en este escenario:
 
 <p align="center">
   <img width="400" src="https://user-images.githubusercontent.com/75450615/177225041-423f1470-fda4-4503-ac33-7c34dc602077.png">
