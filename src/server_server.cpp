@@ -201,6 +201,7 @@ void Server::sendResponses() {
 void Server::update(){    
     for(std::unique_ptr<ClientHandler>& player : this->players){
         int & energy = player->getEnergy();
+        energy = this->game.getTotalEnergy(player->getFaction());
         if(energy < 0)
             this->time_penalty[player->getFaction()] = 0,
             this->time_penalty[player->getFaction()] += round(abs(energy/10));
