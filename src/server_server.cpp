@@ -107,13 +107,20 @@ void Server::run() {
         this->enableReading();
 
         // mismo que los keepalive de los clientes, no mas keepalive
-        sleepcp(10);  
-        for (size_t i = 0; i < (this->players).size(); i++) 
+        sleepcp(10);
+        std::vector<int> players_to_remove;
+        for (size_t i = 0; i < (this->players).size(); i++) {
             if (this->players[i]->isDone()){
                 std::cout << "player: " << i << " is done" << std::endl;
                 this->players[i]->close();
-                this->players.erase(this->players.begin() + i);
+                players_to_remove.push_back(i);
             }
+        }
+
+        for (size_t i = 0; i < players_to_remove.size(); i++)
+            this->players.erase(this->players.begin() + players_to_remove[i]);
+
+        players_to_remove.clear();
     }
     std::cout << "Game loop stopped. Closing all clients..." << std::endl;
     this->closeAllClients();
