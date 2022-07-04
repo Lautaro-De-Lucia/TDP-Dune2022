@@ -43,12 +43,15 @@ void Server::acceptPlayers() {
 }
 
 void Server::checkForFinishedClients() {
+    std::vector<int> players_to_remove;
     for (size_t k = 0; k < this->players.size(); k++){ 
         if (this->players[k]->isDone() == true){
             this->players[k]->close();
-            this->players.erase(this->players.begin() + k);
+            players_to_remove.push_back(k);
         }
     }
+    for (size_t i = 0; i < players_to_remove.size(); i++)
+        this->players.erase(this->players.begin() + players_to_remove[i]);
 }
 
 void Server::closeAllClients() {
