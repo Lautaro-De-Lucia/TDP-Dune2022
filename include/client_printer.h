@@ -12,11 +12,14 @@ class CPrinter{
     int y;
     int font_size;
     int message_size;
-    std::unique_ptr<SDL2pp::Texture> texture;
+    std::vector<std::unique_ptr<SDL2pp::Texture>> textures;
     public:
     CPrinter();
     void print(std::unique_ptr<SDL2pp::Texture> texture,int x, int y, int font_size,int message_size);
     void timedPrint(std::unique_ptr<SDL2pp::Texture> texture,int x, int y, int font_size,int message_size, size_t time);
     void render(SDL2pp::Renderer & renderer);
+    void renderTimed(SDL2pp::Renderer & renderer);
+    void clearPrints();
+
 
 };

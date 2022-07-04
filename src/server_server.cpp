@@ -85,12 +85,12 @@ void Server::run() {
         //std::cout << "Checking for loosing players" << std::endl;
         this->checkForLosingPlayers();
         //std::cout << "Waiting for players to notify" << std::endl;
-        std::cout << "Total players: " << this->players.size() << std::endl;
+        //std::cout << "Total players: " << this->players.size() << std::endl;
         while(this->TSQ.getSize() < this->players.size()){}
         // pop until empty, then update
         // if > 1000 pops, exit
         // sleep in server
-        std::cout << "Reading a new instruction" << std::endl;
+        //std::cout << "Reading a new instruction" << std::endl;
         for(size_t i = 0 ; i < this->players.size(); i++) { // while (!queue.empty)
             std::unique_ptr<instruction_t> new_instruction = this->TSQ.pop();
             this->handleInstruction(new_instruction);
@@ -203,7 +203,7 @@ void Server::update(){
         int & energy = player->getEnergy();
         if(energy < 0)
             this->time_penalty[player->getFaction()] = 0,
-            this->time_penalty[player->getFaction()] += round(abs(energy/100));
+            this->time_penalty[player->getFaction()] += round(abs(energy/10));
         else
             this->time_penalty[player->getFaction()] = 0;
         for(building_t CREATOR : creators)

@@ -55,7 +55,8 @@ class Player {
    std::map<building_t, int> creators;
    std::map<int, std::unique_ptr<CSelectable>> elements;
    MouseHandler mouse;
-   CPrinter printer;
+   CPrinter response_printer;
+   CPrinter energy_printer;
    GameMap map;
    GameHud hud;
    SDL2pp::Window& game_window;
@@ -109,8 +110,9 @@ class Player {
 
    //   Socket/Protocol methods
 
-   void print(std::string toprint, std::string fontpath, int x, int y, int size ,SDL_Color color,size_t time);
-   
+   void printResponse(std::string toprint, std::string fontpath, int x, int y, int size ,SDL_Color color,size_t time);
+   void printEnergy(std::string toprint, std::string fontpath, int x, int y, int size ,SDL_Color color,size_t time);
+
    void addUnitButton(std::string& IMG_PATH, int& x, int& y, int& id);
    void addBuildButton(std::string& IMG_PATH, int& x, int& y, int& id);
    int checkBuild(int& x, int& y);
@@ -120,6 +122,7 @@ class Player {
 
    void receiveCreationData();
    void renderCreationData();
+   void renderPrinters();
 
    void receiveCreators();
    void renderCreators();

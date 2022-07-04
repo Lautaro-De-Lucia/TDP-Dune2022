@@ -172,12 +172,12 @@ void Player::play(){
                             switch (checkBtn(x, y))
                             {
                             case BUILD_BTN:
-                                if(this->construction_time < CONSTRUCTION_TIME){
+                                if(this->construction_time < CONSTRUCTION_TIME+this->time_penalty){
                                     std::cout << usr_msg[RES_WAIT_TO_BUILD] << std::endl;
-                                    this->print(usr_msg[RES_WAIT_TO_BUILD], DATA_PATH FONT_IMPACT_PATH, 200, 300, 10, colors[RED], 1000);   
+                                    this->printResponse(usr_msg[RES_WAIT_TO_BUILD], DATA_PATH FONT_IMPACT_PATH, 200, 300, 10, colors[RED], 1000);   
                                     continue;
                                 } 
-                                this->print("Place building on screen", DATA_PATH FONT_IMPACT_PATH, 200, 300, 10, colors[YELLOW], 1000);
+                                this->printResponse("Place building on screen", DATA_PATH FONT_IMPACT_PATH, 200, 300, 10, colors[YELLOW], 1000);
                                 this->is_holding_building = true;
                                 this->building_held = checkBuild(x, y);
                                 break;
@@ -331,7 +331,7 @@ void Player::play(){
 
         for (response_t res : responses) {
             if (res != RES_SUCCESS)
-                this->print(usr_msg[res], DATA_PATH FONT_IMPACT_PATH, 200, 300, 10, res >= RESPONSE_FAILURE_OFFSET ? colors[GREEN] : colors[RED], 1000);
+                this->printResponse(usr_msg[res], DATA_PATH FONT_IMPACT_PATH, 200, 300, 10, res >= RESPONSE_FAILURE_OFFSET ? colors[GREEN] : colors[RED], 1000);
         }
 
         responses.clear();
@@ -354,6 +354,9 @@ bool Player::contains(int ID) {
 }
 
 void Player::update() {
+
+    this->energy_printer.clearPrints();
+
     if(this->construction_time < (CONSTRUCTION_TIME + this->time_penalty)){
         //std::cout <<"construction time: "<< construction_time << std::endl;
         this->construction_time+=1;
@@ -373,8 +376,9 @@ void Player::update() {
 
     if(energy < 0){
         this->time_penalty = 0;
-        this->time_penalty = round(abs(energy))/100;
-        this->print("Current energy debt: " + std::to_string(abs(energy)), DATA_PATH FONT_IMPACT_PATH, 400, 330, 10, colors[RED], 1000);   
+        this->time_penalty = round(abs(energy))/10;
+        this->printEnergy("You are running on an energy debt of: " + std::to_string(abs(energy)), DATA_PATH FONT_IMPACT_PATH, 200, 30, 10, colors[RED], 1000);   
+        this->printEnergy("Units & Buildings will take significantly longer to create", DATA_PATH FONT_IMPACT_PATH, 150, 80, 10, colors[RED], 1000);   
     } else { 
         this->time_penalty = 0;
     }
@@ -850,18 +854,24 @@ void Player::render(){
     this->game_renderer.Clear();
     this->renderMap();
     this->renderCorpses();
-    this->printer.render(this->game_renderer);
     for (auto& e : this->elements)
         e.second->render(this->faction,this->game_renderer,this->camera.pos_x,this->camera.pos_y);
     this->hud.update(this->spice,this->c_spice,this->energy);
     this->shotsHandler.render(this->game_renderer, this->textures, this->camera.pos_x, this->camera.pos_y);
     this->explosionsHandler.render(this->game_renderer, this->textures, this->camera.pos_x, this->camera.pos_y);
+    this->renderPrinters();
     this->renderHud();
     this->renderHeldBuilding();
     this->renderButtonInfo();
     this->renderCreators();
     this->renderCreationData();
     this->game_renderer.Present();
+}
+
+void Player::renderPrinters(){
+    this->response_printer.renderTimed(this->game_renderer);
+    if(this->energy < 0)
+        this->energy_printer.render(this->game_renderer);
 }
 
 void Player::renderMap(){
@@ -874,12 +884,20 @@ void Player::renderHud(){
     this->hud.render(this->game_renderer);
 }
 
-void Player::print(std::string toprint, std::string fontpath, int x, int y, int size ,SDL_Color color,size_t time){
+void Player::printResponse(std::string toprint, std::string fontpath, int x, int y, int size ,SDL_Color color,size_t time){
     SDL2pp::Font font(fontpath,size*10);
     SDL2pp::Surface surface = font.RenderText_Solid(toprint,color);
     std::unique_ptr texture = std::make_unique<SDL2pp::Texture>(SDL2pp::Texture(this->game_renderer,surface));
-    this->printer.timedPrint(std::move(texture),x,y,toprint.size(),size,time);
+    this->response_printer.timedPrint(std::move(texture),x,y,toprint.size(),size,time);
 }
+
+void Player::printEnergy(std::string toprint, std::string fontpath, int x, int y, int size ,SDL_Color color,size_t time){
+    SDL2pp::Font font(fontpath,size*10);
+    SDL2pp::Surface surface = font.RenderText_Solid(toprint,color);
+    std::unique_ptr texture = std::make_unique<SDL2pp::Texture>(SDL2pp::Texture(this->game_renderer,surface));
+    this->energy_printer.print(std::move(texture),x,y,toprint.size(),size);
+}
+
 
 void Player::addUnitButton(std::string& IMG_PATH, int& x, int& y, int& id) {
     this->hud.addUnitButton(this->game_renderer, IMG_PATH, x, y, id);
