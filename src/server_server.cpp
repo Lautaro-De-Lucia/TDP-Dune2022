@@ -80,15 +80,28 @@ void Server::read_command(std::istream& input_stream) {
 }
 
 void Server::run() {
+    bool quit = false;
     while (this->running) {
         //std::cout << "Starting instance "<< k << " of game loop" << std::endl;
         //std::cout << "Checking for loosing players" << std::endl;
         this->checkForLosingPlayers();
         //std::cout << "Waiting for players to notify" << std::endl;
-        while(this->TSQ.getSize() < this->players.size()){}
+        std::cout << "Total players: " << this->players.size() << std::endl;
+        while(this->TSQ.getSize() < this->players.size()){
+            if(this->running == false){
+                std::cout << "I'm quitting"<< std::endl;
+                quit = true;
+                break;
+            }
+        }
+        if(quit == true){
+            std::cout << "Imma quit" << std::endl;
+            break;
+        }
         // pop until empty, then update
         // if > 1000 pops, exit
         // sleep in server
+        std::cout << "Reading a new instruction" << std::endl;
         for(size_t i = 0 ; i < this->players.size(); i++) { // while (!queue.empty)
             std::unique_ptr<instruction_t> new_instruction = this->TSQ.pop();
             this->handleInstruction(new_instruction);
@@ -106,11 +119,12 @@ void Server::run() {
 
         // mismo que los keepalive de los clientes, no mas keepalive
         sleepcp(10);  
-
         for (size_t i = 0; i < (this->players).size(); i++) 
-            if (this->players[i]->isDone())
-                this->players[i]->close(),
-                this->players.erase(this->players.begin() + i);  
+            if (this->players[i]->isDone()){
+                std::cout << "player: " << i << " is done" << std::endl;
+                this->players[i]->close();
+                this->players.erase(this->players.begin() + i);
+            }
     }
     std::cout << "Game loop stopped. Closing all clients..." << std::endl;
     this->closeAllClients();

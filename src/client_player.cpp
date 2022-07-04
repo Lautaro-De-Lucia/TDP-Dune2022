@@ -91,10 +91,10 @@ void Player::play(){
         while (SDL_PollEvent(&event)) {
 
             if (event.type == SDL_QUIT) {
-                new_mouse_event.clear();
-                new_mouse_event.push_back(CLOSE);
-                this->mouse_events.push(new_mouse_event);
+                std::cout << "Leaving..." << std::endl;
+                this->protocol.send_command(CLOSE, this->socket);
                 quit = true;
+                sleep(1);
                 break; // salir del otro loop también
             }
             

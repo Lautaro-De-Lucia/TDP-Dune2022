@@ -47,17 +47,18 @@ void ClientHandler::run() {
         this->instruction_queue.push(std::unique_ptr<building_create_t>(new building_create_t(this->player_id, this->faction,CONSTRUCTION_YARD,ORDOS_INIT_POS_X,ORDOS_INIT_POS_Y)));
 
     while (true) {
-        std::cout << "I ain't done yet " << this->player_id << std::endl;
+        //std::cout << "I ain't done yet " << this->player_id << std::endl;
         while (this->reading_flags[this->player_id] == false){
             if (finished)
                 return;
         }
-        std::cout << "This should print" << this->player_id << std::endl;
+        //std::cout << "This should print" << this->player_id << std::endl;
         command_t command;
-        std::cout << "Receiving...: "<< this->player_id <<std::endl;
+        //std::cout << "Receiving...: "<< this->player_id <<std::endl;
         this->protocol.receive_command(command, this->player_socket);
 
         if(command == CLOSE) {
+            std::cout << "Client closed lmao" << std::endl;
             this->finished = true;
             break;
         }

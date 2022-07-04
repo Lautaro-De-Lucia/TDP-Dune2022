@@ -16,7 +16,6 @@ creator_mark(game_renderer,DATA_PATH CMARK_PATH)
                     .append("/").append(stringify(FACTION))
                     .append("/").append(stringify(ANIMATION))
                     .append("/").append(stringify(DIR)).append(".png"),
-                    std::cout << "Loading path" << path << std::endl,
                     unit_textures[UNIT][FACTION][ANIMATION].emplace(DIR,SDL2pp::Texture(game_renderer,path.c_str())),
                     path.clear();
 
@@ -63,7 +62,6 @@ creator_mark(game_renderer,DATA_PATH CMARK_PATH)
                 .append("/").append("unit_imgs")
                 .append("/").append(stringify(FACTION))
                 .append("/").append(stringify(UNIT)).append(".jpg"),
-                std::cout << "Loading texture at path: " << path << std::endl,
                 unit_imgs_textures[FACTION].emplace(UNIT,SDL2pp::Texture(game_renderer,path.c_str())),
                 path.clear();
     //  Load Textures for explosions
