@@ -117,7 +117,61 @@ AudioPlayer::AudioPlayer(){
     }
     this->sound_effects.insert({KILLGUY9,killguy9});
 
+    Mix_Chunk* ai_atack = Mix_LoadWAV(DATA_PATH AI_ATACK_PATH);
+    if (ai_atack == NULL) {
+        printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+        exit(1);
+    }
+    this->sound_effects.insert({AI_ATACK,ai_atack});
 
+    Mix_Chunk* ai_mfail = Mix_LoadWAV(DATA_PATH AI_MFAIL_PATH);
+    if (ai_mfail == NULL) {
+        printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+        exit(1);
+    }
+    this->sound_effects.insert({AI_MFAIL,ai_mfail});
+
+    Mix_Chunk* h_econf1 = Mix_LoadWAV(DATA_PATH H_ECONF1_PATH);
+    if (h_econf1 == NULL) {
+        printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+        exit(1);
+    }
+    this->sound_effects.insert({H_ECONF1,h_econf1});
+
+    Mix_Chunk* h_econf2 = Mix_LoadWAV(DATA_PATH H_ECONF2_PATH);
+    if (h_econf2 == NULL) {
+        printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+        exit(1);
+    }
+    this->sound_effects.insert({H_ECONF2,h_econf2});
+
+    Mix_Chunk* h_econf3 = Mix_LoadWAV(DATA_PATH H_ECONF3_PATH);
+    if (h_econf3 == NULL) {
+        printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+        exit(1);
+    }
+    this->sound_effects.insert({H_ECONF3,h_econf3});
+
+    Mix_Chunk* h_esel1 = Mix_LoadWAV(DATA_PATH H_ESEL1_PATH);
+    if (h_esel1 == NULL) {
+        printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+        exit(1);
+    }
+    this->sound_effects.insert({H_ESEL1,h_esel1});
+
+    Mix_Chunk* h_esel2 = Mix_LoadWAV(DATA_PATH H_ESEL2_PATH);
+    if (h_esel2 == NULL) {
+        printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+        exit(1);
+    }
+    this->sound_effects.insert({H_ESEL2,h_esel2});
+
+    Mix_Chunk* h_esel3 = Mix_LoadWAV(DATA_PATH H_ESEL3_PATH);
+    if (h_esel3 == NULL) {
+        printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+        exit(1);
+    }
+    this->sound_effects.insert({H_ESEL3,h_esel3});
 
     // MUSIC
 

@@ -27,6 +27,15 @@
 #define KILLGUY8_PATH "/sounds/KILLGUY8.WAV"
 #define KILLGUY9_PATH "/sounds/KILLGUY9.WAV"
 
+#define AI_ATACK_PATH "/sounds/AI_ATACK.WAV"
+#define AI_MFAIL_PATH "/sounds/AI_MFAIL.WAV"
+#define H_ECONF1_PATH "/sounds/H_ECONF1.WAV"
+#define H_ECONF2_PATH "/sounds/H_ECONF2.WAV"
+#define H_ECONF3_PATH "/sounds/H_ECONF3.WAV"
+#define H_ESEL1_PATH "/sounds/H_ESEL1.WAV"
+#define H_ESEL2_PATH "/sounds/H_ESEL2.WAV"
+#define H_ESEL3_PATH "/sounds/H_ESEL3.WAV"
+
 enum sfx_t {
     HOUSE_CHOSEN,
     GAME_START,
@@ -42,7 +51,15 @@ enum sfx_t {
     CRUSH1,
     KILLGUY7,
     KILLGUY8,
-    KILLGUY9
+    KILLGUY9,
+    AI_ATACK,
+    AI_MFAIL,
+    H_ECONF1,
+    H_ECONF2,
+    H_ECONF3,
+    H_ESEL1,
+    H_ESEL2,
+    H_ESEL3
 };
 
 enum music_t {
