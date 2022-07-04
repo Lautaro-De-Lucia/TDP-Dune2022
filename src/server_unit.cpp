@@ -364,7 +364,7 @@ void Trike::attack(int x, int y, Board& board){
     } 
     std::cout << "Moving to the position: " << this->moving_position << std::endl;
     //  Move there
-    this->move(this->moving_position.x,this->moving_position.y,board);
+    this->pending_move.push(Position(this->moving_position.x,this->moving_position.y));
 }
 
 void Trike::receiveDamage(int damage){
