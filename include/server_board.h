@@ -43,6 +43,7 @@ class Board{
     bool canTraverse(int x, int y);
     bool hasEnemy(int x, int y, player_t player_faction);
     void dealDamage(int x, int y, int damage);
+    void deleteElement(int id);
     size_t get_width();
     size_t get_height();
     std::vector<Position> getChangedSandPositions(){return this->changed_sand_positions;}

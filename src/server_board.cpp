@@ -94,22 +94,21 @@ void Board::dealDamage(int x, int y, int damage){
     std::unique_ptr<Selectable>& element = this->elements.at(this->cells[x][y].getID());
     element->receiveDamage(damage);
     std::cout << "Element LP" << element->getLP() <<std::endl;
-    if(element->getLP() <= 0){
-        std::cout << "Element LP have reached:" << element->getLP() <<std::endl;
-        std::cout << "Thus it will be destroyed" <<std::endl;
-        for(unit_t UNIT : units)
-            if(element->canCreate(UNIT)) {
-                this->removeUnitCreator(element->getFaction(),UNIT);
-                if (element->getID() == this->creatorID[element->getFaction()][UNIT])
-                    this->creatorID[element->getFaction()][UNIT] = this->findNewCreator(element->getFaction(),UNIT);
-            }
-        for (Position pos : element->getPositions()){
-            std::cout << "Disoccupying cell at position: " << pos << std::endl;
-            this->cells[pos.x][pos.y].disoccupy();
+    if(element->getLP() <= 0)
+        this->deleteElement(element->getID());
+}
+
+void Board::deleteElement(int id){
+    std::unique_ptr<Selectable>& element = this->elements.at(id);
+    for(unit_t UNIT : units)
+        if(element->canCreate(UNIT)) {
+            this->removeUnitCreator(element->getFaction(),UNIT);
+            if (element->getID() == this->creatorID[element->getFaction()][UNIT])
+                this->creatorID[element->getFaction()][UNIT] = this->findNewCreator(element->getFaction(),UNIT);
         }
-        std::cout << "Element of ID: " << element->getID() << " was just destroyed" <<std::endl;
-        this->elements.erase(element->getID());
-    }
+    for (Position pos : element->getPositions())
+        this->cells[pos.x][pos.y].disoccupy();
+    this->elements.erase(element->getID());
 }
 
 Cell& Board::getCell(int x, int y){

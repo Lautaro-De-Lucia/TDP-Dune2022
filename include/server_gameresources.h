@@ -41,6 +41,7 @@ public:
     bool isEnabled(player_t faction,unit_t unit);
     bool hasLost(player_t faction);
     int getTotalChangedCells();
+    void deleteElement(int ID);
     std::vector<Position> getChangedCells();
     int getSpiceCapacity(player_t faction);
     int getTotalEnergy(player_t faction);

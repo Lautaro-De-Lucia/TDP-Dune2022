@@ -12,6 +12,12 @@ Cell & GameResources::getCell(int x, int y){
     return this->board.getCell(x,y);
 }
 
+void GameResources::deleteElement(int ID){
+    std::lock_guard<std::mutex> locker(this->lock);
+    this->board.deleteElement(ID);
+}
+
+
 bool GameResources::isEnabled(player_t faction,unit_t unit){
     std::lock_guard<std::mutex> locker(this->lock);
     if(unit != SARDAUKAR && unit != DEVASTATOR)
