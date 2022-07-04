@@ -190,9 +190,33 @@ void Server::handleInstruction(idle_t & INS) {}
 void Server::handleInstruction(close_t & INS) {
     std::cout << "handling close instruction" << std::endl;
 
+    this->game.deleteElement(this->game.getElementAt(this->getFactionBase(INS.faction).x, this->getFactionBase(INS.faction).y)->getID());
+
     this->players[INS.player_ID]->close();
     this->players.erase(this->players.begin() + INS.player_ID);
 
+}
+
+Position Server::getFactionBase(player_t faction) {
+
+    Position pos(-1,-1);
+
+    switch (faction)
+    {
+    case ATREIDES:
+        pos = Position(ATREIDES_INIT_POS_X, ATREIDES_INIT_POS_Y);
+        break;
+    case ORDOS:
+        pos = Position(ORDOS_INIT_POS_X, ORDOS_INIT_POS_Y);
+        break;
+    case HARKONNEN:
+        pos = Position(HARKONNEN_INIT_POS_X, HARKONNEN_INIT_POS_Y);
+        break;
+    default:
+        break;
+    }
+
+    return pos;
 }
 
 void Server::sendResponses() {
