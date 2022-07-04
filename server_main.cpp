@@ -63,6 +63,15 @@ std::vector<std::vector<cell_t>> generate_server_map (std::string tile_map_file)
     return cells;
 }
 
+void readInput() {
+    std::string user_input;
+    while (true) {
+        std::cin >> user_input;
+        if (user_input == "q")
+            break;
+    }
+}
+
 int main(int argc, char *argv[]) {
 
     if (argc != MAX_CMD_ARGS)
@@ -70,11 +79,17 @@ int main(int argc, char *argv[]) {
     const char* service_name = argv[CMD_ARG_PORT];
 
     std::vector<std::vector<cell_t>> cells = generate_server_map(DATA_PATH MAP_FILE);
-    Server server(service_name,cells);
-    server.acceptPlayers();
-    std::thread game_loop(&Server::run, &server);
-    std::cout << "going to read command" << std::endl;
-    server.read_command(std::cin);
-    server.stop();
-    game_loop.join();
+    try{    
+        Server server(service_name,cells);  
+        server.acceptPlayers();
+        //server.stopClientAccept();
+        std::thread game_loop(&Server::run, &server);
+        readInput();        
+        server.stopGameLoop();
+        std::cout << "Joining server thread" << std::endl;
+        game_loop.join();   
+        std::cout << "Server joined. Program over." << std::endl;
+    } catch(std::exception & e){
+        std::cout << "Error:" << e.what() << std::endl;
+    }
 }

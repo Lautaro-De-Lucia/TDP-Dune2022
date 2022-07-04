@@ -2,7 +2,7 @@
 
 extern std::map<color_t,SDL_Color> colors;
 
-#define MAX_CONNECTIONS 1
+#define MAX_CONNECTIONS 2
 
 int ID = 0;
 
@@ -14,7 +14,7 @@ socket(service_name),
 game(cells),
 TSQ(MAX_CONNECTIONS) 
 {
-    this->running = false;
+    this->running = true;
     for(player_t FACTION: factions)
         for (unit_t UNIT : units)
             this->unit_time[FACTION][UNIT] = 0,
@@ -31,13 +31,15 @@ void Server::acceptPlayers() {
         this->ready_flags.push_back(true);
         this->players.push_back(std::unique_ptr<ClientHandler>(new ClientHandler(i,INIT_ENERGY,INIT_SPICE,this->ready_flags,std::move(client_socket),this->TSQ)));
         i++;
-        //checkForFinishedClients();
+        checkForFinishedClients();
     }
-    for (size_t i = 0; i < this->players.size(); i++) {
-        this->players[i]->notifyGameStart();
+    if(this->players.size() == MAX_CONNECTIONS)
+        for (size_t i = 0; i < this->players.size(); i++) 
+            this->players[i]->notifyGameStart();
+    if(this->players.size() < MAX_CONNECTIONS) {       
+        closeAllClients();    
+        throw std::runtime_error("Server closed unexpectedly");
     }
-    
-    //closeAllClients();
 }
 
 void Server::checkForFinishedClients() {
@@ -50,16 +52,22 @@ void Server::checkForFinishedClients() {
 }
 
 void Server::closeAllClients() {
-    for (size_t k = 0; k < this->players.size(); k++){ 
-        this->players[k]->close();
-    }
+    for (size_t k = 0; k < this->players.size(); k++)
+        if(!this->players[k]->isDone())
+            std::cout << "Closing client: " << k << std::endl,
+            this->players[k]->close();
+    std::cout << "Done" << std::endl;
 }
 
 // @TODO: lanzar excepción
-void Server::stop() {
+void Server::stopClientAccept() {
+    //this->running = false;
+    //if ((this->socket).shutdown(SHUT_RDWR))
+        //std::cerr << "SHUTDOWN_ERROR: " << '\n';
+}
+
+void Server::stopGameLoop() {
     this->running = false;
-    if ((this->socket).shutdown(SHUT_RDWR))
-        std::cerr << "SHUTDOWN_ERROR: " << '\n';
 }
 
 void Server::read_command(std::istream& input_stream) {
@@ -72,9 +80,7 @@ void Server::read_command(std::istream& input_stream) {
 }
 
 void Server::run() {
-    this->running = true;
     while (this->running) {
-
         //std::cout << "Starting instance "<< k << " of game loop" << std::endl;
         //std::cout << "Checking for loosing players" << std::endl;
         this->checkForLosingPlayers();
@@ -99,13 +105,15 @@ void Server::run() {
         this->enableReading();
 
         // mismo que los keepalive de los clientes, no mas keepalive
-        sleepcp(10);
-    }
+        sleepcp(10);  
 
-    for (size_t i = 0; i < (this->players).size(); i++) {
-        if (!this->players[i]->isDone())
-            this->players[i]->close();
+        for (size_t i = 0; i < (this->players).size(); i++) 
+            if (this->players[i]->isDone())
+                this->players[i]->close(),
+                this->players.erase(this->players.begin() + i);  
     }
+    std::cout << "Game loop stopped. Closing all clients..." << std::endl;
+    this->closeAllClients();
 }
 
 void Server::checkForLosingPlayers(){

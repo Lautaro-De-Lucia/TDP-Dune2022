@@ -44,7 +44,8 @@ class Server {
       void checkForFinishedClients();
       void checkForLosingPlayers();
       void closeAllClients();
-      void stop();
+      void stopClientAccept();
+      void stopGameLoop();
       void read_command(std::istream& input_stream);
 
       void handleInstruction(std::unique_ptr<instruction_t> & INS);      

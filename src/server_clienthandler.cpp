@@ -23,7 +23,10 @@ bool ClientHandler::isDone(){
 }
 
 void ClientHandler::close(){
+    this->finished = true;
+    std::cout << "Joining my thread: " << this->player_id << std::endl;
     this->thread.join();
+    std::cout << "Thread joined: " << this->player_id << std::endl;
 }
 
 void ClientHandler::notifyGameStart(){
@@ -44,10 +47,14 @@ void ClientHandler::run() {
         this->instruction_queue.push(std::unique_ptr<building_create_t>(new building_create_t(this->player_id, this->faction,CONSTRUCTION_YARD,ORDOS_INIT_POS_X,ORDOS_INIT_POS_Y)));
 
     while (true) {
-        
-        while(this->reading_flags[this->player_id] == false){}
-
+        std::cout << "I ain't done yet " << this->player_id << std::endl;
+        while (this->reading_flags[this->player_id] == false){
+            if (finished)
+                return;
+        }
+        std::cout << "This should print" << this->player_id << std::endl;
         command_t command;
+        std::cout << "Receiving...: "<< this->player_id <<std::endl;
         this->protocol.receive_command(command, this->player_socket);
 
         if(command == CLOSE) {
@@ -87,6 +94,7 @@ void ClientHandler::run() {
         //  std::cout << "Pushed instruction to queue" << std::endl;
         this->reading_flags[this->player_id] = false;
     }
+    std::cout << "I'm fucking done: " << this->player_id << std::endl;
 }
 
 void ClientHandler::reportState(GameResources & game){
