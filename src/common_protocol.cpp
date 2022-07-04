@@ -523,8 +523,6 @@ void Protocol::send_creators(int barrack_id, int light_factory_id, int heavy_fac
     sent_size = client_socket.sendall(&heavy_factory_id_buffer, sizeof(heavy_factory_id_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
 
-    std::cout << "Sent light factory ID: " << light_factory_id << std::endl;
-
     return;
 }
 

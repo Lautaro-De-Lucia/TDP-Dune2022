@@ -56,6 +56,8 @@ void Board::removeUnitCreator(player_t faction, unit_t type){
     this->creators[faction][type]--;
 }
 int Board::getTotalCreators(player_t faction, unit_t type){
+    if(type == UNDEFINED)
+        return -1;
     return this->creators[faction][type];
 }
 
@@ -183,9 +185,11 @@ int Board::getCreator(player_t faction,unit_t type){
 }
 
 void Board::makeCreator(int building_ID){
-    for (unit_t UNIT : units)
+    for (unit_t UNIT : units){
+        std::cout << "dfg" << std::endl;
         if(this->elements.at(building_ID)->canCreate(UNIT))
             this->creatorID[this->elements.at(building_ID)->getFaction()][UNIT] = building_ID;
+    }
 }
 
 void Board::removeCreator(player_t faction, unit_t unit) {

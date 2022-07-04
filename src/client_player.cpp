@@ -733,7 +733,6 @@ void Player::receiveCreators() {
     this->creators[LIGHT_FACTORY] = light_factory_id;
     this->creators[HEAVY_FACTORY] = heavy_factory_id;
 
-    std::cout << "Received light factory ID: " << this->creators[LIGHT_FACTORY] << std::endl;
 }
 
 void Player::renderCreationData() {    

@@ -190,6 +190,7 @@ enum cell_t {
 };
 
 enum unit_t {
+    UNDEFINED = -1,
     HARVESTER = 1,
     TRIKE = 2,
     FREMEN = 3,

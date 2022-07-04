@@ -105,9 +105,8 @@ response_t GameResources::createBuilding(player_t faction,building_t type,int po
     response_t res = (*building).place(board,pos_x,pos_y,spice,energy);
     if (res == RES_CREATE_BUILDING_SUCCESS){
         (this->elements).insert({ID, std::move(building)});
-        ID++;
         this->board.addUnitCreator(faction,type);
-        unit_t model_unit;
+        unit_t model_unit = UNDEFINED;
         if (type == BARRACK) {
             model_unit = FREMEN;
         } else if (type == LIGHT_FACTORY) {
@@ -116,7 +115,8 @@ response_t GameResources::createBuilding(player_t faction,building_t type,int po
             model_unit = TANK;
         }
         if (this->board.getTotalCreators(faction, model_unit) == 1)
-            this->board.makeCreator(ID - 1);
+            this->board.makeCreator(ID);
+        ID++;    
     }
     return res;
 }

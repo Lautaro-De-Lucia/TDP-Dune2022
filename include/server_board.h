@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <mutex>
 #include <memory>
 #include <iostream>
 #include <cmath>
@@ -19,6 +20,7 @@ class Board{
  private:
     int dim_x;
     int dim_y;
+    std::mutex lock;
     std::vector<std::vector<Cell>> cells;
     std::map<int,std::unique_ptr<Selectable>> & elements;
     std::map<player_t,std::map<unit_t,int>> creatorID;

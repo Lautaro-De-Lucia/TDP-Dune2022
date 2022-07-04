@@ -8,7 +8,9 @@ Selectable(ID,faction,LP,pos,dim_x,dim_y,false)
     this->energy = energy;
 }
 
-bool Building::canCreate(unit_t type){return false;}
+bool Building::canCreate(unit_t type){
+    std::cout << "wut" << std::endl;
+    return false;}
 bool Building::canEnable(unit_t type){return false;}
 bool Building::canCostTheGame(){return false;}
 
@@ -338,6 +340,10 @@ Building(ID,faction,LP,spice,energy,pos,dim_x,dim_y)
 
 bool ConstructionYard::canCostTheGame(){
     return true;
+}
+
+bool ConstructionYard::canCreate(unit_t unit){
+    return false;
 }
 
 response_t ConstructionYard::place(Board& board,int pos_x,int pos_y,int& spice,int& energy){

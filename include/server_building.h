@@ -36,6 +36,7 @@ class ConstructionYard : public Building {
     response_t place(Board& board, int pos_x, int pos_y, int& spice, int& energy);
     virtual void sendState(Protocol & protocol,Socket & client_socket);
     virtual bool canCostTheGame();
+    virtual bool canCreate(unit_t type);
 };
 
 class Barrack : public Building {
