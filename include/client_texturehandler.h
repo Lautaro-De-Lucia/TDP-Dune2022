@@ -21,6 +21,7 @@ class TextureHandler {
     std::vector<SDL2pp::Texture> blood_textures;
     std::map<unit_t,SDL2pp::Texture> unit_shot_textures;
     std::map<selectable_t,SDL2pp::Texture> corpse_textures;
+    std::map<game_status_t,SDL2pp::Texture> game_status_textures;
 
  public:
     TextureHandler(SDL2pp::Renderer & game_renderer);
@@ -35,4 +36,5 @@ class TextureHandler {
     SDL2pp::Texture & getExplosion(int frame, bool is_infantry);
     SDL2pp::Texture & getUnitShot(unit_t unit);
     SDL2pp::Texture & getCorpse(selectable_t unit);
+    SDL2pp::Texture & getGameStatus(game_status_t game_status);
 };

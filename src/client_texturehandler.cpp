@@ -101,6 +101,17 @@ creator_mark(game_renderer,DATA_PATH CMARK_PATH)
         this->corpse_textures.emplace((selectable_t) UNIT,SDL2pp::Texture(game_renderer,path.c_str())),
         path.clear();
     }
+    //  Load Textures for status
+    path.append(DATA_PATH)
+    .append("/").append("status")
+    .append("/").append("defeat").append(".png"),
+    this->game_status_textures.emplace(GAME_FAILURE,SDL2pp::Texture(game_renderer,path.c_str())),
+    path.clear();
+    path.append(DATA_PATH)
+    .append("/").append("status")
+    .append("/").append("victory").append(".png"),
+    this->game_status_textures.emplace(GAME_VICTORY,SDL2pp::Texture(game_renderer,path.c_str())),
+    path.clear();
 };
 
 SDL2pp::Texture & TextureHandler::getTexture(unit_t unit, player_t faction,frame_t animation, direction_t direction){
@@ -151,4 +162,8 @@ SDL2pp::Texture & TextureHandler::getUnitShot(unit_t unit){
 
 SDL2pp::Texture & TextureHandler::getCorpse(selectable_t unit){
     return this->corpse_textures.at(unit);
+}
+
+SDL2pp::Texture & TextureHandler::getGameStatus(game_status_t game_status) {
+    return this->game_status_textures.at(game_status);
 }

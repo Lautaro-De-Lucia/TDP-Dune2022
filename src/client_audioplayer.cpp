@@ -223,6 +223,13 @@ AudioPlayer::AudioPlayer(){
         exit(1);
     }
     this->background_songs.insert({WAITING_MUSIC, waiting_music});
+
+    Mix_Music* victory_music = Mix_LoadMUS(DATA_PATH VICTORY_MUSIC_PATH);
+    if (waiting_music == NULL) {
+        printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+        exit(1);
+    }
+    this->background_songs.insert({VICTORY_MUSIC, victory_music});
 }
 
 void AudioPlayer::play(sfx_t sound_effect){
@@ -231,4 +238,8 @@ void AudioPlayer::play(sfx_t sound_effect){
 
 void AudioPlayer::play(music_t music){
     Mix_PlayMusic(this->background_songs[music],-1);
+}
+
+void AudioPlayer::stopMusic() {
+    Mix_HaltMusic();
 }

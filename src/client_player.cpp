@@ -71,6 +71,11 @@ textures(textures)
     this->creators.insert({BARRACK,-1});
     this->creators.insert({LIGHT_FACTORY,-1});
     this->creators.insert({HEAVY_FACTORY,-1});
+
+    this->game_status = GAME_NEUTRAL;
+
+    this->enemies = 0;
+    this->destroyed_enemies = 0;
 }
 
 void Player::play(){
@@ -276,7 +281,7 @@ void Player::play(){
 
         if (frame_time_instruction < GAME_SPEED && game_has_started)
             continue;
-            
+
         game_has_started = true;
 
         base_time_instruction = current_time;
@@ -292,6 +297,11 @@ void Player::play(){
         } else {
             command = IDLE;
         }
+
+        if (this->game_status != GAME_NEUTRAL) {
+            command = IDLE;
+        }
+
         //  La pasamos por socket
         this->protocol.send_command(command, this->socket);
 
@@ -551,6 +561,8 @@ void Player::update() {
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(CONSTRUCTION_YARD,id,faction,lp,pos_x,pos_y,CONSTRUCTION_YARD_DIM_X,CONSTRUCTION_YARD_DIM_Y,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
                     this->updates.push_back(true);
+                    if (faction != this->faction)
+                        this->enemies++;
                 }  
                 break;    
             case SEL_AIR_TRAP:
@@ -665,6 +677,23 @@ void Player::update() {
                 case SEL_HEAVY_FACTORY:
                     if (_id == this->creators[HEAVY_FACTORY])
                         this->creators[HEAVY_FACTORY] = -1;
+                case SEL_CONSTRUCTION_YARD:
+                    if (this->positionBelongsToBase(_pos)) {
+                        // Handle game failure
+                        this->game_status = GAME_FAILURE;
+                        this->audio.stopMusic();
+                        this->audio.play(AI_MFAIL);
+                        this->audio.play(WAITING_MUSIC);
+                    } else {
+                        this->destroyed_enemies++;
+                        if (this->enemies == this->destroyed_enemies) {
+                            // Handle game success
+                            this->game_status = GAME_VICTORY;
+                            this->audio.stopMusic();
+                            this->audio.play(VICTORY);
+                            this->audio.play(VICTORY_MUSIC);
+                        }
+                    }
                 default:
                     break;
                 }
@@ -865,6 +894,8 @@ void Player::render(){
     this->renderButtonInfo();
     this->renderCreators();
     this->renderCreationData();
+    if (this->game_status != GAME_NEUTRAL)
+        this->renderGameEnding();
     this->game_renderer.Present();
 }
 
@@ -1025,4 +1056,18 @@ bool Player::positionBelongsToBase(Position position) {
         }
     }
     return false;
+}
+
+void Player::renderGameEnding(){
+
+    if (this->game_status == GAME_NEUTRAL)
+        return;
+
+    SDL2pp::Texture & status = textures.getGameStatus(this->game_status);
+
+    this->game_renderer.Copy(
+        status,
+        SDL2pp::NullOpt,
+        SDL2pp::Rect((SCREEN_WIDTH/4)+20, (SCREEN_HEIGHT/4)+20, SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
+    );    
 }

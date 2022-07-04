@@ -300,6 +300,12 @@ enum selectable_t {
     SEL_CONSTRUCTION_YARD = 15
 };
 
+enum game_status_t {
+    GAME_NEUTRAL,
+    GAME_FAILURE,
+    GAME_VICTORY
+};
+
 struct instruction_t {
     int player_ID;
     player_t faction;

@@ -92,7 +92,11 @@ class Player {
    clock_t base_alert_delay;
 
    Position base_position;
-  
+
+   game_status_t game_status;
+
+   int enemies;
+   int destroyed_enemies;
 
    Player(player_t faction, const char* host_name, const char* service_name,Camera & cam, SDL2pp::Window& window,SDL2pp::Renderer& renderer,TextureHandler & textures, size_t spice, size_t c_spice, int energy, size_t c_energy, std::vector<std::vector<std::string>>& map_data);
 
@@ -141,4 +145,6 @@ class Player {
    bool positionBelongsToBase(Position position);
 
    void triggerNewUnitAlert(unit_t type);
+
+   void renderGameEnding();
 };

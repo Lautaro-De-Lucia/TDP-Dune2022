@@ -6,7 +6,8 @@
 #define ATREIDES_MUSIC_PATH "/atreides-background.wav"
 #define HARKONNEN_MUSIC_PATH "/harkonnen-background.wav"
 #define ORDOS_MUSIC_PATH "/ordos-background.wav"
-#define WAITING_MUSIC_PATH "/waiting.wav"
+#define WAITING_MUSIC_PATH "/waiting-background.wav"
+#define VICTORY_MUSIC_PATH "/victory-background.wav"
 
 #define HOUSE_CHOSEN_PATH "/sounds/house-chosen.wav"
 #define GAME_START_PATH "/sounds/game-start.wav"
@@ -74,7 +75,8 @@ enum music_t {
     ATREIDES_MUSIC,
     HARKONNEN_MUSIC,
     ORDOS_MUSIC,
-    WAITING_MUSIC
+    WAITING_MUSIC,
+    VICTORY_MUSIC
 };
 
 class AudioPlayer {
@@ -85,4 +87,5 @@ class AudioPlayer {
     AudioPlayer();
     void play(sfx_t sound_effect);
     void play(music_t music);
+    void stopMusic();
 };
