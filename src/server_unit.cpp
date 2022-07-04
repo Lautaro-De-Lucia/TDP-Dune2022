@@ -542,7 +542,7 @@ void Fremen::react(int x, int y, Board& board) {
     }
     if (!board.canTraverse(x,y))        
         return;
-    this->pending_move.push(Position(x, y));        
+    this->pending_move.push(Position(x, y));         
 }
 
 void Fremen::attack(int x, int y, Board& board){
