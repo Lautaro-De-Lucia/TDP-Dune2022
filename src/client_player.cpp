@@ -411,10 +411,6 @@ void Player::update() {
         // this->protocol.receive_sand_cell(pos_x,pos_y,spice,this->socket);
         // this->map_cells[pos_x][pos_y].setType(type);
         // }
-    //  Receive creator state
-    this->receiveCreationData();
-    //  Receive creators
-    this->receiveCreators();
 
     clock_t current_time = clock();
 
@@ -652,6 +648,7 @@ void Player::update() {
                 }  
                 break;                      
         }
+        
     }
     //  Destroy non-updated elements
     for (size_t i = 0 ; i < this->updates.size() ; i++) {
@@ -708,6 +705,10 @@ void Player::update() {
             }
         }
     }
+    //  Receive creator state
+    this->receiveCreationData();
+    //  Receive creators
+    this->receiveCreators();
 }
 
 void Player::receiveCreationData() {   
@@ -731,10 +732,13 @@ void Player::receiveCreators() {
     this->creators[BARRACK] = barrack_id;
     this->creators[LIGHT_FACTORY] = light_factory_id;
     this->creators[HEAVY_FACTORY] = heavy_factory_id;
+
+    std::cout << "Received light factory ID: " << this->creators[LIGHT_FACTORY] << std::endl;
 }
 
 void Player::renderCreationData() {    
     for(creation_t & c : this->creation_data){
+        std::cout << "Creator ID: " << c.creator_ID << std::endl;
         std::unique_ptr<CSelectable> & element = this->elements[c.creator_ID];
         Position pos = element->getPosition();
         switch(element->getType()){

@@ -54,4 +54,5 @@ class Board{
     std::vector<Position> getDepositPositions(player_t faction);
     std::vector<Position> getSurroundings(Position position, int e_dim_x, int e_dim_y);
     void removeCreator(player_t faction,unit_t unit);
+    int findNewCreator(player_t faction,unit_t unit);
 };

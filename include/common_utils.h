@@ -212,6 +212,7 @@ constexpr std::initializer_list<unit_t> units = {
 const char * stringify(unit_t unit);
 
 enum building_t {
+    NONE = -1,
     AIR_TRAP = 1, 
     BARRACK = 2,
     REFINERY = 3,

@@ -430,8 +430,8 @@ void Protocol::receive_response(response_t& response, Socket& client_socket) {
 
 void Protocol::send_creation_data(int creator_ID, int unit, int current_time, int total_time, Socket& client_socket){
 
-    uint16_t _ID = (uint16_t) creator_ID;
-    uint16_t ID_buffer = (uint16_t) htons(_ID);
+    uint16_t _ID = (int16_t) creator_ID;
+    uint16_t ID_buffer = (int16_t) htons(_ID);
 
     uint8_t _unit = (uint8_t) unit;
     uint8_t unit_buffer = (uint8_t) _unit;
@@ -462,8 +462,8 @@ void Protocol::send_creation_data(int creator_ID, int unit, int current_time, in
 
 void Protocol::receive_creation_data(int & creator_ID, int & unit, int & current_time, int & total_time, Socket& client_socket){
     
-    uint16_t ID_buffer;
-    uint16_t _ID;
+    int16_t ID_buffer;
+    int16_t _ID;
 
     uint8_t unit_buffer;
     uint8_t _unit;
@@ -479,7 +479,7 @@ void Protocol::receive_creation_data(int & creator_ID, int & unit, int & current
 
     recv_size = client_socket.recvall(&ID_buffer, sizeof(ID_buffer), &was_closed);
     handle_receive(was_closed, recv_size);
-    _ID = (uint16_t) ntohs(ID_buffer);
+    _ID = (int16_t) ntohs(ID_buffer);
     creator_ID = (int) _ID;
 
     recv_size = client_socket.recvall(&unit_buffer, sizeof(unit_buffer), &was_closed);
@@ -522,6 +522,8 @@ void Protocol::send_creators(int barrack_id, int light_factory_id, int heavy_fac
 
     sent_size = client_socket.sendall(&heavy_factory_id_buffer, sizeof(heavy_factory_id_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
+
+    std::cout << "Sent light factory ID: " << light_factory_id << std::endl;
 
     return;
 }

@@ -101,7 +101,7 @@ void Board::dealDamage(int x, int y, int damage){
             if(element->canCreate(UNIT)) {
                 this->removeUnitCreator(element->getFaction(),UNIT);
                 if (element->getID() == this->creatorID[element->getFaction()][UNIT])
-                    this->creatorID[element->getFaction()][UNIT] = -1;
+                    this->creatorID[element->getFaction()][UNIT] = this->findNewCreator(element->getFaction(),UNIT);
             }
         for (Position pos : element->getPositions()){
             std::cout << "Disoccupying cell at position: " << pos << std::endl;
@@ -114,6 +114,15 @@ void Board::dealDamage(int x, int y, int damage){
 
 Cell& Board::getCell(int x, int y){
     return this->cells[x][y];
+}
+
+int Board::findNewCreator(player_t faction,unit_t unit){    
+    for (auto& e : this->elements)
+        if(e.second->getFaction() == faction)
+            if(e.second->canCreate(unit))
+                if (e.second->getID() != this->creatorID[faction][unit])
+                    return e.second->getID();
+    return -1;
 }
 
 std::unique_ptr<Selectable> & Board::getElementAt(int x, int y){
