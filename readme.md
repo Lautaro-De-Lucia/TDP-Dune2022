@@ -84,7 +84,7 @@ Cada facción comienza la partida con un centro de construcción, cuya destrucci
 
 #### Construcción de los edificios
 
-Para construir edificios es necesario contar con *energía* y *especia*, la moneda corriente en el mundo de Dune. Si bien se cuenta con cierta cantidad de especia inicial, si la agotamos construyendo edificios y unidades no podremos generarla nuevamente. Para esto, se deben crear unidades **cosechadoras**, que se encargan de transportar la especia de lugares en el mapa con arena especiada hacía la refinería. Un buen consejo es empezar construyendo una **fábrica pesada**, donde pueden entrenarse estas unidades **cosechadoras** que nos conseguirán más especia para poder seguir construyendo edificios y entrenando unidades de combate. Para construir, se hace *click izquierdo* en el ícono con el edificio que queremos construir, y luego click izquierdo en el lugar del mapa que nos resulte conveniente, siempre y cuando haya una formación rocoso bajo suyo. Ahora que tenemos edificios, podemos emezar a crear unidades.
+Para construir edificios es necesario contar con *energía* y *especia*, la moneda corriente en el mundo de Dune. Para conseguir energía tendremos que construir **trampas de aire**. Si bien se cuenta con cierta cantidad de especia inicial, si la agotamos construyendo edificios y unidades no podremos generarla nuevamente. Para esto, se deben crear unidades **cosechadoras**, que se encargan de transportar la especia de lugares en el mapa con arena especiada hacía la refinería. Un buen consejo es empezar construyendo una **fábrica pesada**, donde pueden entrenarse estas unidades **cosechadoras** que nos conseguirán más especia para poder seguir construyendo edificios y entrenando unidades de combate. Para construir, se hace *click izquierdo* en el ícono con el edificio que queremos construir, y luego click izquierdo en el lugar del mapa que nos resulte conveniente, siempre y cuando haya una formación rocosa bajo suyo. Una vez que construímos un edificio, debemos esperar un tiempo para poder construir otro. Los tiempos de construcción y de entrenamiento se ven extendidos en caso de haber una escasez de *energía*, siendo estos proporcionales a la deuda energética. Ahora que tenemos edificios, podemos empezar a crear unidades.
 
 <p align="center">
   <img width="400" src="https://user-images.githubusercontent.com/75450615/175114388-1fd3d5fa-5ec2-4fd6-8fe1-182b3a7490e6.jpg">
@@ -92,10 +92,28 @@ Para construir edificios es necesario contar con *energía* y *especia*, la mone
 
 #### Creacion de Unidades
 
-Cada unidad tiene un costo en especia y un edificio creador. Las unidades de **infantería** se crean desde el **cuartel**. Los **vehículos** se crean en la **fábrica ligera** y la **fábrica pesada**. Cuanto más edificios creadores para una unidad, menos tiempo esta tarda en crearse. Sin embargo, hay solo una unidad creadora de la que emergen las unidades. Para designar el creador seleccionamos el edificio y damos *click derecho* (la selección del edificio puede ser con un *click izquierdo* sobre el edificio o mediante una *selección* de mouse, manteniendo *click izquierdo* desde un punto del mapa hasta otro, definiendo de esta manera un rectángulo donde se seleccionan las unidades y/o edificios en nuestro poder). Existen unidades en los que el creador no será suficiente, y necesitamos tener una estructura **palacio** en pie para poder crearlas, como por ejemplo la **infantería sardaukar**.
+Cada unidad tiene un costo en especia y un edificio creador. Las unidades de **infantería** se crean desde el **cuartel**. Los **vehículos** se crean en la **fábrica ligera** y la **fábrica pesada**. Cuanto más edificios creadores para una unidad, menos tiempo esta tarda en crearse. Sin embargo, según el tipo de unidad, existe solamente un edificio creador del cual emergen las unidades. Identificamos al edificio creador de unidades como aquel con un marcador de color blanco encima, como se puede apreciar en la figura de abajo:
+
+<p align="center">
+  <img width="400" src="https://user-images.githubusercontent.com/75450615/177223950-3b04154f-0f1b-4e82-8a6f-c57ece1ff9c1.png">
+</p>
+
+El primer edificio creador de algún tipo de unidad es creador por defecto, pero si queremos designar otro edificio del mismo tipo como creador, seleccionamos el edificio y damos *click derecho* (la selección del edificio puede ser con un *click izquierdo* sobre el edificio o mediante una *selección* de mouse, manteniendo *click izquierdo* desde un punto del mapa hasta otro, definiendo de esta manera un rectángulo donde se seleccionan las unidades y/o edificios en nuestro poder). Existen unidades en los que el creador no será suficiente, y necesitamos tener una estructura **palacio** en pie para poder crearlas, como es el caso de la **infantería sardaukar**.
 
 <p align="center">
   <img width="400" src="https://user-images.githubusercontent.com/75450615/175114794-d48a411c-3efd-4115-bb52-3600e057a8d6.jpg">
+</p>
+
+Como se explicó en la sección de edificios, la velocidad de creación de unidades también se ve afectada por la deuda energética, cuanto mayor sea, mayores serán los tiempos de espera entre el entrenamiento de dos unidades. Podemos de todas formas *encolar* unidades haciendo múltiples clicks en el ícono de la unidad que queremos crear, y en este caso se iniciará el entrenamiento de una nueva unidad de cierto tipo una vez termine el entrenamiento de otra unidad del mismo tipo. Notamos el tiempo faltante para la creación de una unidad mediante la barra que tenemos al lado de cada edificio creador:
+
+<p align="center">
+  <img width="400" src="https://user-images.githubusercontent.com/75450615/177224539-fa0861a1-16ec-434f-aec3-b1f2d6c2b4fc.png">
+</p>
+
+En la imagen de arriba se observa una **fábrica ligera** en el medio del entrenamiento de un **trike**. Mientras un edificio esté entrenando algún tipo de unidad, nos informará de que tipo es la unidad en cuestión mediante un ícono ubicado arriba de la barra que nos indica el progreso. Supongamos que queremos crear una **cosechadora** una vez que termine el entrenamiento del **trike**. Para esto, le damos click al ícono de la **cosechadora** mientras la **fábrica ligera** está ocupada con el **trike**, y automáticamente la fábrica iniciará la construcción de una **cosechadora** una vez terminada la construcción del **trike**.
+
+<p align="center">
+  <img width="400" src="https://user-images.githubusercontent.com/75450615/177225041-423f1470-fda4-4503-ac33-7c34dc602077.png">
 </p>
 
 #### Movimiento de unidades 
