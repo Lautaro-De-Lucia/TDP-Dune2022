@@ -189,8 +189,10 @@ void Server::handleInstruction(idle_t & INS) {}
 
 void Server::handleInstruction(close_t & INS) {
     std::cout << "handling close instruction" << std::endl;
+
     this->players[INS.player_ID]->close();
     this->players.erase(this->players.begin() + INS.player_ID);
+
 }
 
 void Server::sendResponses() {
