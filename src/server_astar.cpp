@@ -62,7 +62,7 @@ bool aStar::validate_position(Position position,Board& board) {
     if (position.y > board.get_height() - 1 || position.y < 0) 
         return false;
     // position is an obstacle
-    if (board.getCell(position.x, position.y).canTraverse() == false || board.getCell(position.x,position.y).isOccupied() == true || board.getCell(position.x,position.y).getReserveID() != -1)        
+    if (board.canTraverse(position.x, position.y) == false || board.isOccupied(position.x,position.y) == true || board.getReserveID(position.x,position.y) != -1)        
         return false;
     return true;
 }

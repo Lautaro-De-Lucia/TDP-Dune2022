@@ -34,6 +34,7 @@ class Board{
     int getDimX(){return this-> dim_x;}
     int getDimY(){return this-> dim_y;}
     int getCreator(player_t faction,unit_t type);
+    int getReserveID(int x, int y);
     std::unique_ptr<Selectable>& getElementAt(int x, int y);
     void makeCreator(int ID);
     void addUnitCreator(player_t faction,building_t type);
@@ -41,8 +42,15 @@ class Board{
     int getTotalCreators(player_t faction, unit_t type);
     status_t canPlace(const Position& location, int dim_x, int dim_y);
     bool canDeposit(int x, int y, player_t faction);
+    bool isOccupied(int x, int y);
     bool canHarvest(int x, int y);
     bool canTraverse(int x, int y);
+    bool canSlowDown(int x, int y);
+    int extractSpice(int x, int y);
+    void reserve(int x, int y, int ID);
+    void occupy(int x, int y, int ID);
+    void disoccupy(int x, int y);
+    void unReserve(int x, int y);
     bool hasEnemy(int x, int y, player_t player_faction);
     void dealDamage(int x, int y, int damage);
     void deleteElement(int id);

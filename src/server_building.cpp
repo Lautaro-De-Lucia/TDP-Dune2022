@@ -71,7 +71,7 @@ response_t AirTrap::place(Board& board,int pos_x,int pos_y,int& spice,int& energ
 
     for (size_t j = 0 ; j < this->dim_y ; j++)
         for (size_t i = 0 ; i < this->dim_x ; i++)
-            board.getCell(this->position.x+i,this->position.y+j).occupy(this->ID);    
+            board.occupy(this->position.x+i,this->position.y+j,this->ID);    
     
     return RES_CREATE_BUILDING_SUCCESS;
 }
@@ -112,7 +112,7 @@ response_t Barrack::place(Board& board,int pos_x,int pos_y,int& spice,int& energ
 
     for (size_t j = 0 ; j < this->dim_y ; j++)
         for (size_t i = 0 ; i < this->dim_x ; i++)
-            board.getCell(this->position.x+i,this->position.y+j).occupy(this->ID);
+            board.occupy(this->position.x+i,this->position.y+j,this->ID);    
     return RES_CREATE_BUILDING_SUCCESS;
 }
 
@@ -154,7 +154,7 @@ response_t Refinery::place(Board& board,int pos_x,int pos_y,int& spice,int& ener
 
     for (size_t j = 0 ; j < this->dim_y ; j++)
         for (size_t i = 0 ; i < this->dim_x ; i++)
-            board.getCell(this->position.x+i,this->position.y+j).occupy(this->ID);
+            board.occupy(this->position.x+i,this->position.y+j,this->ID);    
         
     std::vector<Position> deposit_positions = board.getSurroundings(this->position, this->dim_x, this->dim_y);    
     board.addDepositPositions(this->faction,deposit_positions);
@@ -199,7 +199,7 @@ response_t LightFactory::place(Board& board,int pos_x,int pos_y,int& spice,int& 
 
     for (size_t j = 0 ; j < this->dim_y ; j++)
         for (size_t i = 0 ; i < this->dim_x ; i++)
-            board.getCell(this->position.x+i,this->position.y+j).occupy(this->ID);
+            board.occupy(this->position.x+i,this->position.y+j,this->ID);    
 
     return RES_CREATE_BUILDING_SUCCESS;
 }
@@ -237,7 +237,7 @@ response_t HeavyFactory::place(Board& board,int pos_x,int pos_y,int& spice,int& 
 
     for (size_t j = 0 ; j < this->dim_y ; j++)
         for (size_t i = 0 ; i < this->dim_x ; i++)
-            board.getCell(this->position.x+i,this->position.y+j).occupy(this->ID);
+            board.occupy(this->position.x+i,this->position.y+j,this->ID);    
 
     return RES_CREATE_BUILDING_SUCCESS;
 }
@@ -277,7 +277,7 @@ response_t Silo::place(Board& board,int pos_x,int pos_y,int& spice,int& energy){
 
     for (size_t j = 0 ; j < this->dim_y ; j++)
         for (size_t i = 0 ; i < this->dim_x ; i++)
-            board.getCell(this->position.x+i,this->position.y+j).occupy(this->ID);
+            board.occupy(this->position.x+i,this->position.y+j,this->ID);    
 
     return RES_CREATE_BUILDING_SUCCESS;
 }
@@ -312,7 +312,7 @@ response_t Palace::place(Board& board,int pos_x,int pos_y,int& spice,int& energy
 
     for (size_t j = 0 ; j < this->dim_y ; j++) 
         for (size_t i = 0 ; i < this->dim_x ; i++)
-            board.getCell(this->position.x+i,this->position.y+j).occupy(this->ID);
+            board.occupy(this->position.x+i,this->position.y+j,this->ID);    
 
     return RES_CREATE_BUILDING_SUCCESS;
 }
@@ -357,7 +357,7 @@ response_t ConstructionYard::place(Board& board,int pos_x,int pos_y,int& spice,i
 
     for (size_t j = 0 ; j < this->getDimY() ; j++)
         for (size_t i = 0 ; i < this->getDimX() ; i++)
-            board.getCell(this->position.x+i,this->position.y+j).occupy(this->ID);
+            board.occupy(this->position.x+i,this->position.y+j,this->ID);    
 
     return RES_CREATE_BUILDING_SUCCESS;
 }

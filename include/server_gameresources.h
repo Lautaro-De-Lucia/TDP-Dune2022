@@ -32,6 +32,11 @@ public:
     void reactToPosition(player_t faction, int pos_x, int pos_y);
     int totalElements();
     void sendElements(Protocol & protocol, Socket & client_socket);
+    void sendCreators(player_t faction,Protocol & protocol, Socket & client_socket);
+    void sendCreationData(std::vector<creation_t> & creation_data,Protocol & protocol, Socket & client_socket);
+
+
+    int getSpiceAt(int x, int y);
 
     void update();
 

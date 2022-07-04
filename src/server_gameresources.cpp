@@ -12,12 +12,30 @@ Cell & GameResources::getCell(int x, int y){
     return this->board.getCell(x,y);
 }
 
+int GameResources::getSpiceAt(int x, int y){
+    std::lock_guard<std::mutex> locker(this->lock);
+    return this->board.getCell(x,y).getSpice();
+}
+
 void GameResources::deleteElement(int ID){
     std::lock_guard<std::mutex> locker(this->lock);
     this->board.deleteElement(ID);
     std::cout << "Element deleted"<< std::endl;
 }
 
+void GameResources::sendCreationData(std::vector<creation_t> & creation_data,Protocol & protocol, Socket & client_socket){
+    protocol.send_creation_data_size(creation_data.size(), client_socket);
+    for (creation_t c : creation_data)
+        protocol.send_creation_data(c.creator_ID,c.unit_being_created,c.current_time,c.total_time,client_socket);
+    creation_data.clear();
+}
+
+void GameResources::sendCreators(player_t faction,Protocol & protocol, Socket & client_socket){
+    int barrack_id = getCreator(faction, FREMEN);
+    int light_factory_id = getCreator(faction, TRIKE);
+    int heavy_factory_id = getCreator(faction, TANK);
+    protocol.send_creators(barrack_id, light_factory_id, heavy_factory_id, client_socket);
+}
 
 bool GameResources::isEnabled(player_t faction,unit_t unit){
     std::lock_guard<std::mutex> locker(this->lock);
@@ -161,7 +179,6 @@ int GameResources::totalElements(){
 }
 
 void GameResources::sendElements(Protocol & protocol, Socket & client_socket){
-    std::lock_guard<std::mutex> locker(this->lock);
     for (auto& e : this->elements)
         e.second->sendState(protocol,client_socket);
 }

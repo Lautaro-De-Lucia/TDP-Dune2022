@@ -300,7 +300,6 @@ void Player::play(){
         if (this->game_status != GAME_NEUTRAL) {
             command = IDLE;
         }
-
         //  La pasamos por socket
         this->protocol.send_command(command, this->socket);
 
@@ -336,7 +335,6 @@ void Player::play(){
             this->protocol.receive_response(response, this->socket);
             responses.push_back(response);
         }
-
 
 
         for (response_t res : responses) {
@@ -650,6 +648,7 @@ void Player::update() {
         }
         
     }
+
     //  Destroy non-updated elements
     for (size_t i = 0 ; i < this->updates.size() ; i++) {
         if(this->updates[i] == false) {

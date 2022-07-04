@@ -93,7 +93,7 @@ response_t Harvester::place(Board& board,std::vector<Position>& positions,int * 
     for (Position position : positions){
         if (board.canPlace(position,1,1) == SUCCESS){
             this->setPosition(position);
-            board.getCell(position.x,position.y).occupy(this->ID);
+            board.occupy(position.x,position.y,this->ID);
             *spice -= this->spice;
             this->player_spice = spice;
             return RES_CREATE_UNIT_SUCCESS;
@@ -151,7 +151,7 @@ void Harvester::receiveDamage(int damage){
 
 void Harvester::update(State& state, Board& board){
     
-    if(board.getCell(this->position.x,this->position.y).canSlowDown()){
+    if(board.canSlowDown(this->position.x,this->position.y)){
         this->speed = HARVESTER_SPEED/2;
     } else{
         this->speed = HARVESTER_SPEED;
@@ -181,8 +181,7 @@ void Harvester::update(State& state, Board& board){
         }
         if(this->harvesting == true){
             if(this->position == this->harvest_position){
-                Cell& harvestcell = board.getCell(harvest_position.x,harvest_position.y);
-                int spice = harvestcell.extractSpice();
+                int spice = board.extractSpice(harvest_position.x,harvest_position.y);
                 board.addSandPosition(harvest_position.x,harvest_position.y);
                 if(spice == 0){
                     if(this->stored_spice > 0){
@@ -190,8 +189,7 @@ void Harvester::update(State& state, Board& board){
                     }
                     else{
                         for(Position pos : board.getSurroundings(this->position,1,1)){
-                            Cell & hc = board.getCell(pos.x,pos.y);
-                            if(hc.canHarvest() && !hc.isOccupied() && (hc.getReserveID() == -1 || hc.getReserveID() == this->ID)){
+                            if(board.canHarvest(pos.x,pos.y) && !board.isOccupied(pos.x,pos.y) && (board.getReserveID(pos.x,pos.y) == -1 || board.getReserveID(pos.x,pos.y) == this->ID)){
                                 this->harvest(pos.x,pos.y,board);
                                 return;
                             }
@@ -220,8 +218,7 @@ void Harvester::update(State& state, Board& board){
         }
         if (this->harvesting == true){
             if(board.get_distance_between(this->harvest_position,this->position) <= 1){
-                Cell & hc = board.getCell(harvest_position.x,harvest_position.y);
-                if(hc.isOccupied() || (hc.getReserveID() != -1 && hc.getReserveID() != this->ID)){
+                if(board.isOccupied(harvest_position.x,harvest_position.y) || (board.getReserveID(harvest_position.x,harvest_position.y) != -1 && board.getReserveID(harvest_position.x,harvest_position.y) != this->ID)){
                     this->moving = false;
                     this->waiting = true;
                     return;
@@ -230,8 +227,7 @@ void Harvester::update(State& state, Board& board){
         } 
         if (this->depositing == true){
             if(board.get_distance_between(this->position,this->deposit_position) <= 1){
-                Cell & dc = board.getCell(deposit_position.x,deposit_position.y);
-                if(dc.isOccupied() || (dc.getReserveID() != -1 && dc.getReserveID() != this->ID)){
+                if(board.isOccupied(deposit_position.x,deposit_position.y) || (board.getReserveID(deposit_position.x,deposit_position.y) != -1 && board.getReserveID(deposit_position.x,deposit_position.y) != this->ID)){
                     this->moving = false;
                     this->waiting = true;
                     return;
@@ -242,10 +238,9 @@ void Harvester::update(State& state, Board& board){
         Position next = remaining_path.back();
         this->focus(next);
         //  Miro la próxima posición
-        Cell& next_cell = board.getCell(next.x,next.y); 
-        if(next_cell.canTraverse() && (next_cell.getReserveID() == -1 || next_cell.getReserveID() == this->ID) && !next_cell.isOccupied()){            //  Si puedo ir, ocuparla
+        if(board.canTraverse(next.x,next.y) && (board.getReserveID(next.x,next.y) == -1 || board.getReserveID(next.x,next.y) == this->ID) && !board.isOccupied(next.x,next.y)){            //  Si puedo ir, ocuparla
             this->waiting = false;
-            next_cell.reserve(this->ID);
+            board.reserve(next.x,next.y,this->ID);
             this->next_position = next;          
             this->current_time+=this->speed;    //  Increase counter
         } else {
@@ -267,8 +262,8 @@ void Harvester::update(State& state, Board& board){
         if (this->current_time >= this->movement_time) {
             //  Cuando se cumple el tiempo, cambiar de posición
             this->current_time = 0; //  Reset counter
-            board.getCell(this->position.x,this->position.y).disoccupy();
-            board.getCell(this->next_position.x,this->next_position.y).unReserve();
+            board.disoccupy(this->position.x,this->position.y);
+            board.unReserve(this->next_position.x,this->next_position.y);
             this->position = this->remaining_path.back();
             this->occupy(board);
             this->remaining_path.pop_back();
@@ -277,15 +272,14 @@ void Harvester::update(State& state, Board& board){
 }
 
 void Harvester::occupy(Board & board){
-    board.getCell(this->position.x,this->position.y).occupy(this->ID);
+    board.occupy(this->position.x,this->position.y,this->ID);
 }
 
 void Harvester::deposit(Board & board){
     size_t best_distance = 1000;
     Position best_position;
     for (Position pos : board.getDepositPositions(this->faction)){
-        Cell & dc = board.getCell(pos.x,pos.y);
-        if (dc.isOccupied() || !dc.canTraverse() || (dc.getReserveID() != -1 && dc.getReserveID() != this->ID))
+        if (board.isOccupied(pos.x,pos.y) || !board.canTraverse(pos.x,pos.y) || (board.getReserveID(pos.x,pos.y) != -1 && board.getReserveID(pos.x,pos.y) != this->ID))
             continue;
         size_t distance = board.get_distance_between(this->position,pos);
         if(distance < best_distance){
@@ -358,8 +352,7 @@ void Trike::attack(int x, int y, Board& board){
     std::vector<Position> attacking_positions = board.getSurroundings(this->enemy_position, enemy_dim_x, enemy_dim_y); 
     //  Find the first position that is neither occupied nor reserved
     for (Position pos : attacking_positions){
-        Cell & c = board.getCell(pos.x,pos.y);
-        if(c.canTraverse() && (c.getReserveID() == -1 || c.getReserveID() == this->ID) && !c.isOccupied()){
+        if(board.canTraverse(pos.x,pos.y) && (board.getReserveID(pos.x,pos.y) == -1 || board.getReserveID(pos.x,pos.y) == this->ID) && !board.isOccupied(pos.x,pos.y)){
 	        this->moving_position = pos;
             break;
         } 
@@ -390,7 +383,7 @@ bool Trike::enemySearch(Board & board){
 void Trike::update(State & state, Board& board){
     Selectable::update(state,board);
 
-    if(board.getCell(this->position.x,this->position.y).canSlowDown()){
+    if(board.canSlowDown(this->position.x,this->position.y)){
         this->speed = TRIKE_SPEED/2;
     } else{
         this->speed = TRIKE_SPEED;
@@ -446,10 +439,9 @@ void Trike::update(State & state, Board& board){
         Position next = remaining_path.back();
         this->focus(next);
         //  Miro la próxima posición
-        Cell& next_cell = board.getCell(next.x,next.y); 
-        if(next_cell.canTraverse() && (next_cell.getReserveID() == -1 || next_cell.getReserveID() == this->ID) && !next_cell.isOccupied()){            //  Si puedo ir, ocuparla
+        if(board.canTraverse(next.x,next.y)  && (board.getReserveID(next.x,next.y) == -1 || board.getReserveID(next.x,next.y) == this->ID) && !board.isOccupied(next.x,next.y)){            //  Si puedo ir, ocuparla
             this->waiting = false;
-            next_cell.reserve(this->ID);
+            board.reserve(next.x,next.y,this->ID);
             this->next_position = next;    
             this->current_time+=this->speed;    //  Increase counter
         } else {
@@ -471,8 +463,8 @@ void Trike::update(State & state, Board& board){
         if (this->current_time >= this->movement_time) {
             //  Cuando se cumple el tiempo, cambiar de posición
             this->current_time = 0; //  Reset counter
-            board.getCell(this->position.x,this->position.y).disoccupy();
-            board.getCell(this->next_position.x,this->next_position.y).unReserve();
+            board.disoccupy(this->position.x,this->position.y);
+            board.unReserve(this->next_position.x,this->next_position.y);
             this->position = this->remaining_path.back();
             this->occupy(board);
             this->remaining_path.pop_back();
@@ -501,7 +493,7 @@ void Trike::sendState(Protocol & protocol, Socket & client_socket){
 
 
 void Trike::occupy(Board & board){
-    board.getCell(this->position.x,this->position.y).occupy(this->ID);
+    board.occupy(this->position.x,this->position.y,this->ID);
 }
 
 bool Trike::isAttacking() {
@@ -515,7 +507,7 @@ response_t Trike::place(Board& board,std::vector<Position>& positions,int * spic
     for (Position position : positions){
         if (board.canPlace(position,1,1) == SUCCESS){
             this->setPosition(position);
-            board.getCell(position.x,position.y).occupy(this->ID);
+            board.occupy(position.x,position.y,this->ID);
             *spice -= this->spice;
             return RES_CREATE_UNIT_SUCCESS;
         }
@@ -559,8 +551,7 @@ void Fremen::attack(int x, int y, Board& board){
     std::vector<Position> attacking_positions = board.getSurroundings(this->enemy_position, enemy_dim_x, enemy_dim_y); 
     //  Find the first position that is neither occupied nor reserved
     for (Position pos : attacking_positions){
-        Cell & c = board.getCell(pos.x,pos.y);
-        if(c.canTraverse() && (c.getReserveID() == -1 || c.getReserveID() == this->ID) && !c.isOccupied()){
+        if(board.canTraverse(pos.x, pos.y)  && (board.getReserveID(pos.x,pos.y) == -1 || board.getReserveID(pos.x,pos.y) == this->ID) && !board.isOccupied(pos.x,pos.y)){
 	        this->moving_position = pos;
             break;
         } 
@@ -591,7 +582,7 @@ bool Fremen::enemySearch(Board & board){
 void Fremen::update(State & state, Board& board){
     Selectable::update(state,board);
     
-    if(board.getCell(this->position.x,this->position.y).canSlowDown()){
+    if(board.canSlowDown(this->position.x,this->position.y)){
         this->speed = FREMEN_SPEED/2;
     } else{
         this->speed = FREMEN_SPEED;
@@ -647,10 +638,9 @@ void Fremen::update(State & state, Board& board){
         Position next = remaining_path.back();
         this->focus(next);
         //  Miro la próxima posición
-        Cell& next_cell = board.getCell(next.x,next.y); 
-        if(next_cell.canTraverse() && (next_cell.getReserveID() == -1 || next_cell.getReserveID() == this->ID) && !next_cell.isOccupied()){            //  Si puedo ir, ocuparla
+        if(board.canTraverse(next.x, next.y)  && (board.getReserveID(next.x,next.y) == -1 || board.getReserveID(next.x,next.y) == this->ID) && !board.isOccupied(next.x,next.y)){            //  Si puedo ir, ocuparla
             this->waiting = false;
-            next_cell.reserve(this->ID);
+            board.reserve(next.x,next.y,this->ID);
             this->next_position = next;          
             this->current_time+=this->speed;    //  Increase counter
         } else {
@@ -672,8 +662,8 @@ void Fremen::update(State & state, Board& board){
         if (this->current_time >= this->movement_time) {
             //  Cuando se cumple el tiempo, cambiar de posición
             this->current_time = 0; //  Reset counter
-            board.getCell(this->position.x,this->position.y).disoccupy();
-            board.getCell(this->next_position.x,this->next_position.y).unReserve();
+            board.disoccupy(this->position.x,this->position.y);
+            board.unReserve(this->next_position.x,this->next_position.y);
             this->position = this->remaining_path.back();
             this->occupy(board);
             this->remaining_path.pop_back();
@@ -702,7 +692,7 @@ void Fremen::sendState(Protocol & protocol, Socket & client_socket){
 
 
 void Fremen::occupy(Board & board){
-    board.getCell(this->position.x,this->position.y).occupy(this->ID);
+    board.occupy(this->position.x,this->position.y,this->ID);
 }
 
 bool Fremen::isAttacking() {
@@ -716,7 +706,7 @@ response_t Fremen::place(Board& board,std::vector<Position>& positions,int * spi
     for (Position position : positions){
         if (board.canPlace(position,1,1) == SUCCESS){
             this->setPosition(position);
-            board.getCell(position.x,position.y).occupy(this->ID);
+            board.occupy(position.x,position.y,this->ID);
             *spice -= this->spice;
             return RES_CREATE_UNIT_SUCCESS;
         }
@@ -760,8 +750,7 @@ void Infantry::attack(int x, int y, Board& board){
     std::vector<Position> attacking_positions = board.getSurroundings(this->enemy_position, enemy_dim_x, enemy_dim_y); 
     //  Find the first position that is neither occupied nor reserved
     for (Position pos : attacking_positions){
-        Cell & c = board.getCell(pos.x,pos.y);
-        if(c.canTraverse() && (c.getReserveID() == -1 || c.getReserveID() == this->ID) && !c.isOccupied()){
+        if(board.canTraverse(pos.x, pos.y)  && (board.getReserveID(pos.x,pos.y) == -1 || board.getReserveID(pos.x,pos.y) == this->ID) && !board.isOccupied(pos.x,pos.y)){
 	        this->moving_position = pos;
             break;
         } 
@@ -792,7 +781,7 @@ bool Infantry::enemySearch(Board & board){
 void Infantry::update(State & state, Board& board){
     Selectable::update(state,board);
     
-    if(board.getCell(this->position.x,this->position.y).canSlowDown()){
+    if(board.canSlowDown(this->position.x,this->position.y)){
         this->speed = INFANTRY_SPEED/2;
     } else{
         this->speed = INFANTRY_SPEED;
@@ -848,10 +837,9 @@ void Infantry::update(State & state, Board& board){
         Position next = remaining_path.back();
         this->focus(next);
         //  Miro la próxima posición
-        Cell& next_cell = board.getCell(next.x,next.y); 
-        if(next_cell.canTraverse() && (next_cell.getReserveID() == -1 || next_cell.getReserveID() == this->ID) && !next_cell.isOccupied()){            //  Si puedo ir, ocuparla
+        if(board.canTraverse(next.x, next.y)  && (board.getReserveID(next.x,next.y) == -1 || board.getReserveID(next.x,next.y) == this->ID) && !board.isOccupied(next.x,next.y)){            //  Si puedo ir, ocuparla
             this->waiting = false;
-            next_cell.reserve(this->ID);
+            board.reserve(next.x,next.y,this->ID);
             this->next_position = next;          
             this->current_time+=this->speed;    //  Increase counter
         } else {
@@ -873,8 +861,8 @@ void Infantry::update(State & state, Board& board){
         if (this->current_time >= this->movement_time) {
             //  Cuando se cumple el tiempo, cambiar de posición
             this->current_time = 0; //  Reset counter
-            board.getCell(this->position.x,this->position.y).disoccupy();
-            board.getCell(this->next_position.x,this->next_position.y).unReserve();
+            board.disoccupy(this->position.x,this->position.y);
+            board.unReserve(this->next_position.x,this->next_position.y);
             this->position = this->remaining_path.back();
             this->occupy(board);
             this->remaining_path.pop_back();
@@ -903,7 +891,7 @@ void Infantry::sendState(Protocol & protocol, Socket & client_socket){
 
 
 void Infantry::occupy(Board & board){
-    board.getCell(this->position.x,this->position.y).occupy(this->ID);
+    board.occupy(this->position.x,this->position.y,this->ID);
 }
 
 bool Infantry::isAttacking() {
@@ -917,7 +905,7 @@ response_t Infantry::place(Board& board,std::vector<Position>& positions,int * s
     for (Position position : positions){
         if (board.canPlace(position,1,1) == SUCCESS){
             this->setPosition(position);
-            board.getCell(position.x,position.y).occupy(this->ID);
+            board.occupy(position.x,position.y,this->ID);
             *spice -= this->spice;
             return RES_CREATE_UNIT_SUCCESS;
         }
@@ -961,8 +949,7 @@ void Tank::attack(int x, int y, Board& board){
     std::vector<Position> attacking_positions = board.getSurroundings(this->enemy_position, enemy_dim_x, enemy_dim_y); 
     //  Find the first position that is neither occupied nor reserved
     for (Position pos : attacking_positions){
-        Cell & c = board.getCell(pos.x,pos.y);
-        if(c.canTraverse() && (c.getReserveID() == -1 || c.getReserveID() == this->ID) && !c.isOccupied()){
+        if(board.canTraverse(pos.x, pos.y)  && (board.getReserveID(pos.x,pos.y) == -1 || board.getReserveID(pos.x,pos.y) == this->ID) && !board.isOccupied(pos.x,pos.y)){
 	        this->moving_position = pos;
             break;
         } 
@@ -1043,10 +1030,9 @@ void Tank::update(State & state, Board& board){
         Position next = remaining_path.back();
         this->focus(next);
         //  Miro la próxima posición
-        Cell& next_cell = board.getCell(next.x,next.y); 
-        if(next_cell.canTraverse() && (next_cell.getReserveID() == -1 || next_cell.getReserveID() == this->ID) && !next_cell.isOccupied()){            //  Si puedo ir, ocuparla
+        if(board.canTraverse(next.x, next.y)  && (board.getReserveID(next.x,next.y) == -1 || board.getReserveID(next.x,next.y) == this->ID) && !board.isOccupied(next.x,next.y)){            //  Si puedo ir, ocuparla
             this->waiting = false;
-            next_cell.reserve(this->ID);
+            board.reserve(next.x,next.y,this->ID);
             this->next_position = next;          
             this->current_time+=this->speed;    //  Increase counter
         } else {
@@ -1068,8 +1054,8 @@ void Tank::update(State & state, Board& board){
         if (this->current_time >= this->movement_time) {
             //  Cuando se cumple el tiempo, cambiar de posición
             this->current_time = 0; //  Reset counter
-            board.getCell(this->position.x,this->position.y).disoccupy();
-            board.getCell(this->next_position.x,this->next_position.y).unReserve();
+            board.disoccupy(this->position.x,this->position.y);
+            board.unReserve(this->next_position.x,this->next_position.y);
             this->position = this->remaining_path.back();
             this->occupy(board);
             this->remaining_path.pop_back();
@@ -1098,7 +1084,7 @@ void Tank::sendState(Protocol & protocol, Socket & client_socket){
 
 
 void Tank::occupy(Board & board){
-    board.getCell(this->position.x,this->position.y).occupy(this->ID);
+    board.occupy(this->position.x,this->position.y,this->ID);
 }
 
 bool Tank::isAttacking() {
@@ -1112,7 +1098,7 @@ response_t Tank::place(Board& board,std::vector<Position>& positions,int * spice
     for (Position position : positions){
         if (board.canPlace(position,1,1) == SUCCESS){
             this->setPosition(position);
-            board.getCell(position.x,position.y).occupy(this->ID);
+            board.occupy(position.x,position.y,this->ID);
             *spice -= this->spice;
             return RES_CREATE_UNIT_SUCCESS;
         }
@@ -1156,8 +1142,7 @@ void Devastator::attack(int x, int y, Board& board){
     std::vector<Position> attacking_positions = board.getSurroundings(this->enemy_position, enemy_dim_x, enemy_dim_y); 
     //  Find the first position that is neither occupied nor reserved
     for (Position pos : attacking_positions){
-        Cell & c = board.getCell(pos.x,pos.y);
-        if(c.canTraverse() && (c.getReserveID() == -1 || c.getReserveID() == this->ID) && !c.isOccupied()){
+        if(board.canTraverse(pos.x, pos.y)  && (board.getReserveID(pos.x,pos.y) == -1 || board.getReserveID(pos.x,pos.y) == this->ID) && !board.isOccupied(position.x,position.y)){
 	        this->moving_position = pos;
             break;
         } 
@@ -1238,10 +1223,9 @@ void Devastator::update(State & state, Board& board){
         Position next = remaining_path.back();
         this->focus(next);
         //  Miro la próxima posición
-        Cell& next_cell = board.getCell(next.x,next.y); 
-        if(next_cell.canTraverse() && (next_cell.getReserveID() == -1 || next_cell.getReserveID() == this->ID) && !next_cell.isOccupied()){            //  Si puedo ir, ocuparla
+        if(board.canTraverse(next.x, next.y)  && (board.getReserveID(next.x,next.y) == -1 || board.getReserveID(next.x,next.y) == this->ID) && !board.isOccupied(next.x,next.y)){            //  Si puedo ir, ocuparla
             this->waiting = false;
-            next_cell.reserve(this->ID);
+            board.reserve(next.x,next.y,this->ID);
             this->next_position = next;          
             this->current_time+=this->speed;    //  Increase counter
         } else {
@@ -1263,8 +1247,8 @@ void Devastator::update(State & state, Board& board){
         if (this->current_time >= this->movement_time) {
             //  Cuando se cumple el tiempo, cambiar de posición
             this->current_time = 0; //  Reset counter
-            board.getCell(this->position.x,this->position.y).disoccupy();
-            board.getCell(this->next_position.x,this->next_position.y).unReserve();
+            board.disoccupy(this->position.x,this->position.y);
+            board.unReserve(this->next_position.x,this->next_position.y);
             this->position = this->remaining_path.back();
             this->occupy(board);
             this->remaining_path.pop_back();
@@ -1293,7 +1277,7 @@ void Devastator::sendState(Protocol & protocol, Socket & client_socket){
 
 
 void Devastator::occupy(Board & board){
-    board.getCell(this->position.x,this->position.y).occupy(this->ID);
+    board.occupy(this->position.x,this->position.y,this->ID);
 }
 
 bool Devastator::isAttacking() {
@@ -1307,7 +1291,7 @@ response_t Devastator::place(Board& board,std::vector<Position>& positions,int *
     for (Position position : positions){
         if (board.canPlace(position,1,1) == SUCCESS){
             this->setPosition(position);
-            board.getCell(position.x,position.y).occupy(this->ID);
+            board.occupy(position.x,position.y,this->ID);
             *spice -= this->spice;
             return RES_CREATE_UNIT_SUCCESS;
         }
@@ -1351,8 +1335,7 @@ void Sardaukar::attack(int x, int y, Board& board){
     std::vector<Position> attacking_positions = board.getSurroundings(this->enemy_position, enemy_dim_x, enemy_dim_y); 
     //  Find the first position that is neither occupied nor reserved
     for (Position pos : attacking_positions){
-        Cell & c = board.getCell(pos.x,pos.y);
-        if(c.canTraverse() && (c.getReserveID() == -1 || c.getReserveID() == this->ID) && !c.isOccupied()){
+        if(board.canTraverse(pos.x, pos.y)  && (board.getReserveID(pos.x,pos.y) == -1 || board.getReserveID(pos.x,pos.y) == this->ID) && !board.isOccupied(pos.x,pos.y)){
 	        this->moving_position = pos;
             break;
         } 
@@ -1383,7 +1366,7 @@ bool Sardaukar::enemySearch(Board & board){
 void Sardaukar::update(State & state, Board& board){
     Selectable::update(state,board);
     
-    if(board.getCell(this->position.x,this->position.y).canSlowDown()){
+    if(board.canSlowDown(this->position.x,this->position.y)){
         this->speed = SARDAUKAR_SPEED/2;
     } else{
         this->speed = SARDAUKAR_SPEED;
@@ -1439,10 +1422,9 @@ void Sardaukar::update(State & state, Board& board){
         Position next = remaining_path.back();
         this->focus(next);
         //  Miro la próxima posición
-        Cell& next_cell = board.getCell(next.x,next.y); 
-        if(next_cell.canTraverse() && (next_cell.getReserveID() == -1 || next_cell.getReserveID() == this->ID) && !next_cell.isOccupied()){            //  Si puedo ir, ocuparla
+        if(board.canTraverse(next.x,next.y) && (board.getReserveID(next.x,next.y) == -1 || board.getReserveID(next.x,next.y) == this->ID) && !board.isOccupied(next.x,next.y)){            //  Si puedo ir, ocuparla
             this->waiting = false;
-            next_cell.reserve(this->ID);
+            board.reserve(next.x,next.y,this->ID);
             this->next_position = next;          
             this->current_time+=this->speed;    //  Increase counter
         } else {
@@ -1464,8 +1446,8 @@ void Sardaukar::update(State & state, Board& board){
         if (this->current_time >= this->movement_time) {
             //  Cuando se cumple el tiempo, cambiar de posición
             this->current_time = 0; //  Reset counter
-            board.getCell(this->position.x,this->position.y).disoccupy();
-            board.getCell(this->next_position.x,this->next_position.y).unReserve();
+            board.disoccupy(this->position.x,this->position.y);
+            board.unReserve(this->next_position.x,this->next_position.y);
             this->position = this->remaining_path.back();
             this->occupy(board);
             this->remaining_path.pop_back();
@@ -1494,7 +1476,7 @@ void Sardaukar::sendState(Protocol & protocol, Socket & client_socket){
 
 
 void Sardaukar::occupy(Board & board){
-    board.getCell(this->position.x,this->position.y).occupy(this->ID);
+    board.occupy(this->position.x,this->position.y,this->ID);
 }
 
 bool Sardaukar::isAttacking() {
@@ -1508,7 +1490,7 @@ response_t Sardaukar::place(Board& board,std::vector<Position>& positions,int * 
     for (Position position : positions){
         if (board.canPlace(position,1,1) == SUCCESS){
             this->setPosition(position);
-            board.getCell(position.x,position.y).occupy(this->ID);
+            board.occupy(position.x,position.y,this->ID);
             *spice -= this->spice;
             return RES_CREATE_UNIT_SUCCESS;
         }
