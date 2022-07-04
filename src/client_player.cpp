@@ -563,7 +563,7 @@ void Player::update() {
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CStatic(CONSTRUCTION_YARD,id,faction,lp,pos_x,pos_y,CONSTRUCTION_YARD_DIM_X,CONSTRUCTION_YARD_DIM_Y,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
                     this->updates.push_back(true);
-                    if (faction != this->faction)
+                    if (faction != (int) this->faction)
                         this->enemies++;
                 }  
                 break;    
@@ -666,19 +666,23 @@ void Player::update() {
                 case SEL_INFANTRY: case SEL_FREMEN: case SEL_SARDAUKAR:
                     this->removeAttacker(_id);
                     this->addCorpse(_type, _pos, clock());
+                    break;
                 case SEL_TRIKE: case SEL_TANK: case SEL_DEVASTATOR:
                     this->removeAttacker(_id);
                     break;
                 case SEL_BARRACK:
                     if (_id == this->creators[BARRACK])
                         this->creators[BARRACK] = -1;
+                    break;
                 case SEL_LIGHT_FACTORY:
                     if (_id == this->creators[LIGHT_FACTORY]) {
                         this->creators[LIGHT_FACTORY] = -1;
                     }
+                    break;
                 case SEL_HEAVY_FACTORY:
                     if (_id == this->creators[HEAVY_FACTORY])
                         this->creators[HEAVY_FACTORY] = -1;
+                    break;
                 case SEL_CONSTRUCTION_YARD:
                     if (this->positionBelongsToBase(_pos)) {
                         // Handle game failure
@@ -696,6 +700,7 @@ void Player::update() {
                             this->audio.play(VICTORY_MUSIC);
                         }
                     }
+                    break;
                 default:
                     break;
                 }
