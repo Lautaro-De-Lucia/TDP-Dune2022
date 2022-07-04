@@ -193,7 +193,6 @@ void Server::handleInstruction(close_t & INS) {
     this->players[INS.player_ID]->close();
     this->players.erase(this->players.begin() + INS.player_ID);
 
-    this->game
 }
 
 void Server::sendResponses() {
