@@ -110,6 +110,12 @@ Como se explicó en la sección de edificios, la velocidad de creación de unida
   <img width="400" src="https://user-images.githubusercontent.com/75450615/177224539-fa0861a1-16ec-434f-aec3-b1f2d6c2b4fc.png">
 </p>
 
+En la imagen de arriba se observa una **fábrica ligera** en el medio del entrenamiento de un **trike**. Mientras un edificio esté entrenando algún tipo de unidad, nos informará de que tipo es la unidad en cuestión mediante un ícono ubicado arriba de la barra que nos indica el progreso. Supongamos que queremos crear una **cosechadora** una vez que termine el entrenamiento del **trike**. Para esto, le damos click al ícono de la **cosechadora** mientras la **fábrica ligera** está ocupada con el **trike**, y automáticamente la fábrica iniciará la construcción de una **cosechadora** una vez terminada la construcción del **trike**.
+
+<p align="center">
+  <img width="400" src="https://user-images.githubusercontent.com/75450615/177225041-423f1470-fda4-4503-ac33-7c34dc602077.png">
+</p>
+
 #### Movimiento de unidades 
 
 Una vez creadas las unidades, podemos desplazarlas de un punto del mapa a otro. Para hacer esto, debemos primero seleccionarlas y luego hacemos *click derecho* en algún punto del mapa, y nuestras unidades inciaran un trayecto hasta ese punto. Si en este punto se encuentra una **colina**, o hacemos click sobre una unidad o edificio aliado, nuestras unidades seleccionadas se moverán a la primera *posición libre del mapa más cercana* a ese punto.
