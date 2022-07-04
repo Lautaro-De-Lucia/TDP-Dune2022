@@ -16,6 +16,8 @@ class Explosion{
 
    int explosion_width;
    int explosion_height;
+   int x_offset;
+   int y_offset;
    clock_t explosion_delay;
 
    int speed;

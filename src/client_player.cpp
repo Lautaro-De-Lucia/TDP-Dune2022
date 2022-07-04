@@ -692,7 +692,7 @@ void Player::update() {
                         this->audio.play(WAITING_MUSIC);
                     } else {
                         this->destroyed_enemies++;
-                        if (this->enemies == this->destroyed_enemies) {
+                        if ((this->enemies == this->destroyed_enemies) && (this->enemies > 0)) {
                             // Handle game success
                             this->game_status = GAME_VICTORY;
                             this->audio.stopMusic();
@@ -783,14 +783,26 @@ void Player::renderCreators() {
 
     for (int id : creators_to_render){
         Position pos = this->elements.at(id)->getPosition();
+        selectable_t type = this->elements.at(id)->getType();
         SDL2pp::Texture & creator_mark = this->textures.getCreatorMark();
+        int x_offset = -1;
+        int y_offset = -1;
+        if (type == SEL_BARRACK) {
+            x_offset = -12;
+            y_offset = -4;
+        } else if (type == SEL_LIGHT_FACTORY) {
+            x_offset = +0;
+            y_offset = +0;
+        } else if (type == SEL_HEAVY_FACTORY) {
+            x_offset = +13;
+            y_offset = -7;
+        }
         this->game_renderer.Copy(
             creator_mark,
             SDL2pp::NullOpt,
-            SDL2pp::Rect((pos.x+1)*TILE_DIM*2-this->camera.pos_x*2,(pos.y-1)*TILE_DIM*2-this->camera.pos_y*2,20,30)
+            SDL2pp::Rect((pos.x+1)*TILE_DIM*2-this->camera.pos_x*2+x_offset,(pos.y-1)*TILE_DIM*2-this->camera.pos_y*2+y_offset,20,30)
         );
     }
-
 }
 
 /*º
@@ -988,19 +1000,20 @@ void Player::addCorpse(selectable_t type, Position position, int time) {
 void Player::renderCorpses() {
 
     std::vector<int> corpses_to_remove;
-    clock_t current_time;
+    clock_t current_time = clock();
 
     for (size_t i = 0; i < this->corpses.size(); i++) {
-        if (current_time - this->corpses[i].time > 50000000000)
+        if (current_time - this->corpses[i].time > 20000000)
             corpses_to_remove.push_back(i);
         else {
-            SDL2pp::Texture & explosion = textures.getCorpse(this->corpses[i].type);
+
+            SDL2pp::Texture & corpse = textures.getCorpse(this->corpses[i].type);
             int pos_x = this->corpses[i].position.x * TILE_DIM - this->camera.pos_x;
             int pos_y = this->corpses[i].position.y * TILE_DIM - this->camera.pos_y;
             this->game_renderer.Copy(
-                explosion,
+                corpse,
                 SDL2pp::NullOpt,
-                SDL2pp::Rect(pos_x,pos_y,1,1)
+                SDL2pp::Rect(pos_x,pos_y,1*TILE_DIM,1*TILE_DIM)
             );
         }
     }
@@ -1011,7 +1024,7 @@ void Player::renderCorpses() {
 
 void Player::triggerBaseAttackAlert(clock_t& current_time) {
 
-    if (current_time - this->base_alert_delay > 50000000) {
+    if (current_time - this->base_alert_delay > 20000000) {
         this->audio.play(AI_ATACK);
         this->audio.play(UNDER_ATTACK);
         this->base_alert_delay = current_time;
@@ -1075,6 +1088,6 @@ void Player::renderGameEnding(){
     this->game_renderer.Copy(
         status,
         SDL2pp::NullOpt,
-        SDL2pp::Rect((SCREEN_WIDTH/4)+20, (SCREEN_HEIGHT/4)+20, SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
+        SDL2pp::Rect((SCREEN_WIDTH/4)-20, (SCREEN_HEIGHT/4)+20, SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
     );    
 }
