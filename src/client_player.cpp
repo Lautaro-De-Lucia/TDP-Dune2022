@@ -173,7 +173,6 @@ void Player::play(){
                             {
                             case BUILD_BTN:
                                 if(this->construction_time < CONSTRUCTION_TIME+this->time_penalty){
-                                    std::cout << usr_msg[RES_WAIT_TO_BUILD] << std::endl;
                                     this->printResponse(usr_msg[RES_WAIT_TO_BUILD], DATA_PATH FONT_IMPACT_PATH, 200, 300, 10, colors[RED], 1000);   
                                     continue;
                                 } 
@@ -301,7 +300,6 @@ void Player::play(){
                 break;
             case CREATE_BUILDING:
                 this->protocol.send_create_building_request(mouse_event[1], mouse_event[2],mouse_event[3],this->socket);
-                this->construction_time = 0;
                 break;
             case MOUSE_LEFT_CLICK:
                 this->protocol.send_mouse_left_click(mouse_event[1], mouse_event[2], this->socket);
@@ -329,9 +327,13 @@ void Player::play(){
             responses.push_back(response);
         }
 
+
+
         for (response_t res : responses) {
             if (res != RES_SUCCESS)
                 this->printResponse(usr_msg[res], DATA_PATH FONT_IMPACT_PATH, 200, 300, 10, res >= RESPONSE_FAILURE_OFFSET ? colors[GREEN] : colors[RED], 1000);
+            if(res == RES_CREATE_BUILDING_SUCCESS)
+                this->construction_time = 0;
         }
 
         responses.clear();
