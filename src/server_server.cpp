@@ -199,6 +199,7 @@ void Server::sendResponses() {
 }
 
 void Server::update(){    
+    this->game.update();
     for(std::unique_ptr<ClientHandler>& player : this->players){
         int & energy = player->getEnergy();
         energy = this->game.getTotalEnergy(player->getFaction());
@@ -210,7 +211,6 @@ void Server::update(){
         for(building_t CREATOR : creators)
             this->responses[player->getID()].push_back(checkCreation(player->getFaction(),CREATOR));
     }
-    this->game.update();
 }
 
 std::unique_ptr<ClientHandler> & Server::getPlayer(player_t faction) {
@@ -227,12 +227,18 @@ response_t Server::checkCreation(player_t faction, building_t creator) {
     this->unit_time[faction][queued] += this->game.getTotalCreators(faction,queued); 
     for(size_t i = 0; i < this->players.size(); i++)
         if(this->players[i]->getFaction() == faction)
-            this->creation_data[i].push_back(creation_t(
-                this->game.getCreator(faction,queued),
-                queued,
-                this->unit_time[faction][queued],
-                this->unit_creation_time[faction][queued]+this->time_penalty[faction])
-            );
+            if(this->game.getCreator(faction,queued) == -1){
+                while(!this->creating_queues[faction][creator].empty())
+                    this->creating_queues[faction][creator].pop();
+                this->unit_time[faction][queued] = 0;
+            } else {
+                this->creation_data[i].push_back(creation_t(
+                    this->game.getCreator(faction,queued),
+                    queued,
+                    this->unit_time[faction][queued],
+                    this->unit_creation_time[faction][queued]+this->time_penalty[faction])
+                );
+            }
     if(this->unit_time[faction][queued] >= this->unit_creation_time[faction][queued]+this->time_penalty[faction]){
         response_t res;
         res = this->game.createUnit(faction,queued,this->getPlayer(faction)->getSpice());
