@@ -343,6 +343,8 @@ void Trike::react(int x, int y, Board& board) {
     }
     if (!board.canTraverse(x,y))        
         return;
+    this->attacking = false;
+    this->targeting =false;
     this->pending_move.push(Position(x, y));        
 }
 
@@ -542,6 +544,8 @@ void Fremen::react(int x, int y, Board& board) {
     }
     if (!board.canTraverse(x,y))        
         return;
+    this->attacking = false;
+    this->targeting =false;
     this->pending_move.push(Position(x, y));         
 }
 
@@ -741,6 +745,8 @@ void Infantry::react(int x, int y, Board& board) {
     }
     if (!board.canTraverse(x,y))        
         return;
+    this->attacking = false;
+    this->targeting =false;
     this->pending_move.push(Position(x, y));        
 }
 
@@ -940,6 +946,8 @@ void Tank::react(int x, int y, Board& board) {
     }
     if (!board.canTraverse(x,y))        
         return;
+    this->attacking = false;
+    this->targeting =false;    
     this->pending_move.push(Position(x, y));        
 }
 
@@ -1133,6 +1141,8 @@ void Devastator::react(int x, int y, Board& board) {
     }
     if (!board.canTraverse(x,y))        
         return;
+    this->attacking = false;
+    this->targeting =false;
     this->pending_move.push(Position(x, y));        
 }
 
@@ -1326,6 +1336,8 @@ void Sardaukar::react(int x, int y, Board& board) {
     }
     if (!board.canTraverse(x,y))        
         return;
+    this->attacking = false;
+    this->targeting =false;
     this->pending_move.push(Position(x, y));        
 }
 
