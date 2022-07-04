@@ -12,7 +12,6 @@ class Building : public Selectable {
  public:
     Building(int ID,player_t faction, int LP, int spice, int energy, Position pos, int dim_x, int dim_y);
     int getSpice();
-    int getEnergy();
     virtual response_t place(Board& board, int pos_x, int pos_y, int& spice, int& energy);
     virtual void react(int x, int y, Board& board);
     virtual void sendState(Protocol & protocol,Socket & client_socket);
@@ -20,6 +19,7 @@ class Building : public Selectable {
     virtual bool canEnable(unit_t type);
     virtual bool canCostTheGame();
     virtual std::vector<Position> getPositions();
+    virtual int getEnergy();
 };
 class AirTrap : public Building {
     int c_energy;

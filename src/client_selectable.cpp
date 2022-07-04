@@ -160,7 +160,7 @@ void CMovable::render(player_t player_faction, SDL2pp::Renderer& renderer, int c
     int ydim = this->dim_y*TILE_SIZE;
     //std::cout << "X offset: " << this->rel_pos_x <<" Y offset: "<<this->rel_pos_y<< std::endl;
 
-    frame_t frame;
+    frame_t frame = ANIMATION_IDLE;
     
     if(abs(this->rel_pos_x) == 0 || abs(this->rel_pos_y) == 0)
         frame = ANIMATION_IDLE;    

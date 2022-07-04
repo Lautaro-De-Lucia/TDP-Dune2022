@@ -181,6 +181,8 @@ void GameHud::setBuildButtonColor(double percentage, color_t color){
 }
 
 void GameHud::setUnitButtonColor(selectable_t type, double percentage, color_t color){
+	if (percentage >= 1)
+		percentage = 1;
 	for(Button & unit_button : this->unit_buttons){
 		if(unit_button.getID() == (int)type)
 			unit_button.setTextureColor(percentage,color);

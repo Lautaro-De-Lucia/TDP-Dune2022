@@ -65,7 +65,7 @@ response_t AirTrap::place(Board& board,int pos_x,int pos_y,int& spice,int& energ
         return res;
     
     spice -= this->spice;
-    energy += this->energy;
+    // energy += this->energy;
 
     for (size_t j = 0 ; j < this->dim_y ; j++)
         for (size_t i = 0 ; i < this->dim_x ; i++)
@@ -106,7 +106,7 @@ response_t Barrack::place(Board& board,int pos_x,int pos_y,int& spice,int& energ
         return res;
 
     spice -= this->spice;
-    energy -= this->energy;
+    //energy -= this->energy;
 
     for (size_t j = 0 ; j < this->dim_y ; j++)
         for (size_t i = 0 ; i < this->dim_x ; i++)
@@ -148,7 +148,7 @@ response_t Refinery::place(Board& board,int pos_x,int pos_y,int& spice,int& ener
     if(res != RES_CREATE_BUILDING_SUCCESS)
         return res;
     spice -= this->spice;
-    energy -= this->energy;
+    //energy -= this->energy;
 
     for (size_t j = 0 ; j < this->dim_y ; j++)
         for (size_t i = 0 ; i < this->dim_x ; i++)
@@ -193,7 +193,7 @@ response_t LightFactory::place(Board& board,int pos_x,int pos_y,int& spice,int& 
         return res;
 
     spice -= this->spice;
-    energy -= this->energy;
+    //energy -= this->energy;
 
     for (size_t j = 0 ; j < this->dim_y ; j++)
         for (size_t i = 0 ; i < this->dim_x ; i++)
@@ -231,7 +231,7 @@ response_t HeavyFactory::place(Board& board,int pos_x,int pos_y,int& spice,int& 
         return res;
 
     spice -= this->spice;
-    energy -= this->energy;
+    //energy -= this->energy;
 
     for (size_t j = 0 ; j < this->dim_y ; j++)
         for (size_t i = 0 ; i < this->dim_x ; i++)
@@ -271,7 +271,7 @@ response_t Silo::place(Board& board,int pos_x,int pos_y,int& spice,int& energy){
         return res;
 
     spice -= this->spice;
-    energy -= this->energy;
+    //energy -= this->energy;
 
     for (size_t j = 0 ; j < this->dim_y ; j++)
         for (size_t i = 0 ; i < this->dim_x ; i++)
@@ -306,7 +306,7 @@ response_t Palace::place(Board& board,int pos_x,int pos_y,int& spice,int& energy
         return res;
 
     spice -= this->spice;
-    energy -= this->energy;
+    //energy -= this->energy;
 
     for (size_t j = 0 ; j < this->dim_y ; j++) 
         for (size_t i = 0 ; i < this->dim_x ; i++)
@@ -347,7 +347,7 @@ response_t ConstructionYard::place(Board& board,int pos_x,int pos_y,int& spice,i
         return res;
 
     spice -= this->spice;
-    energy -= this->energy;
+    //energy -= this->energy;
 
     for (size_t j = 0 ; j < this->getDimY() ; j++)
         for (size_t i = 0 ; i < this->getDimX() ; i++)

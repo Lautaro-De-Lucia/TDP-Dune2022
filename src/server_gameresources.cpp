@@ -35,6 +35,16 @@ int GameResources::getSpiceCapacity(player_t faction){
     return total_spice;
 }
 
+int GameResources::getTotalEnergy(player_t faction){
+    std::lock_guard<std::mutex> locker(this->lock);
+    int total_energy = 0;
+    for (auto& e : this->elements)
+        if(e.second->getFaction() == faction){
+            total_energy += e.second->getEnergy();
+        }
+    return total_energy;
+}
+
 bool GameResources::hasLost(player_t faction){
     std::lock_guard<std::mutex> locker(this->lock);
     for (auto& e : this->elements)

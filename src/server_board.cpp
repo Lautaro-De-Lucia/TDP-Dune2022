@@ -103,7 +103,6 @@ void Board::dealDamage(int x, int y, int damage){
                 if (element->getID() == this->creatorID[element->getFaction()][UNIT])
                     this->creatorID[element->getFaction()][UNIT] = -1;
             }
-
         for (Position pos : element->getPositions()){
             std::cout << "Disoccupying cell at position: " << pos << std::endl;
             this->cells[pos.x][pos.y].disoccupy();

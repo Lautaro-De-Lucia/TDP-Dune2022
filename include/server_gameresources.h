@@ -43,6 +43,7 @@ public:
     int getTotalChangedCells();
     std::vector<Position> getChangedCells();
     int getSpiceCapacity(player_t faction);
+    int getTotalEnergy(player_t faction);
     int getTotalCreators(player_t faction, unit_t type);
     void clearChangedCells();
 };

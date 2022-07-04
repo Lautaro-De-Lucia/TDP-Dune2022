@@ -142,7 +142,7 @@ void Harvester::harvest(int x, int y, Board& board){
     this->harvesting = true;
     this->harvest_position.x = x;
     this->harvest_position.y = y;
-    this->move(x,y,board);
+    this->pending_move.push(Position(x, y));        
 }
 
 void Harvester::receiveDamage(int damage){
@@ -364,7 +364,7 @@ void Trike::attack(int x, int y, Board& board){
     } 
     std::cout << "Moving to the position: " << this->moving_position << std::endl;
     //  Move there
-    this->move(this->moving_position.x,this->moving_position.y,board);
+    this->pending_move.push(Position(this->moving_position.x,this->moving_position.y));
 }
 
 void Trike::receiveDamage(int damage){
@@ -542,7 +542,7 @@ void Fremen::react(int x, int y, Board& board) {
     }
     if (!board.canTraverse(x,y))        
         return;
-    this->pending_move.push(Position(x, y));        
+    this->pending_move.push(Position(x, y));         
 }
 
 void Fremen::attack(int x, int y, Board& board){
@@ -563,7 +563,7 @@ void Fremen::attack(int x, int y, Board& board){
     } 
     std::cout << "Moving to the position: " << this->moving_position << std::endl;
     //  Move there
-    this->move(this->moving_position.x,this->moving_position.y,board);
+    this->pending_move.push(Position(this->moving_position.x,this->moving_position.y));
 }
 
 void Fremen::receiveDamage(int damage){
@@ -762,7 +762,7 @@ void Infantry::attack(int x, int y, Board& board){
     } 
     std::cout << "Moving to the position: " << this->moving_position << std::endl;
     //  Move there
-    this->move(this->moving_position.x,this->moving_position.y,board);
+    this->pending_move.push(Position(this->moving_position.x,this->moving_position.y));
 }
 
 void Infantry::receiveDamage(int damage){
@@ -961,7 +961,7 @@ void Tank::attack(int x, int y, Board& board){
     } 
     std::cout << "Moving to the position: " << this->moving_position << std::endl;
     //  Move there
-    this->move(this->moving_position.x,this->moving_position.y,board);
+    this->pending_move.push(Position(this->moving_position.x,this->moving_position.y));
 }
 
 void Tank::receiveDamage(int damage){
@@ -1154,7 +1154,7 @@ void Devastator::attack(int x, int y, Board& board){
     } 
     std::cout << "Moving to the position: " << this->moving_position << std::endl;
     //  Move there
-    this->move(this->moving_position.x,this->moving_position.y,board);
+    this->pending_move.push(Position(this->moving_position.x,this->moving_position.y));
 }
 
 void Devastator::receiveDamage(int damage){
@@ -1347,7 +1347,7 @@ void Sardaukar::attack(int x, int y, Board& board){
     } 
     std::cout << "Moving to the position: " << this->moving_position << std::endl;
     //  Move there
-    this->move(this->moving_position.x,this->moving_position.y,board);
+    this->pending_move.push(Position(this->moving_position.x,this->moving_position.y));
 }
 
 void Sardaukar::receiveDamage(int damage){
