@@ -87,6 +87,10 @@ class Player {
    ShotsHandler shotsHandler;
    ExplosionsHandler explosionsHandler;
    std::vector<corpse_t> corpses;
+
+   clock_t base_alert_delay;
+
+   Position base_position;
   
 
    Player(player_t faction, const char* host_name, const char* service_name,Camera & cam, SDL2pp::Window& window,SDL2pp::Renderer& renderer,TextureHandler & textures, size_t spice, size_t c_spice, int energy, size_t c_energy, std::vector<std::vector<std::string>>& map_data);
@@ -128,4 +132,10 @@ class Player {
    void addCorpse(selectable_t type, Position position, int time);
 
    void renderCorpses();
+
+   void triggerBaseAttackAlert(clock_t& current_time);
+
+   bool positionBelongsToBase(Position position);
+
+   void triggerNewUnitAlert(unit_t type);
 };

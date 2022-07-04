@@ -49,6 +49,25 @@ textures(textures)
     this->new_unit_available = true;
     this->faction = faction;
 
+    this->base_alert_delay = clock();
+
+    switch (faction)
+    {
+    case ATREIDES:
+        this->base_position = Position(ATREIDES_INIT_POS_X, ATREIDES_INIT_POS_Y);
+        break;
+    case ORDOS:
+        this->base_position = Position(ORDOS_INIT_POS_X, ORDOS_INIT_POS_Y);
+        break;
+    case HARKONNEN:
+        this->base_position = Position(HARKONNEN_INIT_POS_X, HARKONNEN_INIT_POS_Y);
+        break;
+    
+    default:
+        this->base_position = Position(-1, -1);
+        break;
+    }
+
     this->creators.insert({BARRACK,-1});
     this->creators.insert({LIGHT_FACTORY,-1});
     this->creators.insert({HEAVY_FACTORY,-1});
@@ -381,6 +400,8 @@ void Player::update() {
     //  Receive creators
     this->receiveCreators();
 
+    clock_t current_time = clock();
+
     //  Receive elements
     //  Set updates to false
     for (size_t i = 0 ; i < this->updates.size(); i++)
@@ -399,12 +420,16 @@ void Player::update() {
                     this->updates[id] = true;
                     if (attacking) {
                         this->updateAttacker(id, TRIKE, Position(pos_x, pos_y), Position(enemy_pos_x, enemy_pos_y));
+                        if (this->positionBelongsToBase(Position(enemy_pos_x, enemy_pos_y)))
+                            triggerBaseAttackAlert(current_time);
                     } else {
                         this->removeAttacker(id);
                     }
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(TRIKE,id,faction,lp,pos_x,pos_y,1,1,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
-                    this->updates.push_back(true);  
+                    this->updates.push_back(true);
+                    if ((int) this->faction == faction)
+                        this->triggerNewUnitAlert((unit_t) type);
                 }
                 break;
             case SEL_HARVESTER:
@@ -414,7 +439,9 @@ void Player::update() {
                     this->updates[id] = true;
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(HARVESTER,id,faction,lp,pos_x,pos_y,1,1,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
-                    this->updates.push_back(true);  
+                    this->updates.push_back(true);
+                    if ((int) this->faction == faction)
+                        this->triggerNewUnitAlert((unit_t) type);
                 }
                 break;
             case SEL_FREMEN:
@@ -424,12 +451,16 @@ void Player::update() {
                     this->updates[id] = true;
                     if (attacking) {
                         this->updateAttacker(id, FREMEN, Position(pos_x, pos_y), Position(enemy_pos_x, enemy_pos_y));
+                        if (this->positionBelongsToBase(Position(enemy_pos_x, enemy_pos_y)))
+                            triggerBaseAttackAlert(current_time);
                     } else {
                         this->removeAttacker(id);
                     }
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(FREMEN,id,faction,lp,pos_x,pos_y,1,1,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
-                    this->updates.push_back(true);  
+                    this->updates.push_back(true);
+                    if ((int) this->faction == faction)
+                        this->triggerNewUnitAlert((unit_t) type);
                 }
                 break;
             case SEL_INFANTRY:
@@ -439,12 +470,16 @@ void Player::update() {
                     this->updates[id] = true;
                     if (attacking) {
                         this->updateAttacker(id, INFANTRY, Position(pos_x, pos_y), Position(enemy_pos_x, enemy_pos_y));
+                        if (this->positionBelongsToBase(Position(enemy_pos_x, enemy_pos_y)))
+                            triggerBaseAttackAlert(current_time);
                     } else {
                         this->removeAttacker(id);
                     }
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(INFANTRY,id,faction,lp,pos_x,pos_y,1,1,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
-                    this->updates.push_back(true);  
+                    this->updates.push_back(true);
+                    if ((int) this->faction == faction)
+                        this->triggerNewUnitAlert((unit_t) type);
                 }
                 break;   
             case SEL_SARDAUKAR:
@@ -454,12 +489,16 @@ void Player::update() {
                     this->updates[id] = true;
                     if (attacking) {
                         this->updateAttacker(id, SARDAUKAR, Position(pos_x, pos_y), Position(enemy_pos_x, enemy_pos_y));
+                        if (this->positionBelongsToBase(Position(enemy_pos_x, enemy_pos_y)))
+                            triggerBaseAttackAlert(current_time);
                     } else {
                         this->removeAttacker(id);
                     }
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(SARDAUKAR,id,faction,lp,pos_x,pos_y,1,1,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
-                    this->updates.push_back(true);  
+                    this->updates.push_back(true);
+                    if ((int) this->faction == faction)
+                        this->triggerNewUnitAlert((unit_t) type);
                 }
                 break;
             case SEL_TANK:
@@ -469,12 +508,16 @@ void Player::update() {
                     this->updates[id] = true;
                     if (attacking) {
                         this->updateAttacker(id, TANK, Position(pos_x, pos_y), Position(enemy_pos_x, enemy_pos_y));
+                        if (this->positionBelongsToBase(Position(enemy_pos_x, enemy_pos_y)))
+                            triggerBaseAttackAlert(current_time);
                     } else {
                         this->removeAttacker(id);
                     }
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(TANK,id,faction,lp,pos_x,pos_y,1,1,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
-                    this->updates.push_back(true);  
+                    this->updates.push_back(true);
+                    if ((int) this->faction == faction)
+                        this->triggerNewUnitAlert((unit_t) type);
                 }
                 break; 
             case SEL_DEVASTATOR:
@@ -484,12 +527,16 @@ void Player::update() {
                     this->updates[id] = true;
                     if (attacking) {
                         this->updateAttacker(id, DEVASTATOR, Position(pos_x, pos_y), Position(enemy_pos_x, enemy_pos_y));
+                        if (this->positionBelongsToBase(Position(enemy_pos_x, enemy_pos_y)))
+                            triggerBaseAttackAlert(current_time);
                     } else {
                         this->removeAttacker(id);
                     }
                 } else {
                     this->elements.insert({id,std::unique_ptr<CSelectable>(new CMovable(DEVASTATOR,id,faction,lp,pos_x,pos_y,1,1,this->game_renderer,this->textures,DATA_PATH LP_PATH))});
-                    this->updates.push_back(true);  
+                    this->updates.push_back(true);
+                    if ((int) this->faction == faction)
+                        this->triggerNewUnitAlert((unit_t) type);
                 }
                 break; 
             case SEL_CONSTRUCTION_YARD:
@@ -904,4 +951,60 @@ void Player::renderCorpses() {
 
     for (size_t i = 0; i < corpses_to_remove.size(); i++)
             this->corpses.erase(this->corpses.begin() + corpses_to_remove[i]);
+}
+
+void Player::triggerBaseAttackAlert(clock_t& current_time) {
+
+    if (current_time - this->base_alert_delay > 50000000) {
+        this->audio.play(AI_ATACK);
+        this->audio.play(UNDER_ATTACK);
+        this->base_alert_delay = current_time;
+    }
+}
+
+void Player::triggerNewUnitAlert(unit_t type) {
+
+    switch (type)
+    {
+    case INFANTRY:
+        this->audio.play(H_ECONF1);
+        break;
+    case SARDAUKAR:
+        this->audio.play(H_ECONF2);
+        break;
+    case FREMEN:
+        this->audio.play(H_ECONF3);
+        break;
+    case TRIKE:
+        this->audio.play(H_ESEL1);
+        break;
+    case TANK:
+        this->audio.play(H_ESEL2);
+        break;
+    case DEVASTATOR:
+        this->audio.play(H_ESEL3);
+        break;
+    case HARVESTER:
+        this->audio.play(FLAMER1);
+        break;
+    default:
+        break;
+    }
+}
+
+bool Player::positionBelongsToBase(Position position) {
+
+    int map_dim_x = 80;
+    int map_dim_y = 45;
+
+    for (size_t i = this->base_position.x; i < this->base_position.x + CONSTRUCTION_YARD_DIM_X; i++) {
+        for (size_t j = this->base_position.y; j < this->base_position.y + CONSTRUCTION_YARD_DIM_Y; j++) {
+            
+            if (i >= map_dim_x || j >= map_dim_y)
+                continue;
+            if (position.x == i && position.y == j)
+                return true;
+        }
+    }
+    return false;
 }

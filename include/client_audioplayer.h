@@ -36,6 +36,11 @@
 #define H_ESEL2_PATH "/sounds/H_ESEL2.WAV"
 #define H_ESEL3_PATH "/sounds/H_ESEL3.WAV"
 
+#define UNDER_ATTACK_PATH "/sounds/UNDER_ATTACK.WAV"
+#define VICTORY_PATH "/sounds/VICTORY.WAV"
+
+#define FLAMER1_PATH "/sounds/FLAMER1.WAV"
+
 enum sfx_t {
     HOUSE_CHOSEN,
     GAME_START,
@@ -59,7 +64,10 @@ enum sfx_t {
     H_ECONF3,
     H_ESEL1,
     H_ESEL2,
-    H_ESEL3
+    H_ESEL3,
+    UNDER_ATTACK,
+    VICTORY,
+    FLAMER1
 };
 
 enum music_t {

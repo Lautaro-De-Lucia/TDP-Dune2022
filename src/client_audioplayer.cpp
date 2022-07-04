@@ -173,6 +173,27 @@ AudioPlayer::AudioPlayer(){
     }
     this->sound_effects.insert({H_ESEL3,h_esel3});
 
+    Mix_Chunk* under_attack = Mix_LoadWAV(DATA_PATH UNDER_ATTACK_PATH);
+    if (under_attack == NULL) {
+        printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+        exit(1);
+    }
+    this->sound_effects.insert({UNDER_ATTACK,under_attack});
+
+    Mix_Chunk* victory = Mix_LoadWAV(DATA_PATH VICTORY_PATH);
+    if (victory == NULL) {
+        printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+        exit(1);
+    }
+    this->sound_effects.insert({VICTORY,victory});
+
+    Mix_Chunk* flamer1 = Mix_LoadWAV(DATA_PATH FLAMER1_PATH);
+    if (flamer1 == NULL) {
+        printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+        exit(1);
+    }
+    this->sound_effects.insert({FLAMER1,flamer1});
+
     // MUSIC
 
     Mix_Music* atreides_music = Mix_LoadMUS(DATA_PATH ATREIDES_MUSIC_PATH);
