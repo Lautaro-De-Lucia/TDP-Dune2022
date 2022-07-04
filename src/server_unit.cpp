@@ -142,7 +142,7 @@ void Harvester::harvest(int x, int y, Board& board){
     this->harvesting = true;
     this->harvest_position.x = x;
     this->harvest_position.y = y;
-    this->move(x,y,board);
+    this->pending_move.push(Position(x, y));        
 }
 
 void Harvester::receiveDamage(int damage){
