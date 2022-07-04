@@ -5,14 +5,14 @@ Shot::Shot(Position origin, Position target, int speed, unit_t unit){
     this->pixel_origin_pos_x = origin.x*TILE_SIZE;
     this->pixel_origin_pos_y = origin.y*TILE_SIZE;
 
-    this->pixel_target_pos_x = target.x*TILE_SIZE;
-    this->pixel_target_pos_y = target.y*TILE_SIZE;
+    this->pixel_target_pos_x = target.x*TILE_SIZE + TILE_SIZE/2;
+    this->pixel_target_pos_y = target.y*TILE_SIZE + TILE_SIZE/2;
 
     this->speed = speed;
     this->unit = unit;
 
-    this->shot_width = 2;
-    this->shot_height = 2;
+    this->shot_width = 4;
+    this->shot_height = 4;
 
     int dx = this->pixel_target_pos_x - this->pixel_origin_pos_x;
     int dy = this->pixel_target_pos_y - this->pixel_origin_pos_y;
@@ -88,6 +88,13 @@ void Shot::update(bool& has_reached_its_target) {
     if (current_time - this->shot_delay > this->speed) {
         if (this->x_positions.size() == 0) {
             has_reached_its_target = true;
+            return;
+        } else {
+            this->nextPosition();
+        }
+        if (this->x_positions.size() == 0) {
+            has_reached_its_target = true;
+            return;
         } else {
             this->nextPosition();
             this->shot_delay = current_time;
