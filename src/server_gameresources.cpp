@@ -15,6 +15,7 @@ Cell & GameResources::getCell(int x, int y){
 void GameResources::deleteElement(int ID){
     std::lock_guard<std::mutex> locker(this->lock);
     this->board.deleteElement(ID);
+    std::cout << "Element deleted"<< std::endl;
 }
 
 
