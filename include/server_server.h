@@ -55,6 +55,7 @@ class Server {
       void handleInstruction(right_click_t & INS);
       void handleInstruction(selection_t & INS);
       void handleInstruction(idle_t & INS);
+      void handleInstruction(close_t & INS);
 
       void sendResponses();
       void reportCreationState();

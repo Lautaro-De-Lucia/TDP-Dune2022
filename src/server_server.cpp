@@ -80,24 +80,13 @@ void Server::read_command(std::istream& input_stream) {
 }
 
 void Server::run() {
-    bool quit = false;
     while (this->running) {
         //std::cout << "Starting instance "<< k << " of game loop" << std::endl;
         //std::cout << "Checking for loosing players" << std::endl;
         this->checkForLosingPlayers();
         //std::cout << "Waiting for players to notify" << std::endl;
         std::cout << "Total players: " << this->players.size() << std::endl;
-        while(this->TSQ.getSize() < this->players.size()){
-            if(this->running == false){
-                std::cout << "I'm quitting"<< std::endl;
-                quit = true;
-                break;
-            }
-        }
-        if(quit == true){
-            std::cout << "Imma quit" << std::endl;
-            break;
-        }
+        while(this->TSQ.getSize() < this->players.size()){}
         // pop until empty, then update
         // if > 1000 pops, exit
         // sleep in server
@@ -154,7 +143,10 @@ void Server::handleInstruction(std::unique_ptr<instruction_t> & INS) {
             break; 
         case IDLE:
             this->handleInstruction(dynamic_cast<idle_t&>(*INS));
-            break;     
+            break;
+        case CLOSE:
+            this->handleInstruction(dynamic_cast<close_t&>(*INS));
+            break; 
         default:
             break;
     }
@@ -194,6 +186,12 @@ void Server::handleInstruction(selection_t & INS) {
 }
 
 void Server::handleInstruction(idle_t & INS) {}
+
+void Server::handleInstruction(close_t & INS) {
+    std::cout << "handling close instruction" << std::endl;
+    this->players[INS.player_ID]->close();
+    this->players.erase(this->players.begin() + INS.player_ID);
+}
 
 void Server::sendResponses() {
     for (size_t i = 0 ; i < this->players.size(); i++)

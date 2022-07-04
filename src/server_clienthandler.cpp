@@ -24,9 +24,7 @@ bool ClientHandler::isDone(){
 
 void ClientHandler::close(){
     this->finished = true;
-    std::cout << "Joining my thread: " << this->player_id << std::endl;
     this->thread.join();
-    std::cout << "Thread joined: " << this->player_id << std::endl;
 }
 
 void ClientHandler::notifyGameStart(){
@@ -46,22 +44,22 @@ void ClientHandler::run() {
     if(this->faction == ORDOS)
         this->instruction_queue.push(std::unique_ptr<building_create_t>(new building_create_t(this->player_id, this->faction,CONSTRUCTION_YARD,ORDOS_INIT_POS_X,ORDOS_INIT_POS_Y)));
 
+    bool quit = false;
     while (true) {
         //std::cout << "I ain't done yet " << this->player_id << std::endl;
         while (this->reading_flags[this->player_id] == false){
-            if (finished)
-                return;
+            if(finished == true){
+                quit = true;
+                break;
+            }
+        }
+        if(quit){
+            break;
         }
         //std::cout << "This should print" << this->player_id << std::endl;
         command_t command;
         //std::cout << "Receiving...: "<< this->player_id <<std::endl;
         this->protocol.receive_command(command, this->player_socket);
-
-        if(command == CLOSE) {
-            std::cout << "Client closed lmao" << std::endl;
-            this->finished = true;
-            break;
-        }
 
         int type, pos_x, pos_y, pos_x_min,pos_x_max,pos_y_min,pos_y_max;
         //  std::cout << "Pushing instruction to queue" << std::endl;
@@ -89,13 +87,15 @@ void ClientHandler::run() {
             case IDLE:
                 this->instruction_queue.push(std::unique_ptr<idle_t>(new idle_t(this->player_id, this->faction)));
                 break;
+            case CLOSE:
+                this->instruction_queue.push(std::unique_ptr<close_t>(new close_t(this->player_id, this->faction)));
+                break;            
             default:
                 break;
         }
         //  std::cout << "Pushed instruction to queue" << std::endl;
         this->reading_flags[this->player_id] = false;
     }
-    std::cout << "I'm fucking done: " << this->player_id << std::endl;
 }
 
 void ClientHandler::reportState(GameResources & game){

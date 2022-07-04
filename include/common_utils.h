@@ -383,6 +383,12 @@ struct idle_t : instruction_t {
     }
 };
 
+struct close_t : instruction_t {
+
+    close_t(int player_ID, player_t faction) : instruction_t(player_ID, faction, CLOSE) {
+    }
+};
+
 
 struct Position {
  public:
