@@ -126,7 +126,7 @@ int main(int argc, char *argv[]) {
     std::string _host_name(host_name);
     std::string _service_name(service_name);
 
-    char* _program_name = (char*) "./client";
+    char* _program_name = (char*) "./dune2022client";
     int _argc = 1;
     char *_argv[1] = {_program_name};
 

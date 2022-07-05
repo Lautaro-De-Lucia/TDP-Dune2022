@@ -80,7 +80,6 @@ ADD_EXECUTABLE("dune2022client" client_main.cpp
 target_include_directories("dune2022server" PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)  
 target_include_directories("dune2022client" PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)            
 
-
 TARGET_LINK_LIBRARIES("dune2022server" "${SDL2PP_LIBRARIES}" Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Multimedia yaml-cpp)
 TARGET_LINK_LIBRARIES("dune2022client" "${SDL2PP_LIBRARIES}" Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Multimedia yaml-cpp)
 
