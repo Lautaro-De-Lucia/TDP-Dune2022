@@ -15,16 +15,6 @@ Por el momento el juego se encuentra disponible para computadoras personales con
 </p>
 
 
-- cmake
-- libsdl2-dev
-- libsdl2-ttf-dev
-- libsdl2-image-dev
-- qt5-default
-- qtbase5-dev
-- qtmultimedia5-dev
-- gstreamer1.0-plugins-good
-- libqt5multimedia5-plugins
-
 ### ¿Cómo descargo el juego?
 
 Por el momento es posible descargar el juego a través de su repositorio de GitHub (https://github.com/Lautaro-De-Lucia/TDP-Dune2022). Para esto debemos clonar el repositorio mediante el siguiente comando de consola:
@@ -37,9 +27,21 @@ Una vez descargado el repositorio, entramos a la carpeta donde se descargó y ej
 
 `$ ./install.sh` <br>
 
-Es posible que no tengamos permiso para ejecutar este instalador, en tal caso debemos correr el siguiente comando en la misma terminal:
+Es posible que no tengamos permiso para ejecutar este instalador, en tal caso, antes de ejecutar el instalador, debemos correr el siguiente comando en la misma terminal:
 
 `$ chmod +x install.sh` <br>
+
+Este instalador se encarga de instalar las siguientes dependencias:
+
+- cmake
+- libsdl2-dev
+- libsdl2-ttf-dev
+- libsdl2-image-dev
+- qt5-default
+- qtbase5-dev
+- qtmultimedia5-dev
+- gstreamer1.0-plugins-good
+- libqt5multimedia5-plugins
 
 Ahora ya resulta posible correr el juego. Desde el directorio donde nos encontramos, vamos la carpeta creada por el instalador "build", y notamos que esta contiene dos ejecutables, `dune2022server` y `dune2022client`. Para correr el `server` debemos indicarle por línea de comando el parámetro del *service name* (por ejemplo, http-alt), y una vez ejecutado se quedará corriendo esperando jugadores que quieran jugar. Por otro lado, si lo que queremos es jugar, debemos utilizar el archivo ejecutable del `client`. Para correr el juego, es necesario primero tener el juego corriendo en un servidor en alguna computadora. Conociendo la dirección ip de este servidor, nos será posible unirnos a una partida hosteada por el servidor ejecutando el programa `client` con dos argumentos por línea de comando: primero se le indica el *host name* (la dirección de ip del servidor), y luego se le especifica el *service name* (http-alt). Para correr el servidor y el cliente en una misma computadora, es posible utilizar `localhost` como *host name*. A continuación se ilustra con un ejemplo de ejecución del programa en una misma máquina:
 
