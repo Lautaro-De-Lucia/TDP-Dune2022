@@ -25,7 +25,7 @@ void Unit::update(State& state, Board& board){}
 void Unit::receiveDamage(int damage){}
 
 std::vector<Position> Unit::getPositions(){
-    std::cout << "Getting positions of the destroyed unit" << std::endl;
+    //std::cout << "Getting positions of the destroyed unit" << std::endl;
     std::vector<Position> positions;
     positions.push_back(this->position);
     if(this->next_position.x != -1 && this->next_position.y !=-1)
@@ -356,7 +356,7 @@ void Trike::attack(int x, int y, Board& board){
             break;
         } 
     } 
-    std::cout << "Moving to the position: " << this->moving_position << std::endl;
+    //std::cout << "Moving to the position: " << this->moving_position << std::endl;
     //  Move there
     this->pending_move.push(Position(this->moving_position.x,this->moving_position.y));
 }
@@ -398,7 +398,7 @@ void Trike::update(State & state, Board& board){
     //  Si no me estoy moviendo ni atacando, buscar enemigos
     if(this->moving == false && this->targeting == false){
 		if (this->enemySearch(board) == true){
-            std::cout << "Attacking position: "<< this->enemy_position << std::endl;
+            //std::cout << "Attacking position: "<< this->enemy_position << std::endl;
             this->attack(this->enemy_position.x,this->enemy_position.y,board);
         }
     }
@@ -555,7 +555,7 @@ void Fremen::attack(int x, int y, Board& board){
             break;
         } 
     } 
-    std::cout << "Moving to the position: " << this->moving_position << std::endl;
+    //std::cout << "Moving to the position: " << this->moving_position << std::endl;
     //  Move there
     this->pending_move.push(Position(this->moving_position.x,this->moving_position.y));
 }
@@ -597,7 +597,7 @@ void Fremen::update(State & state, Board& board){
     //  Si no me estoy moviendo ni atacando, buscar enemigos
     if(this->moving == false && this->targeting == false){
 		if (this->enemySearch(board) == true){
-            std::cout << "Attacking position: "<< this->enemy_position << std::endl;
+            //std::cout << "Attacking position: "<< this->enemy_position << std::endl;
             this->attack(this->enemy_position.x,this->enemy_position.y,board);
         }
     }
@@ -754,7 +754,7 @@ void Infantry::attack(int x, int y, Board& board){
             break;
         } 
     } 
-    std::cout << "Moving to the position: " << this->moving_position << std::endl;
+    //std::cout << "Moving to the position: " << this->moving_position << std::endl;
     //  Move there
     this->pending_move.push(Position(this->moving_position.x,this->moving_position.y));
 }
@@ -796,7 +796,7 @@ void Infantry::update(State & state, Board& board){
     //  Si no me estoy moviendo ni atacando, buscar enemigos
     if(this->moving == false && this->targeting == false){
 		if (this->enemySearch(board) == true){
-            std::cout << "Attacking position: "<< this->enemy_position << std::endl;
+            //std::cout << "Attacking position: "<< this->enemy_position << std::endl;
             this->attack(this->enemy_position.x,this->enemy_position.y,board);
         }
     }
@@ -953,7 +953,7 @@ void Tank::attack(int x, int y, Board& board){
             break;
         } 
     } 
-    std::cout << "Moving to the position: " << this->moving_position << std::endl;
+    //std::cout << "Moving to the position: " << this->moving_position << std::endl;
     //  Move there
     this->pending_move.push(Position(this->moving_position.x,this->moving_position.y));
 }
@@ -989,7 +989,7 @@ void Tank::update(State & state, Board& board){
     //  Si no me estoy moviendo ni atacando, buscar enemigos
     if(this->moving == false && this->targeting == false){
 		if (this->enemySearch(board) == true){
-            std::cout << "Attacking position: "<< this->enemy_position << std::endl;
+            //std::cout << "Attacking position: "<< this->enemy_position << std::endl;
             this->attack(this->enemy_position.x,this->enemy_position.y,board);
         }
     }
@@ -1146,7 +1146,7 @@ void Devastator::attack(int x, int y, Board& board){
             break;
         } 
     } 
-    std::cout << "Moving to the position: " << this->moving_position << std::endl;
+    //std::cout << "Moving to the position: " << this->moving_position << std::endl;
     //  Move there
     this->pending_move.push(Position(this->moving_position.x,this->moving_position.y));
 }
@@ -1182,7 +1182,7 @@ void Devastator::update(State & state, Board& board){
     //  Si no me estoy moviendo ni atacando, buscar enemigos
     if(this->moving == false && this->targeting == false){
 		if (this->enemySearch(board) == true){
-            std::cout << "Attacking position: "<< this->enemy_position << std::endl;
+            //std::cout << "Attacking position: "<< this->enemy_position << std::endl;
             this->attack(this->enemy_position.x,this->enemy_position.y,board);
         }
     }
@@ -1339,7 +1339,7 @@ void Sardaukar::attack(int x, int y, Board& board){
             break;
         } 
     } 
-    std::cout << "Moving to the position: " << this->moving_position << std::endl;
+    //std::cout << "Moving to the position: " << this->moving_position << std::endl;
     //  Move there
     this->pending_move.push(Position(this->moving_position.x,this->moving_position.y));
 }
@@ -1381,7 +1381,7 @@ void Sardaukar::update(State & state, Board& board){
     //  Si no me estoy moviendo ni atacando, buscar enemigos
     if(this->moving == false && this->targeting == false){
 		if (this->enemySearch(board) == true){
-            std::cout << "Attacking position: "<< this->enemy_position << std::endl;
+            //std::cout << "Attacking position: "<< this->enemy_position << std::endl;
             this->attack(this->enemy_position.x,this->enemy_position.y,board);
         }
     }

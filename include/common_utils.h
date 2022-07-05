@@ -6,6 +6,42 @@
 #include <vector>
 #include <SDL2pp/SDL2pp.hh>
 
+#include "client_setup.h"
+#include "server_setup.h"
+
+// server
+// ===========
+#define INIT_SPICE 20000
+#define INIT_CSPICE 20000
+#define INIT_ENERGY 2000
+#define INIT_CENERGY 5000
+#define MAX_CONNECTIONS 2
+// ===========
+
+#define TRIKE_BULLET_SPEED 500
+#define FREMEN_BULLET_SPEED 500
+#define INFANTRY_BULLET_SPEED 500
+#define SARDAUKAR_BULLET_SPEED 500
+#define TANK_BULLET_SPEED 500
+#define DEVASTATOR_BULLET_SPEED 500
+
+#define TRIKE_SHOT_FREQUENCY 3000000
+#define FREMEN_SHOT_FREQUENCY 2000000
+#define TANK_SHOT_FREQUENCY 3000000
+#define DEVASTATOR_SHOT_FREQUENCY 5000000
+#define INFANTRY_SHOT_FREQUENCY 1000000
+#define SARDAUKAR_SHOT_FREQUENCY 2000000
+
+#define CAMERA_WIDTH 640
+#define CAMERA_HEIGHT 360
+
+#define CAMERA_INITIAL_POS_X 400
+#define CAMERA_INITIAL_POS_Y 200
+
+#define GAME_SPEED 100000
+
+#define CONSTRUCTION_TIME 100
+
 #define TILE_SIZE 16
 
 //  These would be lifted from a file

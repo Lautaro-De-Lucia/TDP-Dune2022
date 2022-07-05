@@ -1,6 +1,8 @@
 #pragma once
 
 #include <queue>
+#include <iostream>
+
 #include "client_selectable.h"
 #include "client_gamemap.h"
 #include "client_gamehud.h"
@@ -15,18 +17,6 @@
 #include "common_utils.h"
 #include "common_protocol.h"
 #include "common_socket.h"
-
-#include <iostream>
-
-const int CAMERA_WIDTH = 640;
-const int CAMERA_HEIGHT = 360;
-
-const int CAMERA_INITIAL_POS_X = 400;
-const int CAMERA_INITIAL_POS_Y = 200;
-
-const int GAME_SPEED = 100000;
-
-#define CONSTRUCTION_TIME 100
 
 struct corpse_t {
   selectable_t type;

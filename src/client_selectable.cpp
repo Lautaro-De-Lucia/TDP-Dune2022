@@ -87,7 +87,7 @@ int CSelectable::getID() {return this->ID;}
 
 Position CSelectable::getPosition() {return this->position;}
 player_t CSelectable::getFaction() {return this->faction;}
-selectable_t CSelectable::getType() {std::cout << "i shouldnt be here" << std::endl; return (selectable_t) (-1);};
+selectable_t CSelectable::getType() {return (selectable_t) (-1);};
 
 CMovable::CMovable(unit_t type,int id,int faction,int lp,int pos_x,int pos_y,int dim_x,int dim_y,SDL2pp::Renderer& renderer,TextureHandler & textures,const std::string& lp_path)
 :

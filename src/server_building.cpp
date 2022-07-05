@@ -8,9 +8,7 @@ Selectable(ID,faction,LP,pos,dim_x,dim_y,false)
     this->energy = energy;
 }
 
-bool Building::canCreate(unit_t type){
-    std::cout << "wut" << std::endl;
-    return false;}
+bool Building::canCreate(unit_t type){return false;}
 bool Building::canEnable(unit_t type){return false;}
 bool Building::canCostTheGame(){return false;}
 

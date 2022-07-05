@@ -9,18 +9,13 @@
 #include <map>
 #include <sys/socket.h>
 
-#include "./common_socket.h"
-#include "./server_clienthandler.h"
-#include "./server_gameresources.h"
-#include "./common_utils.h"
-#include "./server_tsq.h"
+#include "common_socket.h"
+#include "server_clienthandler.h"
+#include "server_gameresources.h"
+#include "common_utils.h"
+#include "server_tsq.h"
 
-#define INIT_SPICE 20000
-#define INIT_CSPICE 20000
-#define INIT_ENERGY 2000
-#define INIT_CENERGY 5000
 
-#define MAX_CONNECTIONS 2
 
 class Server {
  private:

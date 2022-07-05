@@ -736,7 +736,7 @@ void Player::receiveCreators() {
 
 void Player::renderCreationData() {    
     for(creation_t & c : this->creation_data){
-        std::cout << "Creator ID: " << c.creator_ID << std::endl;
+        //std::cout << "Creator ID: " << c.creator_ID << std::endl;
         std::unique_ptr<CSelectable> & element = this->elements[c.creator_ID];
         Position pos = element->getPosition();
         switch(element->getType()){

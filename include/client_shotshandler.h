@@ -5,26 +5,13 @@
 #include <vector>
 #include <SDL2pp/SDL2pp.hh>
 
-#include "common_utils.h"
 #include "client_shot.h"
 #include "client_audioplayer.h"
 #include "client_texturehandler.h"
 
+#include "common_utils.h"
+
 #define IMG_FORMAT ".png"
-
-#define TRIKE_BULLET_SPEED 500
-#define FREMEN_BULLET_SPEED 500
-#define INFANTRY_BULLET_SPEED 500
-#define SARDAUKAR_BULLET_SPEED 500
-#define TANK_BULLET_SPEED 500
-#define DEVASTATOR_BULLET_SPEED 500
-
-#define TRIKE_SHOT_FREQUENCY 3000000
-#define FREMEN_SHOT_FREQUENCY 2000000
-#define TANK_SHOT_FREQUENCY 3000000
-#define DEVASTATOR_SHOT_FREQUENCY 5000000
-#define INFANTRY_SHOT_FREQUENCY 1000000
-#define SARDAUKAR_SHOT_FREQUENCY 2000000
 
 class ShotsHandler {
  private:

@@ -20,7 +20,7 @@ int GameResources::getSpiceAt(int x, int y){
 void GameResources::deleteElement(int ID){
     //std::lock_guard<std::mutex> locker(this->lock);
     this->board.deleteElement(ID);
-    std::cout << "Element deleted"<< std::endl;
+    //std::cout << "Element deleted"<< std::endl;
 }
 
 void GameResources::sendCreationData(std::vector<creation_t> & creation_data,Protocol & protocol, Socket & client_socket){

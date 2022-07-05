@@ -122,7 +122,7 @@ void Board::dealDamage(int x, int y, int damage){
     //std::lock_guard<std::mutex> locker(this->lock);
     std::unique_ptr<Selectable>& element = this->elements.at(this->cells[x][y].getID());
     element->receiveDamage(damage);
-    std::cout << "Element LP" << element->getLP() <<std::endl;
+    //std::cout << "Element LP" << element->getLP() <<std::endl;
     if(element->getLP() <= 0)
         this->deleteElement(element->getID());
 }
@@ -247,7 +247,6 @@ int Board::getCreator(player_t faction,unit_t type){
 void Board::makeCreator(int building_ID){
     //std::lock_guard<std::mutex> locker(this->lock);
     for (unit_t UNIT : units){
-        std::cout << "dfg" << std::endl;
         if(this->elements.at(building_ID)->canCreate(UNIT))
             this->creatorID[this->elements.at(building_ID)->getFaction()][UNIT] = building_ID;
     }

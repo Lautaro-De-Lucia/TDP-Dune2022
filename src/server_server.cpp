@@ -1,4 +1,4 @@
-#include "./server_server.h"
+#include "server_server.h"
 
 extern std::map<color_t,SDL_Color> colors;
 
@@ -57,7 +57,7 @@ void Server::closeAllClients() {
         if(!this->players[k]->isDone())
             std::cout << "Closing client: " << k << std::endl,
             this->players[k]->close();
-    std::cout << "Done" << std::endl;
+    //std::cout << "Done" << std::endl;
 }
 
 // @TODO: lanzar excepción
@@ -112,7 +112,7 @@ void Server::run() {
         std::vector<int> players_to_remove;
         for (size_t i = 0; i < (this->players).size(); i++) {
             if (this->players[i]->isDone()){
-                std::cout << "player: " << i << " is done" << std::endl;
+                std::cout << "Player: " << i << " is done" << std::endl;
                 this->players[i]->close();
                 players_to_remove.push_back(i);
             }
@@ -196,10 +196,7 @@ void Server::handleInstruction(selection_t & INS) {
 void Server::handleInstruction(idle_t & INS) {}
 
 void Server::handleInstruction(close_t & INS) {
-    std::cout << "handling close instruction, players: " << this->players.size() << std::endl;
-
     if (this->players.size() > 1) {
-        std::cout << "Exploding leaving player's base" << std::endl;
         this->game.deleteElement(this->game.getElementAt(this->getFactionBase(INS.faction).x, this->getFactionBase(INS.faction).y)->getID());
     }
 
