@@ -124,6 +124,7 @@ void Harvester::react(int x, int y, Board& board) {
         this->deposit(x,y,board);
         return;
     }
+
     if (board.canHarvest(x,y) && this->stored_spice < this->max_spice){     
         this->harvest(x,y,board);
         return;
@@ -195,7 +196,7 @@ void Harvester::update(State& state, Board& board){
                         }
                         this->harvesting = false;
                         return;
-                    }  
+                    }
                 }
                 this->stored_spice += spice;
                 if(this->stored_spice == this->max_spice){

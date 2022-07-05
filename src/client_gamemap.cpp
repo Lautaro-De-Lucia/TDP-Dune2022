@@ -39,12 +39,12 @@ void GameMap::render(SDL2pp::Renderer& renderer,TextureHandler & textures, int c
 }
 
 void GameMap::updateCell(SDL2pp::Renderer& renderer,int pos_x, int pos_y,int spice) {
-	if (spice == 0)
+	if (spice == SAND_SPICE_EMPTY)
 		map_cells[pos_x][pos_y].setType("s0");
-	if (spice > 0 && spice < 200)
+	if (spice > SAND_SPICE_EMPTY && spice < SAND_SPICE_LITTLE)
 		map_cells[pos_x][pos_y].setType("s1");
-	if (spice > 200 && spice < 500)
+	if (spice > SAND_SPICE_LITTLE && spice < SAND_SPICE_SOME)
 		map_cells[pos_x][pos_y].setType("s2");
-	if (spice > 500 && spice < 1000)
+	if (spice > SAND_SPICE_SOME && spice < SAND_SPICE_FULL)
 		map_cells[pos_x][pos_y].setType("s3");
 }

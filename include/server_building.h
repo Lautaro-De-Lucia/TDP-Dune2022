@@ -48,7 +48,7 @@ class Barrack : public Building {
 };
 
 class Refinery : public Building {
-    int c_spice = 5000;
+    int c_spice = REFINERY_CAPACITY;
  public:
     Refinery(int ID,player_t faction, int LP, int spice, int energy, Position pos, int dim_x, int dim_y, int c_spice);
     response_t place(Board& board, int pos_x, int pos_y, int& spice, int& energy);
@@ -75,7 +75,7 @@ class HeavyFactory : public Building {
 };
 
 class Silo : public Building {
-    int c_spice = 1000;
+    int c_spice = SILO_SPICE_CAPACITY;
  public:
     Silo(int ID,player_t faction, int LP, int spice, int energy, Position pos, int dim_x, int dim_y);
     response_t place(Board& board, int pos_x, int pos_y, int& spice, int& energy);

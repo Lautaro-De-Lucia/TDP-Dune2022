@@ -18,16 +18,16 @@ void Cell::setTerrain(cell_t terrain){
             this->terrain = std::unique_ptr<Rock>(new Rock());
             break;
         case SAND_EMPTY:
-            this->terrain = std::unique_ptr<Sand>(new Sand(0));
+            this->terrain = std::unique_ptr<Sand>(new Sand(SAND_SPICE_EMPTY));
             break;
         case SAND_LITTLE:
-            this->terrain = std::unique_ptr<Sand>(new Sand(200));
+            this->terrain = std::unique_ptr<Sand>(new Sand(SAND_SPICE_LITTLE));
             break;
         case SAND_SOME:
-            this->terrain = std::unique_ptr<Sand>(new Sand(500));
+            this->terrain = std::unique_ptr<Sand>(new Sand(SAND_SPICE_SOME));
             break;
         case SAND_FULL:
-            this->terrain = std::unique_ptr<Sand>(new Sand(1000));
+            this->terrain = std::unique_ptr<Sand>(new Sand(SAND_SPICE_FULL));
             break;                       
         case DUNE:
             this->terrain = std::unique_ptr<Dune>(new Dune());

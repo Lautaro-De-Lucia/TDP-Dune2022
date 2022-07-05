@@ -8,7 +8,6 @@ board(cells,this->elements)
 {}
 
 Cell & GameResources::getCell(int x, int y){
-    //std::lock_guard<std::mutex> locker(this->lock);
     return this->board.getCell(x,y);
 }
 
