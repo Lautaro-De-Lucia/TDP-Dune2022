@@ -170,7 +170,7 @@ Dentro de las unidades tenemos aquellas que se pueden utilizar para dañar otras
 
 #### Fin del juego
 
-El juego termina cuando sólo queda un centro de construcción en pie, y la facción a la que pertenezca es declarada **ganadora** de la partida.
+El juego termina cuando sólo queda un centro de construcción en pie, y la facción a la que pertenezca es declarada **ganadora** de la partida. Para cerrar un cliente sólo debemos clickear en la cruz que se encuentra en la esquina superior derecha de la ventana, y para cerrar el servidor debemos ingresar "q" en su respectiva terminal.
 
 ![image](https://user-images.githubusercontent.com/75450615/177231841-b01540a0-58f6-4cbf-84fd-49910e6f6d4b.png)
 
