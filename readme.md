@@ -90,12 +90,11 @@ Para construir edificios es necesario contar con *energía* y *especia*, la mone
   <img width="400" src="https://user-images.githubusercontent.com/75450615/177225771-b2175a60-f6f3-46d2-bf74-86f2f50b74b8.png">
 </p>
 
-Una vez que tenemos al ícono con un como el último en la figura de arriba, podemos hacer *click izquierdo* en el edificio y colocarlos en algún punto válido del mapa. Podemos saber que edificio estamos a punto de colocar ya que se puede visualizar un "fantasma" del edificio sobre el puntero del mouse, como podemos notar en la imágen de abajo:
+Una vez que tenemos al ícono con un como el último en la figura de arriba, podemos hacer *click izquierdo* en el edificio y colocarlos en algún punto válido del mapa. Podemos saber que edificio estamos a punto de colocar ya que se puede visualizar un "fantasma" del edificio sobre el puntero del mouse, como podemos notar en la imágen de abajo, donde estamos por colocar una **fábrica pesada** junto al **centro de construcción** luego de haber clickeado sobre su ícono:
 
 <p align="center">
-  <img width="400" src="https://user-images.githubusercontent.com/75450615/177226502-31f73ede-cd0b-47be-9af5-d3a40b8b3f21.png">
+  <img width="400" src="https://user-images.githubusercontent.com/75450615/177226554-4f9d766e-67a8-4e91-9bf8-74fcceb1f95d.png">
 </p>
-
 
 Los tiempos de construcción y de entrenamiento se ven extendidos en caso de haber una escasez de *energía*, siendo estos proporcionales a la deuda energética. Ahora que tenemos edificios, podemos empezar a crear unidades.
 
