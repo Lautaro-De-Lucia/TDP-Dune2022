@@ -2,11 +2,9 @@
 
 extern std::map<color_t,SDL_Color> colors;
 
-#define MAX_CONNECTIONS 2
+std::vector<std::string> file_input;
 
 int ID = 0;
-
-std::vector<std::string> file_input;
 
 Server::Server(const char* service_name, std::vector<std::vector<cell_t>> cells) 
 : 

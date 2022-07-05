@@ -1,6 +1,4 @@
 #include "client_camera.h"
-#include "common_utils.h"
-#define DIM_X_HUD 191
 
 Camera::Camera(int pos_x, int pos_y, int width, int height, int screen_width, int screen_height) {
     this->pos_x = pos_x;

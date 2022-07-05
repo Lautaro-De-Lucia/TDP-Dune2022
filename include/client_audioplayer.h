@@ -2,6 +2,7 @@
 
 #include <SDL2/SDL_mixer.h>
 #include <map>
+#include <iostream>
 
 #define ATREIDES_MUSIC_PATH "/atreides-background.wav"
 #define HARKONNEN_MUSIC_PATH "/harkonnen-background.wav"

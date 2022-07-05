@@ -1,7 +1,5 @@
 #include "client_mouse.h"
 
-
-
 MouseHandler::MouseHandler(size_t tile_dim, Camera& camera)
 :
 camera(camera)

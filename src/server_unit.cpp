@@ -1,5 +1,4 @@
 #include "server_unit.h"
-#include "server_board.h"
 
 Unit::Unit(int ID,player_t faction, int LP,int spice, Position pos, int dim_x, int dim_y,int speed) 
 :

@@ -4,7 +4,7 @@
 
 #include "server_selectable.h"
 #include "server_astar.h"
-
+#include "server_board.h"
 #include "common_utils.h"
 
 class Unit : public Selectable {

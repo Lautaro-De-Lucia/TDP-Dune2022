@@ -1,5 +1,19 @@
 // Copyright [2022] <Martin Di Paola>
 
+#include <stdio.h>
+#include <assert.h>
+#include <string.h>
+#include <errno.h>
+
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <unistd.h>
+
+#include "common_resolver.h"
+#include "common_utils.h"
+
 #pragma once
 
 /*

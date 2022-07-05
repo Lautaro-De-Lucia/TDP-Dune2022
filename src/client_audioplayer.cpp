@@ -1,7 +1,5 @@
 #include "client_audioplayer.h"
 
-#include <iostream>
-
 AudioPlayer::AudioPlayer(){
    
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {

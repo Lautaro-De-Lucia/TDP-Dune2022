@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+#include <string>
 #include <SDL2pp/SDL2pp.hh>
 
 #include "client_gamehud_button.h"
@@ -7,6 +9,20 @@
 #include "client_texturehandler.h"
 
 #include "common_utils.h"
+
+#define HUD_IMG_PATH "../src/ui/resources/img/"
+#define HUD_IMG_MENU_PATH "../src/ui/resources/img/newmenu.png"
+/*
+#define BARRACK_PATH "../src/ui/resources/img/barrack.bmp"
+#define REFINERY_PATH "../src/ui/resources/img/refinery.bmp"
+#define AIR_TRAP_PATH "../src/ui/resources/img/windtrap.bmp"
+#define TRIKE_PATH "../src/ui/resources/img/trike.bmp"
+#define HARVESTER_PATH "../src/ui/resources/img/harvester.bmp"
+*/
+#define ENERGY_PATH "../src/ui/resources/img/energy.jpg"
+
+#define TOTAL_BUILDING_IMGS 8
+#define TOTAL_UNIT_IMGS 8
 
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;

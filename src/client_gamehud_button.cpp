@@ -1,7 +1,4 @@
 #include "client_gamehud_button.h"
-#include <string>
-
-#define DIM_BUTTON 50
 
 Button::Button(SDL2pp::Renderer& renderer, std::string IMG_PATH, int x, int y, int id) : texture(renderer, IMG_PATH),
     x(x), y(y), dRect{x, y, DIM_BUTTON, DIM_BUTTON}, id(id) {}

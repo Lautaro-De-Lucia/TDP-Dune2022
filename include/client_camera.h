@@ -3,6 +3,10 @@
 #include <iostream>
 #include <SDL2pp/SDL2pp.hh>
 
+#include "common_utils.h"
+
+#define DIM_X_HUD 191
+
 struct Camera {
 
     int pos_x;

@@ -1,4 +1,4 @@
-#include "./client_texturehandler.h"
+#include "client_texturehandler.h"
 
 TextureHandler::TextureHandler(SDL2pp::Renderer & game_renderer):
 creator_mark(game_renderer,DATA_PATH CMARK_PATH)

@@ -1,10 +1,4 @@
-#include <vector>
-#include <algorithm>
-#include <iostream>
-
 #include "server_astar.h"
-
-#define INF 999999
 
 aStar::aStar() {
 

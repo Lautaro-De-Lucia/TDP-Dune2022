@@ -1,20 +1,4 @@
 #include "client_gamehud.h"
-#include <iostream>
-#include <string>
-
-#define HUD_IMG_PATH "../src/ui/resources/img/"
-#define HUD_IMG_MENU_PATH "../src/ui/resources/img/newmenu.png"
-/*
-#define BARRACK_PATH "../src/ui/resources/img/barrack.bmp"
-#define REFINERY_PATH "../src/ui/resources/img/refinery.bmp"
-#define AIR_TRAP_PATH "../src/ui/resources/img/windtrap.bmp"
-#define TRIKE_PATH "../src/ui/resources/img/trike.bmp"
-#define HARVESTER_PATH "../src/ui/resources/img/harvester.bmp"
-*/
-#define ENERGY_PATH "../src/ui/resources/img/energy.jpg"
-
-#define TOTAL_BUILDING_IMGS 8
-#define TOTAL_UNIT_IMGS 8
 
 GameHud::GameHud(player_t faction, SDL2pp::Renderer& renderer) : texture(renderer, HUD_IMG_MENU_PATH) {
 	int w = texture.GetWidth();

@@ -1,6 +1,11 @@
 #pragma once
-#include "common_utils.h"
+
 #include <SDL2pp/SDL2pp.hh>
+#include <string>
+
+#include "common_utils.h"
+
+#define DIM_BUTTON 50
 
 class Button {
  private:

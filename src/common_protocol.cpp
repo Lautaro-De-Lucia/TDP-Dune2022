@@ -1,10 +1,3 @@
-#include <iostream>
-
-#include <netinet/in.h>
-
-#include <chrono>
-#include <thread>
-
 #include "common_protocol.h"
 
 Protocol::Protocol() {

@@ -9,6 +9,8 @@
 #include "server_astar.h"
 #include "server_board.h"
 
+#define INF 999999
+
 class HashFn {
  public:
     size_t operator() (const Position& p) const {

@@ -20,6 +20,8 @@
 #define INIT_ENERGY 2000
 #define INIT_CENERGY 5000
 
+#define MAX_CONNECTIONS 2
+
 class Server {
  private:
       Socket socket;       ///   Accepting socket for new clients
