@@ -26,16 +26,16 @@ elements(elements)
 }
 
 void Board::addSandPosition(int x, int y){
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     this->changed_sand_positions.push_back(Position(x,y));
 }
 void Board::clearSandPositions(){
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     this->changed_sand_positions.clear();
 }
 
 void Board::addUnitCreator(player_t faction, building_t type){
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     if (type == BARRACK) {
         this->creators[faction][FREMEN]++;
         this->creators[faction][INFANTRY]++;
@@ -55,18 +55,18 @@ void Board::addUnitCreator(player_t faction, building_t type){
 }
 
 void Board::removeUnitCreator(player_t faction, unit_t type){
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     this->creators[faction][type]--;
 }
 int Board::getTotalCreators(player_t faction, unit_t type){
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     if(type == UNDEFINED)
         return -1;
     return this->creators[faction][type];
 }
 
 status_t Board::canPlace(const Position& location, int dim_x,int dim_y) {
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     //  See if any of the positions is occupied or cant build there
     for (size_t j = 0 ; j < dim_y ; j++)
         for (size_t i = 0 ; i < dim_x ; i++) 
@@ -80,7 +80,7 @@ status_t Board::canPlace(const Position& location, int dim_x,int dim_y) {
 }
 
 bool Board::canDeposit(int x, int y,player_t faction){
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     Position depositing_position(x,y);
     for (Position pos : this->deposit_positions[faction])
         if (depositing_position == pos)
@@ -88,31 +88,31 @@ bool Board::canDeposit(int x, int y,player_t faction){
     return false;
 }
 bool Board::isOccupied(int x, int y){
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     return this->cells[x][y].isOccupied();
 }
 
 
 bool Board::canHarvest(int x, int y){
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     return cells[x][y].canHarvest();
 }
 bool Board::canTraverse(int x, int y){
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     return cells[x][y].canTraverse();
 }
 bool Board::canSlowDown(int x, int y){
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     return cells[x][y].canSlowDown();
 }
 
 int Board::extractSpice(int x, int y){
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     return cells[x][y].extractSpice();
 }
 
 bool Board::hasEnemy(int x, int y, player_t player_faction){
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     if(this->cells[x][y].isOccupied() == false)
         return false;
     player_t faction = this->elements.at(this->cells[x][y].getID())->getFaction();
@@ -120,7 +120,7 @@ bool Board::hasEnemy(int x, int y, player_t player_faction){
 }
 
 void Board::dealDamage(int x, int y, int damage){
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     std::unique_ptr<Selectable>& element = this->elements.at(this->cells[x][y].getID());
     element->receiveDamage(damage);
     std::cout << "Element LP" << element->getLP() <<std::endl;
@@ -129,7 +129,7 @@ void Board::dealDamage(int x, int y, int damage){
 }
 
 void Board::deleteElement(int id){
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     std::unique_ptr<Selectable>& element = this->elements.at(id);
     for(unit_t UNIT : units)
         if(element->canCreate(UNIT)) {
@@ -143,12 +143,12 @@ void Board::deleteElement(int id){
 }
 
 Cell& Board::getCell(int x, int y){
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     return this->cells[x][y];
 }
 
 int Board::findNewCreator(player_t faction,unit_t unit){    
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     for (auto& e : this->elements)
         if(e.second->getFaction() == faction)
             if(e.second->canCreate(unit))
@@ -158,27 +158,27 @@ int Board::findNewCreator(player_t faction,unit_t unit){
 }
 
 std::unique_ptr<Selectable> & Board::getElementAt(int x, int y){
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     int elementID = this->cells[x][y].getID();
     return this->elements.at(elementID);
 }
 
 int Board::getReserveID(int x, int y){
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     return this->cells[x][y].getReserveID();
 }
 
 size_t Board::get_width() {
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     return (size_t) this->dim_x;
 }
 size_t Board::get_height() {
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     return (size_t) this->dim_y;
 }
 
 std::vector<Position> Board::get_traversable_neighbors_of(Position pos, size_t distance) {
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     std::vector<Position> valid_neighbors;
 
     for (int i = pos.x-distance; i <= pos.x+distance; i++) {
@@ -202,27 +202,27 @@ std::vector<Position> Board::get_traversable_neighbors_of(Position pos, size_t d
 }
 
 void Board::reserve(int x, int y, int ID){
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     this->cells[x][y].reserve(ID);
 }
 
 void Board::unReserve(int x, int y){
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     this->cells[x][y].unReserve();
 }
 
 void Board::occupy(int x, int y, int ID){
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     this->cells[x][y].occupy(ID);
 }
 
 void Board::disoccupy(int x, int y){
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     this->cells[x][y].disoccupy();
 }
 
 size_t Board::get_distance_between(Position pos1, Position pos2) {
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     size_t x_dist = abs(pos2.x-pos1.x);
     size_t y_dist = abs(pos2.y-pos1.y);
 
@@ -230,23 +230,23 @@ size_t Board::get_distance_between(Position pos1, Position pos2) {
 }
 
 void Board::addDepositPositions(player_t faction,std::vector<Position> & new_deposit_positions){
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     for (Position pos : new_deposit_positions)
         this->deposit_positions[faction].push_back(pos);
 }
 
 std::vector<Position> Board::getDepositPositions(player_t faction){
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     return this->deposit_positions[faction];
 }
 
 int Board::getCreator(player_t faction,unit_t type){
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     return this->creatorID[faction][type];
 }
 
 void Board::makeCreator(int building_ID){
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     for (unit_t UNIT : units){
         std::cout << "dfg" << std::endl;
         if(this->elements.at(building_ID)->canCreate(UNIT))
@@ -255,12 +255,12 @@ void Board::makeCreator(int building_ID){
 }
 
 void Board::removeCreator(player_t faction, unit_t unit) {
-    std::lock_guard<std::mutex> locker(this->lock);
+    //std::lock_guard<std::mutex> locker(this->lock);
     this->creatorID[faction][unit] = -1;
 }
 
 std::vector<Position> Board::getSurroundings(Position position, int e_dim_x, int e_dim_y){
-    std::lock_guard<std::mutex> locker(this->lock);    
+    //std::lock_guard<std::mutex> locker(this->lock);    
     std::vector <Position> surroundings;
     for (int i = (position.x - 1); i <= (position.x + e_dim_x); i++) {
         for (int j = (position.y - 1); j <= (position.y + e_dim_y); j++) {
