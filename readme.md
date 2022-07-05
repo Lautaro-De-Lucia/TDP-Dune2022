@@ -21,9 +21,13 @@ Por el momento es posible descargar el juego a través de su repositorio de GitH
 
 `$ git clone https://github.com/Lautaro-De-Lucia/TDP-Dune2022` <br>
 
+### ¿Cómo configuro el juego?
+
+Una vez descargado el repositorio, entramos en la carpeta descargada y abrimos con un editor de texto los archivos `server_setup.h` y `client_setup.h` que se encuentran en el directorio. Podemos modificar ahora las distintas variables del juego, como la cantidad de jugadores en el archivo de configuración del server (`MAX_CONNECTIONS`) y el tamaño de la cámara en el archivo de configuración del cliente (`CAMERA_WIDTH` y `CAMERA_HEIGHT`).
+
 ### ¿Cómo instalo el juego?
 
-Una vez descargado el repositorio, entramos a la carpeta donde se descargó y ejecutamos desde una terminal el script de instalación que se encuentra dentro, de la siguiente forma:
+Una vez configuradas las opciones del juego, ejecutamos desde una terminal el script de instalación que se encuentra dentro de la carpeta descargada (la misma donde se encontraban los archivos de configuración) de la siguiente forma:
 
 `$ ./install.sh` <br>
 
@@ -43,7 +47,9 @@ Este instalador se encarga de instalar las siguientes dependencias:
 - gstreamer1.0-plugins-good
 - libqt5multimedia5-plugins
 
-Ahora ya resulta posible correr el juego. Desde el directorio donde nos encontramos, vamos la carpeta creada por el instalador "build", y notamos que esta contiene dos ejecutables, `dune2022server` y `dune2022client`. Para correr el `server` debemos indicarle por línea de comando el parámetro del *service name* (por ejemplo, http-alt), y una vez ejecutado se quedará corriendo esperando jugadores que quieran jugar. Por otro lado, si lo que queremos es jugar, debemos utilizar el archivo ejecutable del `client`. Para correr el juego, es necesario primero tener el juego corriendo en un servidor en alguna computadora. Conociendo la dirección ip de este servidor, nos será posible unirnos a una partida hosteada por el servidor ejecutando el programa `client` con dos argumentos por línea de comando: primero se le indica el *host name* (la dirección de ip del servidor), y luego se le especifica el *service name* (http-alt). Para correr el servidor y el cliente en una misma computadora, es posible utilizar `localhost` como *host name*. A continuación se ilustra con un ejemplo de ejecución del programa en una misma máquina:
+### ¿Cómo corro el juego?
+
+Ahora, con el juego configurado e instalado, ya resulta posible correrlo. Desde el directorio donde nos encontramos, vamos la carpeta creada por el instalador "build", y notamos que esta contiene dos ejecutables, `dune2022server` y `dune2022client`. Para correr el `server` debemos indicarle por línea de comando el parámetro del *service name* (por ejemplo, http-alt), y una vez ejecutado se quedará corriendo esperando jugadores que quieran jugar. Por otro lado, si lo que queremos es jugar, debemos utilizar el archivo ejecutable del `client`. Para correr el juego, es necesario primero tener el juego corriendo en un servidor en alguna computadora. Conociendo la dirección ip de este servidor, nos será posible unirnos a una partida hosteada por el servidor ejecutando el programa `client` con dos argumentos por línea de comando: primero se le indica el *host name* (la dirección de ip del servidor), y luego se le especifica el *service name* (http-alt). Para correr el servidor y el cliente en una misma computadora, es posible utilizar `localhost` como *host name*. A continuación se ilustra con un ejemplo de ejecución del programa en una misma máquina:
 
 - Dejamos corriendo el servidor
 `$ ./dune2022server http-alt` <br>

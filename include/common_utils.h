@@ -6,8 +6,8 @@
 #include <vector>
 #include <SDL2pp/SDL2pp.hh>
 
-#include "client_setup.h"
-#include "server_setup.h"
+#include "../client_setup.h"
+#include "../server_setup.h"
 
 #define ATREIDES_INIT_POS_X 10
 #define ATREIDES_INIT_POS_Y 5

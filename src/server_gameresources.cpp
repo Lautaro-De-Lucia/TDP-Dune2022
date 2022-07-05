@@ -19,7 +19,6 @@ int GameResources::getSpiceAt(int x, int y){
 void GameResources::deleteElement(int ID){
     //std::lock_guard<std::mutex> locker(this->lock);
     this->board.deleteElement(ID);
-    //std::cout << "Element deleted"<< std::endl;
 }
 
 void GameResources::sendCreationData(std::vector<creation_t> & creation_data,Protocol & protocol, Socket & client_socket){
@@ -37,7 +36,6 @@ void GameResources::sendCreators(player_t faction,Protocol & protocol, Socket & 
 }
 
 bool GameResources::isEnabled(player_t faction,unit_t unit){
-    //std::lock_guard<std::mutex> locker(this->lock);
     if(unit != SARDAUKAR && unit != DEVASTATOR)
         return true;
     for (auto& e : this->elements)
@@ -48,7 +46,6 @@ bool GameResources::isEnabled(player_t faction,unit_t unit){
 }
 
 int GameResources::getSpiceCapacity(player_t faction){
-    //std::lock_guard<std::mutex> locker(this->lock);
     int total_spice = 0;
     for (auto& e : this->elements)
         if(e.second->getFaction() == faction){
@@ -60,7 +57,6 @@ int GameResources::getSpiceCapacity(player_t faction){
 }
 
 int GameResources::getTotalEnergy(player_t faction){
-    //std::lock_guard<std::mutex> locker(this->lock);
     int total_energy = 0;
     for (auto& e : this->elements)
         if(e.second->getFaction() == faction){
@@ -70,7 +66,6 @@ int GameResources::getTotalEnergy(player_t faction){
 }
 
 bool GameResources::hasLost(player_t faction){
-    //std::lock_guard<std::mutex> locker(this->lock);
     for (auto& e : this->elements)
         if(e.second->getFaction() == faction)
             if(e.second->canCostTheGame() == true)
@@ -79,17 +74,14 @@ bool GameResources::hasLost(player_t faction){
 }
 
 std::unique_ptr<Selectable> & GameResources::getElementAt(int x, int y){
-    //std::lock_guard<std::mutex> locker(this->lock);
     return this->board.getElementAt(x,y);
 }
 
 int GameResources::getTotalCreators(player_t faction, unit_t type){
-    //std::lock_guard<std::mutex> locker(this->lock);
     return this->board.getTotalCreators(faction,type);
 }
 
 int GameResources::getCreator(player_t faction,unit_t type){
-    //std::lock_guard<std::mutex> locker(this->lock);
     return this->board.getCreator(faction,type);
 }
 
@@ -173,7 +165,6 @@ void GameResources::reactToPosition(player_t faction,int pos_x,int pos_y){
 }
 
 int GameResources::totalElements(){
-    //std::lock_guard<std::mutex> locker(this->lock);
     return this->elements.size();
 }
 
@@ -183,7 +174,6 @@ void GameResources::sendElements(Protocol & protocol, Socket & client_socket){
 }
 
 int GameResources::getTotalChangedCells(){
-    //std::lock_guard<std::mutex> locker(this->lock); 
     return this->board.getChangedSandPositions().size();
 }
 void GameResources::clearChangedCells(){
@@ -191,17 +181,12 @@ void GameResources::clearChangedCells(){
     this->board.clearSandPositions();
 }
 std::vector<Position> GameResources::getChangedCells(){
-    //std::lock_guard<std::mutex> locker(this->lock);
     return this->board.getChangedSandPositions();
 }
 
 void GameResources::update(){
     //std::lock_guard<std::mutex> locker(this->lock);
-    State state;
-    std::vector<State> states;
     for (auto& e : this->elements){
-        state.ID = e.first;
-        e.second->update(state,this->board);
-        states.push_back(state);
+        e.second->update(this->board);
     }
 }

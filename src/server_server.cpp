@@ -74,6 +74,7 @@ void Server::stopGameLoop() {
 void Server::read_command(std::istream& input_stream) {
     std::string command;
     while (1) {
+        sleepcp(100);
         input_stream >> command;
         if (command == "q")
             continue;
@@ -82,6 +83,8 @@ void Server::read_command(std::istream& input_stream) {
 
 void Server::run() {
     while (this->running) {
+        std::cout << "Server frequency" << std::endl;
+        std::cout << "test" << std::endl;
         //std::cout << "Starting instance "<< k << " of game loop" << std::endl;
         //std::cout << "Checking for loosing players" << std::endl;
         this->checkForLosingPlayers();
@@ -108,7 +111,6 @@ void Server::run() {
         this->enableReading();
 
         // mismo que los keepalive de los clientes, no mas keepalive
-        sleepcp(10);
         std::vector<int> players_to_remove;
         for (size_t i = 0; i < (this->players).size(); i++) {
             if (this->players[i]->isDone()){

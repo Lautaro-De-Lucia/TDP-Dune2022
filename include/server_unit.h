@@ -26,7 +26,7 @@ class Unit : public Selectable {
     Unit() = default;
     Unit(int ID,player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed);
     virtual void react(int x, int y, Board& board);
-    virtual void update(State& state, Board& board);
+    virtual void update(Board& board);
     virtual void receiveDamage(int damage);
     virtual void sendState(Protocol & protocol, Socket & client_socket);
     virtual response_t place(Board& board,std::vector<Position>& positions,int* spice);
@@ -52,7 +52,7 @@ class Harvester : public Unit {
     Harvester(int ID,player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int max_spice);
     void create();
     virtual void react(int x, int y, Board& board);
-    virtual void update(State& state, Board& board);
+    virtual void update(Board& board);
     virtual void receiveDamage(int damage);
     virtual void sendState(Protocol & protocol, Socket & client_socket);
     virtual response_t place(Board& board,std::vector<Position>& positions,int* spice);
@@ -76,7 +76,7 @@ class Trike : public Unit {
     Trike(int ID,player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int attack, int range);
     void create();
     virtual void react(int x, int y, Board& board);
-    virtual void update(State& state, Board& board);
+    virtual void update(Board& board);
     virtual void receiveDamage(int damage);
     virtual void sendState(Protocol & protocol, Socket & client_socket);
     virtual response_t place(Board& board,std::vector<Position>& positions,int* spice);
@@ -98,7 +98,7 @@ class Fremen : public Unit {
     Fremen(int ID,player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int attack, int range);
     void create();
     virtual void react(int x, int y, Board& board);
-    virtual void update(State& state, Board& board);
+    virtual void update(Board& board);
     virtual void receiveDamage(int damage);
     virtual void sendState(Protocol & protocol, Socket & client_socket);
     virtual response_t place(Board& board,std::vector<Position>& positions,int* spice);
@@ -120,7 +120,7 @@ class Infantry : public Unit {
     Infantry(int ID,player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int attack, int range);
     void create();
     virtual void react(int x, int y, Board& board);
-    virtual void update(State& state, Board& board);
+    virtual void update(Board& board);
     virtual void receiveDamage(int damage);
     virtual void sendState(Protocol & protocol, Socket & client_socket);
     virtual response_t place(Board& board,std::vector<Position>& positions,int* spice);
@@ -142,7 +142,7 @@ class Sardaukar : public Unit {
     Sardaukar(int ID,player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int attack, int range);
     void create();
     virtual void react(int x, int y, Board& board);
-    virtual void update(State& state, Board& board);
+    virtual void update(Board& board);
     virtual void receiveDamage(int damage);
     virtual void sendState(Protocol & protocol, Socket & client_socket);
     virtual response_t place(Board& board,std::vector<Position>& positions,int* spice);
@@ -164,7 +164,7 @@ class Tank : public Unit {
     Tank(int ID,player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int attack, int range);
     void create();
     virtual void react(int x, int y, Board& board);
-    virtual void update(State& state, Board& board);
+    virtual void update(Board& board);
     virtual void receiveDamage(int damage);
     virtual void sendState(Protocol & protocol, Socket & client_socket);
     virtual response_t place(Board& board,std::vector<Position>& positions,int* spice);
@@ -186,7 +186,7 @@ class Devastator : public Unit {
     Devastator(int ID,player_t faction, int LP, int spice, Position pos, int dim_x, int dim_y, int speed, int attack, int range);
     void create();
     virtual void react(int x, int y, Board& board);
-    virtual void update(State& state, Board& board);
+    virtual void update(Board& board);
     virtual void receiveDamage(int damage);
     virtual void sendState(Protocol & protocol, Socket & client_socket);
     virtual response_t place(Board& board,std::vector<Position>& positions,int* spice);

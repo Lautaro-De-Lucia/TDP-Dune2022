@@ -21,7 +21,7 @@ void Unit::sendState(Protocol & protocol, Socket & client_socket){
 }
 
 void Unit::react(int x, int y, Board& board){}
-void Unit::update(State& state, Board& board){}
+void Unit::update(Board& board){}
 void Unit::receiveDamage(int damage){}
 
 std::vector<Position> Unit::getPositions(){
@@ -149,7 +149,7 @@ void Harvester::receiveDamage(int damage){
     this->LP = this->LP-damage;
 }
 
-void Harvester::update(State& state, Board& board){
+void Harvester::update(Board& board){
     
     if(board.canSlowDown(this->position.x,this->position.y)){
         this->speed = HARVESTER_SPEED/2;
@@ -157,7 +157,7 @@ void Harvester::update(State& state, Board& board){
         this->speed = HARVESTER_SPEED;
     }
 
-    Selectable::update(state,board);
+    Selectable::update(board);
 
     if (this->pending_move.size() != 0) {
         if (this->current_time == 0) {
@@ -380,8 +380,8 @@ bool Trike::enemySearch(Board & board){
     return false;
 }
 
-void Trike::update(State & state, Board& board){
-    Selectable::update(state,board);
+void Trike::update(Board& board){
+    Selectable::update(board);
 
     if(board.canSlowDown(this->position.x,this->position.y)){
         this->speed = TRIKE_SPEED/2;
@@ -579,8 +579,8 @@ bool Fremen::enemySearch(Board & board){
     return false;
 }
 
-void Fremen::update(State & state, Board& board){
-    Selectable::update(state,board);
+void Fremen::update(Board& board){
+    Selectable::update(board);
     
     if(board.canSlowDown(this->position.x,this->position.y)){
         this->speed = FREMEN_SPEED/2;
@@ -778,8 +778,8 @@ bool Infantry::enemySearch(Board & board){
     return false;
 }
 
-void Infantry::update(State & state, Board& board){
-    Selectable::update(state,board);
+void Infantry::update(Board& board){
+    Selectable::update(board);
     
     if(board.canSlowDown(this->position.x,this->position.y)){
         this->speed = INFANTRY_SPEED/2;
@@ -977,8 +977,8 @@ bool Tank::enemySearch(Board & board){
     return false;
 }
 
-void Tank::update(State & state, Board& board){
-    Selectable::update(state,board);
+void Tank::update(Board& board){
+    Selectable::update(board);
     
     if (this->pending_move.size() != 0) {
         if (this->current_time == 0) {
@@ -1170,8 +1170,8 @@ bool Devastator::enemySearch(Board & board){
     return false;
 }
 
-void Devastator::update(State & state, Board& board){
-    Selectable::update(state,board);
+void Devastator::update(Board& board){
+    Selectable::update(board);
     
     if (this->pending_move.size() != 0) {
         if (this->current_time == 0) {
@@ -1363,8 +1363,8 @@ bool Sardaukar::enemySearch(Board & board){
     return false;
 }
 
-void Sardaukar::update(State & state, Board& board){
-    Selectable::update(state,board);
+void Sardaukar::update(Board& board){
+    Selectable::update(board);
     
     if(board.canSlowDown(this->position.x,this->position.y)){
         this->speed = SARDAUKAR_SPEED/2;

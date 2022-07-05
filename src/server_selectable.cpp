@@ -40,11 +40,7 @@ void Selectable::receiveDamage(int damage){
     this->LP = this->LP-damage;
 }
 
-void Selectable::update(State& state, Board& board){
-    state.LP = this->LP;
-    state.position = this->position;
-    state.selected = this->selected;
-}
+void Selectable::update(Board& board){}
 
 
 bool Selectable::isWithin(const Area& selection){

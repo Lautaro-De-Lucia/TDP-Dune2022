@@ -34,7 +34,7 @@ class Selectable {
     bool contains(const Position& pos);
     bool isWithin(const Area& selection);
     virtual void react(int x, int y, Board& board);
-    virtual void update(State & state, Board& board);
+    virtual void update(Board& board);
     virtual void receiveDamage(int damage);
     virtual void sendState(Protocol & protocol,Socket & client_socket);
     virtual bool canCreate(unit_t type);
