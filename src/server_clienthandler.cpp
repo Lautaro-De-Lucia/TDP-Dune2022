@@ -35,7 +35,6 @@ void ClientHandler::notifyGameStart()
 
 void ClientHandler::run()
 {
-
     // faction setting
     int _faction;
     this->protocol.receive_faction_request(_faction, this->player_socket);

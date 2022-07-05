@@ -21,20 +21,6 @@ cd build
 cmake -S ../ -B .
 make all
 
-# copying data contents to /var/dune2022
-cd ..
-cd data
-sudo mkdir -p /var/dune2022
-sudo cp -r * /var/dune2022
-
-# copying binaries to /usr/bin
-cd ..
-cd build
-chmod +x dune2022server
-chmod +x dune2022client
-sudo cp dune2022server /usr/bin
-sudo cp dune2022client /usr/bin
-
 echo "==========================================================="
 echo "================== Installation complete =================="
 echo "==========================================================="
