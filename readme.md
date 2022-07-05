@@ -84,7 +84,13 @@ Cada facción comienza la partida con un centro de construcción, cuya destrucci
 
 #### Construcción de los edificios
 
-Para construir edificios es necesario contar con *energía* y *especia*, la moneda corriente en el mundo de Dune. Para conseguir energía tendremos que construir **trampas de aire**. Si bien se cuenta con cierta cantidad de especia inicial, si la agotamos construyendo edificios y unidades no podremos generarla nuevamente. Para esto, se deben crear unidades **cosechadoras**, que se encargan de transportar la especia de lugares en el mapa con arena especiada hacía la refinería. Un buen consejo es empezar construyendo una **fábrica pesada**, donde pueden entrenarse estas unidades **cosechadoras** que nos conseguirán más especia para poder seguir construyendo edificios y entrenando unidades de combate. Para construir, se hace *click izquierdo* en el ícono con el edificio que queremos construir, y luego click izquierdo en el lugar del mapa que nos resulte conveniente, siempre y cuando haya una formación rocosa bajo suyo. Una vez que construímos un edificio, debemos esperar un tiempo para poder construir otro. Los tiempos de espera pueden ser visualizados mediante la colorización de los íconos de los distintos tipos de edificio (los colores varían según la facción escogida: verde para Ordos, azul para Atreides y rojo para Harkonnen). Si el ícono de un edificio se encuentra colorizado, significa que debemos esperar una cantidad de tiempo que es proporcional a la colorización del ícono. Se observa en la imagen de abajo un ícono en proceso de decolorizacion de una **trampa de aires** para el caso de haber escogido la casa Harkonnen:
+Para construir edificios es necesario contar con *energía* y *especia*, la moneda corriente en el mundo de Dune. Para conseguir energía tendremos que construir **trampas de aire**. Si bien se cuenta con cierta cantidad de especia inicial, si la agotamos construyendo edificios y unidades no podremos generarla nuevamente. Para esto, se deben crear unidades **cosechadoras**, que se encargan de transportar la especia de lugares en el mapa con arena especiada hacía la refinería. Un buen consejo es empezar construyendo una **fábrica pesada**, donde pueden entrenarse estas unidades **cosechadoras** que nos conseguirán más especia para poder seguir construyendo edificios y entrenando unidades de combate. Si colocamos el mouse por encima de los íconos de los distintos edificios, podemos obtener información acerca de los puntos de vida, los beneficios que otorga, y sus costos en especia y/o energía. En la imagen de abajo se puede observar un ejemplo de esta característica:
+
+<p align="center">
+  <img width="400" src="https://user-images.githubusercontent.com/75450615/177233059-9d2413ba-763a-4fea-9b8e-3626c743290b.png">
+</p>
+
+Para construir, se hace *click izquierdo* en el ícono con el edificio que queremos construir, y luego click izquierdo en el lugar del mapa que nos resulte conveniente, siempre y cuando haya una formación rocosa bajo suyo. Una vez que construímos un edificio, debemos esperar un tiempo para poder construir otro. Los tiempos de espera pueden ser visualizados mediante la colorización de los íconos de los distintos tipos de edificio (los colores varían según la facción escogida: verde para Ordos, azul para Atreides y rojo para Harkonnen). Si el ícono de un edificio se encuentra colorizado, significa que debemos esperar una cantidad de tiempo que es proporcional a la colorización del ícono. Se observa en la imagen de abajo un ícono en proceso de decolorizacion de una **trampa de aires** para el caso de haber escogido la casa Harkonnen:
 
 <p align="center">
   <img width="400" src="https://user-images.githubusercontent.com/75450615/177225771-b2175a60-f6f3-46d2-bf74-86f2f50b74b8.png">
@@ -116,7 +122,13 @@ El primer edificio creador de algún tipo de unidad es designado por defecto, pe
   <img width="400" src="https://user-images.githubusercontent.com/75450615/175114794-d48a411c-3efd-4115-bb52-3600e057a8d6.jpg">
 </p>
 
-Como se explicó en la sección de edificios, la velocidad de creación de unidades también se ve afectada por la deuda energética, cuanto mayor sea, mayores serán los tiempos de espera entre el entrenamiento de dos unidades. Podemos de todas formas *encolar* unidades haciendo múltiples clicks en el ícono de la unidad que queremos crear, y en este caso se iniciará el entrenamiento de una nueva unidad una vez termine el entrenamiento de otra unidad. Notamos el tiempo faltante para la creación de una unidad mediante la barra que tenemos al lado de cada edificio creador:
+De manera similar a los edificios, podemos obntener información acerca de cada tipo de unidad manteniendo el mouse por encima de su ícono:
+
+<p align="center">
+  <img width="400" src="https://user-images.githubusercontent.com/75450615/177233435-94f45630-9148-4499-b7e7-934e98962ccf.png">
+</p>
+
+La velocidad de creación de unidades se ve afectada por la deuda energética de manera similar a los edificios: cuanto mayor sea, mayores serán los tiempos de espera entre el entrenamiento de dos unidades. Podemos de todas formas *encolar* unidades haciendo múltiples clicks en el ícono de la unidad que queremos crear, y en este caso se iniciará el entrenamiento de una nueva unidad una vez termine el entrenamiento de otra unidad. Notamos el tiempo faltante para la creación de una unidad mediante la barra que tenemos al lado de cada edificio creador:
 
 <p align="center">
   <img width="400" src="https://user-images.githubusercontent.com/75450615/177224539-fa0861a1-16ec-434f-aec3-b1f2d6c2b4fc.png">
