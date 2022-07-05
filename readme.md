@@ -146,6 +146,10 @@ Ya sabemos como crear unidades **cosechadoras** luego de construir una **fábric
 
 Cabe destacar que cada jugador cuenta con una capacidad máxima de especia, una vez alcanzada no podremos seguir agregando. Para aumentear nuestra capacidad máxima de especia que podemos colectar, debemos construir **silos**, pequeños depósitos de especia que podemos ubicar en cualquier punto del mapa.
 
+<p align="center">
+  <img width="400" src="https://user-images.githubusercontent.com/75450615/177231477-a20ba8cc-ba79-4f5b-9263-5c9c5f5c14b3.png">
+</p>
+
 En la imagen de arriba se observan varios **silos** junto a una **refineria** y a una unidad **cosechadora**.
 
 #### Combate
