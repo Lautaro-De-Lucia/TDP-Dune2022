@@ -12,7 +12,7 @@ add_subdirectory(external/SDL2pp)
 SET(GCC_COVERAGE_LINK_FLAGS "-lSDL2_mixer")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -pthread -g0 -ggdb")
 SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
-ADD_DEFINITIONS(-DDATA_PATH="${PROJECT_SOURCE_DIR}/data")
+ADD_DEFINITIONS(-DDATA_PATH="/var/dune2022")
 INCLUDE_DIRECTORIES("${SDL2PP_INCLUDE_DIRS}")
 
 # set up yaml-cpp library
@@ -28,7 +28,7 @@ find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Multimedia REQUIRED)
 
-ADD_EXECUTABLE("server" server_main.cpp
+ADD_EXECUTABLE("dune2022server" server_main.cpp
             src/common_protocol.cpp
             src/common_resolver.cpp
             src/common_socket.cpp
@@ -47,7 +47,7 @@ ADD_EXECUTABLE("server" server_main.cpp
             src/server_unit.cpp
             src/server_unitfactory.cpp)
 
-ADD_EXECUTABLE("client" client_main.cpp
+ADD_EXECUTABLE("dune2022client" client_main.cpp
             src/common_protocol.cpp
             src/common_socket.cpp
             src/common_resolver.cpp
@@ -77,10 +77,10 @@ ADD_EXECUTABLE("client" client_main.cpp
             src/ui/creditswindow.ui
             src/ui/resources.qrc)
 
-target_include_directories("server" PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)  
-target_include_directories("client" PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)            
+target_include_directories("dune2022server" PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)  
+target_include_directories("dune2022client" PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)            
 
 
-TARGET_LINK_LIBRARIES("server" "${SDL2PP_LIBRARIES}" Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Multimedia yaml-cpp)
-TARGET_LINK_LIBRARIES("client" "${SDL2PP_LIBRARIES}" Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Multimedia yaml-cpp)
+TARGET_LINK_LIBRARIES("dune2022server" "${SDL2PP_LIBRARIES}" Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Multimedia yaml-cpp)
+TARGET_LINK_LIBRARIES("dune2022client" "${SDL2PP_LIBRARIES}" Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Multimedia yaml-cpp)
 
