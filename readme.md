@@ -61,7 +61,7 @@ Se inicia el juego uniendose a la partida del servidor mediante las intrucciones
 
 #### Pantalla de selección de casa
 
-Nos será posible elegir entre tres casas, o tres facciones distintas, todas basadas en las casas ficticias creadas por Frank Herbert en sus novelas de Dune. Es posible jugar sólo contra enemigos, o con aliados. Para esto último, los dos jugadores deben elegir la misma facción. Distintas facciones poseen distintos edificios y distintas unidades.
+Nos será posible elegir entre tres casas, o tres facciones distintas, todas basadas en las casas ficticias creadas por Frank Herbert en sus novelas de Dune. Distintas facciones poseen edificios y unidades de distintos colores (rojo para Harkonnen, azul para Atreides y verde para Ordos).
 
 ### Inicio del juego
 
@@ -69,7 +69,7 @@ Nos será posible elegir entre tres casas, o tres facciones distintas, todas bas
   <img width="1200" src="https://user-images.githubusercontent.com/75450615/174889424-eba884dc-2f52-4482-8392-091c9c620986.png">
 </p>
 
-Una vez escogida una casa y comenzado el juego, nos encontramos con una pantalla como la de arriba. Primero se mencioan los distintos tipos de terreno:
+Una vez escogida una casa y comenzado el juego, nos encontramos con una pantalla como la de arriba. Primero, se mencioan los distintos tipos de terreno que podemos observar en esa primera pantalla:
 
 - arena
 - roca
@@ -90,7 +90,7 @@ Para construir edificios es necesario contar con *energía* y *especia*, la mone
   <img width="400" src="https://user-images.githubusercontent.com/75450615/177225771-b2175a60-f6f3-46d2-bf74-86f2f50b74b8.png">
 </p>
 
-Una vez que tenemos al ícono con un como el último en la figura de arriba, podemos hacer *click izquierdo* en el edificio y colocarlos en algún punto válido del mapa. Podemos saber que edificio estamos a punto de colocar ya que se puede visualizar un "fantasma" del edificio sobre el puntero del mouse, como podemos notar en la imágen de abajo, donde estamos por colocar una **fábrica pesada** junto al **centro de construcción** luego de haber clickeado sobre su ícono:
+Una vez que tenemos al ícono con un como el último en la figura de arriba, podemos hacer *click izquierdo* en el edificio y colocarlos en algún punto válido del mapa. Podemos saber que edificio estamos a punto de colocar ya que se puede visualizar un "fantasma" del edificio sobre el puntero del mouse, como podemos notar en la imagen de abajo, donde estamos por colocar una **fábrica pesada** junto al **centro de construcción** luego de haber hecho *click izquierdo* sobre su ícono:
 
 <p align="center">
   <img width="400" src="https://user-images.githubusercontent.com/75450615/177226554-4f9d766e-67a8-4e91-9bf8-74fcceb1f95d.png">
@@ -110,13 +110,13 @@ Cada unidad tiene un costo en especia y un edificio creador. Las unidades de **i
   <img width="400" src="https://user-images.githubusercontent.com/75450615/177223950-3b04154f-0f1b-4e82-8a6f-c57ece1ff9c1.png">
 </p>
 
-El primer edificio creador de algún tipo de unidad es creador por defecto, pero si queremos designar otro edificio del mismo tipo como creador, seleccionamos el edificio y damos *click derecho* (la selección del edificio puede ser con un *click izquierdo* sobre el edificio o mediante una *selección* de mouse, manteniendo *click izquierdo* desde un punto del mapa hasta otro, definiendo de esta manera un rectángulo donde se seleccionan las unidades y/o edificios en nuestro poder). Existen unidades en los que el creador no será suficiente, y necesitamos tener una estructura **palacio** en pie para poder crearlas, como es el caso de la **infantería sardaukar**.
+El primer edificio creador de algún tipo de unidad es designado por defecto, pero si queremos apuntar otro edificio del mismo tipo como creador, seleccionamos el edificio y damos *click derecho* (la selección del edificio puede ser con un *click izquierdo* sobre el edificio o mediante una *selección* de mouse, manteniendo *click izquierdo* desde un punto del mapa hasta otro, definiendo de esta manera un rectángulo donde se seleccionan las unidades y/o edificios que se encuentran en su interior y nos pertenecen). Existen unidades en los que el creador no será suficiente, y necesitamos tener una estructura **palacio** en pie para poder crearlas, como es el caso de la **infantería sardaukar** y el **tanque devastador**.
 
 <p align="center">
   <img width="400" src="https://user-images.githubusercontent.com/75450615/175114794-d48a411c-3efd-4115-bb52-3600e057a8d6.jpg">
 </p>
 
-Como se explicó en la sección de edificios, la velocidad de creación de unidades también se ve afectada por la deuda energética, cuanto mayor sea, mayores serán los tiempos de espera entre el entrenamiento de dos unidades. Podemos de todas formas *encolar* unidades haciendo múltiples clicks en el ícono de la unidad que queremos crear, y en este caso se iniciará el entrenamiento de una nueva unidad de cierto tipo una vez termine el entrenamiento de otra unidad del mismo tipo. Notamos el tiempo faltante para la creación de una unidad mediante la barra que tenemos al lado de cada edificio creador:
+Como se explicó en la sección de edificios, la velocidad de creación de unidades también se ve afectada por la deuda energética, cuanto mayor sea, mayores serán los tiempos de espera entre el entrenamiento de dos unidades. Podemos de todas formas *encolar* unidades haciendo múltiples clicks en el ícono de la unidad que queremos crear, y en este caso se iniciará el entrenamiento de una nueva unidad una vez termine el entrenamiento de otra unidad. Notamos el tiempo faltante para la creación de una unidad mediante la barra que tenemos al lado de cada edificio creador:
 
 <p align="center">
   <img width="400" src="https://user-images.githubusercontent.com/75450615/177224539-fa0861a1-16ec-434f-aec3-b1f2d6c2b4fc.png">
@@ -138,11 +138,15 @@ Una vez creadas las unidades, podemos desplazarlas de un punto del mapa a otro. 
 
 #### Cosechadoras
 
-Ya sabemos como crear unidades *cosechadoras* luego de construir una *fábrica pesada*. Para ponerlas a trabajar una vez que aparezcan junto a la fábrica, necesitamos primero una **refinería**, que es el edificio donde las cosechadoras depositan la especia colectada. Luego de construir la **refinería**, seleccionamos una o mas *cosechadoras* y luego hacemos click derecho en algún lugar del mapa con arena con especia, y automáticamente estas unidades iniciaran un ciclo de colectar especia y depositarla en la refinería, hasta agotar los recursos naturales de esa región del mapa.
+Ya sabemos como crear unidades **cosechadoras** luego de construir una **fábrica pesada**. Para ponerlas a trabajar una vez que aparezcan junto a la fábrica, necesitamos primero una **refinería**, que es el edificio donde las cosechadoras depositan la especia colectada. Luego de construir la **refinería**, seleccionamos una o mas **cosechadoras** y luego hacemos click derecho en algún lugar del mapa con arena con especia, y automáticamente estas unidades iniciaran un ciclo de colectar especia y depositarla en la refinería, hasta agotar los recursos naturales de esa región del mapa.
 
 <p align="center">
   <img width="400" src="https://user-images.githubusercontent.com/75450615/175112064-b6afb0f8-6863-46cb-81ff-50bf652c397f.jpg">
 </p>
+
+Cabe destacar que cada jugador cuenta con una capacidad máxima de especia, una vez alcanzada no podremos seguir agregando. Para aumentear nuestra capacidad máxima de especia que podemos colectar, debemos construir **silos**, pequeños depósitos de especia que podemos ubicar en cualquier punto del mapa.
+
+En la imagen de arriba se observan varios **silos** junto a una **refineria** y a una unidad **cosechadora**.
 
 #### Combate
 
@@ -151,4 +155,3 @@ Dentro de las unidades tenemos aquellas que se pueden utilizar para dañar otras
 #### Fin del juego
 
 El juego termina cuando sólo queda un centro de construcción en pie, y la facción a la que pertenezca es declarada **ganadora** de la partida.
-
