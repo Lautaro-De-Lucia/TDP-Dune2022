@@ -122,7 +122,7 @@ El primer edificio creador de algún tipo de unidad es designado por defecto, pe
   <img width="400" src="https://user-images.githubusercontent.com/75450615/175114794-d48a411c-3efd-4115-bb52-3600e057a8d6.jpg">
 </p>
 
-De manera similar a los edificios, podemos obntener información acerca de cada tipo de unidad manteniendo el mouse por encima de su ícono:
+De manera similar a los edificios, podemos obtener información acerca de cada tipo de unidad manteniendo el mouse por encima de su ícono:
 
 <p align="center">
   <img width="400" src="https://user-images.githubusercontent.com/75450615/177233435-94f45630-9148-4499-b7e7-934e98962ccf.png">
