@@ -26,7 +26,7 @@ game_window(window),
 game_renderer(renderer),
 map(renderer,map_data),
 hud(faction,renderer),
-mouse(TILE_DIM,cam),
+mouse(TILE_SIZE,cam),
 shotsHandler(renderer),
 explosionsHandler(renderer),
 textures(textures)
@@ -758,13 +758,13 @@ void Player::renderCreationData() {
         this->game_renderer.Copy(
             progress,
             SDL2pp::NullOpt,
-            SDL2pp::Rect(pos.x*TILE_DIM*2-this->camera.pos_x*2,pos.y*TILE_DIM*2-this->camera.pos_y*2,10,80)
+            SDL2pp::Rect(pos.x*TILE_SIZE*2-this->camera.pos_x*2,pos.y*TILE_SIZE*2-this->camera.pos_y*2,10,80)
         );
         SDL2pp::Texture & unit_being_created = this->textures.getUnitIMG(this->elements[c.creator_ID]->getFaction(),c.unit_being_created);
         this->game_renderer.Copy(
             unit_being_created,
             SDL2pp::NullOpt,
-            SDL2pp::Rect(pos.x*TILE_DIM*2-this->camera.pos_x*2,(pos.y-1)*TILE_DIM*2-this->camera.pos_y*2,30,30)
+            SDL2pp::Rect(pos.x*TILE_SIZE*2-this->camera.pos_x*2,(pos.y-1)*TILE_SIZE*2-this->camera.pos_y*2,30,30)
         );
     }
 }
@@ -802,7 +802,7 @@ void Player::renderCreators() {
         this->game_renderer.Copy(
             creator_mark,
             SDL2pp::NullOpt,
-            SDL2pp::Rect((pos.x+1)*TILE_DIM*2-this->camera.pos_x*2+x_offset,(pos.y-1)*TILE_DIM*2-this->camera.pos_y*2+y_offset,20,30)
+            SDL2pp::Rect((pos.x+1)*TILE_SIZE*2-this->camera.pos_x*2+x_offset,(pos.y-1)*TILE_SIZE*2-this->camera.pos_y*2+y_offset,20,30)
         );
     }
 }
@@ -895,7 +895,7 @@ void Player::renderHeldBuilding(){
         this->game_renderer.Copy(
             texture,
             SDL2pp::NullOpt,
-            SDL2pp::Rect(x-TILE_DIM,y-TILE_DIM,texture.GetWidth(),texture.GetHeight()));				
+            SDL2pp::Rect(x-TILE_SIZE,y-TILE_SIZE,texture.GetWidth(),texture.GetHeight()));				
         texture.SetBlendMode(SDL_BLENDMODE_BLEND);
     }
 }
@@ -1010,12 +1010,12 @@ void Player::renderCorpses() {
         else {
 
             SDL2pp::Texture & corpse = textures.getCorpse(this->corpses[i].type);
-            int pos_x = this->corpses[i].position.x * TILE_DIM - this->camera.pos_x;
-            int pos_y = this->corpses[i].position.y * TILE_DIM - this->camera.pos_y;
+            int pos_x = this->corpses[i].position.x * TILE_SIZE - this->camera.pos_x;
+            int pos_y = this->corpses[i].position.y * TILE_SIZE - this->camera.pos_y;
             this->game_renderer.Copy(
                 corpse,
                 SDL2pp::NullOpt,
-                SDL2pp::Rect(pos_x,pos_y,1*TILE_DIM,1*TILE_DIM)
+                SDL2pp::Rect(pos_x,pos_y,1*TILE_SIZE,1*TILE_SIZE)
             );
         }
     }

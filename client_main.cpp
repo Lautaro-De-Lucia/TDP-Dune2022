@@ -92,12 +92,12 @@ void run_sdl(const int* _faction, std::string host_name, std::string service_nam
         init_cam_pos_y = 0;
         break;
     case HARKONNEN:
-        init_cam_pos_x = 70*TILE_DIM;
-        init_cam_pos_y = 35*TILE_DIM;
+        init_cam_pos_x = 70*TILE_SIZE;
+        init_cam_pos_y = 35*TILE_SIZE;
         break;
     case ORDOS:
         init_cam_pos_x = 0;
-        init_cam_pos_y = 35*TILE_DIM;
+        init_cam_pos_y = 35*TILE_SIZE;
         break;    
     default:
         break;

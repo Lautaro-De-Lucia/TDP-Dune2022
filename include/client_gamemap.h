@@ -13,7 +13,7 @@
 
 extern Camera cam;
 
-#define TILE_DIM 16
+#define TILE_SIZE 16
 #define ROCK_PATH "/mapsprites/rock_1.png"
 #define SAND_PATH "/mapsprites/sand_1.png"
 #define DUNE_PATH "/mapsprites/dune_1.png"

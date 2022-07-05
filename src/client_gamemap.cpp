@@ -14,7 +14,7 @@ void MapCell::render(SDL2pp::Renderer& renderer,TextureHandler & textures, int c
 		textures.getCell(this->type),						//	The sprite
 		//	(x,y,w,h) -> top-left (x,y) coordinates, height & width
 		SDL2pp::NullOpt,		//	'cut' from the sprite (NullOpt for no cut)
-		SDL2pp::Rect(this->position.x*TILE_DIM-cam_pos_x,this->position.y*TILE_DIM-cam_pos_y,TILE_DIM,TILE_DIM)				//	set to this part of the window		
+		SDL2pp::Rect(this->position.x*TILE_SIZE-cam_pos_x,this->position.y*TILE_SIZE-cam_pos_y,TILE_SIZE,TILE_SIZE)				//	set to this part of the window		
 	);
 }
 
