@@ -2,7 +2,7 @@
 
 extern std::map<color_t,SDL_Color> colors;
 
-#define MAX_CONNECTIONS 1
+#define MAX_CONNECTIONS 2
 
 int ID = 0;
 
@@ -198,13 +198,22 @@ void Server::handleInstruction(selection_t & INS) {
 void Server::handleInstruction(idle_t & INS) {}
 
 void Server::handleInstruction(close_t & INS) {
-    std::cout << "handling close instruction" << std::endl;
+    std::cout << "handling close instruction, players: " << this->players.size() << std::endl;
 
-    this->game.deleteElement(this->game.getElementAt(this->getFactionBase(INS.faction).x, this->getFactionBase(INS.faction).y)->getID());
+    if (this->players.size() > 1) {
+        std::cout << "Exploding leaving player's base" << std::endl;
+        this->game.deleteElement(this->game.getElementAt(this->getFactionBase(INS.faction).x, this->getFactionBase(INS.faction).y)->getID());
+    }
 
-    this->players[INS.player_ID]->close();
-    this->players.erase(this->players.begin() + INS.player_ID);
+    int player_index = INS.player_ID;
 
+    for (size_t i = 0; i < this->players.size(); i++)
+        if (this->players[i]->getID() == INS.player_ID)
+            player_index = i;
+
+    this->players[player_index]->close();
+
+    this->players.erase(this->players.begin() + player_index);
 }
 
 Position Server::getFactionBase(player_t faction) {
