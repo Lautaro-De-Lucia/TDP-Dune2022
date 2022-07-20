@@ -5,6 +5,7 @@
 #include <map>
 #include <vector>
 #include <SDL2pp/SDL2pp.hh>
+#include <unistd.h>
 
 #include "../client_setup.h"
 #include "../server_setup.h"
@@ -340,7 +341,7 @@ struct Area {
     }
 };
 
-void sleepcp(int milliseconds);
+void sleepms(int milliseconds);
 Position pixelToGP(int x, int y);
 void GPToPixel(Position pos, int& pixel_x, int& pixel_y);
 

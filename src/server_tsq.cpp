@@ -26,7 +26,7 @@ void ThreadSafeQueue::push(std::unique_ptr<instruction_t> && new_instruction) {
 
     std::lock_guard<std::mutex> lock(this->mtx);
     this->q.push(std::move(new_instruction));
-    this->cv.notify_one();
+    this->cv.notify_all();
     return;
 }
 

@@ -74,7 +74,7 @@ void Server::stopGameLoop() {
 void Server::read_command(std::istream& input_stream) {
     std::string command;
     while (1) {
-        sleepcp(100);
+        sleepms(100);
         input_stream >> command;
         if (command == "q")
             continue;

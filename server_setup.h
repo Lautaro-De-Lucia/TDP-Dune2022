@@ -1,6 +1,6 @@
 #pragma once
 
-#define MAX_CONNECTIONS 2
+#define MAX_CONNECTIONS 1
 
 #define INIT_SPICE 20000
 #define INIT_CSPICE 20000

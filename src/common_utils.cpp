@@ -122,13 +122,13 @@ std::ostream& operator<<(std::ostream& os, const Position& pos)
     return os;
 }
 
-void sleepcp(int milliseconds) // Cross-platform sleep function
-{
-    clock_t time_end;
-    time_end = clock() + milliseconds * CLOCKS_PER_SEC/1000;
-    while (clock() < time_end)
-    {
-    }
+void sleepms(int milliseconds) {
+
+    const struct timespec ts = {
+        milliseconds / 1000, /* seconds */
+        (milliseconds % 1000) * 1000 * 1000 /* nano seconds */
+    };
+    nanosleep(&ts, nullptr);
 }
 
 // revisar

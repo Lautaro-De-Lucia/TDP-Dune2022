@@ -276,7 +276,7 @@ void Player::play(){
         this->shotsHandler.update();
         this->explosionsHandler.update();
 
-        sleepcp(20);
+        sleepms(20);
         std::cout << "Client frequency" << std::endl;
         std::cout << "test" << std::endl;
         if (frame_time_instruction < GAME_SPEED && game_has_started)
