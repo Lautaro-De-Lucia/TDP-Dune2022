@@ -241,3 +241,15 @@ void AudioPlayer::play(music_t music){
 void AudioPlayer::stopMusic() {
     Mix_HaltMusic();
 }
+
+void AudioPlayer::playStart(player_t faction) {
+
+    this->play(GAME_START);
+    switch (faction)
+    {
+    case ATREIDES: this->play(ATREIDES_MUSIC); break;
+    case HARKONNEN: this->play(HARKONNEN_MUSIC); break;
+    case ORDOS: this->play(ORDOS_MUSIC); break;    
+    default: break;
+    }
+}

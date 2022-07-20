@@ -48,7 +48,11 @@ void Server::checkForFinishedClients() {
             players_to_remove.push_back(k);
         }
     }
-    for (size_t i = 0; i < players_to_remove.size(); i++)
+
+    if (players_to_remove.size() == 0)
+        return;
+
+    for (size_t i = players_to_remove.size() - 1; i >= 0; i--)
         this->players.erase(this->players.begin() + players_to_remove[i]);
 }
 
@@ -83,8 +87,6 @@ void Server::read_command(std::istream& input_stream) {
 
 void Server::run() {
     while (this->running) {
-        std::cout << "Server frequency" << std::endl;
-        std::cout << "test" << std::endl;
         //std::cout << "Starting instance "<< k << " of game loop" << std::endl;
         //std::cout << "Checking for loosing players" << std::endl;
         this->checkForLosingPlayers();
@@ -120,8 +122,10 @@ void Server::run() {
             }
         }
 
-        for (size_t i = 0; i < players_to_remove.size(); i++)
-            this->players.erase(this->players.begin() + players_to_remove[i]);
+        if (players_to_remove.size() != 0) {
+            for (size_t i = players_to_remove.size() - 1; i >= 0; i--)
+                this->players.erase(this->players.begin() + players_to_remove[i]);
+        }
 
         players_to_remove.clear();
     }

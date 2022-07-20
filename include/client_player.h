@@ -55,7 +55,7 @@ class Player {
    Camera & camera;
    bool is_holding_building;
    int building_held;
-   std::queue<std::vector<int>> mouse_events;
+   std::queue<std::vector<int>> usr_events;
    std::map<int,std::string> button_info_paths;
    std::vector<bool> updates;
    bool left_click;
@@ -68,6 +68,7 @@ class Player {
    bool new_unit_available;
    player_t faction;
    AudioPlayer audio;
+   bool game_has_started;
 
    std::map<player_t,color_t> faction_colours ={
      {ATREIDES,BLUE},
@@ -88,9 +89,13 @@ class Player {
    int enemies;
    int destroyed_enemies;
 
+   clock_t base_time_instruction;
+   clock_t base_time_update;
+
    Player(player_t faction, const char* host_name, const char* service_name,Camera & cam, SDL2pp::Window& window,SDL2pp::Renderer& renderer,TextureHandler & textures, size_t spice, size_t c_spice, int energy, size_t c_energy, std::vector<std::vector<std::string>>& map_data);
 
    void play();
+   void play2();
    void renderWaitingText();
    void renderMap();
    void renderHud();
@@ -137,4 +142,22 @@ class Player {
    void triggerNewUnitAlert(unit_t type);
 
    void renderGameEnding();
+
+   void updateCamera();
+
+   void handleEvent(SDL_Event& event);
+
+   void sendInstruction(command_t command, std::vector<int>& usr_event);
+
+   void handleResponse();
+
+   void updateLoop();
+   void instructionLoop();
+
+   void updateUtils();
+   void updateHud();
+   void updatePlayerState();
+   void updateBoard();
+   void updateSelectables();
+   void updateCreationData();
 };

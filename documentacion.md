@@ -256,7 +256,7 @@ Los valores de capacidad y energía se actualizan desde el servidor y se muestra
 
 El Cliente tiene su propio arreglo de elementos seleccionables 'simétrico' al del servidor. Esta no es la clase **Selectable** sino la clase **CSelectable**. Los seleccionables del cliente actualizan sus parámetros en función de los seleccionables en el servidor y renderizarán la imágen correspondiente en función de estos parámetros. 
 
-    std::queue<std::vector<int>> mouse_events;
+    std::queue<std::vector<int>> usr_events;
 
 Cola que almacena los elementos del mouse procesados como una instrucción que es pasada por protocolo al Servidor.  
 

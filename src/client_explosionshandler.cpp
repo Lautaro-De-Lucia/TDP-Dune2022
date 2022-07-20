@@ -43,10 +43,12 @@ void ExplosionsHandler::update() {
             explosions_to_remove.push_back(i);
     }
 
-    for (size_t i = 0; i < explosions_to_remove.size(); i++) {
-            this->explosions_type.erase(i);
-            this->explosions_position.erase(i);
-            this->explosions.erase(this->explosions.begin() + explosions_to_remove[i]);
+    if (explosions_to_remove.size() != 0) {
+        for (size_t i = explosions_to_remove.size() - 1; i >= 0; i--) {
+                this->explosions_type.erase(explosions_to_remove[i]);
+                this->explosions_position.erase(explosions_to_remove[i]);
+                this->explosions.erase(this->explosions.begin() + explosions_to_remove[i]);
+        }
     }
 
     for (size_t i = 0; i < this->explosions.size(); i++)

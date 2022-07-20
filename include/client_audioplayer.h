@@ -4,6 +4,8 @@
 #include <map>
 #include <iostream>
 
+#include "common_utils.h"
+
 #define ATREIDES_MUSIC_PATH "/atreides-background.wav"
 #define HARKONNEN_MUSIC_PATH "/harkonnen-background.wav"
 #define ORDOS_MUSIC_PATH "/ordos-background.wav"
@@ -88,5 +90,6 @@ class AudioPlayer {
     AudioPlayer();
     void play(sfx_t sound_effect);
     void play(music_t music);
+    void playStart(player_t faction);
     void stopMusic();
 };
