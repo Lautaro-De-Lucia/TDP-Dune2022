@@ -40,22 +40,6 @@ void Server::acceptPlayers() {
     }
 }
 
-void Server::checkForFinishedClients() {
-    std::vector<int> players_to_remove;
-    for (size_t k = 0; k < this->players.size(); k++){ 
-        if (this->players[k]->isDone() == true){
-            this->players[k]->close();
-            players_to_remove.push_back(k);
-        }
-    }
-
-    if (players_to_remove.size() == 0)
-        return;
-
-    for (size_t i = players_to_remove.size() - 1; i >= 0; i--)
-        this->players.erase(this->players.begin() + players_to_remove[i]);
-}
-
 void Server::closeAllClients() {
     for (size_t k = 0; k < this->players.size(); k++)
         if(!this->players[k]->isDone())
@@ -87,17 +71,8 @@ void Server::read_command(std::istream& input_stream) {
 
 void Server::run() {
     while (this->running) {
-        //std::cout << "Starting instance "<< k << " of game loop" << std::endl;
-        //std::cout << "Checking for loosing players" << std::endl;
-        this->checkForLosingPlayers();
-        //std::cout << "Waiting for players to notify" << std::endl;
-        //std::cout << "Total players: " << this->players.size() << std::endl;
         while(this->TSQ.getSize() < this->players.size()){}
-        // pop until empty, then update
-        // if > 1000 pops, exit
-        // sleep in server
-        //std::cout << "Reading a new instruction" << std::endl;
-        for(size_t i = 0 ; i < this->players.size(); i++) { // while (!queue.empty)
+        for(size_t i = 0 ; i < this->players.size(); i++) { 
             std::unique_ptr<instruction_t> new_instruction = this->TSQ.pop();
             this->handleInstruction(new_instruction);
         }
@@ -133,9 +108,37 @@ void Server::run() {
     this->closeAllClients();
 }
 
-void Server::checkForLosingPlayers(){
-    //std::cout << "Server::checkForLosingPlayers()" << std::endl;
-    return;
+void Server::run2() {
+    while (this->running) {
+        if(!this->TSQ.isEmpty()){
+            std::unique_ptr<instruction_t> new_instruction = this->TSQ.pop();
+            this->handleInstruction(new_instruction);
+            this->sendResponses();
+        }
+        this->update();
+        this->reportCreationState();
+        for(size_t i = 0; i < this->players.size(); i++)
+            this->players[i]->reportState(this->game);
+        this->checkForFinishedClients();
+        sleepms(100);
+    }
+    this->closeAllClients();
+}
+
+void Server::checkForFinishedClients() {
+    std::vector<int> players_to_remove;
+    for (size_t k = 0; k < (this->players).size(); k++){ 
+        if (this->players[k]->isDone() == true){
+            this->players[k]->close();
+            players_to_remove.push_back(k);
+        }
+    }
+
+    if (players_to_remove.size() == 0)
+        return;
+
+    for (size_t i = players_to_remove.size() - 1; i >= 0; i--)
+        this->players.erase(this->players.begin() + players_to_remove[i]);
 }
 
 void Server::handleInstruction(std::unique_ptr<instruction_t> & INS) {

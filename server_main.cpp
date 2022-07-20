@@ -86,9 +86,9 @@ int main(int argc, char *argv[]) {
         std::thread game_loop(&Server::run, &server);
         readInput();        
         server.stopGameLoop();
-        std::cout << "Joining server thread" << std::endl;
+        std::cout << "Joining server thread " << std::endl;
         game_loop.join();   
-        std::cout << "Server joined. Program over." << std::endl;
+        std::cout << "Server joined. Program over. " << std::endl;
     } catch(std::exception & e){
         std::cout << "Error:" << e.what() << std::endl;
     }

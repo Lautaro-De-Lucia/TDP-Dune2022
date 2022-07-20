@@ -39,7 +39,6 @@ class Server {
       void acceptPlayers();
       void run();
       void checkForFinishedClients();
-      void checkForLosingPlayers();
       void closeAllClients();
       void stopClientAccept();
       void stopGameLoop();
@@ -63,4 +62,6 @@ class Server {
       response_t checkCreation(player_t faction, building_t type);
       building_t getCreator(unit_t type);
       Position getFactionBase(player_t faction);
+
+      void run2();
 };

@@ -58,4 +58,5 @@ class ClientHandler {
    void setSpice(int spice);
    void setEnergy(int energy);
    void notifyGameStart();
+   void run2();
 };

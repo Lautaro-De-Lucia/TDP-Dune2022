@@ -15,6 +15,9 @@ ClientHandler::ClientHandler(int player_id, int init_energy, int init_spice, std
     this->construction_wait = 0;
 
     this->finished = false;
+
+    
+    
 }
 
 bool ClientHandler::isDone()
@@ -104,6 +107,59 @@ void ClientHandler::run()
         this->reading_flags[this->player_id] = false;
     }
 }
+ 
+void ClientHandler::run2(){
+
+    // faction setting
+    int _faction;
+    this->protocol.receive_faction_request(_faction, this->player_socket);
+    this->faction = (player_t)_faction;
+    if (this->faction == ATREIDES)
+        this->instruction_queue.push(std::unique_ptr<building_create_t>(new building_create_t(this->player_id, this->faction, CONSTRUCTION_YARD, ATREIDES_INIT_POS_X, ATREIDES_INIT_POS_Y)));
+    if (this->faction == HARKONNEN)
+        this->instruction_queue.push(std::unique_ptr<building_create_t>(new building_create_t(this->player_id, this->faction, CONSTRUCTION_YARD, HARKONNEN_INIT_POS_X, HARKONNEN_INIT_POS_Y)));
+    if (this->faction == ORDOS)
+        this->instruction_queue.push(std::unique_ptr<building_create_t>(new building_create_t(this->player_id, this->faction, CONSTRUCTION_YARD, ORDOS_INIT_POS_X, ORDOS_INIT_POS_Y)));
+
+    while (true)
+    {
+        command_t command;
+        this->protocol.receive_command(command, this->player_socket);
+        int type, pos_x, pos_y, pos_x_min, pos_x_max, pos_y_min, pos_y_max;
+        switch (command)
+        {
+        case CREATE_UNIT:
+            this->protocol.receive_create_unit_request(type, this->player_socket);
+            this->instruction_queue.push(std::unique_ptr<unit_create_t>(new unit_create_t(this->player_id, this->faction, (unit_t)type)));
+            break;
+        case CREATE_BUILDING:
+            this->protocol.receive_create_building_request(type, pos_x, pos_y, this->player_socket);
+            this->instruction_queue.push(std::unique_ptr<building_create_t>(new building_create_t(this->player_id, this->faction, type, pos_x, pos_y)));
+            break;
+        case MOUSE_LEFT_CLICK:
+            this->protocol.receive_mouse_left_click(pos_x, pos_y, this->player_socket);
+            this->instruction_queue.push(std::unique_ptr<left_click_t>(new left_click_t(this->player_id, this->faction, pos_x, pos_y)));
+            break;
+        case MOUSE_RIGHT_CLICK:
+            this->protocol.receive_mouse_right_click(pos_x, pos_y, this->player_socket);
+            this->instruction_queue.push(std::unique_ptr<right_click_t>(new right_click_t(this->player_id, this->faction, pos_x, pos_y)));
+            break;
+        case MOUSE_SELECTION:
+            this->protocol.receive_mouse_selection(pos_x_min, pos_x_max, pos_y_min, pos_y_max, this->player_socket);
+            this->instruction_queue.push(std::unique_ptr<selection_t>(new selection_t(this->player_id, this->faction, pos_x_min, pos_x_max, pos_y_min, pos_y_max)));
+            break;
+        case IDLE:
+            this->instruction_queue.push(std::unique_ptr<idle_t>(new idle_t(this->player_id, this->faction)));
+            break;
+        case CLOSE:
+            this->instruction_queue.push(std::unique_ptr<close_t>(new close_t(this->player_id, this->faction)));
+            break;
+        default:
+            break;
+        }
+    }
+}
+
 
 void ClientHandler::reportState(GameResources &game)
 {
