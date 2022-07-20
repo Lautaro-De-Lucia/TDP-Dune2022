@@ -110,7 +110,6 @@ void run_sdl(const int* _faction, std::string host_name, std::string service_nam
 
     std::vector<std::vector<std::string>> cell_paths = generate_client_map(DATA_PATH MAP_FILE);    
     Player client_player(faction,_host_name,_service_name,cam,game_window,game_renderer,textures,INIT_SPICE,INIT_CSPICE,INIT_ENERGY,INIT_CENERGY,cell_paths);
-
     client_player.play();
 };
 

@@ -120,20 +120,20 @@ void Player::instructionLoop(){
         std::vector<int> usr_event = this->usr_events.front();
         this->usr_events.pop();
         command_t command = (command_t)(usr_event[0]);
+        std::cout << "Received command: " << command << std::endl;
         this->sendInstruction(command, usr_event);
         this->handleResponse();
-
         sleepms(20);
     }
 }
 
-void Player::play2(){
+void Player::play(){
     std::thread server_updates(&Player::updateLoop, this);
     this->instructionLoop();
     server_updates.join();
 }
 
-void Player::play(){
+void Player::play2(){
 
     while (true) {
         //  loopeamos infinitamente

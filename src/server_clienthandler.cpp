@@ -15,8 +15,6 @@ ClientHandler::ClientHandler(int player_id, int init_energy, int init_spice, std
     this->construction_wait = 0;
 
     this->finished = false;
-
-    
     
 }
 
@@ -36,7 +34,7 @@ void ClientHandler::notifyGameStart()
     this->protocol.send_game_has_started(this->player_socket);
 }
 
-void ClientHandler::run()
+void ClientHandler::run2()
 {
     // faction setting
     int _faction;
@@ -108,9 +106,8 @@ void ClientHandler::run()
     }
 }
  
-void ClientHandler::run2(){
-
-    // faction setting
+void ClientHandler::run(){
+    
     int _faction;
     this->protocol.receive_faction_request(_faction, this->player_socket);
     this->faction = (player_t)_faction;

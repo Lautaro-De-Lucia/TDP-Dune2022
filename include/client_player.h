@@ -69,6 +69,7 @@ class Player {
    player_t faction;
    AudioPlayer audio;
    bool game_has_started;
+   bool can_update;
 
    std::map<player_t,color_t> faction_colours ={
      {ATREIDES,BLUE},

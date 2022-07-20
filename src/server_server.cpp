@@ -69,7 +69,7 @@ void Server::read_command(std::istream& input_stream) {
     }
 }
 
-void Server::run() {
+void Server::run2() {
     while (this->running) {
         while(this->TSQ.getSize() < this->players.size()){}
         for(size_t i = 0 ; i < this->players.size(); i++) { 
@@ -108,13 +108,15 @@ void Server::run() {
     this->closeAllClients();
 }
 
-void Server::run2() {
+void Server::run() {
     while (this->running) {
         if(!this->TSQ.isEmpty()){
+            std::cout << "Receiving new instruction" << std::endl;
             std::unique_ptr<instruction_t> new_instruction = this->TSQ.pop();
             this->handleInstruction(new_instruction);
             this->sendResponses();
         }
+        std::cout << "Updating..." << std::endl;
         this->update();
         this->reportCreationState();
         for(size_t i = 0; i < this->players.size(); i++)
