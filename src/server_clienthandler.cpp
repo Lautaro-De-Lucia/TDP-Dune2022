@@ -117,7 +117,7 @@ void ClientHandler::run(){
         this->instruction_queue.push(std::unique_ptr<building_create_t>(new building_create_t(this->player_id, this->faction, CONSTRUCTION_YARD, HARKONNEN_INIT_POS_X, HARKONNEN_INIT_POS_Y)));
     if (this->faction == ORDOS)
         this->instruction_queue.push(std::unique_ptr<building_create_t>(new building_create_t(this->player_id, this->faction, CONSTRUCTION_YARD, ORDOS_INIT_POS_X, ORDOS_INIT_POS_Y)));
-
+    
     while (true)
     {
         command_t command;
@@ -160,6 +160,8 @@ void ClientHandler::run(){
 
 void ClientHandler::reportState(GameResources &game)
 {
+    //  Send responses loaded on the Server
+    this->sendResponses();
     //  Sending spice & energy state
     int max_spice = INIT_CSPICE + game.getSpiceCapacity(this->faction);
     if (this->spice >= max_spice)
@@ -185,12 +187,12 @@ void ClientHandler::reportState(GameResources &game)
     this->protocol.send_creators(barrack_id, light_factory_id, heavy_factory_id, this->player_socket);
 }
 
-void ClientHandler::sendResponses(std::vector<response_t> &responses)
+void ClientHandler::sendResponses()
 {
-    this->protocol.send_responses_size(responses.size(), this->player_socket);
-    for (response_t res : responses)
+    this->protocol.send_responses_size(this->responses_buffer.size(), this->player_socket);
+    for (response_t res : this->responses_buffer)
         this->protocol.send_response(res, this->player_socket);
-    responses.clear();
+    this->responses_buffer.clear();
 }
 
 void ClientHandler::setCreationData(std::vector<creation_t> &creation_data)
@@ -239,4 +241,9 @@ void ClientHandler::setSpice(int spice)
 void ClientHandler::setEnergy(int energy)
 {
     this->energy = energy;
+}
+
+void ClientHandler::pushResponse(response_t response)
+{
+    this->responses_buffer.push_back(response);
 }

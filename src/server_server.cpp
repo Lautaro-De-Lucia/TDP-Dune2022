@@ -76,18 +76,11 @@ void Server::run2() {
             std::unique_ptr<instruction_t> new_instruction = this->TSQ.pop();
             this->handleInstruction(new_instruction);
         }
-        //std::cout << "Sending responses" << std::endl;
-        this->sendResponses();
-        //std::cout << "Updating game" << std::endl;
         this->update();
-        //std::cout << "Reporting the state of the game to players" << std::endl;
-        this->reportCreationState();
         for(size_t i = 0; i < this->players.size(); i++)
             this->players[i]->reportState(this->game);
-        //std::cout << "Enabling reading" << std::endl;
         this->enableReading();
 
-        // mismo que los keepalive de los clientes, no mas keepalive
         std::vector<int> players_to_remove;
         for (size_t i = 0; i < (this->players).size(); i++) {
             if (this->players[i]->isDone()){
@@ -111,14 +104,10 @@ void Server::run2() {
 void Server::run() {
     while (this->running) {
         if(!this->TSQ.isEmpty()){
-            std::cout << "Receiving new instruction" << std::endl;
             std::unique_ptr<instruction_t> new_instruction = this->TSQ.pop();
             this->handleInstruction(new_instruction);
-            this->sendResponses();
         }
-        std::cout << "Updating..." << std::endl;
         this->update();
-        this->reportCreationState();
         for(size_t i = 0; i < this->players.size(); i++)
             this->players[i]->reportState(this->game);
         this->checkForFinishedClients();
@@ -173,7 +162,7 @@ void Server::handleInstruction(std::unique_ptr<instruction_t> & INS) {
 
 
 void Server::handleInstruction(building_create_t & INS) {
-    this->responses[INS.player_ID].push_back(
+    this->players[INS.player_ID]->pushResponse(
         this->game.createBuilding(INS.faction,(building_t)INS.type,INS.pos_x,INS.pos_y,this->players[INS.player_ID]->getSpice(),this->players[INS.player_ID]->getEnergy())
     );
 }
@@ -181,15 +170,15 @@ void Server::handleInstruction(building_create_t & INS) {
 void Server::handleInstruction(unit_create_t & INS) {
 
     if (this->game.getCreator(INS.faction,INS.type) == -1) {
-		this->responses[INS.player_ID].push_back(RES_CREATE_UNIT_FAILURE_CREATOR);
+		this->players[INS.player_ID]->pushResponse(RES_CREATE_UNIT_FAILURE_CREATOR);
         return;
     }
     if (this->game.isEnabled(INS.faction,INS.type) == false){
-        this->responses[INS.player_ID].push_back(RES_CREATE_UNIT_FAILURE_SPECIAL);
+        this->players[INS.player_ID]->pushResponse(RES_CREATE_UNIT_FAILURE_SPECIAL);
         return;
     }
 	this->creating_queues[INS.faction][getCreator(INS.type)].push(INS.type);
-	this->responses[INS.player_ID].push_back(RES_SUCCESS);
+	this->players[INS.player_ID]->pushResponse(RES_SUCCESS);
 }
 
 void Server::handleInstruction(left_click_t & INS) {
@@ -244,11 +233,6 @@ Position Server::getFactionBase(player_t faction) {
     return pos;
 }
 
-void Server::sendResponses() {
-    for (size_t i = 0 ; i < this->players.size(); i++)
-        this->players[i]->sendResponses(this->responses[i]);
-}
-
 void Server::update(){    
     this->game.update();
     for(std::unique_ptr<ClientHandler>& player : this->players){
@@ -260,8 +244,9 @@ void Server::update(){
         else
             this->time_penalty[player->getFaction()] = 0;
         for(building_t CREATOR : creators)
-            this->responses[player->getID()].push_back(checkCreation(player->getFaction(),CREATOR));
+            this->players[player->getID()]->pushResponse(checkCreation(player->getFaction(),CREATOR));
     }
+    this->updateCreationState();
 }
 
 std::unique_ptr<ClientHandler> & Server::getPlayer(player_t faction) {
@@ -304,7 +289,7 @@ response_t Server::checkCreation(player_t faction, building_t creator) {
     return RES_SUCCESS;
 }
 
-void Server::reportCreationState(){
+void Server::updateCreationState(){
     for (size_t i = 0 ; i < this->players.size(); i++)
         this->players[i]->setCreationData(this->creation_data[i]);
     for(size_t i = 0; i < this->creation_data.size() ; i++)

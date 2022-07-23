@@ -47,7 +47,7 @@ class ClientHandler {
    void reportState(GameResources & game);
    bool isDone();
    void close();
-   void sendResponses(std::vector<response_t> & responses);
+   void sendResponses();
    void setCreationData(std::vector<creation_t> & creation_data);
    void sendCreationData();
    int & getSpice();
@@ -59,4 +59,6 @@ class ClientHandler {
    void setEnergy(int energy);
    void notifyGameStart();
    void run2();
+   void pushResponse(response_t response);
+
 };

@@ -91,13 +91,6 @@ textures(textures)
     this->base_time_update = clock();
 }
 
-void Player::updateLoop(){
-    while (true) {
-        this->update();
-        this->render();
-    }
-}
-
 void Player::instructionLoop(){
     while (true) {
 
@@ -111,18 +104,13 @@ void Player::instructionLoop(){
             sleep(1);
             break;
         }
-
         this->handleEvent(event);
-
         if (this->usr_events.empty()) 
             continue;
-
         std::vector<int> usr_event = this->usr_events.front();
         this->usr_events.pop();
         command_t command = (command_t)(usr_event[0]);
-        std::cout << "Received command: " << command << std::endl;
         this->sendInstruction(command, usr_event);
-        this->handleResponse();
         sleepms(20);
     }
 }
@@ -133,80 +121,6 @@ void Player::play(){
     server_updates.join();
 }
 
-void Player::play2(){
-
-    while (true) {
-        //  loopeamos infinitamente
-        //  Actualizamos la cámara
-        SDL_Event event;
-
-        bool quit = false;
-
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-                this->protocol.send_command(CLOSE, this->socket);
-                quit = true;
-                sleep(1);
-                break; // salir del otro loop también
-            }
-            this->updateCamera();
-            this->handleEvent(event);
-        }
-
-        if (quit)
-            break;
-
-        this->render();
-
-        auto current_time = clock();
-
-	    auto frame_time_instruction = current_time - this->base_time_instruction;
-
-        this->shotsHandler.update();
-        this->explosionsHandler.update();
-
-        sleepms(20);
-
-        ///////////////////////CODIGO A REEMPLAZAR EN LA NUEVA IMPLEMENTACIÓN/////////////////////
-
-        if (frame_time_instruction < GAME_SPEED && this->game_has_started)
-            continue;
-
-        this->game_has_started = true;
-
-        this->base_time_instruction = current_time;
-
-        std::vector<int> usr_event;
-
-        command_t command;
-
-        if (this->usr_events.size() > 0) {
-            usr_event = this->usr_events.front();
-            this->usr_events.pop();
-            command = (command_t)(usr_event[0]);
-        } else {
-            command = IDLE;
-        }
-
-        if (this->game_status != GAME_NEUTRAL) {
-            command = IDLE;
-        }
-        ///////////////////////CODIGO A REEMPLAZAR EN LA NUEVA IMPLEMENTACIÓN/////////////////////
-
-        this->sendInstruction(command, usr_event);
-        this->handleResponse();
-
-        ///////////////////////CODIGO A REEMPLAZAR EN LA NUEVA IMPLEMENTACIÓN/////////////////////
-        current_time = clock();
-        auto frame_time_update = current_time - this->base_time_update;
-        if (frame_time_update < 100 && this->game_has_started)
-            continue;
-        this->base_time_update = current_time;
-        this->update();
-        ///////////////////////CODIGO A REEMPLAZAR EN LA NUEVA IMPLEMENTACIÓN/////////////////////
-    }
-}
-
 bool Player::contains(int ID) {
     for (auto& e : this->elements){
         if (e.first == ID)
@@ -215,10 +129,18 @@ bool Player::contains(int ID) {
     return false;
 }
 
+void Player::updateLoop(){
+    while (true) {
+        this->update();
+        this->render();
+    }
+}
+
 void Player::update() {
+    this->handleResponse();
+    this->updatePlayerState();
     this->updateUtils();
     this->updateHud();
-    this->updatePlayerState();
     this->updateBoard();
     this->updateSelectables();
     this->updateCreationData();  
