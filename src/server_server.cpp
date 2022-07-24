@@ -122,7 +122,7 @@ void Server::run() {
         for(size_t i = 0; i < this->players.size(); i++)
             this->players[i]->reportState(this->game);
         this->checkForFinishedClients();
-        sleepms(100);
+        sleepms(1000);
     }
     this->closeAllClients();
 }
