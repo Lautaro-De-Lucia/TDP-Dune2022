@@ -24,7 +24,6 @@ class Server {
       std::vector<std::unique_ptr<ClientHandler>> players;  ///   Client Handlers each of them holding a thread
       bool running;                         ///   Status flag
       ThreadSafeQueue TSQ;
-      std::map<int,std::vector<response_t>> responses;
       std::map<int,std::vector<creation_t>> creation_data;
       std::map<player_t,std::map<unit_t,int>> unit_creation_time;
       std::map<player_t,int> time_penalty;
@@ -53,8 +52,7 @@ class Server {
       void handleInstruction(idle_t & INS);
       void handleInstruction(close_t & INS);
 
-      void sendResponses();
-      void reportCreationState();
+      void updateCreationState();
       void enableReading();
       void update();
 

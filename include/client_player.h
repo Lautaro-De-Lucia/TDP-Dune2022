@@ -96,7 +96,6 @@ class Player {
    Player(player_t faction, const char* host_name, const char* service_name,Camera & cam, SDL2pp::Window& window,SDL2pp::Renderer& renderer,TextureHandler & textures, size_t spice, size_t c_spice, int energy, size_t c_energy, std::vector<std::vector<std::string>>& map_data);
 
    void play();
-   void play2();
    void renderWaitingText();
    void renderMap();
    void renderHud();
