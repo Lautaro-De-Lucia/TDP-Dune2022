@@ -1820,10 +1820,13 @@ void Protocol::send_player_state(int spice, int c_spice,int energy, Socket& clie
     sent_size = client_socket.sendall(&energy_buffer, sizeof(energy_buffer), &was_closed);
     handle_dispatch(was_closed, sent_size);
 
+    std::cout << "S: On protocol -> spice: " << spice << std::endl;
+    std::cout << "S: On protocol -> spice capacity: " << c_spice << std::endl;
+    std::cout << "S: On protocol -> energy: " << energy << std::endl;
     return;
 
 }
-void Protocol::receive_player_state(int& spice,int& c_spice, int& energy, Socket& client_socket) {
+void Protocol::receive_player_state(int& spice, int& c_spice, int& energy, Socket& client_socket) {
 
     uint16_t spice_buffer;
     uint16_t c_spice_buffer;
@@ -1851,6 +1854,10 @@ void Protocol::receive_player_state(int& spice,int& c_spice, int& energy, Socket
     spice = (int) _spice;
     c_spice = (int) _c_spice;
     energy = (int) _energy;
+
+    std::cout << "C: On protocol -> spice: " << spice << std::endl;
+    std::cout << "C: On protocol -> spice capacity: " << c_spice << std::endl;
+    std::cout << "C: On protocol -> energy: " << energy << std::endl;
 
     return;
 }

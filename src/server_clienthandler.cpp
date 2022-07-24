@@ -2,11 +2,11 @@
 #include "server_clienthandler.h"
 
 ClientHandler::ClientHandler(int player_id, int init_energy, int init_spice, std::vector<bool> &ready, Socket &&client_socket, ThreadSafeQueue &tsq)
-    : spice(init_spice),
-      energy(init_energy),
+    : energy(init_energy),
+      spice(init_spice),
       reading_flags(ready),
-      instruction_queue(tsq),
       player_socket(std::move(client_socket)),
+      instruction_queue(tsq),
       finished(false),
       thread(&ClientHandler::run, this)
 {
@@ -168,6 +168,7 @@ void ClientHandler::reportState(GameResources &game)
     int max_spice = INIT_CSPICE + game.getSpiceCapacity(this->faction);
     if (this->spice >= max_spice)
         this->spice = max_spice;
+    std::cout << "Sending player energy: " << this->energy << std::endl;
     this->protocol.send_player_state(this->spice, max_spice, this->energy, this->player_socket);
     //  Sending board state
     this->protocol.send_sand_cells_size(game.getTotalChangedCells(), this->player_socket);

@@ -92,6 +92,13 @@ textures(textures)
     this->base_time_update = clock();
 }
 
+void Player::updateLoop(){
+    while (true) {
+        this->update();
+        //this->render();
+    }
+}
+
 void Player::instructionLoop(){
     while (true) {
 
@@ -108,7 +115,7 @@ void Player::instructionLoop(){
         this->handleEvent(event);
 
         if (this->usr_events.empty()){ 
-            std::cout << "T1: No instruction so far" << std::endl;
+            //std::cout << "T1: No instruction so far" << std::endl;
             continue;
         }
         std::cout << "T1: USR sent an instruction: " << std::endl;
@@ -710,6 +717,12 @@ void Player::updatePlayerState(){
     int spice,c_spice; 
     std::cout << "T2: Waiting for Update from Server" << std::endl;  
     this->protocol.receive_player_state(spice,c_spice,energy,this->socket);
+    std::cout << "Received server data" << std::endl;  
+    std::cout << "<========== Player state ========>" << std::endl;
+    std::cout << "spice: " << spice << std::endl; 
+    std::cout << "spice capacity: " << c_spice  << std::endl; 
+    std::cout << "energy: " << energy << std::endl; 
+
     this->spice = spice;
     this->c_spice = c_spice;
     this->energy = energy;
@@ -728,6 +741,7 @@ void Player::updateBoard(){
     int pos_x,pos_y,spice; //  Values
     int toread,c;    
     this->protocol.receive_sand_cells_size(toread,this->socket);
+    std::cout << "Sand cells to read: " << toread <<std::endl;
     for (c = 0 ; c < toread; c++){
         this->protocol.receive_sand_cell(pos_x,pos_y,spice,this->socket);
         this->map.updateCell(this->game_renderer,pos_x,pos_y,spice);
