@@ -160,4 +160,6 @@ class Player {
    void updateBoard();
    void updateSelectables();
    void updateCreationData();
+
+   bool refresh();
 };

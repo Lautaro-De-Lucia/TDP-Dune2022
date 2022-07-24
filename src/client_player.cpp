@@ -95,14 +95,11 @@ textures(textures)
 void Player::updateLoop(){
     while (true) {
         this->update();
-        this->render();
     }
 }
 
 void Player::instructionLoop(){
     while (true) {
-
-        this->updateCamera();
 
         this->game_has_started = true;
 
@@ -130,8 +127,16 @@ void Player::instructionLoop(){
 
 void Player::play(){
     std::thread server_updates(&Player::updateLoop, this);
+    std::thread refresh_window(&Player::refresh, this);
     this->instructionLoop();
     server_updates.join();
+}
+
+bool Player::refresh(){
+    while(true){
+        sleepms(30);
+        this->render();
+    }
 }
 
 bool Player::contains(int ID) {
@@ -309,6 +314,7 @@ void Player::renderHeldBuilding(){
 
 void Player::render(){
     this->game_renderer.Clear();
+    this->updateCamera();
     this->renderMap();
     this->renderCorpses();
     for (auto& e : this->elements)
