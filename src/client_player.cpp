@@ -104,7 +104,8 @@ void Player::instructionLoop(){
         this->game_has_started = true;
 
         SDL_Event event;
-        SDL_PollEvent(&event);
+
+        while (SDL_PollEvent(&event)) {
 
         if (event.type == SDL_QUIT) {
             this->protocol.send_command(CLOSE, this->socket);
@@ -112,7 +113,7 @@ void Player::instructionLoop(){
             break;
         }
         this->handleEvent(event);
-        sleepms(20);
+        
         if (this->usr_events.empty()){ 
             //std::cout << "T1: No instruction so far" << std::endl;
             continue;
@@ -122,6 +123,10 @@ void Player::instructionLoop(){
         this->usr_events.pop();
         command_t command = (command_t)(usr_event[0]);
         this->sendInstruction(command, usr_event);
+
+        }      
+
+        sleepms(20);  
     }
 }
 

@@ -114,7 +114,7 @@ void Server::run() {
         for(size_t i = 0; i < this->players.size(); i++)
             this->players[i]->reportState(this->game);
         this->checkForFinishedClients();
-        sleepms(10);
+        sleepms(200);
     }
     this->closeAllClients();
 }
