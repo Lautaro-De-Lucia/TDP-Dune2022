@@ -104,17 +104,11 @@ void Server::run2() {
 void Server::run() {
     while (this->running) {
         if(!this->TSQ.isEmpty()){
-<<<<<<< HEAD
-=======
             std::cout << "T2: Receiving new instruction" << std::endl;
->>>>>>> 022abbacfc7acfcfac50741af2ae718f14eb5712
             std::unique_ptr<instruction_t> new_instruction = this->TSQ.pop();
             this->handleInstruction(new_instruction);
         }
-<<<<<<< HEAD
-=======
         std::cout << "T2: Updating..." << std::endl;
->>>>>>> 022abbacfc7acfcfac50741af2ae718f14eb5712
         this->update();
         for(size_t i = 0; i < this->players.size(); i++)
             this->players[i]->reportState(this->game);

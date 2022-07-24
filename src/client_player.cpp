@@ -106,17 +106,12 @@ void Player::instructionLoop(){
             break;
         }
         this->handleEvent(event);
-<<<<<<< HEAD
-        if (this->usr_events.empty()) 
-            continue;
-=======
 
         if (this->usr_events.empty()){ 
             std::cout << "T1: No instruction so far" << std::endl;
             continue;
         }
         std::cout << "T1: USR sent an instruction: " << std::endl;
->>>>>>> 022abbacfc7acfcfac50741af2ae718f14eb5712
         std::vector<int> usr_event = this->usr_events.front();
         this->usr_events.pop();
         command_t command = (command_t)(usr_event[0]);
