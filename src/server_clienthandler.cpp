@@ -109,6 +109,7 @@ void ClientHandler::run2()
 void ClientHandler::run(){
     
     int _faction;
+    std::cout << "T1: Getting faction from client" << std::endl;
     this->protocol.receive_faction_request(_faction, this->player_socket);
     this->faction = (player_t)_faction;
     if (this->faction == ATREIDES)
@@ -120,6 +121,7 @@ void ClientHandler::run(){
 
     while (true)
     {
+        std::cout << "T1: Waiting for a command from client" << std::endl;
         command_t command;
         this->protocol.receive_command(command, this->player_socket);
         int type, pos_x, pos_y, pos_x_min, pos_x_max, pos_y_min, pos_y_max;
