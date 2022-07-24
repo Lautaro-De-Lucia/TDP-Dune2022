@@ -104,9 +104,17 @@ void Server::run2() {
 void Server::run() {
     while (this->running) {
         if(!this->TSQ.isEmpty()){
+<<<<<<< HEAD
+=======
+            std::cout << "T2: Receiving new instruction" << std::endl;
+>>>>>>> 022abbacfc7acfcfac50741af2ae718f14eb5712
             std::unique_ptr<instruction_t> new_instruction = this->TSQ.pop();
             this->handleInstruction(new_instruction);
         }
+<<<<<<< HEAD
+=======
+        std::cout << "T2: Updating..." << std::endl;
+>>>>>>> 022abbacfc7acfcfac50741af2ae718f14eb5712
         this->update();
         for(size_t i = 0; i < this->players.size(); i++)
             this->players[i]->reportState(this->game);
@@ -135,18 +143,23 @@ void Server::checkForFinishedClients() {
 void Server::handleInstruction(std::unique_ptr<instruction_t> & INS) {
     switch(INS->command){
         case CREATE_UNIT:
+            std::cout << "T2: creating new unit" << std::endl;
             this->handleInstruction(dynamic_cast<unit_create_t&>(*INS));
             break;
         case CREATE_BUILDING:
+            std::cout << "T2: creating new building" << std::endl;
             this->handleInstruction(dynamic_cast<building_create_t&>(*INS));
             break; 
         case MOUSE_RIGHT_CLICK:
+            std::cout << "T2: Mouse right click" << std::endl;
             this->handleInstruction(dynamic_cast<right_click_t&>(*INS));
             break;
         case MOUSE_LEFT_CLICK:
+            std::cout << "T2: Mouse left click" << std::endl;
             this->handleInstruction(dynamic_cast<left_click_t&>(*INS));
             break;
         case MOUSE_SELECTION:
+            std::cout << "T2: Mouse selection" << std::endl;
             this->handleInstruction(dynamic_cast<selection_t&>(*INS));
             break; 
         case IDLE:

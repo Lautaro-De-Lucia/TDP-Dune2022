@@ -81,9 +81,10 @@ textures(textures)
     this->renderWaitingText();
 
     //  Cargar Texturas
-
     this->protocol.receive_game_has_started(this->socket);
+    std::cout << "Game Has Started" << std::endl;
     this->protocol.send_faction_request(this->faction, this->socket); 
+    std::cout << "Faction Sent to The Server" << std::endl;
 
     this->audio.playStart(faction);
 
@@ -105,8 +106,17 @@ void Player::instructionLoop(){
             break;
         }
         this->handleEvent(event);
+<<<<<<< HEAD
         if (this->usr_events.empty()) 
             continue;
+=======
+
+        if (this->usr_events.empty()){ 
+            std::cout << "T1: No instruction so far" << std::endl;
+            continue;
+        }
+        std::cout << "T1: USR sent an instruction: " << std::endl;
+>>>>>>> 022abbacfc7acfcfac50741af2ae718f14eb5712
         std::vector<int> usr_event = this->usr_events.front();
         this->usr_events.pop();
         command_t command = (command_t)(usr_event[0]);
@@ -213,7 +223,6 @@ void Player::renderCreators() {
 
     if (this->creators[HEAVY_FACTORY] != -1)
         creators_to_render.push_back(this->creators[HEAVY_FACTORY]);
-
 
     for (int id : creators_to_render){
         Position pos = this->elements.at(id)->getPosition();
@@ -703,7 +712,8 @@ void Player::updateHud(){
 }
 
 void Player::updatePlayerState(){
-    int spice,c_spice;   
+    int spice,c_spice; 
+    std::cout << "T2: Waiting for Update from Server" << std::endl;  
     this->protocol.receive_player_state(spice,c_spice,energy,this->socket);
     this->spice = spice;
     this->c_spice = c_spice;
