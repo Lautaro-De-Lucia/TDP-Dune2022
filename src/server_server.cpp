@@ -102,6 +102,7 @@ void Server::run2() {
 }
 
 void Server::run() {
+    sleep(2);
     while (this->running) {
         if(!this->TSQ.isEmpty()){
             std::cout << "T2: Receiving new instruction" << std::endl;
@@ -113,7 +114,7 @@ void Server::run() {
         for(size_t i = 0; i < this->players.size(); i++)
             this->players[i]->reportState(this->game);
         this->checkForFinishedClients();
-        sleepms(1000);
+        sleepms(10);
     }
     this->closeAllClients();
 }

@@ -95,7 +95,7 @@ textures(textures)
 void Player::updateLoop(){
     while (true) {
         this->update();
-        //this->render();
+        this->render();
     }
 }
 
@@ -103,6 +103,8 @@ void Player::instructionLoop(){
     while (true) {
 
         this->updateCamera();
+
+        this->game_has_started = true;
 
         SDL_Event event;
         SDL_PollEvent(&event);
@@ -113,7 +115,7 @@ void Player::instructionLoop(){
             break;
         }
         this->handleEvent(event);
-
+        sleepms(20);
         if (this->usr_events.empty()){ 
             //std::cout << "T1: No instruction so far" << std::endl;
             continue;
@@ -123,7 +125,6 @@ void Player::instructionLoop(){
         this->usr_events.pop();
         command_t command = (command_t)(usr_event[0]);
         this->sendInstruction(command, usr_event);
-        sleepms(20);
     }
 }
 
@@ -139,13 +140,6 @@ bool Player::contains(int ID) {
             return true;
     }
     return false;
-}
-
-void Player::updateLoop(){
-    while (true) {
-        this->update();
-        this->render();
-    }
 }
 
 void Player::update() {
