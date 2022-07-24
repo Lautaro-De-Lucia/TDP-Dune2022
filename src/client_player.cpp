@@ -154,6 +154,7 @@ bool Player::contains(int ID) {
 
 void Player::update() {
     this->handleResponse();
+    std::lock_guard<std::mutex> locker(this->lock);
     this->updatePlayerState();
     this->updateUtils();
     this->updateHud();
@@ -318,6 +319,7 @@ void Player::renderHeldBuilding(){
 }
 
 void Player::render(){
+    std::lock_guard<std::mutex> locker(this->lock);
     this->game_renderer.Clear();
     this->updateCamera();
     this->renderMap();

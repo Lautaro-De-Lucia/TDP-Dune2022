@@ -2,6 +2,7 @@
 
 #include <queue>
 #include <iostream>
+#include <mutex>
 
 #include "client_selectable.h"
 #include "client_gamemap.h"
@@ -70,6 +71,7 @@ class Player {
    AudioPlayer audio;
    bool game_has_started;
    bool can_update;
+   mutable std::mutex lock;
 
    std::map<player_t,color_t> faction_colours ={
      {ATREIDES,BLUE},
